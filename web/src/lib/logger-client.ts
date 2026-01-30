@@ -9,10 +9,13 @@ import { clientConfig } from "./config-client";
 
 let isConfigured = false;
 
-const isDevelopment = process.env.NODE_ENV === "development";
-
+/**
+ * Configure client-side logger with appropriate formatter
+ */
 export async function configureLogger() {
   if (isConfigured) return;
+
+  const isDevelopment = process.env.NODE_ENV === "development";
 
   await configure({
     sinks: {
@@ -21,6 +24,7 @@ export async function configureLogger() {
           ? getTextFormatter({
               timestamp: "date-time",
               level: "FULL",
+              category: ".",
             })
           : getJsonLinesFormatter({
               message: "rendered",
@@ -45,7 +49,6 @@ export async function configureLogger() {
   isConfigured = true;
 }
 
-// Auto-configure on client
 configureLogger();
 
 export { getLogger } from "@logtape/logtape";

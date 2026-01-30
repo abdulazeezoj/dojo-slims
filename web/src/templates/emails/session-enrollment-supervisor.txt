@@ -1,0 +1,28 @@
+SIWES Session Enrollment - SLIMS
+
+Dear {{supervisorName}},
+
+You have been enrolled as a school supervisor for the {{sessionName}} SIWES session.
+
+Session Details:
+- Session: {{sessionName}}
+- Start Date: {{startDate}}
+- End Date: {{endDate}}
+- Assigned Students: {{assignedStudentsCount}} student(s)
+
+As a school supervisor, you will be able to:
+- Monitor your assigned students' weekly logbook entries
+- Provide weekly comments and feedback
+- Lock/unlock weeks as needed
+- Submit final assessments for each student
+
+Access your dashboard here:
+{{dashboardUrl}}
+
+Thank you for your commitment to supervising our students.
+
+Best regards,
+SLIMS Team
+
+Ahmadu Bello University, Zaria
+SIWES Logbook Management System

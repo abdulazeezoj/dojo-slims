@@ -1,0 +1,29 @@
+SIWES Student Linked - SLIMS
+
+Dear {{supervisorName}},
+
+A SIWES student from Ahmadu Bello University has been assigned to you for industrial training supervision.
+
+Student Details:
+- Name: {{studentName}}
+- Email: {{studentEmail}}
+- Session: {{sessionName}}
+- Training Period: {{trainingDates}}
+
+As an industry supervisor, you'll be able to:
+- Review the student's weekly logbook entries
+- Provide feedback and comments on their work
+- Submit a final assessment at the end of training
+
+Access your dashboard here:
+{{dashboardUrl}}
+
+Note: You can sign in using the magic link that will be sent to your email when needed, or contact the student for assistance.
+
+Thank you for supporting our students' industrial training!
+
+Best regards,
+SLIMS Team
+
+Ahmadu Bello University, Zaria
+SIWES Logbook Management System

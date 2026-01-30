@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getLogger } from "./logger-server";
+import { getLogger } from "./logger";
 
 const logger = getLogger(["api"]);
 
@@ -164,19 +164,22 @@ export function parseQueryParams<T>(
  * Wrap async route handler with error handling
  */
 export async function withErrorHandler<T>(
-  handler: () => Promise<NextResponse<ApiResponse<T>>>,
+  handler: (request?: Request) => Promise<NextResponse<ApiResponse<T>>>,
+  request?: Request,
 ): Promise<NextResponse<ApiResponse<T>>> {
   try {
-    return await handler();
+    return await handler(request);
   } catch (error) {
-    logger.error("Route handler error", { error });
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal server error";
+    logger.error("Unhandled route error", {
+      error: errorMessage,
+      stack: error instanceof Error ? error.stack : undefined,
+    });
 
-    return createErrorResponse(
-      error instanceof Error ? error.message : "Internal server error",
-      {
-        status: 500,
-        code: "INTERNAL_ERROR",
-      },
-    ) as NextResponse<ApiResponse<T>>;
+    return createErrorResponse(errorMessage, {
+      status: 500,
+      code: "INTERNAL_ERROR",
+    }) as NextResponse<ApiResponse<T>>;
   }
 }

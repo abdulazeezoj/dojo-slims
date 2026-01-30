@@ -1,0 +1,569 @@
+DATABASE SCHEMA
+
+---
+
+TABLE: faculties
+
+Columns:
+- id: UUID, PRIMARY KEY
+- name: VARCHAR(255), NOT NULL, UNIQUE
+- code: VARCHAR(50), NOT NULL, UNIQUE
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- code (for fast lookup)
+- name (for search)
+
+---
+
+TABLE: departments
+
+Columns:
+- id: UUID, PRIMARY KEY
+- faculty_id: UUID, FOREIGN KEY → faculties(id), NOT NULL
+- name: VARCHAR(255), NOT NULL
+- code: VARCHAR(50), NOT NULL
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- faculty_id
+- code (for fast lookup)
+- UNIQUE(faculty_id, code)
+
+---
+
+TABLE: placement_organizations
+
+Columns:
+- id: UUID, PRIMARY KEY
+- name: VARCHAR(255), NOT NULL
+- address: TEXT
+- city: VARCHAR(100)
+- state: VARCHAR(100)
+- phone: VARCHAR(20)
+- email: VARCHAR(255)
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- name (for fast lookup and search)
+
+---
+
+TABLE: siwes_sessions
+
+Columns:
+- id: UUID, PRIMARY KEY
+- name: VARCHAR(255), NOT NULL
+- start_date: DATE, NOT NULL
+- end_date: DATE, NOT NULL
+- total_weeks: INTEGER, NOT NULL, DEFAULT 24
+- status: ENUM('active', 'closed'), NOT NULL, DEFAULT 'active'
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- status (for filtering active sessions)
+- start_date, end_date (for date range queries)
+
+---
+
+TABLE: admin_users
+
+Columns:
+- id: UUID, PRIMARY KEY
+- admin_id: VARCHAR(50), NOT NULL, UNIQUE
+- name: VARCHAR(255), NOT NULL
+- email: VARCHAR(255), NOT NULL, UNIQUE
+- password_hash: VARCHAR(255), NOT NULL
+- is_active: BOOLEAN, NOT NULL, DEFAULT TRUE
+- better_auth_user_id: UUID, FOREIGN KEY → user(id), NULL
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- admin_id (for login)
+- email (for lookup)
+- better_auth_user_id
+
+---
+
+TABLE: students
+
+Columns:
+- id: UUID, PRIMARY KEY
+- matric_number: VARCHAR(50), NOT NULL, UNIQUE
+- name: VARCHAR(255), NOT NULL
+- email: VARCHAR(255), NOT NULL
+- department_id: UUID, FOREIGN KEY → departments(id), NOT NULL
+- password_hash: VARCHAR(255), NOT NULL
+- is_active: BOOLEAN, NOT NULL, DEFAULT TRUE
+- better_auth_user_id: UUID, FOREIGN KEY → user(id), NULL
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- matric_number (for login)
+- department_id
+- email (for lookup)
+- better_auth_user_id
+
+---
+
+TABLE: school_supervisors
+
+Columns:
+- id: UUID, PRIMARY KEY
+- staff_id: VARCHAR(50), NOT NULL, UNIQUE
+- name: VARCHAR(255), NOT NULL
+- email: VARCHAR(255), NOT NULL, UNIQUE
+- department_id: UUID, FOREIGN KEY → departments(id), NOT NULL
+- password_hash: VARCHAR(255), NOT NULL
+- is_active: BOOLEAN, NOT NULL, DEFAULT TRUE
+- better_auth_user_id: UUID, FOREIGN KEY → user(id), NULL
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- staff_id (for login)
+- department_id
+- email (for lookup)
+- better_auth_user_id
+
+---
+
+TABLE: industry_supervisors
+
+Columns:
+- id: UUID, PRIMARY KEY
+- name: VARCHAR(255), NOT NULL
+- email: VARCHAR(255), NOT NULL, UNIQUE
+- placement_organization_id: UUID, FOREIGN KEY → placement_organizations(id), NOT NULL
+- position: VARCHAR(255)
+- phone: VARCHAR(20)
+- is_active: BOOLEAN, NOT NULL, DEFAULT TRUE
+- better_auth_user_id: UUID, FOREIGN KEY → user(id), NULL
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- email (for login/lookup)
+- placement_organization_id
+- better_auth_user_id
+
+---
+
+TABLE: user
+
+Columns:
+- id: UUID, PRIMARY KEY
+- name: VARCHAR(255), NULL
+- email: VARCHAR(255), NULL
+- email_verified: BOOLEAN, NOT NULL, DEFAULT FALSE
+- image: VARCHAR(500), NULL
+- user_type: ENUM('admin', 'student', 'school_supervisor', 'industry_supervisor'), NOT NULL
+- user_reference_id: UUID, NOT NULL
+- is_active: BOOLEAN, NOT NULL, DEFAULT TRUE
+- created_at: TIMESTAMP, NOT NULL
+- updated_at: TIMESTAMP, NOT NULL
+
+Indexes:
+- email (unique)
+- user_type, user_reference_id (for linking to specific user tables)
+- UNIQUE(user_type, user_reference_id)
+
+---
+
+TABLE: session
+
+Columns:
+- id: UUID, PRIMARY KEY
+- user_id: UUID, FOREIGN KEY → user(id), NOT NULL
+- token: VARCHAR(500), NOT NULL, UNIQUE
+- expires_at: TIMESTAMP, NOT NULL
+- ip_address: VARCHAR(45), NULL
+- user_agent: TEXT, NULL
+- created_at: TIMESTAMP, NOT NULL
+- updated_at: TIMESTAMP, NOT NULL
+
+Indexes:
+- token (for authentication)
+- user_id
+- expires_at (for cleanup)
+
+---
+
+TABLE: account
+
+Columns:
+- id: UUID, PRIMARY KEY
+- user_id: UUID, FOREIGN KEY → user(id), NOT NULL
+- account_id: VARCHAR(255), NOT NULL
+- provider_id: VARCHAR(255), NOT NULL
+- access_token: TEXT, NULL
+- refresh_token: TEXT, NULL
+- access_token_expires_at: TIMESTAMP, NULL
+- refresh_token_expires_at: TIMESTAMP, NULL
+- scope: TEXT, NULL
+- id_token: TEXT, NULL
+- password: VARCHAR(255), NULL
+- created_at: TIMESTAMP, NOT NULL
+- updated_at: TIMESTAMP, NOT NULL
+
+Indexes:
+- user_id
+- account_id, provider_id
+- UNIQUE(user_id, account_id, provider_id)
+
+---
+
+TABLE: verification
+
+Columns:
+- id: UUID, PRIMARY KEY
+- identifier: VARCHAR(255), NOT NULL
+- value: TEXT, NOT NULL
+- expires_at: TIMESTAMP, NOT NULL
+- created_at: TIMESTAMP, NOT NULL
+- updated_at: TIMESTAMP, NOT NULL
+
+Indexes:
+- identifier, value (for magic link authentication)
+- expires_at (for cleanup)
+- UNIQUE(identifier, value)
+
+---
+
+TABLE: student_session_enrollments
+
+Columns:
+- id: UUID, PRIMARY KEY
+- student_id: UUID, FOREIGN KEY → students(id), NOT NULL
+- siwes_session_id: UUID, FOREIGN KEY → siwes_sessions(id), NOT NULL
+- is_active: BOOLEAN, NOT NULL, DEFAULT TRUE
+- enrolled_at: TIMESTAMP, NOT NULL
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- student_id, siwes_session_id
+- siwes_session_id
+- UNIQUE(student_id, siwes_session_id)
+
+---
+
+TABLE: supervisor_session_enrollments
+
+Columns:
+- id: UUID, PRIMARY KEY
+- school_supervisor_id: UUID, FOREIGN KEY → school_supervisors(id), NOT NULL
+- siwes_session_id: UUID, FOREIGN KEY → siwes_sessions(id), NOT NULL
+- enrolled_at: TIMESTAMP, NOT NULL
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- school_supervisor_id, siwes_session_id
+- siwes_session_id
+- UNIQUE(school_supervisor_id, siwes_session_id)
+
+---
+
+TABLE: student_siwes_details
+
+Columns:
+- id: UUID, PRIMARY KEY
+- student_id: UUID, FOREIGN KEY → students(id), NOT NULL
+- siwes_session_id: UUID, FOREIGN KEY → siwes_sessions(id), NOT NULL
+- placement_organization_id: UUID, FOREIGN KEY → placement_organizations(id), NOT NULL
+- industry_supervisor_id: UUID, FOREIGN KEY → industry_supervisors(id), NOT NULL
+- training_start_date: DATE, NOT NULL
+- training_end_date: DATE, NOT NULL
+- job_title: VARCHAR(255)
+- department_at_org: VARCHAR(255)
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- student_id, siwes_session_id
+- industry_supervisor_id
+- placement_organization_id
+- UNIQUE(student_id, siwes_session_id)
+
+---
+
+TABLE: logbook_metadata
+
+Columns:
+- id: UUID, PRIMARY KEY
+- student_id: UUID, FOREIGN KEY → students(id), NOT NULL
+- siwes_session_id: UUID, FOREIGN KEY → siwes_sessions(id), NOT NULL
+- program_of_study: VARCHAR(255), NOT NULL
+- level: VARCHAR(50), NOT NULL
+- session: VARCHAR(50), NOT NULL
+- training_duration: VARCHAR(100), NOT NULL
+- area_of_specialization: VARCHAR(255)
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- student_id, siwes_session_id
+- UNIQUE(student_id, siwes_session_id)
+
+---
+
+TABLE: student_supervisor_assignments
+
+Columns:
+- id: UUID, PRIMARY KEY
+- student_id: UUID, FOREIGN KEY → students(id), NOT NULL
+- school_supervisor_id: UUID, FOREIGN KEY → school_supervisors(id), NOT NULL
+- siwes_session_id: UUID, FOREIGN KEY → siwes_sessions(id), NOT NULL
+- assigned_by: UUID, FOREIGN KEY → admin_users(id), NOT NULL
+- assignment_method: ENUM('manual', 'automatic'), NOT NULL
+- assigned_at: TIMESTAMP, NOT NULL
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- student_id, siwes_session_id
+- school_supervisor_id, siwes_session_id
+- UNIQUE(student_id, school_supervisor_id, siwes_session_id)
+
+---
+
+TABLE: weekly_entries
+
+Columns:
+- id: UUID, PRIMARY KEY
+- student_id: UUID, FOREIGN KEY → students(id), NOT NULL
+- siwes_session_id: UUID, FOREIGN KEY → siwes_sessions(id), NOT NULL
+- week_number: INTEGER, NOT NULL
+- monday_entry: TEXT
+- tuesday_entry: TEXT
+- wednesday_entry: TEXT
+- thursday_entry: TEXT
+- friday_entry: TEXT
+- saturday_entry: TEXT
+- is_locked: BOOLEAN, NOT NULL, DEFAULT FALSE
+- locked_by: ENUM('industry_supervisor', 'school_supervisor', 'manual'), NULL
+- locked_at: TIMESTAMP
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- student_id, siwes_session_id, week_number
+- student_id, is_locked
+- UNIQUE(student_id, siwes_session_id, week_number)
+
+---
+
+TABLE: diagrams
+
+Columns:
+- id: UUID, PRIMARY KEY
+- weekly_entry_id: UUID, FOREIGN KEY → weekly_entries(id), NOT NULL
+- file_name: VARCHAR(255), NOT NULL
+- file_path: TEXT, NOT NULL
+- file_size: INTEGER, NOT NULL
+- mime_type: VARCHAR(100), NOT NULL
+- caption: TEXT
+- uploaded_at: TIMESTAMP, NOT NULL
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- weekly_entry_id
+
+---
+
+TABLE: weekly_comments
+
+Columns:
+- id: UUID, PRIMARY KEY
+- weekly_entry_id: UUID, FOREIGN KEY → weekly_entries(id), NOT NULL
+- commenter_type: ENUM('industry_supervisor', 'school_supervisor'), NOT NULL
+- commenter_id: UUID, NOT NULL
+- comment: TEXT, NOT NULL
+- commented_at: TIMESTAMP, NOT NULL
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- weekly_entry_id, commenter_type
+- commenter_id, commenter_type
+
+---
+
+TABLE: review_requests
+
+Columns:
+- id: UUID, PRIMARY KEY
+- weekly_entry_id: UUID, FOREIGN KEY → weekly_entries(id), NOT NULL
+- student_id: UUID, FOREIGN KEY → students(id), NOT NULL
+- industry_supervisor_id: UUID, FOREIGN KEY → industry_supervisors(id), NOT NULL
+- status: ENUM('pending', 'reviewed', 'expired'), NOT NULL, DEFAULT 'pending'
+- requested_at: TIMESTAMP, NOT NULL
+- reviewed_at: TIMESTAMP
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- weekly_entry_id
+- industry_supervisor_id, status
+- student_id
+
+---
+
+TABLE: final_comments
+
+Columns:
+- id: UUID, PRIMARY KEY
+- student_id: UUID, FOREIGN KEY → students(id), NOT NULL
+- siwes_session_id: UUID, FOREIGN KEY → siwes_sessions(id), NOT NULL
+- commenter_type: ENUM('industry_supervisor', 'school_supervisor'), NOT NULL
+- commenter_id: UUID, NOT NULL
+- comment: TEXT, NOT NULL
+- rating: VARCHAR(50)
+- commented_at: TIMESTAMP, NOT NULL
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+
+Indexes:
+- student_id, siwes_session_id, commenter_type
+- commenter_id, commenter_type
+- UNIQUE(student_id, siwes_session_id, commenter_type)
+
+---
+
+TABLE: activity_logs
+
+Columns:
+- id: UUID, PRIMARY KEY
+- user_type: ENUM('admin', 'student', 'school_supervisor', 'industry_supervisor'), NOT NULL
+- user_id: UUID, NOT NULL
+- action: VARCHAR(255), NOT NULL
+- entity_type: VARCHAR(100)
+- entity_id: UUID
+- details: JSONB
+- ip_address: VARCHAR(45)
+- created_at: TIMESTAMP
+
+Indexes:
+- user_type, user_id
+- entity_type, entity_id
+- created_at
+
+---
+
+RELATIONSHIPS:
+
+faculties → departments: one-to-many
+departments → students: one-to-many
+departments → school_supervisors: one-to-many
+placement_organizations → industry_supervisors: one-to-many
+placement_organizations → student_siwes_details: one-to-many
+siwes_sessions → student_session_enrollments: one-to-many
+siwes_sessions → supervisor_session_enrollments: one-to-many
+siwes_sessions → student_siwes_details: one-to-many
+siwes_sessions → logbook_metadata: one-to-many
+siwes_sessions → student_supervisor_assignments: one-to-many
+siwes_sessions → weekly_entries: one-to-many
+siwes_sessions → final_comments: one-to-many
+students → student_session_enrollments: one-to-many
+students → student_siwes_details: one-to-many
+students → logbook_metadata: one-to-many
+students → student_supervisor_assignments: one-to-many
+students → weekly_entries: one-to-many
+students → review_requests: one-to-many
+students → final_comments: one-to-many
+school_supervisors → supervisor_session_enrollments: one-to-many
+school_supervisors → student_supervisor_assignments: one-to-many
+user → session: one-to-many
+user → account: one-to-many
+admin_users → user: one-to-one (via better_auth_user_id)
+students → user: one-to-one (via better_auth_user_id)
+school_supervisors → user: one-to-one (via better_auth_user_id)
+industry_supervisors → user: one-to-one (via better_auth_user_id)
+industry_supervisors → student_siwes_details: one-to-many
+industry_supervisors → review_requests: one-to-many
+admin_users → student_supervisor_assignments: one-to-many
+weekly_entries → diagrams: one-to-many
+weekly_entries → weekly_comments: one-to-many
+weekly_entries → review_requests: one-to-one
+students ↔ school_supervisors: many-to-many (via student_supervisor_assignments)
+students ↔ siwes_sessions: many-to-many (via student_session_enrollments)
+school_supervisors ↔ siwes_sessions: many-to-many (via supervisor_session_enrollments)
+
+---
+
+NOTES:
+
+Session Scope: Each SIWES session spans 24 weeks (1-24). All weekly entries, assignments, and comments are scoped to specific sessions, enabling multi-year data retention and historical queries.
+
+Week Locking Mechanism: Weeks lock automatically when either supervisor comments, or manually by school supervisor. Three lock states stored in weekly_entries.locked_by: 'industry_supervisor', 'school_supervisor', or 'manual'. Once locked, students cannot edit that week's entries.
+
+Student Session Switching: Students can view historical sessions but only have one active enrollment at a time (enforced at application level). Dashboard allows switching between sessions for viewing past logbooks.
+
+Authentication Architecture (Better Auth Integration):
+
+1. Hybrid Schema Approach:
+   - Better Auth manages authentication (user, session, account, verification tables)
+   - Domain-specific tables (admin_users, students, school_supervisors, industry_supervisors) store business data
+   - Link via better_auth_user_id foreign key and user.user_reference_id
+
+2. Multi-User-Type Authentication:
+   - user.user_type discriminates between admin/student/school_supervisor/industry_supervisor
+   - user.user_reference_id links to respective domain table (admin_users.id, students.id, etc.)
+   - Single authentication flow handles all user types
+
+3. Password Storage:
+   - Legacy password_hash columns remain in domain tables for data migration
+   - Active passwords stored in account.password (Better Auth standard)
+   - Migration script transfers password_hash → account.password during initial setup
+
+4. Magic Link Authentication:
+   - Industry supervisors use magic links via Better Auth's verification table
+   - No password required for industry_supervisors
+   - Magic links sent via email (Node Mailer), expire in 5 minutes
+   - Replaced previous magic_link_tokens table
+
+5. Session Management:
+   - Sessions stored in session table with 7-day expiration
+   - Redis used as secondary storage for session caching (2-3x performance improvement)
+   - Automatic session refresh every 24 hours
+   - IP address and user agent tracked for security
+
+6. Authentication Flow:
+   - Admin/Student/School Supervisor: Email/password via Better Auth credential provider
+   - Industry Supervisor: Magic link sent to email, one-click authentication
+   - All sessions tracked in session table, cached in Redis
+   - User lookup: session.token → session.user_id → user.user_reference_id → domain table
+
+7. Better Auth CLI Setup:
+   - Run `npx @better-auth/cli generate` to auto-generate Prisma schema for Better Auth tables
+   - Migration adds better_auth_user_id columns to existing user tables
+   - Data migration script creates user records and links them to existing accounts
+   - Enable experimental.joins for 2-3x query performance improvement
+
+Industry Supervisor Authentication: Magic link/token authentication eliminates password management. Tokens stored in magic_link_tokens table with expiration tracking. Industry supervisors created when students enter SIWES details (Feature #12).
+
+Logbook Metadata: Separate table for ITF-required information distinct from student profile. Includes program_of_study, level, session, training_duration, area_of_specialization - all required for PDF logbook generation.
+
+Polymorphic Comments: commenter_id in weekly_comments and final_comments references different tables based on commenter_type. Application-level foreign key validation required since database cannot enforce polymorphic foreign keys directly.
+
+Review Workflow: Student-triggered review requests (MVP approach before automated emails). review_requests table tracks when students request industry supervisor comments, with status transitions: pending → reviewed/expired.
+
+Assignment Methods: student_supervisor_assignments tracks both manual and automatic assignment via assignment_method ENUM. Supports department/faculty-based auto-assignment and manual override for exceptions.
+
+Diagram Upload: Optional per week (Feature #7). Multiple diagrams per week supported via one-to-many relationship. Stores file metadata (name, path, size, mime_type) for validation and retrieval.
+
+Final Comments: Separate from weekly comments. Students request final comments from both supervisor types when training concludes (Features #17, #22). One final comment per supervisor type per session enforced via UNIQUE constraint.
+
+Activity Logs: Comprehensive audit trail for admin dashboard "recent activities" and compliance. Captures all user actions with entity tracking and JSONB details for flexible logging.
+
+Bulk Upload Support: All entity management tables (students, school_supervisors, placement_organizations) support bulk operations via application layer. No special schema structures needed - standard validation and constraint checking apply.
+
+Future Considerations: Post-MVP automated email notifications may require email_notification_settings table. Analytics dashboard may need student_progress_snapshots for performance. Consider partitioning activity_logs by created_at at scale.

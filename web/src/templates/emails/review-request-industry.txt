@@ -1,0 +1,25 @@
+Weekly Review Request - SLIMS
+
+Dear {{supervisorName}},
+
+{{studentName}} has requested your review for their weekly logbook entry.
+
+Review Details:
+- Student: {{studentName}}
+- Week Number: Week {{weekNumber}}
+- Week Period: {{weekDate}}
+
+Please review the student's activities for this week and provide your feedback.
+
+Review this week's entry here:
+{{reviewUrl}}
+
+Note: {{expiryNote}}
+
+Thank you for your timely feedback!
+
+Best regards,
+SLIMS Team
+
+Ahmadu Bello University, Zaria
+SIWES Logbook Management System

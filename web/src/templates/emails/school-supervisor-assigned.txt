@@ -1,0 +1,21 @@
+Student Assignment - SLIMS
+
+Dear {{supervisorName}},
+
+You have been assigned to supervise {{studentCount}} student(s) for the {{sessionName}} SIWES session.
+
+Your Assigned Students:
+{{studentNames}}
+
+You can now view your students' logbook entries, provide weekly comments, and monitor their progress through your dashboard.
+
+Access your dashboard here:
+{{dashboardUrl}}
+
+Thank you for your commitment to supervising our students during their industrial training.
+
+Best regards,
+SLIMS Team
+
+Ahmadu Bello University, Zaria
+SIWES Logbook Management System

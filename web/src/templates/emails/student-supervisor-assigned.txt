@@ -1,0 +1,21 @@
+School Supervisor Assigned - SLIMS
+
+Hello {{studentName}},
+
+Your school supervisor has been assigned for the {{sessionName}} SIWES session.
+
+Supervisor Details:
+- Name: {{supervisorName}}
+- Email: {{supervisorEmail}}
+- Session: {{sessionName}}
+
+Your school supervisor will review your weekly logbook entries and provide feedback on your progress during the training period.
+
+Access your dashboard here:
+{{dashboardUrl}}
+
+Best regards,
+SLIMS Team
+
+Ahmadu Bello University, Zaria
+SIWES Logbook Management System

@@ -1,0 +1,23 @@
+Welcome to SLIMS
+
+Hello {{recipientName}},
+
+Your account has been created in the Student Industrial Work Experience Scheme (SIWES) Logbook Management System.
+
+Account Details:
+- Account Type: {{userType}}
+- Login Credential: {{loginCredential}}
+- Temporary Password: (sent separately or provided by admin)
+
+Access your dashboard here:
+{{loginUrl}}
+
+IMPORTANT: Please change your password after your first login for security purposes.
+
+If you have any questions or need assistance, please contact us at {{supportEmail}}
+
+Best regards,
+SLIMS Team
+
+Ahmadu Bello University, Zaria
+SIWES Logbook Management System

@@ -11,11 +11,9 @@ export async function POST(request: NextRequest) {
       return createErrorResponse("Task name is required", { status: 400 });
     }
 
-    // Add job to queue
-    // Keep completed jobs for 60 seconds so the frontend can retrieve results
     const job = await defaultQueue.add(taskName, data || {}, {
       removeOnComplete: {
-        age: 60, // Keep for 60 seconds
+        age: 60,
         count: 100,
       },
     });

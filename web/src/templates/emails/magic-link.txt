@@ -1,0 +1,29 @@
+Sign In to SLIMS
+
+Hello {{recipientName}},
+
+You requested to sign in to the Student Industrial Work Experience Scheme (SIWES) Logbook Management System.
+
+OPTION 1: Click the link below to sign in
+{{magicLink}}
+
+─────────────────────────────
+
+OPTION 2: Copy and paste this authentication token
+
+Authentication Token:
+{{magicLinkToken}}
+
+How to use the token: If the link doesn't work, visit the SLIMS login page and paste the token in the authentication field.
+
+─────────────────────────────
+
+This link and token will expire in {{expiryMinutes}} minutes.
+
+If you didn't request this email, you can safely ignore it.
+
+Best regards,
+SLIMS Team
+
+Ahmadu Bello University, Zaria
+SIWES Logbook Management System

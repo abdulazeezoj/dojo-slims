@@ -1,0 +1,22 @@
+Week Locked - SLIMS
+
+Hello {{studentName}},
+
+Your logbook entry for Week {{weekNumber}} has been locked.
+
+Lock Details:
+- Locked By: {{lockedBy}}
+- Reason: {{lockReason}}
+
+IMPORTANT: You can no longer edit this week's entries. The content is now finalized for your records and supervisor review.
+
+Only your school supervisor can unlock this week if changes are needed.
+
+View your logbook here:
+{{dashboardUrl}}
+
+Best regards,
+SLIMS Team
+
+Ahmadu Bello University, Zaria
+SIWES Logbook Management System

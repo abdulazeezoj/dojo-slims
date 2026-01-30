@@ -1,0 +1,26 @@
+PRODUCT NAME:
+SLIMS - SIWES Logbook & Internship Management System
+
+ONE-LINE DESCRIPTION:
+A web-based platform that digitizes the entire SIWES supervision process at Ahmadu Bello University, replacing paper logbooks with a streamlined, transparent, and verifiable digital workflow.
+
+TARGET USER:
+- Primary: SIWES students at Ahmadu Bello University, Zaria (all programs requiring industrial training)
+- Secondary: Industry supervisors at training organizations
+- Tertiary: School supervisors/lecturers at ABU managing SIWES programs
+
+PROBLEM BEING SOLVED:
+Eliminates the manual burden of maintaining handwritten logbooks for 24 weeks of industrial training. Solves the challenge of remote supervision when supervisors and students are geographically separated. Creates permanent, verifiable digital records for institutional compliance and audit purposes, replacing easily lost or damaged paper logbooks.
+
+WHY NOW:
+Educational institutions are accelerating digital transformation of administrative processes. The traditional paper-based SIWES system creates supervision bottlenecks, especially with supervisors unable to travel frequently to training sites. ABU's SIWES Unit needs a modern solution that maintains compliance standards while enabling remote oversight and reducing administrative overhead.
+
+SUCCESS:
+For Students: Complete 24-week SIWES training with fully documented digital logbook entries (144+ daily records), diagrams uploaded (created externally), and ability to auto-generate print-ready physical logbooks on demand.
+
+For Supervisors: Industry supervisors provide weekly feedback via automated email links (no login needed), school supervisors monitor progress remotely with consolidated student reports, all reviews timestamped and permanently recorded.
+
+For ABU SIWES Unit: Centralized digital repository of all student training activities, automated supervision workflows, reduced paperwork, and maintained compliance with institutional documentation standards.
+
+BIGGEST RISK:
+Adoption resistance from students and supervisors accustomed to the paper-based system, particularly if users lack reliable internet access at training sites or perceive the digital platform as more complex than traditional logbooks.

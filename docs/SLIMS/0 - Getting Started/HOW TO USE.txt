@@ -1,0 +1,73 @@
+SOLO PRODUCT TEMPLATE
+
+Lightweight template for solo builders and side projects.
+
+---
+
+WHEN TO USE THIS:
+
+✓ Side projects and experiments
+✓ Internal tools (you're the user)
+✓ Solo builder testing ideas quickly
+✓ MVPs where you know the problem well
+
+DON'T USE THIS FOR:
+
+✗ Products for other people (use full template)
+✗ B2B SaaS with paying customers (use full template)
+✗ Anything requiring investor validation (use full template)
+
+---
+
+WORKFLOW (5 STEPS):
+
+1. Product Idea - What and why
+2. Quick Research - 1-2 conversations, validate assumptions
+3. Feature List - What to build
+4. Database Schema - Data structure
+5. System Architecture - Tech design
+
+Total time: ~3-5 days before coding
+
+---
+
+WHAT'S DIFFERENT FROM FULL TEMPLATE:
+
+Removed:
+- User Journey Map (skip to implementation)
+- User Flows (work them out while coding)
+- Wireframes (just code directly)
+- Validation Notes (no formal user testing)
+- Detailed research docs (just quick notes)
+
+Kept:
+- Product Idea (know what you're building)
+- Quick Research (validate assumptions)
+- Feature List (scope MVP with user stories)
+- Database Schema (design data)
+- System Architecture (tech decisions)
+
+---
+
+VALIDATION:
+
+After Step 2: Decide GO/NO-GO based on quick research
+Then: Build fast, iterate based on usage
+
+---
+
+USAGE:
+
+1. Copy this folder for each product
+2. Fill steps 1-5 (3-5 days)
+3. Start coding
+4. Learn from real usage
+5. Iterate
+
+---
+
+PRINCIPLE:
+
+Move fast, but don't skip thinking.
+Quick research > No research.
+Documentation serves the builder, not the other way around.

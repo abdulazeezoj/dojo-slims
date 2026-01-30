@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Review Request - SLIMS</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+      padding: 40px 20px;
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .content {
+      padding: 40px 30px;
+    }
+
+    .content p {
+      line-height: 1.6;
+      color: #374151;
+      margin: 0 0 20px;
+    }
+
+    .info-box {
+      background-color: #f0fdf4;
+      border-left: 4px solid #22c55e;
+      padding: 16px;
+      margin: 24px 0;
+      border-radius: 4px;
+    }
+
+    .info-box p {
+      margin: 8px 0;
+      font-size: 14px;
+    }
+
+    .info-box strong {
+      color: #166534;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+      color: #ffffff !important;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      margin: 20px 0;
+    }
+
+    .button:hover {
+      opacity: 0.9;
+    }
+
+    .note {
+      background-color: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 16px;
+      margin: 24px 0;
+      border-radius: 4px;
+    }
+
+    .note p {
+      margin: 0;
+      color: #1e40af;
+      font-size: 14px;
+    }
+
+    .footer {
+      background-color: #f9fafb;
+      padding: 20px 30px;
+      text-align: center;
+      font-size: 12px;
+      color: #9ca3af;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .footer p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📝 Weekly Review Request</h1>
+    </div>
+    <div class="content">
+      <p>Dear {{supervisorName}},</p>
+      <p><strong>{{studentName}}</strong> has requested your review for their weekly logbook entry.</p>
+
+      <div class="info-box">
+        <p><strong>Student:</strong> {{studentName}}</p>
+        <p><strong>Week Number:</strong> Week {{weekNumber}}</p>
+        <p><strong>Week Period:</strong> {{weekDate}}</p>
+      </div>
+
+      <p>Please review the student's activities for this week and provide your feedback.</p>
+
+      <div style="text-align: center;">
+        <a href="{{reviewUrl}}" class="button">Review Week {{weekNumber}}</a>
+      </div>
+
+      <div class="note">
+        <p>💡 <strong>Note:</strong> {{expiryNote}}</p>
+      </div>
+
+      <p>Thank you for your timely feedback!</p>
+
+      <p>Best regards,<br>SLIMS Team</p>
+    </div>
+    <div class="footer">
+      <p>Ahmadu Bello University, Zaria</p>
+      <p>SIWES Logbook Management System</p>
+      <p>This is an automated email. Please do not reply.</p>
+    </div>
+  </div>
+</body>
+
+</html>

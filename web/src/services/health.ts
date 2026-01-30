@@ -1,5 +1,5 @@
-import { serverConfig } from "@/lib/config-server";
-import { getLogger } from "@/lib/logger-server";
+import { config } from "@/lib/config";
+import { getLogger } from "@/lib/logger";
 import prisma from "@/lib/prisma";
 import { defaultQueue } from "@/lib/queue";
 import IORedis from "ioredis";
@@ -44,7 +44,7 @@ export async function healthCheck(): Promise<HealthDetails> {
   let redisClient: IORedis | null = null;
   try {
     const redisStart = Date.now();
-    redisClient = new IORedis(serverConfig.REDIS_URL, {
+    redisClient = new IORedis(config.REDIS_URL, {
       maxRetriesPerRequest: 1,
       connectTimeout: 5000,
     });
@@ -95,15 +95,13 @@ export async function healthCheck(): Promise<HealthDetails> {
   const duration = Date.now() - startTime;
 
   if (status === "unhealthy") {
-    logger.warn("Health check completed - system unhealthy", { duration });
-  } else {
-    logger.debug("Health check completed - system healthy", { duration });
+    logger.warn("System health check failed", { duration, checks });
   }
 
   return {
     status,
     timestamp: new Date().toISOString(),
-    version: serverConfig.APP_VERSION,
+    version: config.APP_VERSION,
     checks,
   };
 }

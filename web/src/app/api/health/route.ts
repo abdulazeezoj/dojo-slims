@@ -12,7 +12,6 @@ export async function GET() {
   return withErrorHandler(async () => {
     const { checks, ...summary } = await healthCheck();
 
-    // Return 503 if unhealthy, 200 if healthy
     const statusCode = summary.status === "unhealthy" ? 503 : 200;
 
     if (summary.status === "unhealthy") {

@@ -5,14 +5,17 @@ import {
   getTextFormatter,
   type LogLevel,
 } from "@logtape/logtape";
-import { serverConfig } from "./config-server";
+import { config } from "./config";
 
 let isConfigured = false;
 
-const isDevelopment = serverConfig.NODE_ENV === "development";
-
+/**
+ * Configure server-side logger with appropriate formatter
+ */
 export async function configureLogger() {
   if (isConfigured) return;
+
+  const isDevelopment = config.NODE_ENV === "development";
 
   await configure({
     sinks: {
@@ -21,6 +24,7 @@ export async function configureLogger() {
           ? getTextFormatter({
               timestamp: "date-time",
               level: "FULL",
+              category: ".",
             })
           : getJsonLinesFormatter({
               message: "rendered",
@@ -36,7 +40,7 @@ export async function configureLogger() {
       },
       {
         category: [],
-        lowestLevel: serverConfig.LOG_LEVEL as LogLevel,
+        lowestLevel: config.LOG_LEVEL as LogLevel,
         sinks: ["console"],
       },
     ],
@@ -45,7 +49,6 @@ export async function configureLogger() {
   isConfigured = true;
 }
 
-// Auto-configure on server
 configureLogger();
 
 export { getLogger } from "@logtape/logtape";

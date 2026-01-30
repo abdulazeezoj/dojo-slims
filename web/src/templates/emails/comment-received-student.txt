@@ -1,0 +1,23 @@
+New Comment Received - SLIMS
+
+Hello {{studentName}},
+
+Your {{supervisorType}}, {{supervisorName}}, has commented on your logbook entry.
+
+Comment Details:
+- Week Number: Week {{weekNumber}}
+- Supervisor: {{supervisorName}} ({{supervisorType}})
+
+Comment Preview:
+"{{commentSnippet}}"
+
+View the full comment here:
+{{dashboardUrl}}
+
+Keep up the good work documenting your training activities!
+
+Best regards,
+SLIMS Team
+
+Ahmadu Bello University, Zaria
+SIWES Logbook Management System

@@ -1,0 +1,28 @@
+SIWES Session Enrollment - SLIMS
+
+Hello {{studentName}},
+
+You have been successfully enrolled in the {{sessionName}} SIWES session!
+
+Session Details:
+- Session: {{sessionName}}
+- Start Date: {{startDate}}
+- End Date: {{endDate}}
+- Duration: {{totalWeeks}} weeks
+
+Next Steps:
+1. Enter your SIWES details (placement organization, industry supervisor)
+2. Start documenting your weekly activities (Monday - Saturday)
+3. Request reviews from your industry supervisor weekly
+4. Stay in touch with your school supervisor
+
+Access your dashboard here:
+{{dashboardUrl}}
+
+Best of luck with your industrial training!
+
+Best regards,
+SLIMS Team
+
+Ahmadu Bello University, Zaria
+SIWES Logbook Management System

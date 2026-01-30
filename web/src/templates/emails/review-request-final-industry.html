@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Final Assessment Request - SLIMS</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+      padding: 40px 20px;
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .content {
+      padding: 40px 30px;
+    }
+
+    .content p {
+      line-height: 1.6;
+      color: #374151;
+      margin: 0 0 20px;
+    }
+
+    .info-box {
+      background-color: #f0fdf4;
+      border-left: 4px solid #22c55e;
+      padding: 16px;
+      margin: 24px 0;
+      border-radius: 4px;
+    }
+
+    .info-box p {
+      margin: 8px 0;
+      font-size: 14px;
+    }
+
+    .info-box strong {
+      color: #166534;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+      color: #ffffff !important;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      margin: 20px 0;
+    }
+
+    .button:hover {
+      opacity: 0.9;
+    }
+
+    .highlight {
+      background-color: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 16px;
+      margin: 24px 0;
+      border-radius: 4px;
+    }
+
+    .highlight p {
+      margin: 0;
+      color: #92400e;
+      font-size: 14px;
+    }
+
+    .footer {
+      background-color: #f9fafb;
+      padding: 20px 30px;
+      text-align: center;
+      font-size: 12px;
+      color: #9ca3af;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .footer p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎯 Final Assessment Request</h1>
+    </div>
+    <div class="content">
+      <p>Dear {{supervisorName}},</p>
+      <p><strong>{{studentName}}</strong> has completed their SIWES training and is requesting your final assessment.
+      </p>
+
+      <div class="info-box">
+        <p><strong>Student:</strong> {{studentName}}</p>
+        <p><strong>Session:</strong> {{sessionName}}</p>
+        <p><strong>Total Weeks:</strong> {{totalWeeks}} weeks</p>
+      </div>
+
+      <div class="highlight">
+        <p><strong>📌 Important:</strong> This is the final assessment that will contribute to the student's SIWES
+          grade. Please provide comprehensive feedback on their overall performance during the training period.</p>
+      </div>
+
+      <p>Your final assessment should include:</p>
+      <ul style="color: #374151; line-height: 1.8;">
+        <li>Overall performance evaluation</li>
+        <li>Skills and competencies developed</li>
+        <li>Work attitude and professionalism</li>
+        <li>Areas of strength and improvement</li>
+      </ul>
+
+      <div style="text-align: center;">
+        <a href="{{reviewUrl}}" class="button">Submit Final Assessment</a>
+      </div>
+
+      <p>Thank you for supervising this student throughout their industrial training!</p>
+
+      <p>Best regards,<br>SLIMS Team</p>
+    </div>
+    <div class="footer">
+      <p>Ahmadu Bello University, Zaria</p>
+      <p>SIWES Logbook Management System</p>
+      <p>This is an automated email. Please do not reply.</p>
+    </div>
+  </div>
+</body>
+
+</html>

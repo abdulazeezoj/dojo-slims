@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.3.0",
   "engineVersion": "9d6ad21cbbceab97458517b147a6a09ff43aa735",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id              String    @id\n  name            String?\n  email           String?   @unique\n  emailVerified   Boolean   @default(false)\n  image           String?\n  userType        UserType\n  userReferenceId String\n  isActive        Boolean   @default(true)\n  createdAt       DateTime  @default(now())\n  updatedAt       DateTime  @updatedAt\n  accounts        Account[]\n  sessions        Session[]\n\n  username        String?\n  displayUsername String?\n\n  @@unique([userType, userReferenceId])\n  @@unique([username])\n  @@index([userType, userReferenceId])\n  @@map(\"user\")\n}\n\nmodel Session {\n  id        String   @id\n  expiresAt DateTime\n  token     String   @unique\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  ipAddress String?\n  userAgent String?\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([userId])\n  @@index([expiresAt])\n  @@map(\"session\")\n}\n\nmodel Account {\n  id                    String    @id\n  accountId             String\n  providerId            String\n  userId                String\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime  @default(now())\n  updatedAt             DateTime  @updatedAt\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([userId])\n  @@map(\"account\")\n}\n\nmodel Verification {\n  id         String   @id\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n\n  @@index([identifier])\n  @@index([expiresAt])\n  @@map(\"verification\")\n}\n\nmodel Faculty {\n  id          String       @id @default(uuid())\n  name        String       @unique\n  code        String       @unique\n  createdAt   DateTime     @default(now())\n  updatedAt   DateTime     @updatedAt\n  departments Department[]\n\n  @@index([code])\n  @@index([name])\n  @@map(\"faculties\")\n}\n\nmodel Department {\n  id                String             @id @default(uuid())\n  facultyId         String\n  name              String\n  code              String\n  createdAt         DateTime           @default(now())\n  updatedAt         DateTime           @updatedAt\n  faculty           Faculty            @relation(fields: [facultyId], references: [id], onDelete: Cascade)\n  schoolSupervisors SchoolSupervisor[]\n  students          Student[]\n\n  @@unique([facultyId, code])\n  @@index([facultyId])\n  @@index([code])\n  @@map(\"departments\")\n}\n\nmodel PlacementOrganization {\n  id                  String               @id @default(uuid())\n  name                String\n  address             String?\n  city                String?\n  state               String?\n  phone               String?\n  email               String?\n  createdAt           DateTime             @default(now())\n  updatedAt           DateTime             @updatedAt\n  industrySupervisors IndustrySupervisor[]\n  studentSiwesDetails StudentSiwesDetail[]\n\n  @@index([name])\n  @@map(\"placement_organizations\")\n}\n\nmodel SiwesSession {\n  id                           String                        @id @default(uuid())\n  name                         String\n  startDate                    DateTime\n  endDate                      DateTime\n  totalWeeks                   Int                           @default(24)\n  status                       SessionStatus                 @default(ACTIVE)\n  createdAt                    DateTime                      @default(now())\n  updatedAt                    DateTime                      @updatedAt\n  finalComments                FinalComment[]\n  logbookMetadata              LogbookMetadata[]\n  studentSessionEnrollments    StudentSessionEnrollment[]\n  studentSiwesDetails          StudentSiwesDetail[]\n  studentSupervisorAssignments StudentSupervisorAssignment[]\n  supervisorSessionEnrollments SupervisorSessionEnrollment[]\n  weeklyEntries                WeeklyEntry[]\n\n  @@index([status])\n  @@index([startDate, endDate])\n  @@map(\"siwes_sessions\")\n}\n\nmodel AdminUser {\n  id                           String                        @id @default(uuid())\n  adminId                      String                        @unique\n  name                         String\n  email                        String                        @unique\n  passwordHash                 String\n  isActive                     Boolean                       @default(true)\n  betterAuthUserId             String?\n  createdAt                    DateTime                      @default(now())\n  updatedAt                    DateTime                      @updatedAt\n  studentSupervisorAssignments StudentSupervisorAssignment[]\n\n  @@index([adminId])\n  @@index([email])\n  @@index([betterAuthUserId])\n  @@map(\"admin_users\")\n}\n\nmodel Student {\n  id                           String                        @id @default(uuid())\n  matricNumber                 String                        @unique\n  name                         String\n  email                        String\n  departmentId                 String\n  passwordHash                 String\n  isActive                     Boolean                       @default(true)\n  betterAuthUserId             String?\n  createdAt                    DateTime                      @default(now())\n  updatedAt                    DateTime                      @updatedAt\n  finalComments                FinalComment[]\n  logbookMetadata              LogbookMetadata[]\n  reviewRequests               ReviewRequest[]\n  studentSessionEnrollments    StudentSessionEnrollment[]\n  studentSiwesDetails          StudentSiwesDetail[]\n  studentSupervisorAssignments StudentSupervisorAssignment[]\n  department                   Department                    @relation(fields: [departmentId], references: [id])\n  weeklyEntries                WeeklyEntry[]\n\n  @@index([matricNumber])\n  @@index([departmentId])\n  @@index([email])\n  @@index([betterAuthUserId])\n  @@map(\"students\")\n}\n\nmodel SchoolSupervisor {\n  id                           String                        @id @default(uuid())\n  staffId                      String                        @unique\n  name                         String\n  email                        String                        @unique\n  departmentId                 String\n  passwordHash                 String\n  isActive                     Boolean                       @default(true)\n  betterAuthUserId             String?\n  createdAt                    DateTime                      @default(now())\n  updatedAt                    DateTime                      @updatedAt\n  department                   Department                    @relation(fields: [departmentId], references: [id])\n  studentSupervisorAssignments StudentSupervisorAssignment[]\n  supervisorSessionEnrollments SupervisorSessionEnrollment[]\n\n  @@index([staffId])\n  @@index([departmentId])\n  @@index([email])\n  @@index([betterAuthUserId])\n  @@map(\"school_supervisors\")\n}\n\nmodel IndustrySupervisor {\n  id                      String                @id @default(uuid())\n  name                    String\n  email                   String                @unique\n  placementOrganizationId String\n  position                String?\n  phone                   String?\n  isActive                Boolean               @default(true)\n  betterAuthUserId        String?\n  createdAt               DateTime              @default(now())\n  updatedAt               DateTime              @updatedAt\n  placementOrganization   PlacementOrganization @relation(fields: [placementOrganizationId], references: [id])\n  reviewRequests          ReviewRequest[]\n  studentSiwesDetails     StudentSiwesDetail[]\n\n  @@index([email])\n  @@index([placementOrganizationId])\n  @@index([betterAuthUserId])\n  @@map(\"industry_supervisors\")\n}\n\nmodel StudentSessionEnrollment {\n  id             String       @id @default(uuid())\n  studentId      String\n  siwesSessionId String\n  isActive       Boolean      @default(true)\n  enrolledAt     DateTime\n  createdAt      DateTime     @default(now())\n  updatedAt      DateTime     @updatedAt\n  siwesSession   SiwesSession @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)\n  student        Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)\n\n  @@unique([studentId, siwesSessionId])\n  @@index([studentId, siwesSessionId])\n  @@index([siwesSessionId])\n  @@map(\"student_session_enrollments\")\n}\n\nmodel SupervisorSessionEnrollment {\n  id                 String           @id @default(uuid())\n  schoolSupervisorId String\n  siwesSessionId     String\n  enrolledAt         DateTime\n  createdAt          DateTime         @default(now())\n  updatedAt          DateTime         @updatedAt\n  schoolSupervisor   SchoolSupervisor @relation(fields: [schoolSupervisorId], references: [id], onDelete: Cascade)\n  siwesSession       SiwesSession     @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)\n\n  @@unique([schoolSupervisorId, siwesSessionId])\n  @@index([schoolSupervisorId, siwesSessionId])\n  @@index([siwesSessionId])\n  @@map(\"supervisor_session_enrollments\")\n}\n\nmodel StudentSupervisorAssignment {\n  id                 String           @id @default(uuid())\n  studentId          String\n  schoolSupervisorId String\n  siwesSessionId     String\n  assignedBy         String\n  assignmentMethod   AssignmentMethod\n  assignedAt         DateTime\n  createdAt          DateTime         @default(now())\n  updatedAt          DateTime         @updatedAt\n  admin              AdminUser        @relation(fields: [assignedBy], references: [id])\n  schoolSupervisor   SchoolSupervisor @relation(fields: [schoolSupervisorId], references: [id], onDelete: Cascade)\n  siwesSession       SiwesSession     @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)\n  student            Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)\n\n  @@unique([studentId, schoolSupervisorId, siwesSessionId])\n  @@index([studentId, siwesSessionId])\n  @@index([schoolSupervisorId, siwesSessionId])\n  @@map(\"student_supervisor_assignments\")\n}\n\nmodel StudentSiwesDetail {\n  id                      String                @id @default(uuid())\n  studentId               String\n  siwesSessionId          String\n  placementOrganizationId String\n  industrySupervisorId    String\n  trainingStartDate       DateTime\n  trainingEndDate         DateTime\n  jobTitle                String?\n  departmentAtOrg         String?\n  createdAt               DateTime              @default(now())\n  updatedAt               DateTime              @updatedAt\n  industrySupervisor      IndustrySupervisor    @relation(fields: [industrySupervisorId], references: [id])\n  placementOrganization   PlacementOrganization @relation(fields: [placementOrganizationId], references: [id])\n  siwesSession            SiwesSession          @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)\n  student                 Student               @relation(fields: [studentId], references: [id], onDelete: Cascade)\n\n  @@unique([studentId, siwesSessionId])\n  @@index([studentId, siwesSessionId])\n  @@index([industrySupervisorId])\n  @@index([placementOrganizationId])\n  @@map(\"student_siwes_details\")\n}\n\nmodel LogbookMetadata {\n  id                   String       @id @default(uuid())\n  studentId            String\n  siwesSessionId       String\n  programOfStudy       String\n  level                String\n  session              String\n  trainingDuration     String\n  areaOfSpecialization String?\n  createdAt            DateTime     @default(now())\n  updatedAt            DateTime     @updatedAt\n  siwesSession         SiwesSession @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)\n  student              Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)\n\n  @@unique([studentId, siwesSessionId])\n  @@index([studentId, siwesSessionId])\n  @@map(\"logbook_metadata\")\n}\n\nmodel WeeklyEntry {\n  id             String          @id @default(uuid())\n  studentId      String\n  siwesSessionId String\n  weekNumber     Int\n  mondayEntry    String?\n  tuesdayEntry   String?\n  wednesdayEntry String?\n  thursdayEntry  String?\n  fridayEntry    String?\n  saturdayEntry  String?\n  isLocked       Boolean         @default(false)\n  lockedBy       LockedBy?\n  lockedAt       DateTime?\n  createdAt      DateTime        @default(now())\n  updatedAt      DateTime        @updatedAt\n  diagrams       Diagram[]\n  reviewRequest  ReviewRequest?\n  weeklyComments WeeklyComment[]\n  siwesSession   SiwesSession    @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)\n  student        Student         @relation(fields: [studentId], references: [id], onDelete: Cascade)\n\n  @@unique([studentId, siwesSessionId, weekNumber])\n  @@index([studentId, siwesSessionId, weekNumber])\n  @@index([studentId, isLocked])\n  @@map(\"weekly_entries\")\n}\n\nmodel Diagram {\n  id            String      @id @default(uuid())\n  weeklyEntryId String\n  fileName      String\n  filePath      String\n  fileSize      Int\n  mimeType      String\n  caption       String?\n  uploadedAt    DateTime\n  createdAt     DateTime    @default(now())\n  updatedAt     DateTime    @updatedAt\n  weeklyEntry   WeeklyEntry @relation(fields: [weeklyEntryId], references: [id], onDelete: Cascade)\n\n  @@index([weeklyEntryId])\n  @@map(\"diagrams\")\n}\n\nmodel WeeklyComment {\n  id            String        @id @default(uuid())\n  weeklyEntryId String\n  commenterType CommenterType\n  commenterId   String\n  comment       String\n  commentedAt   DateTime\n  createdAt     DateTime      @default(now())\n  updatedAt     DateTime      @updatedAt\n  weeklyEntry   WeeklyEntry   @relation(fields: [weeklyEntryId], references: [id], onDelete: Cascade)\n\n  @@index([weeklyEntryId, commenterType])\n  @@index([commenterId, commenterType])\n  @@map(\"weekly_comments\")\n}\n\nmodel ReviewRequest {\n  id                   String             @id @default(uuid())\n  weeklyEntryId        String             @unique\n  studentId            String\n  industrySupervisorId String\n  status               ReviewStatus       @default(PENDING)\n  requestedAt          DateTime\n  reviewedAt           DateTime?\n  createdAt            DateTime           @default(now())\n  updatedAt            DateTime           @updatedAt\n  industrySupervisor   IndustrySupervisor @relation(fields: [industrySupervisorId], references: [id])\n  student              Student            @relation(fields: [studentId], references: [id], onDelete: Cascade)\n  weeklyEntry          WeeklyEntry        @relation(fields: [weeklyEntryId], references: [id], onDelete: Cascade)\n\n  @@index([weeklyEntryId])\n  @@index([industrySupervisorId, status])\n  @@index([studentId])\n  @@map(\"review_requests\")\n}\n\nmodel FinalComment {\n  id             String        @id @default(uuid())\n  studentId      String\n  siwesSessionId String\n  commenterType  CommenterType\n  commenterId    String\n  comment        String\n  rating         String?\n  commentedAt    DateTime\n  createdAt      DateTime      @default(now())\n  updatedAt      DateTime      @updatedAt\n  siwesSession   SiwesSession  @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)\n  student        Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)\n\n  @@unique([studentId, siwesSessionId, commenterType])\n  @@index([studentId, siwesSessionId, commenterType])\n  @@index([commenterId, commenterType])\n  @@map(\"final_comments\")\n}\n\nmodel ActivityLog {\n  id         String   @id @default(uuid())\n  userType   UserType\n  userId     String\n  action     String\n  entityType String?\n  entityId   String?\n  details    Json?\n  ipAddress  String?\n  createdAt  DateTime @default(now())\n\n  @@index([userType, userId])\n  @@index([entityType, entityId])\n  @@index([createdAt])\n  @@map(\"activity_logs\")\n}\n\nenum UserType {\n  ADMIN\n  STUDENT\n  SCHOOL_SUPERVISOR\n  INDUSTRY_SUPERVISOR\n\n  @@map(\"user_type\")\n}\n\nenum SessionStatus {\n  ACTIVE\n  CLOSED\n\n  @@map(\"session_status\")\n}\n\nenum AssignmentMethod {\n  MANUAL\n  AUTOMATIC\n\n  @@map(\"assignment_method\")\n}\n\nenum LockedBy {\n  INDUSTRY_SUPERVISOR\n  SCHOOL_SUPERVISOR\n  MANUAL\n\n  @@map(\"locked_by\")\n}\n\nenum CommenterType {\n  INDUSTRY_SUPERVISOR\n  SCHOOL_SUPERVISOR\n\n  @@map(\"commenter_type\")\n}\n\nenum ReviewStatus {\n  PENDING\n  REVIEWED\n  EXPIRED\n\n  @@map(\"review_status\")\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"emailVerified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userType\",\"kind\":\"enum\",\"type\":\"UserType\"},{\"name\":\"userReferenceId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"accounts\",\"kind\":\"object\",\"type\":\"Account\",\"relationName\":\"AccountToUser\"},{\"name\":\"sessions\",\"kind\":\"object\",\"type\":\"Session\",\"relationName\":\"SessionToUser\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"displayUsername\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":\"user\"},\"Session\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"ipAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userAgent\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"SessionToUser\"}],\"dbName\":\"session\"},\"Account\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accountId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"providerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accessToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"refreshToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"idToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accessTokenExpiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"refreshTokenExpiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"scope\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AccountToUser\"}],\"dbName\":\"account\"},\"Verification\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"identifier\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"verification\"},\"Faculty\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"code\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"departments\",\"kind\":\"object\",\"type\":\"Department\",\"relationName\":\"DepartmentToFaculty\"}],\"dbName\":\"faculties\"},\"Department\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"facultyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"code\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"faculty\",\"kind\":\"object\",\"type\":\"Faculty\",\"relationName\":\"DepartmentToFaculty\"},{\"name\":\"schoolSupervisors\",\"kind\":\"object\",\"type\":\"SchoolSupervisor\",\"relationName\":\"DepartmentToSchoolSupervisor\"},{\"name\":\"students\",\"kind\":\"object\",\"type\":\"Student\",\"relationName\":\"DepartmentToStudent\"}],\"dbName\":\"departments\"},\"PlacementOrganization\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"address\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"state\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"industrySupervisors\",\"kind\":\"object\",\"type\":\"IndustrySupervisor\",\"relationName\":\"IndustrySupervisorToPlacementOrganization\"},{\"name\":\"studentSiwesDetails\",\"kind\":\"object\",\"type\":\"StudentSiwesDetail\",\"relationName\":\"PlacementOrganizationToStudentSiwesDetail\"}],\"dbName\":\"placement_organizations\"},\"SiwesSession\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"totalWeeks\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"SessionStatus\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"finalComments\",\"kind\":\"object\",\"type\":\"FinalComment\",\"relationName\":\"FinalCommentToSiwesSession\"},{\"name\":\"logbookMetadata\",\"kind\":\"object\",\"type\":\"LogbookMetadata\",\"relationName\":\"LogbookMetadataToSiwesSession\"},{\"name\":\"studentSessionEnrollments\",\"kind\":\"object\",\"type\":\"StudentSessionEnrollment\",\"relationName\":\"SiwesSessionToStudentSessionEnrollment\"},{\"name\":\"studentSiwesDetails\",\"kind\":\"object\",\"type\":\"StudentSiwesDetail\",\"relationName\":\"SiwesSessionToStudentSiwesDetail\"},{\"name\":\"studentSupervisorAssignments\",\"kind\":\"object\",\"type\":\"StudentSupervisorAssignment\",\"relationName\":\"SiwesSessionToStudentSupervisorAssignment\"},{\"name\":\"supervisorSessionEnrollments\",\"kind\":\"object\",\"type\":\"SupervisorSessionEnrollment\",\"relationName\":\"SiwesSessionToSupervisorSessionEnrollment\"},{\"name\":\"weeklyEntries\",\"kind\":\"object\",\"type\":\"WeeklyEntry\",\"relationName\":\"SiwesSessionToWeeklyEntry\"}],\"dbName\":\"siwes_sessions\"},\"AdminUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"adminId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"betterAuthUserId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"studentSupervisorAssignments\",\"kind\":\"object\",\"type\":\"StudentSupervisorAssignment\",\"relationName\":\"AdminUserToStudentSupervisorAssignment\"}],\"dbName\":\"admin_users\"},\"Student\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"matricNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"departmentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"betterAuthUserId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"finalComments\",\"kind\":\"object\",\"type\":\"FinalComment\",\"relationName\":\"FinalCommentToStudent\"},{\"name\":\"logbookMetadata\",\"kind\":\"object\",\"type\":\"LogbookMetadata\",\"relationName\":\"LogbookMetadataToStudent\"},{\"name\":\"reviewRequests\",\"kind\":\"object\",\"type\":\"ReviewRequest\",\"relationName\":\"ReviewRequestToStudent\"},{\"name\":\"studentSessionEnrollments\",\"kind\":\"object\",\"type\":\"StudentSessionEnrollment\",\"relationName\":\"StudentToStudentSessionEnrollment\"},{\"name\":\"studentSiwesDetails\",\"kind\":\"object\",\"type\":\"StudentSiwesDetail\",\"relationName\":\"StudentToStudentSiwesDetail\"},{\"name\":\"studentSupervisorAssignments\",\"kind\":\"object\",\"type\":\"StudentSupervisorAssignment\",\"relationName\":\"StudentToStudentSupervisorAssignment\"},{\"name\":\"department\",\"kind\":\"object\",\"type\":\"Department\",\"relationName\":\"DepartmentToStudent\"},{\"name\":\"weeklyEntries\",\"kind\":\"object\",\"type\":\"WeeklyEntry\",\"relationName\":\"StudentToWeeklyEntry\"}],\"dbName\":\"students\"},\"SchoolSupervisor\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"staffId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"departmentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"betterAuthUserId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"department\",\"kind\":\"object\",\"type\":\"Department\",\"relationName\":\"DepartmentToSchoolSupervisor\"},{\"name\":\"studentSupervisorAssignments\",\"kind\":\"object\",\"type\":\"StudentSupervisorAssignment\",\"relationName\":\"SchoolSupervisorToStudentSupervisorAssignment\"},{\"name\":\"supervisorSessionEnrollments\",\"kind\":\"object\",\"type\":\"SupervisorSessionEnrollment\",\"relationName\":\"SchoolSupervisorToSupervisorSessionEnrollment\"}],\"dbName\":\"school_supervisors\"},\"IndustrySupervisor\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"placementOrganizationId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"betterAuthUserId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"placementOrganization\",\"kind\":\"object\",\"type\":\"PlacementOrganization\",\"relationName\":\"IndustrySupervisorToPlacementOrganization\"},{\"name\":\"reviewRequests\",\"kind\":\"object\",\"type\":\"ReviewRequest\",\"relationName\":\"IndustrySupervisorToReviewRequest\"},{\"name\":\"studentSiwesDetails\",\"kind\":\"object\",\"type\":\"StudentSiwesDetail\",\"relationName\":\"IndustrySupervisorToStudentSiwesDetail\"}],\"dbName\":\"industry_supervisors\"},\"StudentSessionEnrollment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"studentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"siwesSessionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"enrolledAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"siwesSession\",\"kind\":\"object\",\"type\":\"SiwesSession\",\"relationName\":\"SiwesSessionToStudentSessionEnrollment\"},{\"name\":\"student\",\"kind\":\"object\",\"type\":\"Student\",\"relationName\":\"StudentToStudentSessionEnrollment\"}],\"dbName\":\"student_session_enrollments\"},\"SupervisorSessionEnrollment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"schoolSupervisorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"siwesSessionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"enrolledAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"schoolSupervisor\",\"kind\":\"object\",\"type\":\"SchoolSupervisor\",\"relationName\":\"SchoolSupervisorToSupervisorSessionEnrollment\"},{\"name\":\"siwesSession\",\"kind\":\"object\",\"type\":\"SiwesSession\",\"relationName\":\"SiwesSessionToSupervisorSessionEnrollment\"}],\"dbName\":\"supervisor_session_enrollments\"},\"StudentSupervisorAssignment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"studentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"schoolSupervisorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"siwesSessionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"assignedBy\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"assignmentMethod\",\"kind\":\"enum\",\"type\":\"AssignmentMethod\"},{\"name\":\"assignedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"admin\",\"kind\":\"object\",\"type\":\"AdminUser\",\"relationName\":\"AdminUserToStudentSupervisorAssignment\"},{\"name\":\"schoolSupervisor\",\"kind\":\"object\",\"type\":\"SchoolSupervisor\",\"relationName\":\"SchoolSupervisorToStudentSupervisorAssignment\"},{\"name\":\"siwesSession\",\"kind\":\"object\",\"type\":\"SiwesSession\",\"relationName\":\"SiwesSessionToStudentSupervisorAssignment\"},{\"name\":\"student\",\"kind\":\"object\",\"type\":\"Student\",\"relationName\":\"StudentToStudentSupervisorAssignment\"}],\"dbName\":\"student_supervisor_assignments\"},\"StudentSiwesDetail\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"studentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"siwesSessionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"placementOrganizationId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"industrySupervisorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"trainingStartDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"trainingEndDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"jobTitle\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"departmentAtOrg\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"industrySupervisor\",\"kind\":\"object\",\"type\":\"IndustrySupervisor\",\"relationName\":\"IndustrySupervisorToStudentSiwesDetail\"},{\"name\":\"placementOrganization\",\"kind\":\"object\",\"type\":\"PlacementOrganization\",\"relationName\":\"PlacementOrganizationToStudentSiwesDetail\"},{\"name\":\"siwesSession\",\"kind\":\"object\",\"type\":\"SiwesSession\",\"relationName\":\"SiwesSessionToStudentSiwesDetail\"},{\"name\":\"student\",\"kind\":\"object\",\"type\":\"Student\",\"relationName\":\"StudentToStudentSiwesDetail\"}],\"dbName\":\"student_siwes_details\"},\"LogbookMetadata\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"studentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"siwesSessionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"programOfStudy\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"level\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"session\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"trainingDuration\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"areaOfSpecialization\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"siwesSession\",\"kind\":\"object\",\"type\":\"SiwesSession\",\"relationName\":\"LogbookMetadataToSiwesSession\"},{\"name\":\"student\",\"kind\":\"object\",\"type\":\"Student\",\"relationName\":\"LogbookMetadataToStudent\"}],\"dbName\":\"logbook_metadata\"},\"WeeklyEntry\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"studentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"siwesSessionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"weekNumber\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"mondayEntry\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tuesdayEntry\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"wednesdayEntry\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"thursdayEntry\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fridayEntry\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"saturdayEntry\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isLocked\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"lockedBy\",\"kind\":\"enum\",\"type\":\"LockedBy\"},{\"name\":\"lockedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"diagrams\",\"kind\":\"object\",\"type\":\"Diagram\",\"relationName\":\"DiagramToWeeklyEntry\"},{\"name\":\"reviewRequest\",\"kind\":\"object\",\"type\":\"ReviewRequest\",\"relationName\":\"ReviewRequestToWeeklyEntry\"},{\"name\":\"weeklyComments\",\"kind\":\"object\",\"type\":\"WeeklyComment\",\"relationName\":\"WeeklyCommentToWeeklyEntry\"},{\"name\":\"siwesSession\",\"kind\":\"object\",\"type\":\"SiwesSession\",\"relationName\":\"SiwesSessionToWeeklyEntry\"},{\"name\":\"student\",\"kind\":\"object\",\"type\":\"Student\",\"relationName\":\"StudentToWeeklyEntry\"}],\"dbName\":\"weekly_entries\"},\"Diagram\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"weeklyEntryId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fileName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"filePath\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fileSize\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"mimeType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"caption\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"uploadedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"weeklyEntry\",\"kind\":\"object\",\"type\":\"WeeklyEntry\",\"relationName\":\"DiagramToWeeklyEntry\"}],\"dbName\":\"diagrams\"},\"WeeklyComment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"weeklyEntryId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"commenterType\",\"kind\":\"enum\",\"type\":\"CommenterType\"},{\"name\":\"commenterId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"comment\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"commentedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"weeklyEntry\",\"kind\":\"object\",\"type\":\"WeeklyEntry\",\"relationName\":\"WeeklyCommentToWeeklyEntry\"}],\"dbName\":\"weekly_comments\"},\"ReviewRequest\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"weeklyEntryId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"studentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"industrySupervisorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"ReviewStatus\"},{\"name\":\"requestedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"reviewedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"industrySupervisor\",\"kind\":\"object\",\"type\":\"IndustrySupervisor\",\"relationName\":\"IndustrySupervisorToReviewRequest\"},{\"name\":\"student\",\"kind\":\"object\",\"type\":\"Student\",\"relationName\":\"ReviewRequestToStudent\"},{\"name\":\"weeklyEntry\",\"kind\":\"object\",\"type\":\"WeeklyEntry\",\"relationName\":\"ReviewRequestToWeeklyEntry\"}],\"dbName\":\"review_requests\"},\"FinalComment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"studentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"siwesSessionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"commenterType\",\"kind\":\"enum\",\"type\":\"CommenterType\"},{\"name\":\"commenterId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"comment\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"rating\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"commentedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"siwesSession\",\"kind\":\"object\",\"type\":\"SiwesSession\",\"relationName\":\"FinalCommentToSiwesSession\"},{\"name\":\"student\",\"kind\":\"object\",\"type\":\"Student\",\"relationName\":\"FinalCommentToStudent\"}],\"dbName\":\"final_comments\"},\"ActivityLog\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userType\",\"kind\":\"enum\",\"type\":\"UserType\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"action\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"entityType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"entityId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"details\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"ipAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"activity_logs\"}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -176,7 +176,235 @@ export interface PrismaClient<
     extArgs: ExtArgs
   }>>
 
-    
+      /**
+   * `prisma.user`: Exposes CRUD operations for the **User** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Users
+    * const users = await prisma.user.findMany()
+    * ```
+    */
+  get user(): Prisma.UserDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.session`: Exposes CRUD operations for the **Session** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Sessions
+    * const sessions = await prisma.session.findMany()
+    * ```
+    */
+  get session(): Prisma.SessionDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.account`: Exposes CRUD operations for the **Account** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Accounts
+    * const accounts = await prisma.account.findMany()
+    * ```
+    */
+  get account(): Prisma.AccountDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.verification`: Exposes CRUD operations for the **Verification** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Verifications
+    * const verifications = await prisma.verification.findMany()
+    * ```
+    */
+  get verification(): Prisma.VerificationDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.faculty`: Exposes CRUD operations for the **Faculty** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Faculties
+    * const faculties = await prisma.faculty.findMany()
+    * ```
+    */
+  get faculty(): Prisma.FacultyDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.department`: Exposes CRUD operations for the **Department** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Departments
+    * const departments = await prisma.department.findMany()
+    * ```
+    */
+  get department(): Prisma.DepartmentDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.placementOrganization`: Exposes CRUD operations for the **PlacementOrganization** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PlacementOrganizations
+    * const placementOrganizations = await prisma.placementOrganization.findMany()
+    * ```
+    */
+  get placementOrganization(): Prisma.PlacementOrganizationDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.siwesSession`: Exposes CRUD operations for the **SiwesSession** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SiwesSessions
+    * const siwesSessions = await prisma.siwesSession.findMany()
+    * ```
+    */
+  get siwesSession(): Prisma.SiwesSessionDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.adminUser`: Exposes CRUD operations for the **AdminUser** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdminUsers
+    * const adminUsers = await prisma.adminUser.findMany()
+    * ```
+    */
+  get adminUser(): Prisma.AdminUserDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.student`: Exposes CRUD operations for the **Student** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Students
+    * const students = await prisma.student.findMany()
+    * ```
+    */
+  get student(): Prisma.StudentDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.schoolSupervisor`: Exposes CRUD operations for the **SchoolSupervisor** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SchoolSupervisors
+    * const schoolSupervisors = await prisma.schoolSupervisor.findMany()
+    * ```
+    */
+  get schoolSupervisor(): Prisma.SchoolSupervisorDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.industrySupervisor`: Exposes CRUD operations for the **IndustrySupervisor** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more IndustrySupervisors
+    * const industrySupervisors = await prisma.industrySupervisor.findMany()
+    * ```
+    */
+  get industrySupervisor(): Prisma.IndustrySupervisorDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.studentSessionEnrollment`: Exposes CRUD operations for the **StudentSessionEnrollment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StudentSessionEnrollments
+    * const studentSessionEnrollments = await prisma.studentSessionEnrollment.findMany()
+    * ```
+    */
+  get studentSessionEnrollment(): Prisma.StudentSessionEnrollmentDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.supervisorSessionEnrollment`: Exposes CRUD operations for the **SupervisorSessionEnrollment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SupervisorSessionEnrollments
+    * const supervisorSessionEnrollments = await prisma.supervisorSessionEnrollment.findMany()
+    * ```
+    */
+  get supervisorSessionEnrollment(): Prisma.SupervisorSessionEnrollmentDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.studentSupervisorAssignment`: Exposes CRUD operations for the **StudentSupervisorAssignment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StudentSupervisorAssignments
+    * const studentSupervisorAssignments = await prisma.studentSupervisorAssignment.findMany()
+    * ```
+    */
+  get studentSupervisorAssignment(): Prisma.StudentSupervisorAssignmentDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.studentSiwesDetail`: Exposes CRUD operations for the **StudentSiwesDetail** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StudentSiwesDetails
+    * const studentSiwesDetails = await prisma.studentSiwesDetail.findMany()
+    * ```
+    */
+  get studentSiwesDetail(): Prisma.StudentSiwesDetailDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.logbookMetadata`: Exposes CRUD operations for the **LogbookMetadata** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LogbookMetadata
+    * const logbookMetadata = await prisma.logbookMetadata.findMany()
+    * ```
+    */
+  get logbookMetadata(): Prisma.LogbookMetadataDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.weeklyEntry`: Exposes CRUD operations for the **WeeklyEntry** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WeeklyEntries
+    * const weeklyEntries = await prisma.weeklyEntry.findMany()
+    * ```
+    */
+  get weeklyEntry(): Prisma.WeeklyEntryDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.diagram`: Exposes CRUD operations for the **Diagram** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Diagrams
+    * const diagrams = await prisma.diagram.findMany()
+    * ```
+    */
+  get diagram(): Prisma.DiagramDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.weeklyComment`: Exposes CRUD operations for the **WeeklyComment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WeeklyComments
+    * const weeklyComments = await prisma.weeklyComment.findMany()
+    * ```
+    */
+  get weeklyComment(): Prisma.WeeklyCommentDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.reviewRequest`: Exposes CRUD operations for the **ReviewRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReviewRequests
+    * const reviewRequests = await prisma.reviewRequest.findMany()
+    * ```
+    */
+  get reviewRequest(): Prisma.ReviewRequestDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.finalComment`: Exposes CRUD operations for the **FinalComment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FinalComments
+    * const finalComments = await prisma.finalComment.findMany()
+    * ```
+    */
+  get finalComment(): Prisma.FinalCommentDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.activityLog`: Exposes CRUD operations for the **ActivityLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ActivityLogs
+    * const activityLogs = await prisma.activityLog.findMany()
+    * ```
+    */
+  get activityLog(): Prisma.ActivityLogDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

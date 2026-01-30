@@ -1,6 +1,9 @@
 import { PrismaClient } from "@/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
+/**
+ * Prisma client singleton to prevent multiple instances in development
+ */
 const globalForPrisma = global as unknown as {
   prisma: PrismaClient;
 };

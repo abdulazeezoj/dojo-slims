@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -5,4 +6,494 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+  id              String    @id
+  name            String?
+  email           String?   @unique
+  emailVerified   Boolean   @default(false)
+  image           String?
+  userType        UserType
+  userReferenceId String
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  accounts        Account[]
+  sessions        Session[]
+
+  username        String?
+  displayUsername String?
+
+  @@unique([userType, userReferenceId])
+  @@index([userType, userReferenceId])
+  @@map("user")
+  @@unique([username])
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@index([expiresAt])
+  @@map("verification")
+}
+
+model Faculty {
+  id          String       @id @default(uuid())
+  name        String       @unique
+  code        String       @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  departments Department[]
+
+  @@index([code])
+  @@index([name])
+  @@map("faculties")
+}
+
+model Department {
+  id                String             @id @default(uuid())
+  facultyId         String
+  name              String
+  code              String
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  faculty           Faculty            @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  schoolSupervisors SchoolSupervisor[]
+  students          Student[]
+
+  @@unique([facultyId, code])
+  @@index([facultyId])
+  @@index([code])
+  @@map("departments")
+}
+
+model PlacementOrganization {
+  id                  String               @id @default(uuid())
+  name                String
+  address             String?
+  city                String?
+  state               String?
+  phone               String?
+  email               String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  industrySupervisors IndustrySupervisor[]
+  studentSiwesDetails StudentSiwesDetail[]
+
+  @@index([name])
+  @@map("placement_organizations")
+}
+
+model SiwesSession {
+  id                           String                        @id @default(uuid())
+  name                         String
+  startDate                    DateTime
+  endDate                      DateTime
+  totalWeeks                   Int                           @default(24)
+  status                       SessionStatus                 @default(ACTIVE)
+  createdAt                    DateTime                      @default(now())
+  updatedAt                    DateTime                      @updatedAt
+  finalComments                FinalComment[]
+  logbookMetadata              LogbookMetadata[]
+  studentSessionEnrollments    StudentSessionEnrollment[]
+  studentSiwesDetails          StudentSiwesDetail[]
+  studentSupervisorAssignments StudentSupervisorAssignment[]
+  supervisorSessionEnrollments SupervisorSessionEnrollment[]
+  weeklyEntries                WeeklyEntry[]
+
+  @@index([status])
+  @@index([startDate, endDate])
+  @@map("siwes_sessions")
+}
+
+model AdminUser {
+  id                           String                        @id @default(uuid())
+  adminId                      String                        @unique
+  name                         String
+  email                        String                        @unique
+  passwordHash                 String
+  isActive                     Boolean                       @default(true)
+  betterAuthUserId             String?
+  createdAt                    DateTime                      @default(now())
+  updatedAt                    DateTime                      @updatedAt
+  studentSupervisorAssignments StudentSupervisorAssignment[]
+
+  @@index([adminId])
+  @@index([email])
+  @@index([betterAuthUserId])
+  @@map("admin_users")
+}
+
+model Student {
+  id                           String                        @id @default(uuid())
+  matricNumber                 String                        @unique
+  name                         String
+  email                        String
+  departmentId                 String
+  passwordHash                 String
+  isActive                     Boolean                       @default(true)
+  betterAuthUserId             String?
+  createdAt                    DateTime                      @default(now())
+  updatedAt                    DateTime                      @updatedAt
+  finalComments                FinalComment[]
+  logbookMetadata              LogbookMetadata[]
+  reviewRequests               ReviewRequest[]
+  studentSessionEnrollments    StudentSessionEnrollment[]
+  studentSiwesDetails          StudentSiwesDetail[]
+  studentSupervisorAssignments StudentSupervisorAssignment[]
+  department                   Department                    @relation(fields: [departmentId], references: [id])
+  weeklyEntries                WeeklyEntry[]
+
+  @@index([matricNumber])
+  @@index([departmentId])
+  @@index([email])
+  @@index([betterAuthUserId])
+  @@map("students")
+}
+
+model SchoolSupervisor {
+  id                           String                        @id @default(uuid())
+  staffId                      String                        @unique
+  name                         String
+  email                        String                        @unique
+  departmentId                 String
+  passwordHash                 String
+  isActive                     Boolean                       @default(true)
+  betterAuthUserId             String?
+  createdAt                    DateTime                      @default(now())
+  updatedAt                    DateTime                      @updatedAt
+  department                   Department                    @relation(fields: [departmentId], references: [id])
+  studentSupervisorAssignments StudentSupervisorAssignment[]
+  supervisorSessionEnrollments SupervisorSessionEnrollment[]
+
+  @@index([staffId])
+  @@index([departmentId])
+  @@index([email])
+  @@index([betterAuthUserId])
+  @@map("school_supervisors")
+}
+
+model IndustrySupervisor {
+  id                      String                @id @default(uuid())
+  name                    String
+  email                   String                @unique
+  placementOrganizationId String
+  position                String?
+  phone                   String?
+  isActive                Boolean               @default(true)
+  betterAuthUserId        String?
+  createdAt               DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
+  placementOrganization   PlacementOrganization @relation(fields: [placementOrganizationId], references: [id])
+  reviewRequests          ReviewRequest[]
+  studentSiwesDetails     StudentSiwesDetail[]
+
+  @@index([email])
+  @@index([placementOrganizationId])
+  @@index([betterAuthUserId])
+  @@map("industry_supervisors")
+}
+
+model StudentSessionEnrollment {
+  id             String       @id @default(uuid())
+  studentId      String
+  siwesSessionId String
+  isActive       Boolean      @default(true)
+  enrolledAt     DateTime
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  siwesSession   SiwesSession @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
+  student        Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, siwesSessionId])
+  @@index([studentId, siwesSessionId])
+  @@index([siwesSessionId])
+  @@map("student_session_enrollments")
+}
+
+model SupervisorSessionEnrollment {
+  id                 String           @id @default(uuid())
+  schoolSupervisorId String
+  siwesSessionId     String
+  enrolledAt         DateTime
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  schoolSupervisor   SchoolSupervisor @relation(fields: [schoolSupervisorId], references: [id], onDelete: Cascade)
+  siwesSession       SiwesSession     @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
+
+  @@unique([schoolSupervisorId, siwesSessionId])
+  @@index([schoolSupervisorId, siwesSessionId])
+  @@index([siwesSessionId])
+  @@map("supervisor_session_enrollments")
+}
+
+model StudentSupervisorAssignment {
+  id                 String           @id @default(uuid())
+  studentId          String
+  schoolSupervisorId String
+  siwesSessionId     String
+  assignedBy         String
+  assignmentMethod   AssignmentMethod
+  assignedAt         DateTime
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  admin              AdminUser        @relation(fields: [assignedBy], references: [id])
+  schoolSupervisor   SchoolSupervisor @relation(fields: [schoolSupervisorId], references: [id], onDelete: Cascade)
+  siwesSession       SiwesSession     @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
+  student            Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, schoolSupervisorId, siwesSessionId])
+  @@index([studentId, siwesSessionId])
+  @@index([schoolSupervisorId, siwesSessionId])
+  @@map("student_supervisor_assignments")
+}
+
+model StudentSiwesDetail {
+  id                      String                @id @default(uuid())
+  studentId               String
+  siwesSessionId          String
+  placementOrganizationId String
+  industrySupervisorId    String
+  trainingStartDate       DateTime
+  trainingEndDate         DateTime
+  jobTitle                String?
+  departmentAtOrg         String?
+  createdAt               DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
+  industrySupervisor      IndustrySupervisor    @relation(fields: [industrySupervisorId], references: [id])
+  placementOrganization   PlacementOrganization @relation(fields: [placementOrganizationId], references: [id])
+  siwesSession            SiwesSession          @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
+  student                 Student               @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, siwesSessionId])
+  @@index([studentId, siwesSessionId])
+  @@index([industrySupervisorId])
+  @@index([placementOrganizationId])
+  @@map("student_siwes_details")
+}
+
+model LogbookMetadata {
+  id                   String       @id @default(uuid())
+  studentId            String
+  siwesSessionId       String
+  programOfStudy       String
+  level                String
+  session              String
+  trainingDuration     String
+  areaOfSpecialization String?
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  siwesSession         SiwesSession @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
+  student              Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, siwesSessionId])
+  @@index([studentId, siwesSessionId])
+  @@map("logbook_metadata")
+}
+
+model WeeklyEntry {
+  id             String          @id @default(uuid())
+  studentId      String
+  siwesSessionId String
+  weekNumber     Int
+  mondayEntry    String?
+  tuesdayEntry   String?
+  wednesdayEntry String?
+  thursdayEntry  String?
+  fridayEntry    String?
+  saturdayEntry  String?
+  isLocked       Boolean         @default(false)
+  lockedBy       LockedBy?
+  lockedAt       DateTime?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  diagrams       Diagram[]
+  reviewRequest  ReviewRequest?
+  weeklyComments WeeklyComment[]
+  siwesSession   SiwesSession    @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
+  student        Student         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, siwesSessionId, weekNumber])
+  @@index([studentId, siwesSessionId, weekNumber])
+  @@index([studentId, isLocked])
+  @@map("weekly_entries")
+}
+
+model Diagram {
+  id            String      @id @default(uuid())
+  weeklyEntryId String
+  fileName      String
+  filePath      String
+  fileSize      Int
+  mimeType      String
+  caption       String?
+  uploadedAt    DateTime
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  weeklyEntry   WeeklyEntry @relation(fields: [weeklyEntryId], references: [id], onDelete: Cascade)
+
+  @@index([weeklyEntryId])
+  @@map("diagrams")
+}
+
+model WeeklyComment {
+  id            String        @id @default(uuid())
+  weeklyEntryId String
+  commenterType CommenterType
+  commenterId   String
+  comment       String
+  commentedAt   DateTime
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  weeklyEntry   WeeklyEntry   @relation(fields: [weeklyEntryId], references: [id], onDelete: Cascade)
+
+  @@index([weeklyEntryId, commenterType])
+  @@index([commenterId, commenterType])
+  @@map("weekly_comments")
+}
+
+model ReviewRequest {
+  id                   String             @id @default(uuid())
+  weeklyEntryId        String             @unique
+  studentId            String
+  industrySupervisorId String
+  status               ReviewStatus       @default(PENDING)
+  requestedAt          DateTime
+  reviewedAt           DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  industrySupervisor   IndustrySupervisor @relation(fields: [industrySupervisorId], references: [id])
+  student              Student            @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  weeklyEntry          WeeklyEntry        @relation(fields: [weeklyEntryId], references: [id], onDelete: Cascade)
+
+  @@index([weeklyEntryId])
+  @@index([industrySupervisorId, status])
+  @@index([studentId])
+  @@map("review_requests")
+}
+
+model FinalComment {
+  id             String        @id @default(uuid())
+  studentId      String
+  siwesSessionId String
+  commenterType  CommenterType
+  commenterId    String
+  comment        String
+  rating         String?
+  commentedAt    DateTime
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  siwesSession   SiwesSession  @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
+  student        Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, siwesSessionId, commenterType])
+  @@index([studentId, siwesSessionId, commenterType])
+  @@index([commenterId, commenterType])
+  @@map("final_comments")
+}
+
+model ActivityLog {
+  id         String   @id @default(uuid())
+  userType   UserType
+  userId     String
+  action     String
+  entityType String?
+  entityId   String?
+  details    Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@index([userType, userId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@map("activity_logs")
+}
+
+enum UserType {
+  ADMIN
+  STUDENT
+  SCHOOL_SUPERVISOR
+  INDUSTRY_SUPERVISOR
+
+  @@map("user_type")
+}
+
+enum SessionStatus {
+  ACTIVE
+  CLOSED
+
+  @@map("session_status")
+}
+
+enum AssignmentMethod {
+  MANUAL
+  AUTOMATIC
+
+  @@map("assignment_method")
+}
+
+enum LockedBy {
+  INDUSTRY_SUPERVISOR
+  SCHOOL_SUPERVISOR
+  MANUAL
+
+  @@map("locked_by")
+}
+
+enum CommenterType {
+  INDUSTRY_SUPERVISOR
+  SCHOOL_SUPERVISOR
+
+  @@map("commenter_type")
+}
+
+enum ReviewStatus {
+  PENDING
+  REVIEWED
+  EXPIRED
+
+  @@map("review_status")
 }

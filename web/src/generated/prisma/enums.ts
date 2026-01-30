@@ -9,7 +9,53 @@
 * 🟢 You can import this file directly.
 */
 
+export const UserType = {
+  ADMIN: 'ADMIN',
+  STUDENT: 'STUDENT',
+  SCHOOL_SUPERVISOR: 'SCHOOL_SUPERVISOR',
+  INDUSTRY_SUPERVISOR: 'INDUSTRY_SUPERVISOR'
+} as const
+
+export type UserType = (typeof UserType)[keyof typeof UserType]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const SessionStatus = {
+  ACTIVE: 'ACTIVE',
+  CLOSED: 'CLOSED'
+} as const
+
+export type SessionStatus = (typeof SessionStatus)[keyof typeof SessionStatus]
+
+
+export const AssignmentMethod = {
+  MANUAL: 'MANUAL',
+  AUTOMATIC: 'AUTOMATIC'
+} as const
+
+export type AssignmentMethod = (typeof AssignmentMethod)[keyof typeof AssignmentMethod]
+
+
+export const LockedBy = {
+  INDUSTRY_SUPERVISOR: 'INDUSTRY_SUPERVISOR',
+  SCHOOL_SUPERVISOR: 'SCHOOL_SUPERVISOR',
+  MANUAL: 'MANUAL'
+} as const
+
+export type LockedBy = (typeof LockedBy)[keyof typeof LockedBy]
+
+
+export const CommenterType = {
+  INDUSTRY_SUPERVISOR: 'INDUSTRY_SUPERVISOR',
+  SCHOOL_SUPERVISOR: 'SCHOOL_SUPERVISOR'
+} as const
+
+export type CommenterType = (typeof CommenterType)[keyof typeof CommenterType]
+
+
+export const ReviewStatus = {
+  PENDING: 'PENDING',
+  REVIEWED: 'REVIEWED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type ReviewStatus = (typeof ReviewStatus)[keyof typeof ReviewStatus]

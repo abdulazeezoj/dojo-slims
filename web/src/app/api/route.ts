@@ -1,5 +1,5 @@
 import { createSuccessResponse, withErrorHandler } from "@/lib/api-response";
-import { serverConfig } from "@/lib/config-server";
+import { config } from "@/lib/config";
 import { healthCheck } from "@/services/health";
 
 export const dynamic = "force-dynamic";
@@ -10,7 +10,7 @@ export async function GET() {
     const { checks, ...summary } = await healthCheck();
 
     return createSuccessResponse({
-      message: `Welcome to ${serverConfig.APP_NAME}`,
+      message: `Welcome to ${config.APP_NAME}`,
       ...summary,
     });
   });

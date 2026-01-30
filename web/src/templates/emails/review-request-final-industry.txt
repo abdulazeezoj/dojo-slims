@@ -1,0 +1,29 @@
+Final Assessment Request - SLIMS
+
+Dear {{supervisorName}},
+
+{{studentName}} has completed their SIWES training and is requesting your final assessment.
+
+Training Summary:
+- Student: {{studentName}}
+- Session: {{sessionName}}
+- Total Weeks: {{totalWeeks}} weeks
+
+IMPORTANT: This is the final assessment that will contribute to the student's SIWES grade. Please provide comprehensive feedback on their overall performance during the training period.
+
+Your final assessment should include:
+- Overall performance evaluation
+- Skills and competencies developed
+- Work attitude and professionalism
+- Areas of strength and improvement
+
+Submit your final assessment here:
+{{reviewUrl}}
+
+Thank you for supervising this student throughout their industrial training!
+
+Best regards,
+SLIMS Team
+
+Ahmadu Bello University, Zaria
+SIWES Logbook Management System

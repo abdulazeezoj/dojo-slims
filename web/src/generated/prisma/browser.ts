@@ -17,4 +17,118 @@ import * as Prisma from './internal/prismaNamespaceBrowser'
 export { Prisma }
 export * as $Enums from './enums'
 export * from './enums';
-
+/**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
+/**
+ * Model Session
+ * 
+ */
+export type Session = Prisma.SessionModel
+/**
+ * Model Account
+ * 
+ */
+export type Account = Prisma.AccountModel
+/**
+ * Model Verification
+ * 
+ */
+export type Verification = Prisma.VerificationModel
+/**
+ * Model Faculty
+ * 
+ */
+export type Faculty = Prisma.FacultyModel
+/**
+ * Model Department
+ * 
+ */
+export type Department = Prisma.DepartmentModel
+/**
+ * Model PlacementOrganization
+ * 
+ */
+export type PlacementOrganization = Prisma.PlacementOrganizationModel
+/**
+ * Model SiwesSession
+ * 
+ */
+export type SiwesSession = Prisma.SiwesSessionModel
+/**
+ * Model AdminUser
+ * 
+ */
+export type AdminUser = Prisma.AdminUserModel
+/**
+ * Model Student
+ * 
+ */
+export type Student = Prisma.StudentModel
+/**
+ * Model SchoolSupervisor
+ * 
+ */
+export type SchoolSupervisor = Prisma.SchoolSupervisorModel
+/**
+ * Model IndustrySupervisor
+ * 
+ */
+export type IndustrySupervisor = Prisma.IndustrySupervisorModel
+/**
+ * Model StudentSessionEnrollment
+ * 
+ */
+export type StudentSessionEnrollment = Prisma.StudentSessionEnrollmentModel
+/**
+ * Model SupervisorSessionEnrollment
+ * 
+ */
+export type SupervisorSessionEnrollment = Prisma.SupervisorSessionEnrollmentModel
+/**
+ * Model StudentSupervisorAssignment
+ * 
+ */
+export type StudentSupervisorAssignment = Prisma.StudentSupervisorAssignmentModel
+/**
+ * Model StudentSiwesDetail
+ * 
+ */
+export type StudentSiwesDetail = Prisma.StudentSiwesDetailModel
+/**
+ * Model LogbookMetadata
+ * 
+ */
+export type LogbookMetadata = Prisma.LogbookMetadataModel
+/**
+ * Model WeeklyEntry
+ * 
+ */
+export type WeeklyEntry = Prisma.WeeklyEntryModel
+/**
+ * Model Diagram
+ * 
+ */
+export type Diagram = Prisma.DiagramModel
+/**
+ * Model WeeklyComment
+ * 
+ */
+export type WeeklyComment = Prisma.WeeklyCommentModel
+/**
+ * Model ReviewRequest
+ * 
+ */
+export type ReviewRequest = Prisma.ReviewRequestModel
+/**
+ * Model FinalComment
+ * 
+ */
+export type FinalComment = Prisma.FinalCommentModel
+/**
+ * Model ActivityLog
+ * 
+ */
+export type ActivityLog = Prisma.ActivityLogModel

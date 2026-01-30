@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import { Worker } from "bullmq";
-import { serverConfig } from "./lib/config-server";
-import { getLogger } from "./lib/logger-server";
+import { config } from "./lib/config";
+import { getLogger } from "./lib/logger";
 
 const logger = getLogger(["worker"]);
 
@@ -11,7 +11,7 @@ import { taskHandlers } from "./tasks";
 
 // Create worker
 const worker = new Worker(
-  serverConfig.WORKER_DEFAULT_QUEUE,
+  config.WORKER_DEFAULT_QUEUE,
   async (job) => {
     logger.info(`Processing job ${job.id} of type ${job.name}`);
 
@@ -30,13 +30,13 @@ const worker = new Worker(
   },
   {
     connection: {
-      url: serverConfig.WORKER_REDIS_URL,
+      url: config.WORKER_REDIS_URL,
       maxRetriesPerRequest: null, // Required for BullMQ
     },
-    concurrency: serverConfig.WORKER_CONCURRENCY,
+    concurrency: config.WORKER_CONCURRENCY,
     limiter: {
-      max: serverConfig.WORKER_LIMITER_MAX,
-      duration: serverConfig.WORKER_LIMITER_DURATION,
+      max: config.WORKER_LIMITER_MAX,
+      duration: config.WORKER_LIMITER_DURATION,
     },
   },
 );
@@ -44,7 +44,7 @@ const worker = new Worker(
 // Worker event handlers
 worker.on("ready", () => {
   logger.info(
-    `Worker started and ready to process jobs from queue: ${serverConfig.WORKER_DEFAULT_QUEUE}`,
+    `Worker started and ready to process jobs from queue: ${config.WORKER_DEFAULT_QUEUE}`,
   );
 });
 

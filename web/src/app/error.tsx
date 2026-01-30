@@ -11,7 +11,6 @@ import {
   QuestionIcon,
 } from "@phosphor-icons/react";
 import Link from "next/link";
-import { useEffect } from "react";
 
 export default function Error({
   error,
@@ -20,11 +19,6 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    // Log the error to console
-    console.error("Error boundary caught:", error);
-  }, [error]);
-
   return (
     <div className="flex min-h-screen flex-col">
       {/* Header */}

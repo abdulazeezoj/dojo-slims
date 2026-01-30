@@ -1,0 +1,29 @@
+Final Assessment Request - SLIMS
+
+Dear {{supervisorName}},
+
+{{studentName}} has completed their SIWES training and is requesting your final academic assessment.
+
+Training Summary:
+- Student: {{studentName}}
+- Session: {{sessionName}}
+- Total Weeks: {{totalWeeks}} weeks
+
+IMPORTANT: Your assessment as the school supervisor is critical for determining the student's final SIWES grade. Please review all weekly entries and provide your comprehensive evaluation.
+
+Your assessment should consider:
+- Consistency and quality of logbook entries
+- Engagement with feedback and supervision
+- Professional development and learning outcomes
+- Industry supervisor's comments and ratings
+
+Submit your final assessment here:
+{{reviewUrl}}
+
+Thank you for your dedication to supervising this student!
+
+Best regards,
+SLIMS Team
+
+Ahmadu Bello University, Zaria
+SIWES Logbook Management System
