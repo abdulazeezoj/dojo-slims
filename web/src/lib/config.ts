@@ -14,6 +14,11 @@ const envSchema = z.object({
     .string()
     .default("postgresql://admin:password@localhost:5432/dojo-slims"),
   REDIS_URL: z.string().default("redis://localhost:6379"),
+  RATE_LIMIT_ENABLED: z.coerce.boolean().default(true),
+  RATE_LIMIT_REDIS_URL: z.string().optional(),
+  RATE_LIMIT_WINDOW_MS: z.coerce.number().default(60000),
+  RATE_LIMIT_MAX_REQUESTS: z.coerce.number().default(100),
+  RATE_LIMIT_SKIP_SUCCESS_RESPONSES: z.coerce.boolean().default(false),
   CSRF_SECRET: z
     .string()
     .min(32, "CSRF secret must be at least 32 characters")
@@ -65,6 +70,12 @@ function loadEnv(): Env {
     LOG_LEVEL: process.env.LOG_LEVEL || process.env.NEXT_PUBLIC_LOG_LEVEL,
     DATABASE_URL: process.env.DATABASE_URL,
     REDIS_URL: process.env.REDIS_URL,
+    RATE_LIMIT_ENABLED: process.env.RATE_LIMIT_ENABLED,
+    RATE_LIMIT_REDIS_URL: process.env.RATE_LIMIT_REDIS_URL,
+    RATE_LIMIT_WINDOW_MS: process.env.RATE_LIMIT_WINDOW_MS,
+    RATE_LIMIT_MAX_REQUESTS: process.env.RATE_LIMIT_MAX_REQUESTS,
+    RATE_LIMIT_SKIP_SUCCESS_RESPONSES:
+      process.env.RATE_LIMIT_SKIP_SUCCESS_RESPONSES,
     CSRF_SECRET: process.env.CSRF_SECRET,
     CSRF_COOKIE_NAME: process.env.CSRF_COOKIE_NAME,
     CSRF_TOKEN_EXPIRY_M: process.env.CSRF_TOKEN_EXPIRY_M,

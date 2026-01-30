@@ -9,9 +9,6 @@ import prisma from "@/lib/prisma";
  * School Supervisor Repository - Thin data access layer for SchoolSupervisor entity
  */
 export class SchoolSupervisorRepository {
-  /**
-   * Find school supervisor by ID
-   */
   async findById(id: string): Promise<SchoolSupervisor | null> {
     return prisma.schoolSupervisor.findUnique({
       where: { id },
@@ -25,9 +22,6 @@ export class SchoolSupervisorRepository {
     });
   }
 
-  /**
-   * Find school supervisor by staff ID
-   */
   async findByStaffId(staffId: string): Promise<SchoolSupervisor | null> {
     return prisma.schoolSupervisor.findUnique({
       where: { staffId },
@@ -41,9 +35,6 @@ export class SchoolSupervisorRepository {
     });
   }
 
-  /**
-   * Find school supervisor by email
-   */
   async findByEmail(email: string): Promise<SchoolSupervisor | null> {
     return prisma.schoolSupervisor.findUnique({
       where: { email },
@@ -57,9 +48,6 @@ export class SchoolSupervisorRepository {
     });
   }
 
-  /**
-   * Create new school supervisor
-   */
   async create(
     data: Prisma.SchoolSupervisorCreateInput,
   ): Promise<SchoolSupervisor> {
@@ -75,9 +63,6 @@ export class SchoolSupervisorRepository {
     });
   }
 
-  /**
-   * Update school supervisor by ID
-   */
   async update(
     id: string,
     data: Prisma.SchoolSupervisorUpdateInput,
@@ -95,18 +80,12 @@ export class SchoolSupervisorRepository {
     });
   }
 
-  /**
-   * Delete school supervisor by ID
-   */
   async delete(id: string): Promise<SchoolSupervisor> {
     return prisma.schoolSupervisor.delete({
       where: { id },
     });
   }
 
-  /**
-   * Find school supervisors by department
-   */
   async findByDepartment(departmentId: string): Promise<SchoolSupervisor[]> {
     return prisma.schoolSupervisor.findMany({
       where: { departmentId },
@@ -120,9 +99,6 @@ export class SchoolSupervisorRepository {
     });
   }
 
-  /**
-   * Find all school supervisors with optional filtering and pagination
-   */
   async findMany(params: {
     where?: Prisma.SchoolSupervisorWhereInput;
     skip?: number;
@@ -141,18 +117,12 @@ export class SchoolSupervisorRepository {
     });
   }
 
-  /**
-   * Count school supervisors with optional filtering
-   */
   async count(where?: Prisma.SchoolSupervisorWhereInput): Promise<number> {
     return prisma.schoolSupervisor.count({
       where,
     });
   }
 
-  /**
-   * Bulk create school supervisors
-   */
   async createMany(
     data: Prisma.SchoolSupervisorCreateManyInput[],
   ): Promise<number> {
@@ -163,9 +133,6 @@ export class SchoolSupervisorRepository {
     return result.count;
   }
 
-  /**
-   * Deactivate school supervisor
-   */
   async deactivate(id: string): Promise<SchoolSupervisor> {
     return prisma.schoolSupervisor.update({
       where: { id },
@@ -173,9 +140,6 @@ export class SchoolSupervisorRepository {
     });
   }
 
-  /**
-   * Activate school supervisor
-   */
   async activate(id: string): Promise<SchoolSupervisor> {
     return prisma.schoolSupervisor.update({
       where: { id },
@@ -188,9 +152,6 @@ export class SchoolSupervisorRepository {
  * Industry Supervisor Repository - Thin data access layer for IndustrySupervisor entity
  */
 export class IndustrySupervisorRepository {
-  /**
-   * Find industry supervisor by ID
-   */
   async findById(id: string): Promise<IndustrySupervisor | null> {
     return prisma.industrySupervisor.findUnique({
       where: { id },
@@ -200,9 +161,6 @@ export class IndustrySupervisorRepository {
     });
   }
 
-  /**
-   * Find industry supervisor by email
-   */
   async findByEmail(email: string): Promise<IndustrySupervisor | null> {
     return prisma.industrySupervisor.findUnique({
       where: { email },
@@ -212,9 +170,6 @@ export class IndustrySupervisorRepository {
     });
   }
 
-  /**
-   * Create new industry supervisor
-   */
   async create(
     data: Prisma.IndustrySupervisorCreateInput,
   ): Promise<IndustrySupervisor> {
@@ -226,9 +181,6 @@ export class IndustrySupervisorRepository {
     });
   }
 
-  /**
-   * Update industry supervisor by ID
-   */
   async update(
     id: string,
     data: Prisma.IndustrySupervisorUpdateInput,
@@ -242,18 +194,12 @@ export class IndustrySupervisorRepository {
     });
   }
 
-  /**
-   * Delete industry supervisor by ID
-   */
   async delete(id: string): Promise<IndustrySupervisor> {
     return prisma.industrySupervisor.delete({
       where: { id },
     });
   }
 
-  /**
-   * Find industry supervisors by organization
-   */
   async findByOrganization(
     placementOrganizationId: string,
   ): Promise<IndustrySupervisor[]> {
@@ -265,9 +211,6 @@ export class IndustrySupervisorRepository {
     });
   }
 
-  /**
-   * Find all industry supervisors with optional filtering and pagination
-   */
   async findMany(params: {
     where?: Prisma.IndustrySupervisorWhereInput;
     skip?: number;
@@ -282,18 +225,12 @@ export class IndustrySupervisorRepository {
     });
   }
 
-  /**
-   * Count industry supervisors with optional filtering
-   */
   async count(where?: Prisma.IndustrySupervisorWhereInput): Promise<number> {
     return prisma.industrySupervisor.count({
       where,
     });
   }
 
-  /**
-   * Bulk create industry supervisors
-   */
   async createMany(
     data: Prisma.IndustrySupervisorCreateManyInput[],
   ): Promise<number> {
@@ -304,9 +241,6 @@ export class IndustrySupervisorRepository {
     return result.count;
   }
 
-  /**
-   * Deactivate industry supervisor
-   */
   async deactivate(id: string): Promise<IndustrySupervisor> {
     return prisma.industrySupervisor.update({
       where: { id },
@@ -314,9 +248,6 @@ export class IndustrySupervisorRepository {
     });
   }
 
-  /**
-   * Activate industry supervisor
-   */
   async activate(id: string): Promise<IndustrySupervisor> {
     return prisma.industrySupervisor.update({
       where: { id },

@@ -5,18 +5,12 @@ import prisma from "@/lib/prisma";
  * SIWES Session Repository - Thin data access layer for SiwesSession entity
  */
 export class SessionRepository {
-  /**
-   * Find session by ID
-   */
   async findById(id: string): Promise<SiwesSession | null> {
     return prisma.siwesSession.findUnique({
       where: { id },
     });
   }
 
-  /**
-   * Find active sessions
-   */
   async findActive(): Promise<SiwesSession[]> {
     return prisma.siwesSession.findMany({
       where: {
@@ -28,9 +22,6 @@ export class SessionRepository {
     });
   }
 
-  /**
-   * Find current active session (most recent active)
-   */
   async findCurrentActive(): Promise<SiwesSession | null> {
     return prisma.siwesSession.findFirst({
       where: {
@@ -42,9 +33,6 @@ export class SessionRepository {
     });
   }
 
-  /**
-   * Find sessions by status
-   */
   async findByStatus(status: "ACTIVE" | "CLOSED"): Promise<SiwesSession[]> {
     return prisma.siwesSession.findMany({
       where: { status },
@@ -54,18 +42,12 @@ export class SessionRepository {
     });
   }
 
-  /**
-   * Create new session
-   */
   async create(data: Prisma.SiwesSessionCreateInput): Promise<SiwesSession> {
     return prisma.siwesSession.create({
       data,
     });
   }
 
-  /**
-   * Update session by ID
-   */
   async update(
     id: string,
     data: Prisma.SiwesSessionUpdateInput,
@@ -76,18 +58,12 @@ export class SessionRepository {
     });
   }
 
-  /**
-   * Delete session by ID
-   */
   async delete(id: string): Promise<SiwesSession> {
     return prisma.siwesSession.delete({
       where: { id },
     });
   }
 
-  /**
-   * Close session (set status to CLOSED)
-   */
   async close(id: string): Promise<SiwesSession> {
     return prisma.siwesSession.update({
       where: { id },
@@ -97,9 +73,6 @@ export class SessionRepository {
     });
   }
 
-  /**
-   * Reopen session (set status to ACTIVE)
-   */
   async reopen(id: string): Promise<SiwesSession> {
     return prisma.siwesSession.update({
       where: { id },
@@ -109,9 +82,6 @@ export class SessionRepository {
     });
   }
 
-  /**
-   * Find all sessions with optional filtering and pagination
-   */
   async findMany(params: {
     where?: Prisma.SiwesSessionWhereInput;
     skip?: number;
@@ -121,18 +91,12 @@ export class SessionRepository {
     return prisma.siwesSession.findMany(params);
   }
 
-  /**
-   * Count sessions with optional filtering
-   */
   async count(where?: Prisma.SiwesSessionWhereInput): Promise<number> {
     return prisma.siwesSession.count({
       where,
     });
   }
 
-  /**
-   * Find sessions within date range
-   */
   async findByDateRange(
     startDate: Date,
     endDate: Date,
@@ -158,9 +122,6 @@ export class SessionRepository {
     });
   }
 
-  /**
-   * Check if session name exists
-   */
   async existsByName(name: string): Promise<boolean> {
     const count = await prisma.siwesSession.count({
       where: { name },

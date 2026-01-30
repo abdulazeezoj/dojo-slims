@@ -1,17 +1,72 @@
+// Activity Log
+export { ActivityLogRepository, activityLogRepository } from "./activity-log";
+
+// Admin
+export { AdminRepository, adminRepository } from "./admin";
+
+// Assignment
+export { AssignmentRepository, assignmentRepository } from "./assignment";
+
+// Enrollment
 export {
-  diagramRepository,
+  StudentEnrollmentRepository,
+  SupervisorEnrollmentRepository,
+  studentEnrollmentRepository,
+  supervisorEnrollmentRepository,
+} from "./enrollment";
+
+// Faculty & Department
+export {
+  DepartmentRepository,
+  FacultyRepository,
+  departmentRepository,
+  facultyRepository,
+} from "./faculty";
+
+// Final Comment
+export {
+  FinalCommentRepository,
+  finalCommentRepository,
+} from "./final-comment";
+
+// Logbook (Weekly Entries, Diagrams, Comments)
+export {
   DiagramRepository,
-  weeklyCommentRepository,
   WeeklyCommentRepository,
-  weeklyEntryRepository,
   WeeklyEntryRepository,
-} from "./logbook.repository";
-export { sessionRepository, SessionRepository } from "./session.repository";
-export { studentRepository, StudentRepository } from "./student.repository";
+  diagramRepository,
+  weeklyCommentRepository,
+  weeklyEntryRepository,
+} from "./logbook";
+
+// Logbook Metadata
 export {
-  industrySupervisorRepository,
+  LogbookMetadataRepository,
+  logbookMetadataRepository,
+} from "./logbook-metadata";
+
+// Placement Organization
+export { PlacementRepository, placementRepository } from "./placement";
+
+// Review Request
+export { ReviewRepository, reviewRepository } from "./review";
+
+// Session
+export { SessionRepository, sessionRepository } from "./session";
+
+// SIWES Detail
+export { SiwesDetailRepository, siwesDetailRepository } from "./siwes-detail";
+
+// Student
+export { StudentRepository, studentRepository } from "./student";
+
+// Supervisor (School & Industry)
+export {
   IndustrySupervisorRepository,
-  schoolSupervisorRepository,
   SchoolSupervisorRepository,
-} from "./supervisor.repository";
-export { userRepository, UserRepository } from "./user.repository";
+  industrySupervisorRepository,
+  schoolSupervisorRepository,
+} from "./supervisor";
+
+// User
+export { UserRepository, userRepository } from "./user";

@@ -1,28 +1,16 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { magicLink, username } from "better-auth/plugins";
-import Redis from "ioredis";
 
 import { authService } from "../services/auth";
 import { config } from "./config";
 import { getLogger } from "./logger";
 import prisma from "./prisma";
+import { createRedisClient } from "./redis";
 
 const logger = getLogger(["lib", "auth"]);
 
-const redis = new Redis(config.REDIS_URL, {
-  maxRetriesPerRequest: 3,
-  enableReadyCheck: true,
-  lazyConnect: false,
-});
-
-redis.on("connect", () => {
-  logger.info("Session cache connected");
-});
-
-redis.on("error", (error) => {
-  logger.error("Session cache connection error", { error });
-});
+const redis = createRedisClient();
 
 /**
  * Redis-backed session cache with automatic TTL management

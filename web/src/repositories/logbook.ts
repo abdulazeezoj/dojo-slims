@@ -10,9 +10,6 @@ import prisma from "@/lib/prisma";
  * Weekly Entry Repository - Thin data access layer for WeeklyEntry entity
  */
 export class WeeklyEntryRepository {
-  /**
-   * Find weekly entry by ID
-   */
   async findById(id: string): Promise<WeeklyEntry | null> {
     return prisma.weeklyEntry.findUnique({
       where: { id },
@@ -24,9 +21,6 @@ export class WeeklyEntryRepository {
     });
   }
 
-  /**
-   * Find weekly entry by student, session, and week number
-   */
   async findByStudentSessionWeek(
     studentId: string,
     siwesSessionId: string,
@@ -48,9 +42,6 @@ export class WeeklyEntryRepository {
     });
   }
 
-  /**
-   * Find all weekly entries for a student in a session
-   */
   async findByStudentSession(
     studentId: string,
     siwesSessionId: string,
@@ -71,9 +62,6 @@ export class WeeklyEntryRepository {
     });
   }
 
-  /**
-   * Create new weekly entry
-   */
   async create(data: Prisma.WeeklyEntryCreateInput): Promise<WeeklyEntry> {
     return prisma.weeklyEntry.create({
       data,
@@ -85,9 +73,6 @@ export class WeeklyEntryRepository {
     });
   }
 
-  /**
-   * Update weekly entry by ID
-   */
   async update(
     id: string,
     data: Prisma.WeeklyEntryUpdateInput,
@@ -103,18 +88,12 @@ export class WeeklyEntryRepository {
     });
   }
 
-  /**
-   * Delete weekly entry by ID
-   */
   async delete(id: string): Promise<WeeklyEntry> {
     return prisma.weeklyEntry.delete({
       where: { id },
     });
   }
 
-  /**
-   * Lock weekly entry
-   */
   async lock(
     id: string,
     lockedBy: "INDUSTRY_SUPERVISOR" | "SCHOOL_SUPERVISOR" | "MANUAL",
@@ -129,9 +108,6 @@ export class WeeklyEntryRepository {
     });
   }
 
-  /**
-   * Unlock weekly entry
-   */
   async unlock(id: string): Promise<WeeklyEntry> {
     return prisma.weeklyEntry.update({
       where: { id },
@@ -143,9 +119,6 @@ export class WeeklyEntryRepository {
     });
   }
 
-  /**
-   * Find all weekly entries with optional filtering and pagination
-   */
   async findMany(params: {
     where?: Prisma.WeeklyEntryWhereInput;
     skip?: number;
@@ -162,9 +135,6 @@ export class WeeklyEntryRepository {
     });
   }
 
-  /**
-   * Count weekly entries with optional filtering
-   */
   async count(where?: Prisma.WeeklyEntryWhereInput): Promise<number> {
     return prisma.weeklyEntry.count({
       where,
@@ -176,18 +146,12 @@ export class WeeklyEntryRepository {
  * Diagram Repository - Thin data access layer for Diagram entity
  */
 export class DiagramRepository {
-  /**
-   * Find diagram by ID
-   */
   async findById(id: string): Promise<Diagram | null> {
     return prisma.diagram.findUnique({
       where: { id },
     });
   }
 
-  /**
-   * Find diagrams by weekly entry
-   */
   async findByWeeklyEntry(weeklyEntryId: string): Promise<Diagram[]> {
     return prisma.diagram.findMany({
       where: { weeklyEntryId },
@@ -197,18 +161,12 @@ export class DiagramRepository {
     });
   }
 
-  /**
-   * Create new diagram
-   */
   async create(data: Prisma.DiagramCreateInput): Promise<Diagram> {
     return prisma.diagram.create({
       data,
     });
   }
 
-  /**
-   * Update diagram by ID
-   */
   async update(id: string, data: Prisma.DiagramUpdateInput): Promise<Diagram> {
     return prisma.diagram.update({
       where: { id },
@@ -216,9 +174,6 @@ export class DiagramRepository {
     });
   }
 
-  /**
-   * Delete diagram by ID
-   */
   async delete(id: string): Promise<Diagram> {
     return prisma.diagram.delete({
       where: { id },
@@ -230,18 +185,12 @@ export class DiagramRepository {
  * Weekly Comment Repository - Thin data access layer for WeeklyComment entity
  */
 export class WeeklyCommentRepository {
-  /**
-   * Find comment by ID
-   */
   async findById(id: string): Promise<WeeklyComment | null> {
     return prisma.weeklyComment.findUnique({
       where: { id },
     });
   }
 
-  /**
-   * Find comments by weekly entry
-   */
   async findByWeeklyEntry(weeklyEntryId: string): Promise<WeeklyComment[]> {
     return prisma.weeklyComment.findMany({
       where: { weeklyEntryId },
@@ -251,18 +200,12 @@ export class WeeklyCommentRepository {
     });
   }
 
-  /**
-   * Create new weekly comment
-   */
   async create(data: Prisma.WeeklyCommentCreateInput): Promise<WeeklyComment> {
     return prisma.weeklyComment.create({
       data,
     });
   }
 
-  /**
-   * Update weekly comment by ID
-   */
   async update(
     id: string,
     data: Prisma.WeeklyCommentUpdateInput,
@@ -273,18 +216,12 @@ export class WeeklyCommentRepository {
     });
   }
 
-  /**
-   * Delete weekly comment by ID
-   */
   async delete(id: string): Promise<WeeklyComment> {
     return prisma.weeklyComment.delete({
       where: { id },
     });
   }
 
-  /**
-   * Find comments by commenter
-   */
   async findByCommenter(
     commenterId: string,
     commenterType: "INDUSTRY_SUPERVISOR" | "SCHOOL_SUPERVISOR",
