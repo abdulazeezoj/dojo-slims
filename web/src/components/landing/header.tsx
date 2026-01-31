@@ -2,6 +2,7 @@
 
 import { BrandLogo } from "@/components/common/brand";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetClose,
@@ -13,7 +14,6 @@ import {
 import { ListIcon, XIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useState } from "react";
-import { Separator } from "@/components/ui/separator";
 
 export function LandingHeader() {
   const [open, setOpen] = useState(false);
@@ -44,7 +44,7 @@ export function LandingHeader() {
 
         {/* Desktop Actions */}
         <div className="hidden items-center gap-3 md:flex">
-          <Link href="/auth/login">
+          <Link href="/auth">
             <Button variant="ghost" size="sm">
               Sign In
             </Button>
@@ -75,7 +75,11 @@ export function LandingHeader() {
 
               <SheetClose
                 render={
-                  <Button variant="ghost" size="icon-sm" className="h-8c w-8c p-0">
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    className="h-8c w-8c p-0"
+                  >
                     <XIcon weight="bold" className="size-5" />
                     <span className="sr-only">Close menu</span>
                   </Button>
@@ -101,7 +105,7 @@ export function LandingHeader() {
 
               <div className="">
                 <Link
-                  href="/auth/login"
+                  href="/auth"
                   onClick={() => setOpen(false)}
                   className="block"
                 >

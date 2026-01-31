@@ -54,7 +54,7 @@ export default function NotFound() {
                   Go Home
                 </Button>
               </Link>
-              <Link href="/auth/login">
+              <Link href="/auth">
                 <Button size="lg" variant="outline" className="min-w-40">
                   Sign In
                 </Button>
@@ -106,7 +106,7 @@ export default function NotFound() {
                 </Card>
               </Link>
 
-              <Link href="/auth/login">
+              <Link href="/auth">
                 <Card className="hover:border-primary group transition-all">
                   <CardContent className="flex flex-col items-center gap-3 p-6 text-center">
                     <div className="bg-primary/10 group-hover:bg-primary/20 flex h-12 w-12 items-center justify-center rounded-full transition-colors">

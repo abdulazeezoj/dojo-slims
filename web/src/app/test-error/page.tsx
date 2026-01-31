@@ -2,7 +2,7 @@ import { TestError } from "@/components/test-error";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Test Error Boundary",
+  title: "Test Error",
   description: "Test page for error boundary functionality",
 };
 

@@ -19,7 +19,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useTestWorker } from "@/hooks/use-test-worker";
-import { formatApiError } from "@/lib/api-client";
 import { CheckCircleIcon, ClockIcon, XCircleIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
@@ -111,7 +110,9 @@ export function TestWorker() {
 
         {error && (
           <Alert variant="destructive">
-            <AlertDescription>{formatApiError(error)}</AlertDescription>
+            <AlertDescription>
+              {error instanceof Error ? error.message : "An error occurred"}
+            </AlertDescription>
           </Alert>
         )}
 

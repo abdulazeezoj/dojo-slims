@@ -34,7 +34,7 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Link href="/auth/login">
+            <Link href="/auth">
               <Button size="lg">Sign In</Button>
             </Link>
             <Link href="#features">
@@ -354,7 +354,7 @@ export default function LandingPage() {
             Already registered? Sign in to access your digital logbook.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Link href="/auth/login">
+            <Link href="/auth">
               <Button size="lg" variant="secondary">
                 Sign In to SLIMS
               </Button>

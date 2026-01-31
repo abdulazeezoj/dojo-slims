@@ -37,7 +37,6 @@ class Mailer {
   private getTransporter(): Transporter {
     if (!this.transporter) {
       this.transporter = this.createTransporter();
-      logger.info("Email transporter initialized");
     }
 
     return this.transporter;

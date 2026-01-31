@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosInstance } from "axios";
 import { clientConfig } from "./config-client";
 
 /**
@@ -24,39 +24,11 @@ function getCsrfTokenFromCookie(): string | null {
 }
 
 /**
- * Custom API Response Interface
- */
-export interface ApiResponse<T = unknown> {
-  success: boolean;
-  data?: T;
-  error?: {
-    message: string;
-    code?: string;
-    details?: unknown;
-  };
-  meta?: {
-    timestamp: string;
-    requestId?: string;
-  };
-}
-
-/**
- * Custom error class for API errors
- */
-export class ApiError extends Error {
-  constructor(
-    message: string,
-    public statusCode: number,
-    public code?: string,
-    public details?: unknown,
-  ) {
-    super(message);
-    this.name = "ApiError";
-  }
-}
-
-/**
  * Create axios instance with CSRF protection and standard configuration
+ *
+ * This is a simple HTTP client with CSRF token injection.
+ * It does NOT enforce any response structure - different APIs may return different formats.
+ * Error handling and response parsing should be done by the consuming code.
  */
 function createApiClient(): AxiosInstance {
   const instance = axios.create({
@@ -67,6 +39,7 @@ function createApiClient(): AxiosInstance {
     withCredentials: true,
   });
 
+  // Inject CSRF token for state-changing requests
   instance.interceptors.request.use(
     (config) => {
       const method = config.method?.toUpperCase();
@@ -84,87 +57,27 @@ function createApiClient(): AxiosInstance {
     },
   );
 
-  instance.interceptors.response.use(
-    (response) => response,
-    (error: AxiosError<ApiResponse>) => {
-      if (error.response) {
-        const { data, status } = error.response;
-
-        const errorMessage = data?.error?.message || "An error occurred";
-        const errorCode = data?.error?.code;
-        const errorDetails = data?.error?.details;
-
-        throw new ApiError(errorMessage, status, errorCode, errorDetails);
-      } else if (error.request) {
-        throw new ApiError("No response from server", 0, "NETWORK_ERROR");
-      } else {
-        throw new ApiError(error.message, 0, "REQUEST_SETUP_ERROR");
-      }
-    },
-  );
-
   return instance;
 }
 
 /**
  * Singleton API client instance
+ *
+ * Use this for all client-side HTTP requests.
+ * CSRF tokens are automatically included for POST/PUT/DELETE/PATCH requests.
  */
 export const apiClient = createApiClient();
 
 /**
- * Type-safe wrapper for API calls
+ * Type guard to check if an error is an Axios error with response
+ * Use this in TanStack Query/Mutation error handlers for proper type narrowing
+ *
+ * @example
+ * if (isApiError(error)) {
+ *   console.log(error.response.data);
+ *   console.log(error.response.status);
+ * }
  */
-export async function apiRequest<T>(
-  config: AxiosRequestConfig,
-): Promise<ApiResponse<T>> {
-  const response = await apiClient.request<ApiResponse<T>>(config);
-  return response.data;
-}
-
-export const api = {
-  get: async <T>(url: string, config?: AxiosRequestConfig) => {
-    return apiRequest<T>({ ...config, method: "GET", url });
-  },
-
-  post: async <T>(url: string, data?: unknown, config?: AxiosRequestConfig) => {
-    return apiRequest<T>({ ...config, method: "POST", url, data });
-  },
-
-  put: async <T>(url: string, data?: unknown, config?: AxiosRequestConfig) => {
-    return apiRequest<T>({ ...config, method: "PUT", url, data });
-  },
-
-  patch: async <T>(
-    url: string,
-    data?: unknown,
-    config?: AxiosRequestConfig,
-  ) => {
-    return apiRequest<T>({ ...config, method: "PATCH", url, data });
-  },
-
-  delete: async <T>(url: string, config?: AxiosRequestConfig) => {
-    return apiRequest<T>({ ...config, method: "DELETE", url });
-  },
-};
-
-/**
- * Utility to check if error is ApiError
- */
-export function isApiError(error: unknown): error is ApiError {
-  return error instanceof ApiError;
-}
-
-/**
- * Format error for display
- */
-export function formatApiError(error: unknown): string {
-  if (isApiError(error)) {
-    return error.message;
-  }
-
-  if (error instanceof Error) {
-    return error.message;
-  }
-
-  return "An unknown error occurred";
+export function isApiError(error: unknown): error is AxiosError {
+  return axios.isAxiosError(error);
 }

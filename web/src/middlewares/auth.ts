@@ -89,19 +89,15 @@ function extractSessionToken(request: NextRequest): string | null {
  */
 async function getSession(token: string): Promise<AuthSession | null> {
   try {
-    // Try Redis cache first
     let cachedSession = await sessionStore.get(token);
 
     if (cachedSession) {
-      // Validate expiry
       if (new Date(cachedSession.expiresAt) > new Date()) {
         return cachedSession as AuthSession;
       }
-      // Expired - remove from cache
       await sessionStore.delete(token);
     }
 
-    // Fallback to database
     const dbSession = await prisma.session.findUnique({
       where: { token },
       include: {
@@ -113,7 +109,6 @@ async function getSession(token: string): Promise<AuthSession | null> {
       return null;
     }
 
-    // Check expiry
     if (dbSession.expiresAt < new Date()) {
       return null;
     }
@@ -161,7 +156,6 @@ export async function authMiddleware(
   const token = extractSessionToken(request);
   const isProtected = isProtectedRoute(pathname);
 
-  // If route is protected and no token, return 401
   if (isProtected && !token) {
     return createErrorResponse("Authentication required", {
       status: 401,
@@ -175,7 +169,6 @@ export async function authMiddleware(
 
   const session = await getSession(token);
 
-  // If route is protected and session is invalid, return 401
   if (isProtected && !session) {
     return createErrorResponse("Invalid or expired session", {
       status: 401,
@@ -187,7 +180,6 @@ export async function authMiddleware(
     return response || NextResponse.next();
   }
 
-  // Check if user is active
   if (!session.user.isActive) {
     logger.warn("Inactive user attempted access", {
       userId: session.user.id,
@@ -195,7 +187,6 @@ export async function authMiddleware(
       pathname,
     });
 
-    // Block inactive users from protected routes
     if (isProtected) {
       return createErrorResponse("Account is inactive", {
         status: 403,

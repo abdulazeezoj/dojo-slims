@@ -1,14 +1,31 @@
+import { AdminLoginForm } from "@/components/auth/admin-login-form";
+import { AuthCard } from "@/components/auth/auth-card";
+import { ArrowLeftIcon } from "@phosphor-icons/react/dist/ssr";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Admin Login | SIWES Logbook",
-  description: "Login with your admin ID to access the admin portal",
+  title: "Admin Login",
+  description: "Sign in to your SLIMS admin account",
 };
 
 export default function Page() {
   return (
-    <div className="flex min-h-100 items-center justify-center">
-      <h1 className="text-2xl font-bold">Admin Login</h1>
+    <div className="space-y-4">
+      <Link
+        href="/auth"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ArrowLeftIcon className="h-4 w-4" weight="bold" />
+        Back to role selection
+      </Link>
+
+      <AuthCard
+        title="Admin Sign In"
+        subtitle="Enter your admin credentials to access the system"
+      >
+        <AdminLoginForm />
+      </AuthCard>
     </div>
   );
 }

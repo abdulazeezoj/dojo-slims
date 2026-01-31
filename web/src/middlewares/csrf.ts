@@ -120,14 +120,11 @@ export function csrfMiddleware(
   const method = request.method;
   const res = response || NextResponse.next();
 
-  // Check if route is exempt from CSRF validation
   if (isExemptRoute(pathname)) {
     return res;
   }
 
-  // Only validate CSRF for state-changing methods
   if (["POST", "PUT", "DELETE", "PATCH"].includes(method)) {
-    // Get CSRF token from cookie (validation source)
     const csrfCookie = request.cookies.get(CSRF_COOKIE_NAME);
 
     if (!csrfCookie) {
@@ -154,7 +151,6 @@ export function csrfMiddleware(
       );
     }
 
-    // Get token from X-CSRF-Token header (client should send this)
     const headerToken = request.headers.get("X-CSRF-Token");
 
     if (!headerToken) {
@@ -168,7 +164,6 @@ export function csrfMiddleware(
       );
     }
 
-    // Validate that header token matches stored token
     try {
       if (
         !timingSafeEqual(
@@ -203,7 +198,6 @@ export function csrfMiddleware(
       ? parseCsrfCookie(existingCookie.value)
       : null;
 
-    // Only generate new token if none exists or current one is invalid/expired
     if (!existingTokenData) {
       const tokenData = generateCsrfToken();
 

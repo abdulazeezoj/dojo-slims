@@ -1,14 +1,18 @@
+import { VerifyMagicLink } from "@/components/auth/verify-magic-link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Verify Magic Link | SIWES Logbook",
+  title: "Verify Magic Link",
   description: "Verifying your magic link access",
 };
 
-export default function Page() {
-  return (
-    <div className="flex min-h-100 items-center justify-center">
-      <h1 className="text-2xl font-bold">Verify Magic Link</h1>
-    </div>
-  );
+interface PageProps {
+  searchParams: Promise<{ token?: string }>;
+}
+
+export default async function Page({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const token = params.token || "";
+
+  return <VerifyMagicLink token={token} />;
 }

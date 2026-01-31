@@ -196,7 +196,6 @@ export async function rateLimitMiddleware(
 
     return res;
   } catch (error) {
-    // Log error but don't block request if rate limiting fails
     logger.error("Rate limit check failed", {
       error,
       pathname: request.nextUrl.pathname,
@@ -230,7 +229,6 @@ function getRateLimitConfig(pathname: string): {
   limit: number;
   windowMs: number;
 } {
-  // Find first matching pattern
   for (const pathConfig of PATH_RATE_LIMITS) {
     if (minimatch(pathname, pathConfig.pattern)) {
       return {
@@ -240,7 +238,6 @@ function getRateLimitConfig(pathname: string): {
     }
   }
 
-  // Default rate limit from config
   return {
     limit: config.RATE_LIMIT_MAX_REQUESTS,
     windowMs: config.RATE_LIMIT_WINDOW_MS,
@@ -260,19 +257,11 @@ async function checkRateLimit(
   const windowStart = now - rateLimitConfig.windowMs;
 
   try {
-    // Use Redis sorted set with timestamps as scores for sliding window
     const pipeline = redis.pipeline();
 
-    // Remove old entries outside the current window
     pipeline.zremrangebyscore(key, 0, windowStart);
-
-    // Count requests in current window
     pipeline.zcard(key);
-
-    // Add current request with timestamp
     pipeline.zadd(key, now, `${now}-${Math.random()}`);
-
-    // Set expiry on the key (window + buffer)
     pipeline.expire(key, Math.ceil(rateLimitConfig.windowMs / 1000) + 10);
 
     const results = await pipeline.exec();
@@ -281,12 +270,10 @@ async function checkRateLimit(
       throw new Error("Redis pipeline execution failed");
     }
 
-    // Get count before adding current request
     const count = (results[1]?.[1] as number) || 0;
     const allowed = count < rateLimitConfig.limit;
     const remaining = Math.max(0, rateLimitConfig.limit - count - 1);
 
-    // Calculate reset time (end of current window)
     const resetAt = now + rateLimitConfig.windowMs;
     const retryAfter = allowed
       ? undefined
@@ -301,7 +288,6 @@ async function checkRateLimit(
     };
   } catch (error) {
     logger.error("Redis rate limit check failed", { error, key });
-    // On error, allow the request (fail open)
     return {
       allowed: true,
       limit: rateLimitConfig.limit,

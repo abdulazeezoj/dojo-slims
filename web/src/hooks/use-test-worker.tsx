@@ -1,6 +1,8 @@
-import { api } from "@/lib/api-client";
+import { apiClient } from "@/lib/api-client";
+import { ApiResponse } from "@/lib/api-response";
 import { clientConfig } from "@/lib/config-client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 /**
  * Query key structure for worker-related queries
@@ -40,18 +42,20 @@ export interface JobStatusResponse {
 export function useQueueJob() {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<QueueJobResponse, AxiosError | Error, QueueJobRequest>({
     mutationFn: async (request: QueueJobRequest) => {
-      const response = await api.post<QueueJobResponse>(
+      const response = await apiClient.post<ApiResponse<QueueJobResponse>>(
         "/api/worker/test",
         request,
       );
 
-      if (!response.success || !response.data) {
-        throw new Error("Failed to queue job");
+      const apiResponse = response.data;
+
+      if (!apiResponse.success || !apiResponse.data) {
+        throw new Error(apiResponse.error?.message || "Failed to queue job");
       }
 
-      return response.data;
+      return apiResponse.data;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: workerKeys.jobs() });
@@ -83,22 +87,25 @@ export function useJobStatus(
   const maxAttempts =
     options?.maxAttempts ?? clientConfig.QUERY_MAX_POLLING_ATTEMPTS;
 
-  return useQuery({
+  return useQuery<JobStatusResponse, AxiosError | Error>({
     queryKey: workerKeys.job(jobId),
     queryFn: async () => {
-      const response = await api.get<JobStatusResponse>(
+      const response = await apiClient.get<ApiResponse<JobStatusResponse>>(
         `/api/worker/test?jobId=${jobId}`,
       );
 
-      if (!response.success || !response.data) {
-        throw new Error("Failed to get job status");
+      const apiResponse = response.data;
+
+      if (!apiResponse.success || !apiResponse.data) {
+        throw new Error(
+          apiResponse.error?.message || "Failed to get job status",
+        );
       }
 
-      return response.data;
+      return apiResponse.data;
     },
     enabled: options?.enabled ?? !!jobId,
     refetchInterval: (query) => {
-      // Stop polling if disabled or no data
       if (!jobId || !query.state.data) {
         return false;
       }
@@ -106,20 +113,16 @@ export function useJobStatus(
       const jobState = query.state.data.state;
       const fetchCount = query.state.dataUpdateCount;
 
-      // Stop polling if job is completed or failed
       if (jobState === "completed" || jobState === "failed") {
         return false;
       }
 
-      // Stop polling if max attempts reached
       if (fetchCount >= maxAttempts) {
         return false;
       }
 
-      // Continue polling at configured interval
       return pollingInterval;
     },
-    // Keep the query mounted for 5 minutes after it's inactive
     gcTime: 5 * 60 * 1000,
   });
 }

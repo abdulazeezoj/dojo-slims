@@ -69,19 +69,17 @@ export function securityMiddleware(
   if (config.SECURITY_ENABLE_CSP) {
     const cspDirectives = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      config.NODE_ENV === "development"
+        ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+        : "script-src 'self'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https:",
       "font-src 'self' data:",
       "connect-src 'self'",
-      "frame-ancestors 'none'",
+      "frame-ancestors 'self'",
       "base-uri 'self'",
       "form-action 'self'",
     ];
-
-    if (config.NODE_ENV === "development") {
-      cspDirectives.push("script-src 'self' 'unsafe-inline' 'unsafe-eval'");
-    }
 
     if (config.SECURITY_CSP_REPORT_URI) {
       cspDirectives.push(`report-uri ${config.SECURITY_CSP_REPORT_URI}`);

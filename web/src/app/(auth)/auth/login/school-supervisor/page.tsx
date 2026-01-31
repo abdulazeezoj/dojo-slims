@@ -1,14 +1,31 @@
+import { AuthCard } from "@/components/auth/auth-card";
+import { SchoolSupervisorLoginForm } from "@/components/auth/school-supervisor-login-form";
+import { ArrowLeftIcon } from "@phosphor-icons/react/dist/ssr";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "School Supervisor Login | SIWES Logbook",
-  description: "Login with your staff ID to access the supervision portal",
+  title: "School Supervisor Login",
+  description: "Sign in to your SLIMS school supervisor account",
 };
 
 export default function Page() {
   return (
-    <div className="flex min-h-100 items-center justify-center">
-      <h1 className="text-2xl font-bold">School Supervisor Login</h1>
+    <div className="space-y-4">
+      <Link
+        href="/auth"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ArrowLeftIcon className="h-4 w-4" weight="bold" />
+        Back to role selection
+      </Link>
+
+      <AuthCard
+        title="School Supervisor Sign In"
+        subtitle="Enter your staff ID and password to supervise students"
+      >
+        <SchoolSupervisorLoginForm />
+      </AuthCard>
     </div>
   );
 }
