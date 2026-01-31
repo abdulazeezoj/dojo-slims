@@ -118,11 +118,11 @@ MUST-HAVE (MVP):
 
 28. Student Management with Bulk Upload
     - Why: Hundreds of students need to be imported each session
-    - User story: As a SIWES admin, I want to add, edit, delete, and bulk upload students so that I can set up sessions efficiently
+    - User story: As a SIWES admin, I want to add, edit, delete, bulk upload students, and download bulk upload templates so that I can set up sessions efficiently
 
 29. School Supervisor Management with Bulk Upload
     - Why: Multiple supervisors need to be imported and updated each session
-    - User story: As a SIWES admin, I want to add, edit, delete, and bulk upload school supervisors so that I can manage the supervisor pool
+    - User story: As a SIWES admin, I want to add, edit, delete, bulk upload school supervisors, and download bulk upload templates so that I can manage the supervisor pool
 
 30. Student-Supervisor Assignment (Manual & Automatic)
     - Why: Fair workload distribution across supervisors by department with flexibility for special cases
