@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import {
   adminIdSchema,
   codeSchema,
@@ -86,6 +87,7 @@ export const manualAssignmentSchema = z.object({
   studentId: uuidSchema,
   schoolSupervisorId: uuidSchema,
   siwesSessionId: uuidSchema,
+  adminId: uuidSchema,
 });
 
 export const autoAssignmentSchema = z.object({

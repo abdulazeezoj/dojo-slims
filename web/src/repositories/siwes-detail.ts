@@ -1,6 +1,7 @@
 import type { Prisma, StudentSiwesDetail } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+
 /**
  * Student SIWES Detail Repository - Thin data access layer for StudentSiwesDetail entity
  */

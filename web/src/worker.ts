@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { Worker } from "bullmq";
+
 import { config } from "./lib/config";
 import { getLogger } from "./lib/logger";
 

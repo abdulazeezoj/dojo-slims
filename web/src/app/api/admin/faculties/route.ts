@@ -1,11 +1,12 @@
-import { requireAdmin } from "@/middlewares/auth";
-import { validateRequest } from "@/lib/api-utils";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { facultyService } from "@/services";
+import { validateRequest } from "@/lib/api-utils";
+import { requireAdmin } from "@/middlewares/auth";
 import { createFacultySchema } from "@/schemas";
-import { NextRequest } from "next/server";
+import { facultyService } from "@/services";
 
-export const GET = requireAdmin(async (request: NextRequest, session) => {
+import type { NextRequest } from "next/server";
+
+export const GET = requireAdmin(async (_request: NextRequest, _session) => {
   try {
     const faculties = await facultyService.getAllFaculties();
     return createSuccessResponse(faculties);
@@ -17,10 +18,12 @@ export const GET = requireAdmin(async (request: NextRequest, session) => {
   }
 });
 
-export const POST = requireAdmin(async (request: NextRequest, session) => {
+export const POST = requireAdmin(async (request: NextRequest, _session) => {
   try {
-    const validation = await validateRequest(request, { body: createFacultySchema });
-    if (!validation.success) return validation.error;
+    const validation = await validateRequest(request, {
+      body: createFacultySchema,
+    });
+    if (!validation.success) {return validation.error;}
 
     const { body } = validation.data;
     const faculty = await facultyService.createFaculty(body);

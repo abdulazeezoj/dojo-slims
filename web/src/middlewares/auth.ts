@@ -1,10 +1,10 @@
+import { minimatch } from "minimatch";
+import { NextResponse, type NextRequest } from "next/server";
+
 import { createErrorResponse } from "@/lib/api-response";
 import { sessionStore } from "@/lib/auth";
 import { getLogger } from "@/lib/logger";
 import prisma from "@/lib/prisma";
-import { minimatch } from "minimatch";
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
 
 const logger = getLogger(["middlewares", "auth"]);
 
@@ -74,7 +74,7 @@ export interface AuthSession {
 function extractSessionToken(request: NextRequest): string | null {
   // Try cookie first (default Better Auth approach)
   const cookieToken = request.cookies.get("better-auth.session_token")?.value;
-  if (cookieToken) return cookieToken;
+  if (cookieToken) {return cookieToken;}
 
   // Fallback to Authorization header
   const authHeader = request.headers.get("Authorization");

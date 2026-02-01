@@ -1,5 +1,5 @@
-import type { Transporter } from "nodemailer";
-import nodemailer from "nodemailer";
+import nodemailer, { type Transporter } from "nodemailer";
+
 import { config } from "./config";
 import { getLogger } from "./logger";
 

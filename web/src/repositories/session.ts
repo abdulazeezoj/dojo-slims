@@ -1,6 +1,7 @@
 import type { Prisma, SiwesSession } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+
 /**
  * SIWES Session Repository - Thin data access layer for SiwesSession entity
  */

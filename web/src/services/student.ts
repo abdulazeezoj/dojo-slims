@@ -216,8 +216,8 @@ export class StudentService {
    * Get count of weeks pending review
    */
   private async getPendingReviewCount(
-    studentId: string,
-    sessionId: string,
+    _studentId: string,
+    _sessionId: string,
   ): Promise<number> {
     // This will be implemented when we have review request repository
     // For now, return 0

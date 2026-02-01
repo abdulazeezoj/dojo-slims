@@ -2,11 +2,11 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin, magicLink, username } from "better-auth/plugins";
 
-import { authService } from "../services/auth";
 import { config } from "./config";
 import { getLogger } from "./logger";
 import prisma from "./prisma";
 import { createRedisClient } from "./redis";
+import { authService } from "../services/auth";
 
 const logger = getLogger(["lib", "auth"]);
 
@@ -29,7 +29,7 @@ export const sessionStore = {
     }
   },
 
-  async set(token: string, session: any, ttl: number) {
+  async set(token: string, session: unknown, ttl: number) {
     try {
       await redis.setex(`session:${token}`, ttl, JSON.stringify(session));
     } catch (error) {
@@ -65,7 +65,7 @@ export const auth = betterAuth({
   plugins: [
     magicLink({
       expiresIn: config.BETTER_AUTH_MAGIC_LINK_EXPIRY_M * 60,
-      sendMagicLink: async ({ email, url, token }, ctx) => {
+      sendMagicLink: async ({ email, url, token }) => {
         const result = await authService.sendMagicLink(email, url, token);
 
         if (!result.success) {
@@ -94,7 +94,7 @@ export const auth = betterAuth({
       adminRoles: ["admin"],
     }),
   ],
-  async onSession(session: any, request: any) {
+  async onSession(session: unknown) {
     if (session) {
       const ttl = Math.floor(
         (new Date(session.expiresAt).getTime() - Date.now()) / 1000,

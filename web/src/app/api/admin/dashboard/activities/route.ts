@@ -1,7 +1,9 @@
+
 import { apiResponse } from "@/lib/api-response";
 import { requireAuth } from "@/middlewares/auth";
 import { adminDashboardService } from "@/services";
-import { NextRequest } from "next/server";
+
+import type { NextRequest } from "next/server";
 
 /**
  * GET /api/admin/dashboard/activities

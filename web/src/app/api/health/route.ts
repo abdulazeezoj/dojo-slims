@@ -10,7 +10,7 @@ export const revalidate = 0;
 
 export async function GET() {
   return withErrorHandler(async () => {
-    const { checks, ...summary } = await healthCheck();
+    const { checks: _, ...summary } = await healthCheck();
 
     const statusCode = summary.status === "unhealthy" ? 503 : 200;
 

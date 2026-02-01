@@ -1,8 +1,10 @@
-import { apiClient } from "@/lib/api-client";
-import { ApiResponse } from "@/lib/api-response";
-import { clientConfig } from "@/lib/config-client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+
+import { apiClient } from "@/lib/api-client";
+import type { ApiResponse } from "@/lib/api-response";
+import { clientConfig } from "@/lib/config-client";
+
+import type { AxiosError } from "axios";
 
 /**
  * Query key structure for worker-related queries

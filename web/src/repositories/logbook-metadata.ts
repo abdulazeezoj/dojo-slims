@@ -1,6 +1,7 @@
 import type { LogbookMetadata, Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+
 /**
  * Logbook Metadata Repository - Thin data access layer for LogbookMetadata entity
  */

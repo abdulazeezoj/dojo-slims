@@ -1,11 +1,12 @@
-import { requireAdmin } from "@/middlewares/auth";
-import { validateRequest } from "@/lib/api-utils";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { departmentService } from "@/services";
+import { validateRequest } from "@/lib/api-utils";
+import { requireAdmin } from "@/middlewares/auth";
 import { createDepartmentSchema } from "@/schemas";
-import { NextRequest } from "next/server";
+import { departmentService } from "@/services";
 
-export const GET = requireAdmin(async (request: NextRequest, session) => {
+import type { NextRequest } from "next/server";
+
+export const GET = requireAdmin(async (request: NextRequest, _session) => {
   try {
     const { searchParams } = new URL(request.url);
     const facultyId = searchParams.get("facultyId") || undefined;
@@ -20,10 +21,12 @@ export const GET = requireAdmin(async (request: NextRequest, session) => {
   }
 });
 
-export const POST = requireAdmin(async (request: NextRequest, session) => {
+export const POST = requireAdmin(async (request: NextRequest, _session) => {
   try {
-    const validation = await validateRequest(request, { body: createDepartmentSchema });
-    if (!validation.success) return validation.error;
+    const validation = await validateRequest(request, {
+      body: createDepartmentSchema,
+    });
+    if (!validation.success) {return validation.error;}
 
     const { body } = validation.data;
     const department = await departmentService.createDepartment(body);

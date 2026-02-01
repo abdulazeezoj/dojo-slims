@@ -5,6 +5,7 @@ import type {
 } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+
 // Type for SchoolSupervisor with included relations
 type SchoolSupervisorWithDepartment = Prisma.SchoolSupervisorGetPayload<{
   include: {

@@ -3,7 +3,7 @@
  * Handles faculty management operations
  */
 
-import { Faculty, Prisma } from "@/generated/prisma/client";
+import type { Faculty, Prisma } from "@/generated/prisma/client";
 import { facultyRepository } from "@/repositories";
 
 export class FacultyService {
@@ -111,10 +111,12 @@ export class FacultyService {
 
     // Check if faculty has departments with students
     // Faculty from findById includes departments with _count
-    const departments = (faculty as any).departments || [];
+    const departments =
+      (faculty as { departments?: Array<{ _count?: { students: number } }> })
+        .departments || [];
     if (departments.length > 0) {
       const hasStudents = departments.some(
-        (dept: any) => dept._count?.students && dept._count.students > 0,
+        (dept) => dept._count?.students && dept._count.students > 0,
       );
       if (hasStudents) {
         throw new Error(

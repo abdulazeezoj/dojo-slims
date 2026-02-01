@@ -1,6 +1,3 @@
-import { BrandLogo } from "@/components/common/brand";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   BookOpenIcon,
   CompassIcon,
@@ -8,6 +5,10 @@ import {
   QuestionIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
+
+import { BrandLogo } from "@/components/common/brand";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function NotFound() {
   return (
@@ -43,8 +44,8 @@ export default function NotFound() {
               </h2>
               <p className="text-muted-foreground mx-auto max-w-xl text-lg">
                 Looks like this page went on SIWES without leaving a logbook
-                entry. The page you're looking for doesn't exist or has been
-                moved.
+                entry. The page you&apos;re looking for doesn&apos;t exist or
+                has been moved.
               </p>
             </div>
 

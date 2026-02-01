@@ -4,6 +4,7 @@ import type {
 } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+
 // Type for StudentSupervisorAssignment with included relations
 type StudentSupervisorAssignmentWithRelations =
   Prisma.StudentSupervisorAssignmentGetPayload<{

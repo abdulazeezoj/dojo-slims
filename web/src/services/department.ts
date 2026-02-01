@@ -3,7 +3,7 @@
  * Handles department management operations
  */
 
-import { Faculty } from "@/generated/prisma/client";
+import type { Faculty } from "@/generated/prisma/client";
 import { departmentRepository, facultyRepository } from "@/repositories";
 
 export class DepartmentService {
@@ -92,8 +92,13 @@ export class DepartmentService {
 
     // Check if department has students by re-fetching with student count
     const deptWithCounts = await facultyRepository.findById(facultyId);
-    const departments = (deptWithCounts as any)?.departments || [];
-    const deptToDelete = departments.find((d: any) => d.id === departmentId);
+    const departments =
+      (
+        deptWithCounts as {
+          departments?: Array<{ id: string; _count?: { students: number } }>;
+        }
+      )?.departments || [];
+    const deptToDelete = departments.find((d) => d.id === departmentId);
     if (deptToDelete?._count?.students && deptToDelete._count.students > 0) {
       throw new Error("Cannot delete department with enrolled students");
     }
@@ -104,7 +109,7 @@ export class DepartmentService {
   /**
    * Get department statistics
    */
-  async getDepartmentStats(departmentId: string): Promise<{
+  async getDepartmentStats(_departmentId: string): Promise<{
     totalStudents: number;
     activeSessions: number;
     totalSupervisors: number;
@@ -134,8 +139,13 @@ export class DepartmentService {
 
     // Repository includes departments, but TypeScript doesn't infer it
     return faculties.flatMap((faculty) => {
-      const departments = (faculty as any).departments || [];
-      return departments.map((dept: any) => ({
+      const departments =
+        (
+          faculty as {
+            departments?: Array<{ id: string; name: string; code: string }>;
+          }
+        ).departments || [];
+      return departments.map((dept) => ({
         id: dept.id,
         name: dept.name,
         code: dept.code,

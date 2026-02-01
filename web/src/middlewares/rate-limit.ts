@@ -1,10 +1,10 @@
+import { minimatch } from "minimatch";
+import { NextResponse, type NextRequest } from "next/server";
+
 import { createErrorResponse } from "@/lib/api-response";
 import { config } from "@/lib/config";
 import { getLogger } from "@/lib/logger";
 import { redis } from "@/lib/redis";
-import { minimatch } from "minimatch";
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
 
 const logger = getLogger(["middlewares", "rate-limit"]);
 
@@ -217,7 +217,7 @@ export async function rateLimitMiddleware(
  */
 function getIdentifier(request: NextRequest): string {
   const userId = request.headers.get("X-User-Id");
-  if (userId) return `user:${userId}`;
+  if (userId) {return `user:${userId}`;}
 
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||

@@ -1,7 +1,9 @@
-import { getLogger } from "@/lib/logger";
 import { readFile } from "fs/promises";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { join } from "path";
+
+
+import { getLogger } from "@/lib/logger";
 
 const logger = getLogger(["api", "test-emails"]);
 

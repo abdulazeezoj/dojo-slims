@@ -6,6 +6,7 @@ import type {
 } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+
 // Type for WeeklyEntry with included relations
 export type WeeklyEntryWithRelations = Prisma.WeeklyEntryGetPayload<{
   include: {

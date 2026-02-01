@@ -1,5 +1,6 @@
 import { healthCheck } from "./health";
 
-export const taskHandlers: Record<string, (data: any) => Promise<any>> = {
-  "health.healthCheck": healthCheck,
-};
+export const taskHandlers: Record<string, (data: unknown) => Promise<unknown>> =
+  {
+    "health.healthCheck": healthCheck,
+  };

@@ -1,11 +1,12 @@
-import { requireAdmin } from "@/middlewares/auth";
-import { validateRequest } from "@/lib/api-utils";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { studentManagementService } from "@/services";
+import { validateRequest } from "@/lib/api-utils";
+import { requireAdmin } from "@/middlewares/auth";
 import { createStudentSchema } from "@/schemas";
-import { NextRequest } from "next/server";
+import { studentManagementService } from "@/services";
 
-export const GET = requireAdmin(async (request: NextRequest, session) => {
+import type { NextRequest } from "next/server";
+
+export const GET = requireAdmin(async (request: NextRequest, _session) => {
   try {
     const { searchParams } = new URL(request.url);
     const skip = parseInt(searchParams.get("skip") || "0");
@@ -29,16 +30,21 @@ export const GET = requireAdmin(async (request: NextRequest, session) => {
   }
 });
 
-export const POST = requireAdmin(async (request: NextRequest, session) => {
+export const POST = requireAdmin(async (request: NextRequest, _session) => {
   try {
-    const validation = await validateRequest(request, { body: createStudentSchema });
-    if (!validation.success) return validation.error;
+    const validation = await validateRequest(request, {
+      body: createStudentSchema,
+    });
+    if (!validation.success) {return validation.error;}
 
     const { body } = validation.data;
+    if (!body) {
+      return createErrorResponse("Invalid request", { status: 400 });
+    }
+
     const student = await studentManagementService.createStudent(body);
 
     return createSuccessResponse(student, {
-      message: "Student created successfully",
       status: 201,
     });
   } catch (error) {

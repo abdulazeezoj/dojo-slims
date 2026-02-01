@@ -1,9 +1,10 @@
-import { requireAdmin } from "@/middlewares/auth";
-import { validateRequest } from "@/lib/api-utils";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { facultyService } from "@/services";
+import { validateRequest } from "@/lib/api-utils";
+import { requireAdmin } from "@/middlewares/auth";
 import { updateFacultySchema } from "@/schemas";
-import { NextRequest } from "next/server";
+import { facultyService } from "@/services";
+
+import type { NextRequest } from "next/server";
 
 export const GET = requireAdmin(
   async (request: NextRequest, session, context: { params: { facultyId: string } }) => {
@@ -28,7 +29,7 @@ export const PATCH = requireAdmin(
     try {
       const { facultyId } = context.params;
       const validation = await validateRequest(request, { body: updateFacultySchema });
-      if (!validation.success) return validation.error;
+      if (!validation.success) {return validation.error;}
 
       const { body } = validation.data;
       const updated = await facultyService.updateFaculty(facultyId, body);

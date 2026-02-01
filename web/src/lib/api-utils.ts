@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 
 /**
@@ -132,7 +132,7 @@ export async function validateRequestSafe<TBody = unknown, TQuery = unknown>(
       } else {
         errors.push(result.error);
       }
-    } catch (jsonError) {
+    } catch {
       return {
         success: false as const,
         errors: [{ message: "Invalid JSON in request body" }],

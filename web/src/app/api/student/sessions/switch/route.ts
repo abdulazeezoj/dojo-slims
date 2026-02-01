@@ -1,10 +1,11 @@
-import { requireStudent } from "@/middlewares/auth";
-import { validateRequest } from "@/lib/api-utils";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
+import { validateRequest } from "@/lib/api-utils";
+import { requireStudent } from "@/middlewares/auth";
 import { switchSessionSchema } from "@/schemas";
-import { NextRequest } from "next/server";
 
-export const POST = requireStudent(async (request: NextRequest, session) => {
+import type { NextRequest } from "next/server";
+
+export const POST = requireStudent(async (request: NextRequest, _session) => {
   try {
     const validation = await validateRequest(request, {
       body: switchSessionSchema,
@@ -16,10 +17,14 @@ export const POST = requireStudent(async (request: NextRequest, session) => {
 
     const { body } = validation.data;
 
+    if (!body) {
+      return createErrorResponse("Request body is required", { status: 400 });
+    }
+
     return createSuccessResponse(
       { sessionId: body.sessionId },
       {
-        message: "Session switched successfully",
+        status: 200,
       },
     );
   } catch (error) {

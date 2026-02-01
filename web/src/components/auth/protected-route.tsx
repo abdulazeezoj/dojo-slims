@@ -1,13 +1,14 @@
 "use client";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useSession } from "@/hooks/use-session";
 import { ShieldCheckIcon, WarningIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useSession } from "@/hooks/use-session";
 
 type UserType =
   | "student"
@@ -29,15 +30,7 @@ export function ProtectedRoute({
   showUnauthorized = true,
 }: ProtectedRouteProps) {
   const router = useRouter();
-  const {
-    isAuthenticated,
-    isPending,
-    userType,
-    isStudent,
-    isAdmin,
-    isSchoolSupervisor,
-    isIndustrySupervisor,
-  } = useSession();
+  const { isAuthenticated, isPending, userType } = useSession();
 
   useEffect(() => {
     if (!isPending && !isAuthenticated) {

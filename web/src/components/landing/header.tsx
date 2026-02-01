@@ -1,5 +1,9 @@
 "use client";
 
+import { ListIcon, XIcon } from "@phosphor-icons/react";
+import Link from "next/link";
+import { useState } from "react";
+
 import { BrandLogo } from "@/components/common/brand";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -11,9 +15,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ListIcon, XIcon } from "@phosphor-icons/react";
-import Link from "next/link";
-import { useState } from "react";
 
 export function LandingHeader() {
   const [open, setOpen] = useState(false);

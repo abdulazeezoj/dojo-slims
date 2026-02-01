@@ -3,13 +3,13 @@
  * Handles ITF-compliant logbook PDF generation
  */
 
-import { Student } from "@/generated/prisma/client";
-import type { WeeklyEntryWithRelations } from "@/repositories";
+import type { Student } from "@/generated/prisma/client";
 import {
   siwesDetailRepository,
   studentEnrollmentRepository,
   studentRepository,
   weeklyEntryRepository,
+  type WeeklyEntryWithRelations,
 } from "@/repositories";
 
 export class PdfGeneratorService {
@@ -62,11 +62,11 @@ export class PdfGeneratorService {
   /**
    * Generate PDF document with ITF compliance
    */
-  private async generatePdfDocument(data: {
+  private async generatePdfDocument(_data: {
     student: Student;
     weeklyEntries: WeeklyEntryWithRelations[];
-    enrollment: any;
-    siwesDetail: any;
+    enrollment: unknown;
+    siwesDetail: unknown;
   }): Promise<Buffer> {
     // Placeholder for actual PDF generation implementation
     // This would use a library like:
@@ -131,7 +131,7 @@ export class PdfGeneratorService {
       await Promise.all(
         batch.map(async (student) => {
           try {
-            const pdfBuffer = await this.generateLogbookPdf(
+            const _pdfBuffer = await this.generateLogbookPdf(
               student.id,
               sessionId,
             );
@@ -181,7 +181,7 @@ export class PdfGeneratorService {
   /**
    * Get PDF generation status
    */
-  async getPdfGenerationStatus(jobId: string): Promise<{
+  async getPdfGenerationStatus(_jobId: string): Promise<{
     status: "pending" | "processing" | "completed" | "failed";
     progress: number;
     url?: string;
@@ -277,9 +277,9 @@ export class PdfGeneratorService {
    * Generate PDF with custom branding
    */
   async generateCustomLogbookPdf(
-    studentId: string,
-    sessionId: string,
-    options: {
+    _studentId: string,
+    _sessionId: string,
+    _options: {
       includeCoverPage?: boolean;
       includeSignatures?: boolean;
       watermark?: string;

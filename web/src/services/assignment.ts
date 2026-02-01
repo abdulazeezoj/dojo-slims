@@ -148,7 +148,7 @@ export class AssignmentService {
     // Group students by department
     const studentsByDept = studentsWithDept.reduce(
       (acc, { enrollment, student }) => {
-        if (!student) return acc;
+        if (!student) {return acc;}
         const deptId = student.departmentId;
         if (!acc[deptId]) {
           acc[deptId] = [];

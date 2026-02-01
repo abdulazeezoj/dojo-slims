@@ -1,9 +1,10 @@
-import { requireSchoolSupervisor } from "@/middlewares/auth";
-import { validateRequest } from "@/lib/api-utils";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
+import { validateRequest } from "@/lib/api-utils";
+import { requireSchoolSupervisor } from "@/middlewares/auth";
 import { changePasswordSchema } from "@/schemas";
 import { passwordService } from "@/services/password";
-import { NextRequest } from "next/server";
+
+import type { NextRequest } from "next/server";
 
 export const POST = requireSchoolSupervisor(async (request: NextRequest, session) => {
   try {

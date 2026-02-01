@@ -1,4 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
+
 import { getLogger } from "./logger";
 
 const logger = getLogger(["lib", "query-client"]);

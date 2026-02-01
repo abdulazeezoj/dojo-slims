@@ -1,4 +1,5 @@
 import { VerifyMagicLink } from "@/components/auth/verify-magic-link";
+
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

@@ -1,6 +1,7 @@
 import type { Department, Faculty, Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+
 /**
  * Faculty Repository - Thin data access layer for Faculty entity
  */

@@ -1,7 +1,8 @@
-import { requireStudent } from "@/middlewares/auth";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
+import { requireStudent } from "@/middlewares/auth";
 import { logbookService } from "@/services";
-import { NextRequest } from "next/server";
+
+import type { NextRequest } from "next/server";
 
 export const POST = requireStudent(
   async (request: NextRequest, session, context: { params: { weekId: string } }) => {

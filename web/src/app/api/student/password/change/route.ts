@@ -3,7 +3,8 @@ import { validateRequest } from "@/lib/api-utils";
 import { requireStudent } from "@/middlewares/auth";
 import { changePasswordSchema } from "@/schemas";
 import { passwordService } from "@/services/password";
-import { NextRequest } from "next/server";
+
+import type { NextRequest } from "next/server";
 
 export const POST = requireStudent(async (request: NextRequest, session) => {
   try {
@@ -16,6 +17,9 @@ export const POST = requireStudent(async (request: NextRequest, session) => {
     }
 
     const { body } = validation.data;
+    if (!body) {
+      return createErrorResponse("Invalid request", { status: 400 });
+    }
 
     // Validate new password strength
     const strength = passwordService.validatePasswordStrength(body.newPassword);
@@ -34,8 +38,8 @@ export const POST = requireStudent(async (request: NextRequest, session) => {
       return createErrorResponse(result.message, { status: 400 });
     }
 
-    return createSuccessResponse(null, {
-      message: result.message,
+    return createSuccessResponse(result.message, {
+      status: 200,
     });
   } catch (error) {
     return createErrorResponse(

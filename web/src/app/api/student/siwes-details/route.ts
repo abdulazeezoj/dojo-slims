@@ -1,9 +1,10 @@
-import { requireStudent } from "@/middlewares/auth";
-import { validateRequest } from "@/lib/api-utils";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { siwesDetailService } from "@/services";
+import { validateRequest } from "@/lib/api-utils";
+import { requireStudent } from "@/middlewares/auth";
 import { siwesDetailSchema } from "@/schemas";
-import { NextRequest } from "next/server";
+import { siwesDetailService } from "@/services";
+
+import type { NextRequest } from "next/server";
 
 export const GET = requireStudent(async (request: NextRequest, session) => {
   try {
@@ -31,6 +32,10 @@ export const POST = requireStudent(async (request: NextRequest, session) => {
     }
 
     const { body } = validation.data;
+    if (!body) {
+      return createErrorResponse("Invalid request", { status: 400 });
+    }
+
     const { searchParams } = new URL(request.url);
     const sessionId = searchParams.get("sessionId");
 
@@ -57,7 +62,6 @@ export const POST = requireStudent(async (request: NextRequest, session) => {
     );
 
     return createSuccessResponse(details, {
-      message: "SIWES details saved successfully",
       status: 201,
     });
   } catch (error) {

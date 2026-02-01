@@ -11,7 +11,7 @@ type UserType =
   | "industry_supervisor";
 
 interface UseSessionReturn {
-  data: any | null;
+  data: unknown | null;
   isPending: boolean;
   error: Error | null;
   isAuthenticated: boolean;
@@ -34,7 +34,7 @@ interface UseSessionReturn {
  */
 export function useSession(): UseSessionReturn {
   const router = useRouter();
-  const [data, setData] = useState<any | null>(null);
+  const [data] = useState<unknown | null>(null);
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 

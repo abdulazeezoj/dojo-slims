@@ -1,9 +1,10 @@
-import { requireStudent } from "@/middlewares/auth";
-import { validateRequest } from "@/lib/api-utils";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { studentService } from "@/services";
+import { validateRequest } from "@/lib/api-utils";
+import { requireStudent } from "@/middlewares/auth";
 import { updateStudentProfileSchema } from "@/schemas";
-import { NextRequest } from "next/server";
+import { studentService } from "@/services";
+
+import type { NextRequest } from "next/server";
 
 export const GET = requireStudent(async (request: NextRequest, session) => {
   try {

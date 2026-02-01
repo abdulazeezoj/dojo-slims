@@ -1,9 +1,10 @@
-import { requireAdmin } from "@/middlewares/auth";
-import { validateRequest } from "@/lib/api-utils";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { sessionService } from "@/services";
+import { validateRequest } from "@/lib/api-utils";
+import { requireAdmin } from "@/middlewares/auth";
 import { updateSessionSchema } from "@/schemas";
-import { NextRequest } from "next/server";
+import { sessionService } from "@/services";
+
+import type { NextRequest } from "next/server";
 
 export const GET = requireAdmin(
   async (request: NextRequest, session, context: { params: { sessionId: string } }) => {
@@ -28,7 +29,7 @@ export const PATCH = requireAdmin(
     try {
       const { sessionId } = context.params;
       const validation = await validateRequest(request, { body: updateSessionSchema });
-      if (!validation.success) return validation.error;
+      if (!validation.success) {return validation.error;}
 
       const { body } = validation.data;
       const updated = await sessionService.updateSession(sessionId, body);

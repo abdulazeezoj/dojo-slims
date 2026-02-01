@@ -30,8 +30,8 @@ export class LogbookService {
     // Repository includes diagrams and weeklyComments, but TypeScript doesn't know that
     const weeksWithRelations = weeks as Array<
       (typeof weeks)[0] & {
-        diagrams: any[];
-        weeklyComments: any[];
+        diagrams: Array<{ id: string; filePath: string; uploadedAt: Date }>;
+        weeklyComments: Array<{ id: string; comment: string; createdAt: Date }>;
       }
     >;
 
@@ -232,7 +232,7 @@ export class LogbookService {
 
     // Repository includes reviewRequest, but TypeScript doesn't know that
     const weekWithReview = week as typeof week & {
-      reviewRequest: any | null;
+      reviewRequest: { id: string; status: string } | null;
     };
 
     // Check if review already requested

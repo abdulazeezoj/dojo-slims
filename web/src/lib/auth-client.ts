@@ -4,6 +4,7 @@ import {
   magicLinkClient,
   usernameClient,
 } from "better-auth/client/plugins";
+
 import { clientConfig } from "./config-client";
 
 export const authClient = createAuthClient({
@@ -40,8 +41,7 @@ export interface BetterAuthSession {
     image: string | null;
     createdAt: Date;
     updatedAt: Date;
-    [key: string]: any; // Allow additional fields
-  };
+  } & Record<string, unknown>; // Allow additional fields
   session: {
     id: string;
     userId: string;
@@ -74,7 +74,7 @@ export function isBetterAuthError(data: unknown): data is BetterAuthError {
     data !== null &&
     "code" in data &&
     "message" in data &&
-    typeof (data as any).code === "string" &&
-    typeof (data as any).message === "string"
+    typeof (data as Record<string, unknown>).code === "string" &&
+    typeof (data as Record<string, unknown>).message === "string"
   );
 }

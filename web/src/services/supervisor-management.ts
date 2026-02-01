@@ -4,11 +4,14 @@
  * Uses better-auth for authentication
  */
 
-import { Prisma, SchoolSupervisor } from "@/generated/prisma/client";
+import crypto from "crypto";
+
+import type { Prisma, SchoolSupervisor } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import { schoolSupervisorRepository, userRepository } from "@/repositories";
-import crypto from "crypto";
+
 import { notificationService } from "./notifications";
+
 
 export class SupervisorManagementService {
   /**
@@ -395,7 +398,7 @@ export class SupervisorManagementService {
   /**
    * Get supervisor workload report
    */
-  async getSupervisorWorkload(params?: {
+  async getSupervisorWorkload(_params?: {
     departmentId?: string;
     sessionId?: string;
   }): Promise<
@@ -415,7 +418,7 @@ export class SupervisorManagementService {
   /**
    * Get unassigned students for a supervisor to review
    */
-  async getUnassignedStudents(params?: {
+  async getUnassignedStudents(_params?: {
     departmentId?: string;
     sessionId?: string;
   }): Promise<

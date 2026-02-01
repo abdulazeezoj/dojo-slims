@@ -1,9 +1,10 @@
-import { requireAdmin } from "@/middlewares/auth";
-import { validateRequest } from "@/lib/api-utils";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { adminUserService } from "@/services";
+import { validateRequest } from "@/lib/api-utils";
+import { requireAdmin } from "@/middlewares/auth";
 import { updateAdminSchema } from "@/schemas";
-import { NextRequest } from "next/server";
+import { adminUserService } from "@/services";
+
+import type { NextRequest } from "next/server";
 
 export const GET = requireAdmin(
   async (request: NextRequest, session, context: { params: { userId: string } }) => {

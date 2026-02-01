@@ -1,5 +1,11 @@
 "use client";
 
+import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import { AuthAlert } from "@/components/auth/auth-alert";
 import { AuthButton } from "@/components/auth/auth-button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
@@ -7,12 +13,9 @@ import { Input } from "@/components/ui/input";
 import { apiClient } from "@/lib/api-client";
 import { type MagicLinkResponse } from "@/lib/auth-client";
 import { mapAuthError } from "@/lib/auth-utils";
-import { useForm } from "@tanstack/react-form";
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { useState } from "react";
-import { toast } from "sonner";
-import { z } from "zod";
+
+import type { AxiosError } from "axios";
+
 
 const industrySupervisorLoginSchema = z.object({
   email: z.email("Please enter a valid email address"),

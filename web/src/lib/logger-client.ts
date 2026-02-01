@@ -5,6 +5,7 @@ import {
   getTextFormatter,
   type LogLevel,
 } from "@logtape/logtape";
+
 import { clientConfig } from "./config-client";
 
 let isConfigured = false;
@@ -13,7 +14,7 @@ let isConfigured = false;
  * Configure client-side logger with appropriate formatter
  */
 export async function configureLogger() {
-  if (isConfigured) return;
+  if (isConfigured) {return;}
 
   const isDevelopment = process.env.NODE_ENV === "development";
 

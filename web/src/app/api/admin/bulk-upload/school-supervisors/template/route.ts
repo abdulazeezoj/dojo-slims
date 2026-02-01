@@ -1,6 +1,8 @@
+import { NextResponse, type NextRequest } from "next/server";
+
 import { getLogger } from "@/lib/logger";
+import { requireAdmin } from "@/middlewares/auth";
 import { bulkUploadService } from "@/services";
-import { NextRequest, NextResponse } from "next/server";
 
 const logger = getLogger([
   "api",
@@ -14,13 +16,13 @@ const logger = getLogger([
  * GET /api/admin/bulk-upload/school-supervisors/template
  * Download Excel template for school supervisor bulk upload
  */
-export async function GET(request: NextRequest) {
+export const GET = requireAdmin(async (_request: NextRequest, _session) => {
   try {
     logger.info("Generating school supervisor bulk upload template");
 
     const template = bulkUploadService.generateSupervisorTemplate();
 
-    return new NextResponse(template, {
+    return new NextResponse(new Uint8Array(template), {
       status: 200,
       headers: {
         "Content-Type":
@@ -36,4 +38,4 @@ export async function GET(request: NextRequest) {
       { status: 500 },
     );
   }
-}
+});

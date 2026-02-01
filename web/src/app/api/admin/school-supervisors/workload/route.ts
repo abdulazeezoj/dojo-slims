@@ -1,9 +1,10 @@
-import { requireAdmin } from "@/middlewares/auth";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
+import { requireAdmin } from "@/middlewares/auth";
 import { supervisorManagementService } from "@/services";
-import { NextRequest } from "next/server";
 
-export const GET = requireAdmin(async (request: NextRequest, session) => {
+import type { NextRequest } from "next/server";
+
+export const GET = requireAdmin(async (request: NextRequest, _session) => {
   try {
     const { searchParams } = new URL(request.url);
     const departmentId = searchParams.get("departmentId") || undefined;

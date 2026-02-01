@@ -3,8 +3,9 @@
  * Handles placement organization CRUD and bulk upload operations
  */
 
-import { PlacementOrganization, Prisma } from "@/generated/prisma/client";
+import type { PlacementOrganization, Prisma } from "@/generated/prisma/client";
 import { placementRepository } from "@/repositories";
+
 
 export class OrganizationService {
   /**

@@ -1,5 +1,13 @@
 "use client";
 
+import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import { AuthAlert } from "@/components/auth/auth-alert";
 import { AuthButton } from "@/components/auth/auth-button";
 import { PasswordInput } from "@/components/auth/password-input";
@@ -8,14 +16,8 @@ import { Input } from "@/components/ui/input";
 import { apiClient } from "@/lib/api-client";
 import { type SignInResponse } from "@/lib/auth-client";
 import { mapAuthError } from "@/lib/auth-utils";
-import { useForm } from "@tanstack/react-form";
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
-import { z } from "zod";
+
+import type { AxiosError } from "axios";
 
 const studentLoginSchema = z.object({
   matricNumber: z
@@ -54,7 +56,7 @@ export function StudentLoginForm() {
 
       return response.data;
     },
-    onSuccess: (data) => {
+    onSuccess: (_data) => {
       setErrorMessage(null);
       toast.success("Sign in successful! Redirecting to your dashboard...");
 

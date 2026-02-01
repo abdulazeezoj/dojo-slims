@@ -2,8 +2,10 @@ import { fileTypeFromBuffer } from "file-type";
 import { existsSync } from "fs";
 import { mkdir, stat, writeFile } from "fs/promises";
 import { join, normalize, resolve } from "path";
+
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
+
 import { config } from "./config";
 import { getLogger } from "./logger";
 
@@ -238,17 +240,6 @@ export class FileUploader {
     }
 
     return normalizedUser;
-  }
-
-  /**
-   * Check user quota (placeholder - implement based on your needs)
-   */
-  async checkUserQuota(
-    _userId: string,
-  ): Promise<{ allowed: boolean; error?: string }> {
-    // TODO: Implement quota checking logic
-    // For now, always allow
-    return { allowed: true };
   }
 
   /**

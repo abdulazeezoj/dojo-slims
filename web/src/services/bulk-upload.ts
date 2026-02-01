@@ -1,6 +1,8 @@
+import * as XLSX from "xlsx";
+
 import { db } from "@/lib/db";
 import { getLogger } from "@/lib/logger";
-import * as XLSX from "xlsx";
+
 import { studentService } from "./student";
 import { supervisorService } from "./supervisor";
 
@@ -30,7 +32,7 @@ interface BulkUploadResult {
   totalRows: number;
   successCount: number;
   failedCount: number;
-  errors: Array<{ row: number; error: string; data?: any }>;
+  errors: Array<{ row: number; error: string; data?: unknown }>;
 }
 
 export class BulkUploadService {
@@ -118,7 +120,10 @@ export class BulkUploadService {
   /**
    * Parse Excel file to JSON
    */
-  private parseExcelFile(buffer: Buffer, sheetName?: string): any[] {
+  private parseExcelFile(
+    buffer: Buffer,
+    sheetName?: string,
+  ): Record<string, unknown>[] {
     try {
       const workbook = XLSX.read(buffer, { type: "buffer" });
       const sheet = sheetName
@@ -140,8 +145,8 @@ export class BulkUploadService {
    * Validate student row data
    */
   private validateStudentRow(
-    row: any,
-    rowIndex: number,
+    row: Record<string, unknown>,
+    _rowIndex: number,
   ): {
     valid: boolean;
     error?: string;
@@ -192,8 +197,8 @@ export class BulkUploadService {
    * Validate supervisor row data
    */
   private validateSupervisorRow(
-    row: any,
-    rowIndex: number,
+    row: Record<string, unknown>,
+    _rowIndex: number,
   ): {
     valid: boolean;
     error?: string;

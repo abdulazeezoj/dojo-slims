@@ -1,7 +1,8 @@
-import { requireStudent } from "@/middlewares/auth";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
+import { requireStudent } from "@/middlewares/auth";
 import { studentService } from "@/services";
-import { NextRequest } from "next/server";
+
+import type { NextRequest } from "next/server";
 
 /**
  * GET /api/student/dashboard

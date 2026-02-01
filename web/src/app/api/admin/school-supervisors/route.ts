@@ -1,11 +1,12 @@
-import { requireAdmin } from "@/middlewares/auth";
-import { validateRequest } from "@/lib/api-utils";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { supervisorManagementService } from "@/services";
+import { validateRequest } from "@/lib/api-utils";
+import { requireAdmin } from "@/middlewares/auth";
 import { createSchoolSupervisorSchema } from "@/schemas";
-import { NextRequest } from "next/server";
+import { supervisorManagementService } from "@/services";
 
-export const GET = requireAdmin(async (request: NextRequest, session) => {
+import type { NextRequest } from "next/server";
+
+export const GET = requireAdmin(async (request: NextRequest, _session) => {
   try {
     const { searchParams } = new URL(request.url);
     const skip = parseInt(searchParams.get("skip") || "0");
@@ -29,10 +30,12 @@ export const GET = requireAdmin(async (request: NextRequest, session) => {
   }
 });
 
-export const POST = requireAdmin(async (request: NextRequest, session) => {
+export const POST = requireAdmin(async (request: NextRequest, _session) => {
   try {
-    const validation = await validateRequest(request, { body: createSchoolSupervisorSchema });
-    if (!validation.success) return validation.error;
+    const validation = await validateRequest(request, {
+      body: createSchoolSupervisorSchema,
+    });
+    if (!validation.success) {return validation.error;}
 
     const { body } = validation.data;
     const supervisor = await supervisorManagementService.createSupervisor(body);

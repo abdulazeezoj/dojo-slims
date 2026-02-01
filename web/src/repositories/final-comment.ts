@@ -1,6 +1,7 @@
 import type { FinalComment, Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+
 /**
  * Final Comment Repository - Thin data access layer for FinalComment entity
  */

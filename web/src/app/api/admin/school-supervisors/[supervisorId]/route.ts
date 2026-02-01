@@ -1,9 +1,10 @@
-import { requireAdmin } from "@/middlewares/auth";
-import { validateRequest } from "@/lib/api-utils";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { supervisorManagementService } from "@/services";
+import { validateRequest } from "@/lib/api-utils";
+import { requireAdmin } from "@/middlewares/auth";
 import { updateSchoolSupervisorSchema } from "@/schemas";
-import { NextRequest } from "next/server";
+import { supervisorManagementService } from "@/services";
+
+import type { NextRequest } from "next/server";
 
 export const GET = requireAdmin(
   async (request: NextRequest, session, context: { params: { supervisorId: string } }) => {
@@ -30,7 +31,7 @@ export const PATCH = requireAdmin(
     try {
       const { supervisorId } = context.params;
       const validation = await validateRequest(request, { body: updateSchoolSupervisorSchema });
-      if (!validation.success) return validation.error;
+      if (!validation.success) {return validation.error;}
 
       const { body } = validation.data;
       const updated = await supervisorManagementService.updateSupervisor(supervisorId, body);

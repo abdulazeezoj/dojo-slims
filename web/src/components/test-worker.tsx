@@ -1,5 +1,8 @@
 "use client";
 
+import { CheckCircleIcon, ClockIcon, XCircleIcon } from "@phosphor-icons/react";
+import { useState } from "react";
+
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,8 +22,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useTestWorker } from "@/hooks/use-test-worker";
-import { CheckCircleIcon, ClockIcon, XCircleIcon } from "@phosphor-icons/react";
-import { useState } from "react";
 
 export function TestWorker() {
   const [taskName, setTaskName] = useState("health.healthCheck");
@@ -83,7 +84,7 @@ export function TestWorker() {
               <Select
                 value={taskName}
                 onValueChange={(value) => {
-                  if (value) setTaskName(value);
+                  if (value) {setTaskName(value);}
                 }}
               >
                 <SelectTrigger id="task">

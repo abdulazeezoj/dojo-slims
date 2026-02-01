@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
+
 import { getLogger } from "./logger";
+
+import type { z } from "zod";
+
 
 const logger = getLogger(["api"]);
 
@@ -113,7 +116,7 @@ export async function parseRequestBody<T>(
       success: true,
       data: result.data,
     };
-  } catch (error) {
+  } catch {
     return {
       success: false,
       response: createErrorResponse("Invalid JSON in request body", {
@@ -149,7 +152,7 @@ export function parseQueryParams<T>(
       success: true,
       data: result.data,
     };
-  } catch (error) {
+  } catch {
     return {
       success: false,
       response: createErrorResponse("Invalid query parameters", {

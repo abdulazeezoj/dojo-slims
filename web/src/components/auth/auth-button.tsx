@@ -1,9 +1,11 @@
 "use client";
 
+import { CircleNotchIcon } from "@phosphor-icons/react";
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { CircleNotchIcon } from "@phosphor-icons/react";
-import { ComponentProps } from "react";
+
+import type { ComponentProps } from "react";
 
 interface AuthButtonProps extends ComponentProps<typeof Button> {
   isLoading?: boolean;

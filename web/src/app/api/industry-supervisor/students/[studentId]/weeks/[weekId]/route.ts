@@ -1,7 +1,8 @@
-import { requireIndustrySupervisor } from "@/middlewares/auth";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
+import { requireIndustrySupervisor } from "@/middlewares/auth";
 import { supervisorService } from "@/services";
-import { NextRequest } from "next/server";
+
+import type { NextRequest } from "next/server";
 
 export const GET = requireIndustrySupervisor(
   async (request: NextRequest, session, context: { params: { studentId: string; weekId: string } }) => {

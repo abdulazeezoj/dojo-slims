@@ -1,10 +1,11 @@
-import type { NextRequest } from "next/server";
 import {
   authMiddleware,
   csrfMiddleware,
   rateLimitMiddleware,
   securityMiddleware,
 } from "./middlewares";
+
+import type { NextRequest } from "next/server";
 
 export async function proxy(request: NextRequest) {
   // 1. Security headers and CORS

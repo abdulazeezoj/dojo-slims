@@ -1,6 +1,8 @@
+
 import { AuthFooter } from "@/components/auth/footer";
 import { AuthHeader } from "@/components/auth/header";
-import { Metadata } from "next";
+
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: {

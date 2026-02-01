@@ -1,13 +1,14 @@
 "use client";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { cn } from "@/lib/utils";
 import {
   CheckCircleIcon,
   InfoIcon,
   WarningIcon,
   XCircleIcon,
 } from "@phosphor-icons/react";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { cn } from "@/lib/utils";
 
 interface AuthAlertProps {
   type: "error" | "success" | "warning" | "info";
@@ -40,7 +41,11 @@ export function AuthAlert({ type, title, message, className }: AuthAlertProps) {
     },
   };
 
-  const { icon: Icon, className: alertClassName, defaultTitle } = config[type];
+  const {
+    icon: Icon,
+    className: alertClassName,
+    defaultTitle: _defaultTitle,
+  } = config[type];
 
   return (
     <Alert className={cn(alertClassName, className)}>

@@ -1,6 +1,7 @@
 import type { ActivityLog, Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+
 /**
  * Activity Log Repository - Thin data access layer for ActivityLog entity
  */

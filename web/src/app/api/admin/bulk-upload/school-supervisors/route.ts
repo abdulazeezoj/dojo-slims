@@ -1,7 +1,9 @@
+
 import { apiResponse } from "@/lib/api-response";
 import { getLogger } from "@/lib/logger";
 import { bulkUploadService } from "@/services";
-import { NextRequest } from "next/server";
+
+import type { NextRequest } from "next/server";
 
 const logger = getLogger(["api", "admin", "bulk-upload", "school-supervisors"]);
 

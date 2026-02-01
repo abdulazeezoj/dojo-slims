@@ -1,4 +1,5 @@
 import { Queue, QueueEvents } from "bullmq";
+
 import { config } from "./config";
 import { getLogger } from "./logger";
 

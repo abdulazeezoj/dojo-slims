@@ -1,11 +1,12 @@
-import { requireAdmin } from "@/middlewares/auth";
-import { validateRequest } from "@/lib/api-utils";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { assignmentService } from "@/services";
+import { validateRequest } from "@/lib/api-utils";
+import { requireAdmin } from "@/middlewares/auth";
 import { manualAssignmentSchema } from "@/schemas";
-import { NextRequest } from "next/server";
+import { assignmentService } from "@/services";
 
-export const GET = requireAdmin(async (request: NextRequest, session) => {
+import type { NextRequest } from "next/server";
+
+export const GET = requireAdmin(async (request: NextRequest, _session) => {
   try {
     const { searchParams } = new URL(request.url);
     const sessionId = searchParams.get("sessionId");
@@ -24,16 +25,26 @@ export const GET = requireAdmin(async (request: NextRequest, session) => {
   }
 });
 
-export const POST = requireAdmin(async (request: NextRequest, session) => {
+export const POST = requireAdmin(async (request: NextRequest, _session) => {
   try {
-    const validation = await validateRequest(request, { body: manualAssignmentSchema });
-    if (!validation.success) return validation.error;
+    const validation = await validateRequest(request, {
+      body: manualAssignmentSchema,
+    });
+    if (!validation.success) {return validation.error;}
 
     const { body } = validation.data;
-    const assignment = await assignmentService.manualAssign(body);
+    if (!body) {
+      return createErrorResponse("Invalid request", { status: 400 });
+    }
+
+    const assignment = await assignmentService.manualAssignment(
+      body.studentId!,
+      body.schoolSupervisorId!,
+      body.siwesSessionId!,
+      body.adminId!,
+    );
 
     return createSuccessResponse(assignment, {
-      message: "Assignment created successfully",
       status: 201,
     });
   } catch (error) {

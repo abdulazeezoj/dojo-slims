@@ -1,6 +1,7 @@
 import type { Prisma, Student } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+
 // Type for Student with included relations
 type StudentWithDepartment = Prisma.StudentGetPayload<{
   include: {
@@ -184,7 +185,7 @@ export class StudentRepository {
       where: {
         studentId,
         siwesSession: {
-          status: \"ACTIVE\",
+          status: "ACTIVE",
         },
       },
     });
@@ -209,7 +210,7 @@ export class StudentRepository {
         studentSessionEnrollments: {
           where: {
             siwesSession: {
-              status: \"ACTIVE\",
+              status: "ACTIVE",
             },
           },
         },

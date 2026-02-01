@@ -5,7 +5,7 @@ import { z } from "zod";
  */
 
 // UUID validation
-export const uuidSchema = z.string().uuid("Invalid ID format");
+export const uuidSchema = z.uuid("Invalid ID format");
 
 // Pagination schemas
 export const paginationSchema = z.object({

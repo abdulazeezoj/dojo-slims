@@ -1,7 +1,8 @@
-import { requireAdmin } from "@/middlewares/auth";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
+import { requireAdmin } from "@/middlewares/auth";
 import { assignmentService } from "@/services";
-import { NextRequest } from "next/server";
+
+import type { NextRequest } from "next/server";
 
 export const DELETE = requireAdmin(
   async (request: NextRequest, session, context: { params: { assignmentId: string } }) => {

@@ -4,11 +4,14 @@
  * Uses better-auth for authentication
  */
 
-import { Prisma, Student } from "@/generated/prisma/client";
+import crypto from "crypto";
+
+import type { Prisma, Student } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import { studentRepository, userRepository } from "@/repositories";
-import crypto from "crypto";
+
 import { notificationService } from "./notifications";
+
 
 export class StudentManagementService {
   /**

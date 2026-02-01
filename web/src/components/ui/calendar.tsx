@@ -1,5 +1,6 @@
 "use client"
 
+import { CaretLeftIcon, CaretRightIcon, CaretDownIcon } from "@phosphor-icons/react"
 import * as React from "react"
 import {
   DayPicker,
@@ -7,9 +8,8 @@ import {
   type DayButton,
 } from "react-day-picker"
 
-import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { CaretLeftIcon, CaretRightIcon, CaretDownIcon } from "@phosphor-icons/react"
+import { cn } from "@/lib/utils"
 
 function Calendar({
   className,
@@ -185,7 +185,7 @@ function CalendarDayButton({
 
   const ref = React.useRef<HTMLButtonElement>(null)
   React.useEffect(() => {
-    if (modifiers.focused) ref.current?.focus()
+    if (modifiers.focused) {ref.current?.focus()}
   }, [modifiers.focused])
 
   return (

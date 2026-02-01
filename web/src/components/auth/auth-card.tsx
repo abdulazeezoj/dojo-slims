@@ -1,3 +1,5 @@
+import React from "react";
+
 import { BrandIcon } from "@/components/common/brand";
 import {
   Card,
@@ -7,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import React from "react";
 
 interface AuthCardProps {
   title: string;

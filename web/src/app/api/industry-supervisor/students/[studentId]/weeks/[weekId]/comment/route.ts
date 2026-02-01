@@ -1,9 +1,10 @@
-import { requireIndustrySupervisor } from "@/middlewares/auth";
-import { validateRequest } from "@/lib/api-utils";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { reviewService } from "@/services";
+import { validateRequest } from "@/lib/api-utils";
+import { requireIndustrySupervisor } from "@/middlewares/auth";
 import { addWeeklyCommentSchema } from "@/schemas";
-import { NextRequest } from "next/server";
+import { reviewService } from "@/services";
+
+import type { NextRequest } from "next/server";
 
 export const POST = requireIndustrySupervisor(
   async (request: NextRequest, session, context: { params: { studentId: string; weekId: string } }) => {

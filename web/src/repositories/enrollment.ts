@@ -5,6 +5,7 @@ import type {
 } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+
 // Type for StudentSessionEnrollment with included relations
 type StudentSessionEnrollmentWithRelations =
   Prisma.StudentSessionEnrollmentGetPayload<{

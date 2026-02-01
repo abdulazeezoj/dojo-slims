@@ -1,21 +1,23 @@
 "use client";
 
-import { AuthAlert } from "@/components/auth/auth-alert";
-import { AuthButton } from "@/components/auth/auth-button";
-import { AuthCard } from "@/components/auth/auth-card";
-import { apiClient } from "@/lib/api-client";
-import { mapAuthError } from "@/lib/auth-utils";
 import {
   CheckCircleIcon,
   CircleNotchIcon,
   XCircleIcon,
 } from "@phosphor-icons/react";
 import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+
+import { AuthAlert } from "@/components/auth/auth-alert";
+import { AuthButton } from "@/components/auth/auth-button";
+import { AuthCard } from "@/components/auth/auth-card";
+import { apiClient } from "@/lib/api-client";
+import { mapAuthError } from "@/lib/auth-utils";
+
+import type { AxiosError } from "axios";
 
 interface VerifyMagicLinkProps {
   token: string;
@@ -23,7 +25,9 @@ interface VerifyMagicLinkProps {
 
 export function VerifyMagicLink({ token }: VerifyMagicLinkProps) {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(
+    token ? null : "No verification token provided.",
+  );
   const [countdown, setCountdown] = useState(3);
 
   const verifyMutation = useMutation<void, AxiosError | Error, string>({
@@ -55,10 +59,8 @@ export function VerifyMagicLink({ token }: VerifyMagicLinkProps) {
   useEffect(() => {
     if (token) {
       verifyMutation.mutate(token);
-    } else {
-      setErrorMessage("No verification token provided.");
     }
-  }, [token]);
+  }, [token, verifyMutation]);
 
   if (verifyMutation.isPending) {
     return (

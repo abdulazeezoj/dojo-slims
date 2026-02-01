@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
+
 import { BrandLogo } from "@/components/common/brand";
 import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
 
 export function LandingFooter() {
   const currentYear = new Date().getFullYear();

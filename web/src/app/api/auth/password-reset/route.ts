@@ -1,8 +1,10 @@
-import { validateRequest } from "@/lib/api-utils";
-import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { passwordService } from "@/services/password";
 import { z } from "zod";
-import { NextRequest } from "next/server";
+
+import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
+import { validateRequest } from "@/lib/api-utils";
+import { passwordService } from "@/services/password";
+
+import type { NextRequest } from "next/server";
 
 const requestResetSchema = z.object({
   email: z.string().email("Invalid email address"),

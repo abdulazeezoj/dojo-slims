@@ -1,6 +1,8 @@
+
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { defaultQueue } from "@/lib/queue";
-import { NextRequest } from "next/server";
+
+import type { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {

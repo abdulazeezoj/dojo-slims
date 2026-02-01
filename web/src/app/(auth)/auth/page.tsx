@@ -1,18 +1,21 @@
 import {
+  BriefcaseIcon,
+  ChalkboardTeacherIcon,
+  GraduationCapIcon,
+  StudentIcon,
+} from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
+
+import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  BriefcaseIcon,
-  ChalkboardTeacherIcon,
-  GraduationCapIcon,
-  StudentIcon,
-} from "@phosphor-icons/react/dist/ssr";
+
 import type { Metadata } from "next";
-import Link from "next/link";
+
 
 export const metadata: Metadata = {
   title: "Sign In",

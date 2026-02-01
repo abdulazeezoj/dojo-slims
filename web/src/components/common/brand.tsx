@@ -1,9 +1,10 @@
 "use client";
 
-import { clientConfig } from "@/lib/config-client";
-import { cn } from "@/lib/utils";
 import { BookOpenIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
+
+import { clientConfig } from "@/lib/config-client";
+import { cn } from "@/lib/utils";
 
 interface BrandIconProps extends React.ComponentProps<"svg"> {
   size?: number;

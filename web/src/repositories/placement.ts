@@ -1,6 +1,7 @@
 import type { PlacementOrganization, Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+
 /**
  * Placement Organization Repository - Thin data access layer for PlacementOrganization entity
  */

@@ -1,6 +1,7 @@
 import type { Prisma, ReviewRequest } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+
 /**
  * Review Request Repository - Thin data access layer for ReviewRequest entity
  */

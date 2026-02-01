@@ -1,3 +1,5 @@
+import { randomUUID } from "crypto";
+
 import { getLogger } from "@/lib/logger";
 import {
   industrySupervisorRepository,
@@ -5,7 +7,6 @@ import {
   studentEnrollmentRepository,
   userRepository,
 } from "@/repositories";
-import { randomUUID } from "crypto";
 
 const logger = getLogger(["services", "siwes-detail"]);
 

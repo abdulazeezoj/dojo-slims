@@ -1,8 +1,11 @@
+import { ArrowLeftIcon } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
+
 import { AdminLoginForm } from "@/components/auth/admin-login-form";
 import { AuthCard } from "@/components/auth/auth-card";
-import { ArrowLeftIcon } from "@phosphor-icons/react/dist/ssr";
+
 import type { Metadata } from "next";
-import Link from "next/link";
+
 
 export const metadata: Metadata = {
   title: "Admin Login",

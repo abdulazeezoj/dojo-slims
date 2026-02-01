@@ -1,11 +1,12 @@
-import { requireAdmin } from "@/middlewares/auth";
-import { validateRequest } from "@/lib/api-utils";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { sessionService } from "@/services";
+import { validateRequest } from "@/lib/api-utils";
+import { requireAdmin } from "@/middlewares/auth";
 import { createSessionSchema } from "@/schemas";
-import { NextRequest } from "next/server";
+import { sessionService } from "@/services";
 
-export const GET = requireAdmin(async (request: NextRequest, session) => {
+import type { NextRequest } from "next/server";
+
+export const GET = requireAdmin(async (_request: NextRequest, _session) => {
   try {
     const sessions = await sessionService.getAllSessions();
     return createSuccessResponse(sessions);
@@ -17,10 +18,12 @@ export const GET = requireAdmin(async (request: NextRequest, session) => {
   }
 });
 
-export const POST = requireAdmin(async (request: NextRequest, session) => {
+export const POST = requireAdmin(async (request: NextRequest, _session) => {
   try {
-    const validation = await validateRequest(request, { body: createSessionSchema });
-    if (!validation.success) return validation.error;
+    const validation = await validateRequest(request, {
+      body: createSessionSchema,
+    });
+    if (!validation.success) {return validation.error;}
 
     const { body } = validation.data;
     const newSession = await sessionService.createSession(body);

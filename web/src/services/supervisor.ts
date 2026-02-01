@@ -58,9 +58,12 @@ export class SupervisorService {
       await assignmentRepository.findBySupervisor(supervisorId);
 
     // Filter active sessions - assignments include siwesSession relation
-    const activeSessions = (assignments as any[]).filter(
-      (a) => a.siwesSession?.status === "ACTIVE",
-    );
+    const activeSessions = (
+      assignments as Array<{
+        siwesSession?: { status: string } | null;
+        siwesSessionId: string;
+      }>
+    ).filter((a) => a.siwesSession?.status === "ACTIVE");
 
     return {
       supervisor,
@@ -144,7 +147,14 @@ export class SupervisorService {
       const assignments =
         await assignmentRepository.findBySupervisor(supervisorId);
       // Assignments include student, siwesSession relations
-      return (assignments as any[]).map((a) => ({
+      return (
+        assignments as Array<{
+          id: string;
+          student: unknown;
+          siwesSessionId: string;
+          siwesSession: unknown;
+        }>
+      ).map((a) => ({
         ...a.student,
         enrollmentId: a.id,
         sessionId: a.siwesSessionId,
@@ -188,7 +198,13 @@ export class SupervisorService {
     const students =
       await industrySupervisorRepository.getAssignedStudents(supervisorId);
 
-    const pendingReviews: any[] = [];
+    const pendingReviews: Array<{
+      weekId: string;
+      studentId: string;
+      weekNumber: number;
+      startDate: Date;
+      endDate: Date;
+    }> = [];
 
     for (const student of students) {
       // Get weeks with pending review requests but no industry comment

@@ -1,4 +1,5 @@
 import { TestEmailTemplate } from "@/components/test-email-template";
+
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

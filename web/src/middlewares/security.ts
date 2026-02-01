@@ -1,8 +1,8 @@
+import { minimatch } from "minimatch";
+import { NextResponse, type NextRequest } from "next/server";
+
 import { config } from "@/lib/config";
 import { getLogger } from "@/lib/logger";
-import { minimatch } from "minimatch";
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
 
 const logger = getLogger(["middlewares", "security"]);
 

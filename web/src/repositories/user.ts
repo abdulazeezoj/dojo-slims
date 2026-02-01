@@ -1,6 +1,7 @@
 import type { Prisma, User } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+
 /**
  * User Repository - Thin data access layer for User entity
  */

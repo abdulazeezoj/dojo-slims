@@ -1,8 +1,9 @@
+import IORedis from "ioredis";
+
 import { config } from "@/lib/config";
 import { getLogger } from "@/lib/logger";
 import prisma from "@/lib/prisma";
 import { defaultQueue } from "@/lib/queue";
-import IORedis from "ioredis";
 
 const logger = getLogger(["services", "health"]);
 
@@ -12,13 +13,19 @@ export interface HealthSummary {
   version: string;
 }
 
+interface HealthCheck {
+  status: "up" | "down";
+  message?: string;
+  latency?: number;
+}
+
 export interface HealthDetails extends HealthSummary {
-  checks: Record<string, any>;
+  checks: Record<string, HealthCheck>;
 }
 
 export async function healthCheck(): Promise<HealthDetails> {
   const startTime = Date.now();
-  const checks: Record<string, any> = {
+  const checks: Record<string, HealthCheck> = {
     database: { status: "down" },
     redis: { status: "down" },
     queue: { status: "down" },
@@ -86,7 +93,7 @@ export async function healthCheck(): Promise<HealthDetails> {
 
   // Determine overall status
   const allUp = Object.values(checks).every((check) => check.status === "up");
-  const anyDown = Object.values(checks).some(
+  const _anyDown = Object.values(checks).some(
     (check) => check.status === "down",
   );
 

@@ -1,7 +1,9 @@
+
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { config } from "@/lib/config";
 import { getCsrfToken } from "@/middlewares/csrf";
-import { NextRequest } from "next/server";
+
+import type { NextRequest } from "next/server";
 
 /**
  * Get CSRF token endpoint with origin validation

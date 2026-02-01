@@ -4,10 +4,12 @@
  * Uses better-auth for authentication
  */
 
-import { AdminUser, Prisma } from "@/generated/prisma/client";
+import crypto from "crypto";
+
+import type { AdminUser, Prisma } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import { adminRepository, userRepository } from "@/repositories";
-import crypto from "crypto";
+
 
 export class AdminUserService {
   /**

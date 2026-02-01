@@ -1,6 +1,6 @@
 import * as healthService from "@/services/health";
 
-export interface HealthCheckData {}
+export type HealthCheckData = Record<string, never>;
 
 export interface HealthCheckResult {
   status: string;
@@ -8,9 +8,7 @@ export interface HealthCheckResult {
   version: string;
 }
 
-export async function healthCheck(
-  data: HealthCheckData,
-): Promise<HealthCheckResult> {
+export async function healthCheck(): Promise<HealthCheckResult> {
   const result = await healthService.healthCheck();
   return result;
 }

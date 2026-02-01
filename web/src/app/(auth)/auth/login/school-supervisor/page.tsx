@@ -1,8 +1,11 @@
+import { ArrowLeftIcon } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
+
 import { AuthCard } from "@/components/auth/auth-card";
 import { SchoolSupervisorLoginForm } from "@/components/auth/school-supervisor-login-form";
-import { ArrowLeftIcon } from "@phosphor-icons/react/dist/ssr";
+
 import type { Metadata } from "next";
-import Link from "next/link";
+
 
 export const metadata: Metadata = {
   title: "School Supervisor Login",

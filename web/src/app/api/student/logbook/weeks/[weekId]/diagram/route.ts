@@ -1,8 +1,10 @@
+
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { fileUploader } from "@/lib/file-upload";
 import { requireStudent } from "@/middlewares/auth";
 import { logbookService } from "@/services";
-import { NextRequest } from "next/server";
+
+import type { NextRequest } from "next/server";
 
 /**
  * POST /api/student/logbook/weeks/[weekId]/diagram

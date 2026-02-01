@@ -1,9 +1,5 @@
 "use client";
 
-import { BrandLogo } from "@/components/common/brand";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   ArrowCounterClockwiseIcon,
   BugIcon,
@@ -11,6 +7,11 @@ import {
   QuestionIcon,
 } from "@phosphor-icons/react";
 import Link from "next/link";
+
+import { BrandLogo } from "@/components/common/brand";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function Error({
   error,
@@ -48,8 +49,8 @@ export default function Error({
                 Oops! Something Went Wrong
               </h1>
               <p className="text-muted-foreground mx-auto max-w-xl text-lg">
-                A wild bug appeared! Don't worry, these things happen. You can
-                try again or return home while we investigate the issue.
+                A wild bug appeared! Don&apos;t worry, these things happen. You
+                can try again or return home while we investigate the issue.
               </p>
             </div>
 

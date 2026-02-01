@@ -1,7 +1,3 @@
-import { Section, SectionHeader } from "@/components/landing/section";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   BookOpenIcon,
   ChartLineUpIcon,
@@ -11,6 +7,11 @@ import {
   UsersThreeIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
+
+import { Section, SectionHeader } from "@/components/landing/section";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function LandingPage() {
   return (
