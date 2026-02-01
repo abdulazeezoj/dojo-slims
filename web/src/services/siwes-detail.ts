@@ -179,8 +179,9 @@ export class SiwesDetailService {
       userId: user.id,
     });
 
-    // TODO: Send welcome email with magic link for first login
-    // await mailer.sendMagicLinkWelcome(supervisorData.email, supervisorData.name);
+    // Note: Magic link will be sent when industry supervisor needs to access the system
+    // This is typically triggered when student submits their logbook for review
+    // await notificationService.sendMagicLinkEmail({...})
 
     return industrySupervisor;
   }

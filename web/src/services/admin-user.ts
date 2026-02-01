@@ -104,7 +104,7 @@ export class AdminUserService {
       adminId: data.adminId,
       name: data.name,
       email: data.email,
-      betterAuthUserId: userId,
+      betterAuthUser: { connect: { id: userId } },
       isActive: data.isActive ?? true,
     });
 

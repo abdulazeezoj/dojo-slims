@@ -48,3 +48,12 @@ export * from "./supervisor-management";
 
 // PDF Generator services
 export * from "./pdf-generator";
+
+// Password Management services
+export * from "./password";
+
+// Notification services
+export * from "./notifications";
+
+// Bulk Upload services
+export * from "./bulk-upload";

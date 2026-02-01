@@ -8,6 +8,7 @@ import { Prisma, Student } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import { studentRepository, userRepository } from "@/repositories";
 import crypto from "crypto";
+import { notificationService } from "./notifications";
 
 export class StudentManagementService {
   /**
@@ -112,7 +113,7 @@ export class StudentManagementService {
       email: data.email,
       matricNumber: data.matricNumber,
       department: { connect: { id: data.departmentId } },
-      betterAuthUserId: userId,
+      betterAuthUser: { connect: { id: userId } },
     });
 
     // Update User with userType and userReferenceId
@@ -121,8 +122,14 @@ export class StudentManagementService {
       userReferenceId: student.id,
     });
 
-    // TODO: Send welcome email with credentials
-    // await mailer.sendWelcomeEmail(data.email, data.name, password);
+    // Send welcome email with credentials
+    await notificationService.sendWelcomeEmail({
+      email: data.email,
+      name: data.name,
+      userType: "Student",
+      loginCredential: data.matricNumber,
+      temporaryPassword: password,
+    });
 
     return student;
   }
@@ -316,7 +323,7 @@ export class StudentManagementService {
             email: studentData.email,
             matricNumber: studentData.matricNumber,
             department: { connect: { id: department.id } },
-            betterAuthUserId: userId,
+            betterAuthUser: { connect: { id: userId } },
           });
 
           // Update User with userType and userReferenceId

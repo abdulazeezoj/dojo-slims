@@ -1,0 +1,27 @@
+import { apiResponse } from "@/lib/api-response";
+import { requireAuth } from "@/middlewares/auth";
+import { adminDashboardService } from "@/services";
+import { NextRequest } from "next/server";
+
+/**
+ * GET /api/admin/dashboard/sessions
+ * Get active sessions with enrollment counts
+ */
+export async function GET(request: NextRequest) {
+  const authResult = await requireAuth(request, ["ADMIN"]);
+  if (!authResult.success) {
+    return authResult.response;
+  }
+
+  try {
+    const sessions = await adminDashboardService.getActiveSessions();
+    return apiResponse.success(
+      sessions,
+      "Active sessions retrieved successfully",
+    );
+  } catch (error) {
+    return apiResponse.error(
+      error instanceof Error ? error.message : "Failed to fetch sessions",
+    );
+  }
+}

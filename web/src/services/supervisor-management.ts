@@ -8,6 +8,7 @@ import { Prisma, SchoolSupervisor } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import { schoolSupervisorRepository, userRepository } from "@/repositories";
 import crypto from "crypto";
+import { notificationService } from "./notifications";
 
 export class SupervisorManagementService {
   /**
@@ -113,7 +114,7 @@ export class SupervisorManagementService {
       email: data.email,
       staffId: data.staffId,
       department: { connect: { id: data.departmentId } },
-      betterAuthUserId: userId,
+      betterAuthUser: { connect: { id: userId } },
     });
 
     // Update User with userType and userReferenceId
@@ -122,8 +123,14 @@ export class SupervisorManagementService {
       userReferenceId: supervisor.id,
     });
 
-    // TODO: Send welcome email with credentials
-    // await mailer.sendWelcomeEmail(data.email, data.name, password);
+    // Send welcome email with credentials
+    await notificationService.sendWelcomeEmail({
+      email: data.email,
+      name: data.name,
+      userType: "School Supervisor",
+      loginCredential: data.staffId,
+      temporaryPassword: password,
+    });
 
     return supervisor;
   }
@@ -326,7 +333,7 @@ export class SupervisorManagementService {
             email: supervisorData.email,
             staffId: supervisorData.staffId,
             department: { connect: { id: department.id } },
-            betterAuthUserId: userId,
+            betterAuthUser: { connect: { id: userId } },
           });
 
           // Update User with userType and userReferenceId
