@@ -11,7 +11,7 @@ datasource db {
 model User {
   id              String    @id
   name            String?
-  email           String?   @unique
+  email           String    @unique  
   emailVerified   Boolean   @default(false)
   image           String?
   userType        UserType
@@ -22,25 +22,37 @@ model User {
   accounts        Account[]
   sessions        Session[]
 
-  username        String?
+  username        String?   @unique
   displayUsername String?
+
+  role            String    @default("user")  
+  banned          Boolean   @default(false)   
+  banReason       String?
+  banExpires      DateTime?
+
+  studentProfile            Student?            @relation("StudentUser")
+  schoolSupervisorProfile   SchoolSupervisor?   @relation("SchoolSupervisorUser")
+  industrySupervisorProfile IndustrySupervisor? @relation("IndustrySupervisorUser")
+  adminProfile              AdminUser?          @relation("AdminUser")
 
   @@unique([userType, userReferenceId])
   @@index([userType, userReferenceId])
+  @@index([email])  
   @@map("user")
-  @@unique([username])
 }
 
 model Session {
-  id        String   @id
-  expiresAt DateTime
-  token     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String   @id
+  expiresAt      DateTime
+  token          String   @unique
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  ipAddress      String?
+  userAgent      String?
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  impersonatedBy String?
 
   @@index([userId])
   @@index([expiresAt])
@@ -154,11 +166,13 @@ model AdminUser {
   adminId                      String                        @unique
   name                         String
   email                        String                        @unique
-  passwordHash                 String
   isActive                     Boolean                       @default(true)
-  betterAuthUserId             String?
+  betterAuthUserId             String                        @unique
   createdAt                    DateTime                      @default(now())
   updatedAt                    DateTime                      @updatedAt
+
+  betterAuthUser               User                          @relation("AdminUser", fields: [betterAuthUserId], references: [id], onDelete: Cascade)
+  
   studentSupervisorAssignments StudentSupervisorAssignment[]
 
   @@index([adminId])
@@ -171,13 +185,15 @@ model Student {
   id                           String                        @id @default(uuid())
   matricNumber                 String                        @unique
   name                         String
-  email                        String
+  email                        String                        @unique  
   departmentId                 String
-  passwordHash                 String
   isActive                     Boolean                       @default(true)
-  betterAuthUserId             String?
+  betterAuthUserId             String                        @unique
   createdAt                    DateTime                      @default(now())
   updatedAt                    DateTime                      @updatedAt
+
+  betterAuthUser               User                          @relation("StudentUser", fields: [betterAuthUserId], references: [id], onDelete: Cascade)
+
   finalComments                FinalComment[]
   logbookMetadata              LogbookMetadata[]
   reviewRequests               ReviewRequest[]
@@ -200,11 +216,13 @@ model SchoolSupervisor {
   name                         String
   email                        String                        @unique
   departmentId                 String
-  passwordHash                 String
   isActive                     Boolean                       @default(true)
-  betterAuthUserId             String?
+  betterAuthUserId             String                        @unique
   createdAt                    DateTime                      @default(now())
   updatedAt                    DateTime                      @updatedAt
+
+  betterAuthUser               User                          @relation("SchoolSupervisorUser", fields: [betterAuthUserId], references: [id], onDelete: Cascade)
+
   department                   Department                    @relation(fields: [departmentId], references: [id])
   studentSupervisorAssignments StudentSupervisorAssignment[]
   supervisorSessionEnrollments SupervisorSessionEnrollment[]
@@ -224,9 +242,12 @@ model IndustrySupervisor {
   position                String?
   phone                   String?
   isActive                Boolean               @default(true)
-  betterAuthUserId        String?
+  betterAuthUserId        String                @unique
   createdAt               DateTime              @default(now())
   updatedAt               DateTime              @updatedAt
+
+  betterAuthUser          User                  @relation("IndustrySupervisorUser", fields: [betterAuthUserId], references: [id], onDelete: Cascade)
+
   placementOrganization   PlacementOrganization @relation(fields: [placementOrganizationId], references: [id])
   reviewRequests          ReviewRequest[]
   studentSiwesDetails     StudentSiwesDetail[]
@@ -241,7 +262,6 @@ model StudentSessionEnrollment {
   id             String       @id @default(uuid())
   studentId      String
   siwesSessionId String
-  isActive       Boolean      @default(true)
   enrolledAt     DateTime
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
@@ -288,6 +308,7 @@ model StudentSupervisorAssignment {
   @@unique([studentId, schoolSupervisorId, siwesSessionId])
   @@index([studentId, siwesSessionId])
   @@index([schoolSupervisorId, siwesSessionId])
+  @@index([assignedBy])  
   @@map("student_supervisor_assignments")
 }
 

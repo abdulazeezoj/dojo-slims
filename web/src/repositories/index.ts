@@ -38,6 +38,7 @@ export {
   weeklyCommentRepository,
   weeklyEntryRepository,
 } from "./logbook";
+export type { WeeklyEntryWithRelations } from "./logbook";
 
 // Logbook Metadata
 export {

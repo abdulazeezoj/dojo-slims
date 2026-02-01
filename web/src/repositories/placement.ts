@@ -117,6 +117,48 @@ export class PlacementRepository {
       },
     });
   }
+
+  // Additional methods for organization service
+  async findByStudentId(studentId: string): Promise<PlacementOrganization[]> {
+    // Note: This assumes there's a relation through SiwesDetail
+    const siwesDetails = await prisma.siwesDetail.findMany({
+      where: { studentId },
+      include: {
+        placementOrganization: {
+          include: {
+            industrySupervisors: true,
+          },
+        },
+      },
+    });
+
+    return siwesDetails
+      .map((detail) => detail.placementOrganization)
+      .filter((org): org is PlacementOrganization => org !== null);
+  }
+
+  async findStudentByMatricNo(matricNo: string) {
+    return prisma.student.findUnique({
+      where: { matricNumber: matricNo },
+    });
+  }
+
+  async countUniqueOrganizations(): Promise<number> {
+    // Count distinct organizations
+    const result = await prisma.placementOrganization.aggregate({
+      _count: {
+        id: true,
+      },
+    });
+    return result._count.id;
+  }
+
+  async countStudentsWithPlacement(): Promise<number> {
+    // Count students with SIWES details
+    return prisma.siwesDetail.count({
+      distinct: ["studentId"],
+    });
+  }
 }
 
 export const placementRepository = new PlacementRepository();

@@ -6,11 +6,20 @@ import type {
 } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+// Type for WeeklyEntry with included relations
+export type WeeklyEntryWithRelations = Prisma.WeeklyEntryGetPayload<{
+  include: {
+    diagrams: true;
+    weeklyComments: true;
+    reviewRequest: true;
+  };
+}>;
+
 /**
  * Weekly Entry Repository - Thin data access layer for WeeklyEntry entity
  */
 export class WeeklyEntryRepository {
-  async findById(id: string): Promise<WeeklyEntry | null> {
+  async findById(id: string): Promise<WeeklyEntryWithRelations | null> {
     return prisma.weeklyEntry.findUnique({
       where: { id },
       include: {
@@ -25,7 +34,7 @@ export class WeeklyEntryRepository {
     studentId: string,
     siwesSessionId: string,
     weekNumber: number,
-  ): Promise<WeeklyEntry | null> {
+  ): Promise<WeeklyEntryWithRelations | null> {
     return prisma.weeklyEntry.findUnique({
       where: {
         studentId_siwesSessionId_weekNumber: {
@@ -45,7 +54,7 @@ export class WeeklyEntryRepository {
   async findByStudentSession(
     studentId: string,
     siwesSessionId: string,
-  ): Promise<WeeklyEntry[]> {
+  ): Promise<WeeklyEntryWithRelations[]> {
     return prisma.weeklyEntry.findMany({
       where: {
         studentId,
@@ -62,7 +71,9 @@ export class WeeklyEntryRepository {
     });
   }
 
-  async create(data: Prisma.WeeklyEntryCreateInput): Promise<WeeklyEntry> {
+  async create(
+    data: Prisma.WeeklyEntryCreateInput,
+  ): Promise<WeeklyEntryWithRelations> {
     return prisma.weeklyEntry.create({
       data,
       include: {
@@ -76,7 +87,7 @@ export class WeeklyEntryRepository {
   async update(
     id: string,
     data: Prisma.WeeklyEntryUpdateInput,
-  ): Promise<WeeklyEntry> {
+  ): Promise<WeeklyEntryWithRelations> {
     return prisma.weeklyEntry.update({
       where: { id },
       data,
@@ -124,7 +135,7 @@ export class WeeklyEntryRepository {
     skip?: number;
     take?: number;
     orderBy?: Prisma.WeeklyEntryOrderByWithRelationInput;
-  }): Promise<WeeklyEntry[]> {
+  }): Promise<WeeklyEntryWithRelations[]> {
     return prisma.weeklyEntry.findMany({
       ...params,
       include: {
@@ -233,6 +244,17 @@ export class WeeklyCommentRepository {
       },
       orderBy: {
         commentedAt: "desc",
+      },
+    });
+  }
+
+  async findByWeek(weeklyEntryId: string): Promise<WeeklyComment[]> {
+    return prisma.weeklyComment.findMany({
+      where: {
+        weeklyEntryId,
+      },
+      orderBy: {
+        commentedAt: "asc",
       },
     });
   }

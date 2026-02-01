@@ -1,0 +1,31 @@
+# Misc
+.DS_Store
+Thumbs.db
+desktop.ini
+*Zone.Identifier
+
+.vscode/
+.idea/
+
+
+# Dev
+.env
+.env.development
+.env.test
+.env.production
+
+*.pem
+
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*

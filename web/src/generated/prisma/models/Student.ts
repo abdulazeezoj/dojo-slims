@@ -30,7 +30,6 @@ export type StudentMinAggregateOutputType = {
   name: string | null
   email: string | null
   departmentId: string | null
-  passwordHash: string | null
   isActive: boolean | null
   betterAuthUserId: string | null
   createdAt: Date | null
@@ -43,7 +42,6 @@ export type StudentMaxAggregateOutputType = {
   name: string | null
   email: string | null
   departmentId: string | null
-  passwordHash: string | null
   isActive: boolean | null
   betterAuthUserId: string | null
   createdAt: Date | null
@@ -56,7 +54,6 @@ export type StudentCountAggregateOutputType = {
   name: number
   email: number
   departmentId: number
-  passwordHash: number
   isActive: number
   betterAuthUserId: number
   createdAt: number
@@ -71,7 +68,6 @@ export type StudentMinAggregateInputType = {
   name?: true
   email?: true
   departmentId?: true
-  passwordHash?: true
   isActive?: true
   betterAuthUserId?: true
   createdAt?: true
@@ -84,7 +80,6 @@ export type StudentMaxAggregateInputType = {
   name?: true
   email?: true
   departmentId?: true
-  passwordHash?: true
   isActive?: true
   betterAuthUserId?: true
   createdAt?: true
@@ -97,7 +92,6 @@ export type StudentCountAggregateInputType = {
   name?: true
   email?: true
   departmentId?: true
-  passwordHash?: true
   isActive?: true
   betterAuthUserId?: true
   createdAt?: true
@@ -183,9 +177,8 @@ export type StudentGroupByOutputType = {
   name: string
   email: string
   departmentId: string
-  passwordHash: string
   isActive: boolean
-  betterAuthUserId: string | null
+  betterAuthUserId: string
   createdAt: Date
   updatedAt: Date
   _count: StudentCountAggregateOutputType | null
@@ -217,11 +210,11 @@ export type StudentWhereInput = {
   name?: Prisma.StringFilter<"Student"> | string
   email?: Prisma.StringFilter<"Student"> | string
   departmentId?: Prisma.StringFilter<"Student"> | string
-  passwordHash?: Prisma.StringFilter<"Student"> | string
   isActive?: Prisma.BoolFilter<"Student"> | boolean
-  betterAuthUserId?: Prisma.StringNullableFilter<"Student"> | string | null
+  betterAuthUserId?: Prisma.StringFilter<"Student"> | string
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
+  betterAuthUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   finalComments?: Prisma.FinalCommentListRelationFilter
   logbookMetadata?: Prisma.LogbookMetadataListRelationFilter
   reviewRequests?: Prisma.ReviewRequestListRelationFilter
@@ -238,11 +231,11 @@ export type StudentOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
-  passwordHash?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  betterAuthUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  betterAuthUser?: Prisma.UserOrderByWithRelationInput
   finalComments?: Prisma.FinalCommentOrderByRelationAggregateInput
   logbookMetadata?: Prisma.LogbookMetadataOrderByRelationAggregateInput
   reviewRequests?: Prisma.ReviewRequestOrderByRelationAggregateInput
@@ -256,17 +249,17 @@ export type StudentOrderByWithRelationInput = {
 export type StudentWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   matricNumber?: string
+  email?: string
+  betterAuthUserId?: string
   AND?: Prisma.StudentWhereInput | Prisma.StudentWhereInput[]
   OR?: Prisma.StudentWhereInput[]
   NOT?: Prisma.StudentWhereInput | Prisma.StudentWhereInput[]
   name?: Prisma.StringFilter<"Student"> | string
-  email?: Prisma.StringFilter<"Student"> | string
   departmentId?: Prisma.StringFilter<"Student"> | string
-  passwordHash?: Prisma.StringFilter<"Student"> | string
   isActive?: Prisma.BoolFilter<"Student"> | boolean
-  betterAuthUserId?: Prisma.StringNullableFilter<"Student"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
+  betterAuthUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   finalComments?: Prisma.FinalCommentListRelationFilter
   logbookMetadata?: Prisma.LogbookMetadataListRelationFilter
   reviewRequests?: Prisma.ReviewRequestListRelationFilter
@@ -275,7 +268,7 @@ export type StudentWhereUniqueInput = Prisma.AtLeast<{
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentListRelationFilter
   department?: Prisma.XOR<Prisma.DepartmentScalarRelationFilter, Prisma.DepartmentWhereInput>
   weeklyEntries?: Prisma.WeeklyEntryListRelationFilter
-}, "id" | "matricNumber">
+}, "id" | "matricNumber" | "email" | "betterAuthUserId">
 
 export type StudentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -283,9 +276,8 @@ export type StudentOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
-  passwordHash?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  betterAuthUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.StudentCountOrderByAggregateInput
@@ -302,9 +294,8 @@ export type StudentScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Student"> | string
   email?: Prisma.StringWithAggregatesFilter<"Student"> | string
   departmentId?: Prisma.StringWithAggregatesFilter<"Student"> | string
-  passwordHash?: Prisma.StringWithAggregatesFilter<"Student"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"Student"> | boolean
-  betterAuthUserId?: Prisma.StringNullableWithAggregatesFilter<"Student"> | string | null
+  betterAuthUserId?: Prisma.StringWithAggregatesFilter<"Student"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Student"> | Date | string
 }
@@ -314,11 +305,10 @@ export type StudentCreateInput = {
   matricNumber: string
   name: string
   email: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
   finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
   reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
@@ -335,9 +325,8 @@ export type StudentUncheckedCreateInput = {
   name: string
   email: string
   departmentId: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
+  betterAuthUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
@@ -354,11 +343,10 @@ export type StudentUpdateInput = {
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
   finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
   reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
@@ -375,9 +363,8 @@ export type StudentUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
@@ -395,9 +382,8 @@ export type StudentCreateManyInput = {
   name: string
   email: string
   departmentId: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
+  betterAuthUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -407,9 +393,7 @@ export type StudentUpdateManyMutationInput = {
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -420,11 +404,15 @@ export type StudentUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StudentNullableScalarRelationFilter = {
+  is?: Prisma.StudentWhereInput | null
+  isNot?: Prisma.StudentWhereInput | null
 }
 
 export type StudentListRelationFilter = {
@@ -443,7 +431,6 @@ export type StudentCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
-  passwordHash?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   betterAuthUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -456,7 +443,6 @@ export type StudentMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
-  passwordHash?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   betterAuthUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -469,7 +455,6 @@ export type StudentMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
-  passwordHash?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   betterAuthUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -479,6 +464,38 @@ export type StudentMinOrderByAggregateInput = {
 export type StudentScalarRelationFilter = {
   is?: Prisma.StudentWhereInput
   isNot?: Prisma.StudentWhereInput
+}
+
+export type StudentCreateNestedOneWithoutBetterAuthUserInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutBetterAuthUserInput, Prisma.StudentUncheckedCreateWithoutBetterAuthUserInput>
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutBetterAuthUserInput
+  connect?: Prisma.StudentWhereUniqueInput
+}
+
+export type StudentUncheckedCreateNestedOneWithoutBetterAuthUserInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutBetterAuthUserInput, Prisma.StudentUncheckedCreateWithoutBetterAuthUserInput>
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutBetterAuthUserInput
+  connect?: Prisma.StudentWhereUniqueInput
+}
+
+export type StudentUpdateOneWithoutBetterAuthUserNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutBetterAuthUserInput, Prisma.StudentUncheckedCreateWithoutBetterAuthUserInput>
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutBetterAuthUserInput
+  upsert?: Prisma.StudentUpsertWithoutBetterAuthUserInput
+  disconnect?: Prisma.StudentWhereInput | boolean
+  delete?: Prisma.StudentWhereInput | boolean
+  connect?: Prisma.StudentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StudentUpdateToOneWithWhereWithoutBetterAuthUserInput, Prisma.StudentUpdateWithoutBetterAuthUserInput>, Prisma.StudentUncheckedUpdateWithoutBetterAuthUserInput>
+}
+
+export type StudentUncheckedUpdateOneWithoutBetterAuthUserNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutBetterAuthUserInput, Prisma.StudentUncheckedCreateWithoutBetterAuthUserInput>
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutBetterAuthUserInput
+  upsert?: Prisma.StudentUpsertWithoutBetterAuthUserInput
+  disconnect?: Prisma.StudentWhereInput | boolean
+  delete?: Prisma.StudentWhereInput | boolean
+  connect?: Prisma.StudentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StudentUpdateToOneWithWhereWithoutBetterAuthUserInput, Prisma.StudentUpdateWithoutBetterAuthUserInput>, Prisma.StudentUncheckedUpdateWithoutBetterAuthUserInput>
 }
 
 export type StudentCreateNestedManyWithoutDepartmentInput = {
@@ -621,16 +638,103 @@ export type StudentUpdateOneRequiredWithoutFinalCommentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StudentUpdateToOneWithWhereWithoutFinalCommentsInput, Prisma.StudentUpdateWithoutFinalCommentsInput>, Prisma.StudentUncheckedUpdateWithoutFinalCommentsInput>
 }
 
+export type StudentCreateWithoutBetterAuthUserInput = {
+  id?: string
+  matricNumber: string
+  name: string
+  email: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
+  logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
+  reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
+  studentSessionEnrollments?: Prisma.StudentSessionEnrollmentCreateNestedManyWithoutStudentInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutStudentInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutStudentInput
+  department: Prisma.DepartmentCreateNestedOneWithoutStudentsInput
+  weeklyEntries?: Prisma.WeeklyEntryCreateNestedManyWithoutStudentInput
+}
+
+export type StudentUncheckedCreateWithoutBetterAuthUserInput = {
+  id?: string
+  matricNumber: string
+  name: string
+  email: string
+  departmentId: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
+  logbookMetadata?: Prisma.LogbookMetadataUncheckedCreateNestedManyWithoutStudentInput
+  reviewRequests?: Prisma.ReviewRequestUncheckedCreateNestedManyWithoutStudentInput
+  studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutStudentInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutStudentInput
+  weeklyEntries?: Prisma.WeeklyEntryUncheckedCreateNestedManyWithoutStudentInput
+}
+
+export type StudentCreateOrConnectWithoutBetterAuthUserInput = {
+  where: Prisma.StudentWhereUniqueInput
+  create: Prisma.XOR<Prisma.StudentCreateWithoutBetterAuthUserInput, Prisma.StudentUncheckedCreateWithoutBetterAuthUserInput>
+}
+
+export type StudentUpsertWithoutBetterAuthUserInput = {
+  update: Prisma.XOR<Prisma.StudentUpdateWithoutBetterAuthUserInput, Prisma.StudentUncheckedUpdateWithoutBetterAuthUserInput>
+  create: Prisma.XOR<Prisma.StudentCreateWithoutBetterAuthUserInput, Prisma.StudentUncheckedCreateWithoutBetterAuthUserInput>
+  where?: Prisma.StudentWhereInput
+}
+
+export type StudentUpdateToOneWithWhereWithoutBetterAuthUserInput = {
+  where?: Prisma.StudentWhereInput
+  data: Prisma.XOR<Prisma.StudentUpdateWithoutBetterAuthUserInput, Prisma.StudentUncheckedUpdateWithoutBetterAuthUserInput>
+}
+
+export type StudentUpdateWithoutBetterAuthUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
+  logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
+  reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
+  studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUpdateManyWithoutStudentNestedInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutStudentNestedInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutStudentNestedInput
+  department?: Prisma.DepartmentUpdateOneRequiredWithoutStudentsNestedInput
+  weeklyEntries?: Prisma.WeeklyEntryUpdateManyWithoutStudentNestedInput
+}
+
+export type StudentUncheckedUpdateWithoutBetterAuthUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
+  logbookMetadata?: Prisma.LogbookMetadataUncheckedUpdateManyWithoutStudentNestedInput
+  reviewRequests?: Prisma.ReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
+  studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutStudentNestedInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutStudentNestedInput
+  weeklyEntries?: Prisma.WeeklyEntryUncheckedUpdateManyWithoutStudentNestedInput
+}
+
 export type StudentCreateWithoutDepartmentInput = {
   id?: string
   matricNumber: string
   name: string
   email: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
   finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
   reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
@@ -645,9 +749,8 @@ export type StudentUncheckedCreateWithoutDepartmentInput = {
   matricNumber: string
   name: string
   email: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
+  betterAuthUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
@@ -694,9 +797,8 @@ export type StudentScalarWhereInput = {
   name?: Prisma.StringFilter<"Student"> | string
   email?: Prisma.StringFilter<"Student"> | string
   departmentId?: Prisma.StringFilter<"Student"> | string
-  passwordHash?: Prisma.StringFilter<"Student"> | string
   isActive?: Prisma.BoolFilter<"Student"> | boolean
-  betterAuthUserId?: Prisma.StringNullableFilter<"Student"> | string | null
+  betterAuthUserId?: Prisma.StringFilter<"Student"> | string
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
 }
@@ -706,11 +808,10 @@ export type StudentCreateWithoutStudentSessionEnrollmentsInput = {
   matricNumber: string
   name: string
   email: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
   finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
   reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
@@ -726,9 +827,8 @@ export type StudentUncheckedCreateWithoutStudentSessionEnrollmentsInput = {
   name: string
   email: string
   departmentId: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
+  betterAuthUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
@@ -760,11 +860,10 @@ export type StudentUpdateWithoutStudentSessionEnrollmentsInput = {
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
   finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
   reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
@@ -780,9 +879,8 @@ export type StudentUncheckedUpdateWithoutStudentSessionEnrollmentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
@@ -798,11 +896,10 @@ export type StudentCreateWithoutStudentSupervisorAssignmentsInput = {
   matricNumber: string
   name: string
   email: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
   finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
   reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
@@ -818,9 +915,8 @@ export type StudentUncheckedCreateWithoutStudentSupervisorAssignmentsInput = {
   name: string
   email: string
   departmentId: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
+  betterAuthUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
@@ -852,11 +948,10 @@ export type StudentUpdateWithoutStudentSupervisorAssignmentsInput = {
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
   finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
   reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
@@ -872,9 +967,8 @@ export type StudentUncheckedUpdateWithoutStudentSupervisorAssignmentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
@@ -890,11 +984,10 @@ export type StudentCreateWithoutStudentSiwesDetailsInput = {
   matricNumber: string
   name: string
   email: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
   finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
   reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
@@ -910,9 +1003,8 @@ export type StudentUncheckedCreateWithoutStudentSiwesDetailsInput = {
   name: string
   email: string
   departmentId: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
+  betterAuthUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
@@ -944,11 +1036,10 @@ export type StudentUpdateWithoutStudentSiwesDetailsInput = {
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
   finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
   reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
@@ -964,9 +1055,8 @@ export type StudentUncheckedUpdateWithoutStudentSiwesDetailsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
@@ -982,11 +1072,10 @@ export type StudentCreateWithoutLogbookMetadataInput = {
   matricNumber: string
   name: string
   email: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
   finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
   reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentCreateNestedManyWithoutStudentInput
@@ -1002,9 +1091,8 @@ export type StudentUncheckedCreateWithoutLogbookMetadataInput = {
   name: string
   email: string
   departmentId: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
+  betterAuthUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
@@ -1036,11 +1124,10 @@ export type StudentUpdateWithoutLogbookMetadataInput = {
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
   finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
   reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUpdateManyWithoutStudentNestedInput
@@ -1056,9 +1143,8 @@ export type StudentUncheckedUpdateWithoutLogbookMetadataInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
@@ -1074,11 +1160,10 @@ export type StudentCreateWithoutWeeklyEntriesInput = {
   matricNumber: string
   name: string
   email: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
   finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
   reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
@@ -1094,9 +1179,8 @@ export type StudentUncheckedCreateWithoutWeeklyEntriesInput = {
   name: string
   email: string
   departmentId: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
+  betterAuthUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
@@ -1128,11 +1212,10 @@ export type StudentUpdateWithoutWeeklyEntriesInput = {
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
   finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
   reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
@@ -1148,9 +1231,8 @@ export type StudentUncheckedUpdateWithoutWeeklyEntriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
@@ -1166,11 +1248,10 @@ export type StudentCreateWithoutReviewRequestsInput = {
   matricNumber: string
   name: string
   email: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
   finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentCreateNestedManyWithoutStudentInput
@@ -1186,9 +1267,8 @@ export type StudentUncheckedCreateWithoutReviewRequestsInput = {
   name: string
   email: string
   departmentId: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
+  betterAuthUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
@@ -1220,11 +1300,10 @@ export type StudentUpdateWithoutReviewRequestsInput = {
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
   finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUpdateManyWithoutStudentNestedInput
@@ -1240,9 +1319,8 @@ export type StudentUncheckedUpdateWithoutReviewRequestsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
@@ -1258,11 +1336,10 @@ export type StudentCreateWithoutFinalCommentsInput = {
   matricNumber: string
   name: string
   email: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
   reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentCreateNestedManyWithoutStudentInput
@@ -1278,9 +1355,8 @@ export type StudentUncheckedCreateWithoutFinalCommentsInput = {
   name: string
   email: string
   departmentId: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
+  betterAuthUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   logbookMetadata?: Prisma.LogbookMetadataUncheckedCreateNestedManyWithoutStudentInput
@@ -1312,11 +1388,10 @@ export type StudentUpdateWithoutFinalCommentsInput = {
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
   reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUpdateManyWithoutStudentNestedInput
@@ -1332,9 +1407,8 @@ export type StudentUncheckedUpdateWithoutFinalCommentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   logbookMetadata?: Prisma.LogbookMetadataUncheckedUpdateManyWithoutStudentNestedInput
@@ -1350,9 +1424,8 @@ export type StudentCreateManyDepartmentInput = {
   matricNumber: string
   name: string
   email: string
-  passwordHash: string
   isActive?: boolean
-  betterAuthUserId?: string | null
+  betterAuthUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1362,11 +1435,10 @@ export type StudentUpdateWithoutDepartmentInput = {
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
   finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
   reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
@@ -1381,9 +1453,8 @@ export type StudentUncheckedUpdateWithoutDepartmentInput = {
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
@@ -1400,9 +1471,8 @@ export type StudentUncheckedUpdateManyWithoutDepartmentInput = {
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1498,11 +1568,11 @@ export type StudentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name?: boolean
   email?: boolean
   departmentId?: boolean
-  passwordHash?: boolean
   isActive?: boolean
   betterAuthUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   finalComments?: boolean | Prisma.Student$finalCommentsArgs<ExtArgs>
   logbookMetadata?: boolean | Prisma.Student$logbookMetadataArgs<ExtArgs>
   reviewRequests?: boolean | Prisma.Student$reviewRequestsArgs<ExtArgs>
@@ -1520,11 +1590,11 @@ export type StudentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   name?: boolean
   email?: boolean
   departmentId?: boolean
-  passwordHash?: boolean
   isActive?: boolean
   betterAuthUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["student"]>
 
@@ -1534,11 +1604,11 @@ export type StudentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   name?: boolean
   email?: boolean
   departmentId?: boolean
-  passwordHash?: boolean
   isActive?: boolean
   betterAuthUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["student"]>
 
@@ -1548,15 +1618,15 @@ export type StudentSelectScalar = {
   name?: boolean
   email?: boolean
   departmentId?: boolean
-  passwordHash?: boolean
   isActive?: boolean
   betterAuthUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "matricNumber" | "name" | "email" | "departmentId" | "passwordHash" | "isActive" | "betterAuthUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
+export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "matricNumber" | "name" | "email" | "departmentId" | "isActive" | "betterAuthUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
 export type StudentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   finalComments?: boolean | Prisma.Student$finalCommentsArgs<ExtArgs>
   logbookMetadata?: boolean | Prisma.Student$logbookMetadataArgs<ExtArgs>
   reviewRequests?: boolean | Prisma.Student$reviewRequestsArgs<ExtArgs>
@@ -1568,15 +1638,18 @@ export type StudentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   _count?: boolean | Prisma.StudentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StudentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }
 export type StudentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }
 
 export type $StudentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Student"
   objects: {
+    betterAuthUser: Prisma.$UserPayload<ExtArgs>
     finalComments: Prisma.$FinalCommentPayload<ExtArgs>[]
     logbookMetadata: Prisma.$LogbookMetadataPayload<ExtArgs>[]
     reviewRequests: Prisma.$ReviewRequestPayload<ExtArgs>[]
@@ -1592,9 +1665,8 @@ export type $StudentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     name: string
     email: string
     departmentId: string
-    passwordHash: string
     isActive: boolean
-    betterAuthUserId: string | null
+    betterAuthUserId: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["student"]>
@@ -1991,6 +2063,7 @@ readonly fields: StudentFieldRefs;
  */
 export interface Prisma__StudentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  betterAuthUser<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   finalComments<T extends Prisma.Student$finalCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$finalCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinalCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   logbookMetadata<T extends Prisma.Student$logbookMetadataArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$logbookMetadataArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LogbookMetadataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviewRequests<T extends Prisma.Student$reviewRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$reviewRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2033,7 +2106,6 @@ export interface StudentFieldRefs {
   readonly name: Prisma.FieldRef<"Student", 'String'>
   readonly email: Prisma.FieldRef<"Student", 'String'>
   readonly departmentId: Prisma.FieldRef<"Student", 'String'>
-  readonly passwordHash: Prisma.FieldRef<"Student", 'String'>
   readonly isActive: Prisma.FieldRef<"Student", 'Boolean'>
   readonly betterAuthUserId: Prisma.FieldRef<"Student", 'String'>
   readonly createdAt: Prisma.FieldRef<"Student", 'DateTime'>

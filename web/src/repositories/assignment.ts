@@ -4,11 +4,40 @@ import type {
 } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+// Type for StudentSupervisorAssignment with included relations
+type StudentSupervisorAssignmentWithRelations =
+  Prisma.StudentSupervisorAssignmentGetPayload<{
+    include: {
+      student: {
+        include: {
+          department: {
+            include: {
+              faculty: true;
+            };
+          };
+        };
+      };
+      schoolSupervisor: {
+        include: {
+          department: {
+            include: {
+              faculty: true;
+            };
+          };
+        };
+      };
+      siwesSession: true;
+      admin: true;
+    };
+  }>;
+
 /**
  * Student Supervisor Assignment Repository - Thin data access layer for StudentSupervisorAssignment entity
  */
 export class AssignmentRepository {
-  async findById(id: string): Promise<StudentSupervisorAssignment | null> {
+  async findById(
+    id: string,
+  ): Promise<StudentSupervisorAssignmentWithRelations | null> {
     return prisma.studentSupervisorAssignment.findUnique({
       where: { id },
       include: {
@@ -77,7 +106,7 @@ export class AssignmentRepository {
   async findByStudentSession(
     studentId: string,
     siwesSessionId: string,
-  ): Promise<StudentSupervisorAssignment[]> {
+  ): Promise<StudentSupervisorAssignmentWithRelations[]> {
     return prisma.studentSupervisorAssignment.findMany({
       where: {
         studentId,
@@ -116,6 +145,39 @@ export class AssignmentRepository {
       where: {
         schoolSupervisorId,
         siwesSessionId,
+      },
+      include: {
+        student: {
+          include: {
+            department: {
+              include: {
+                faculty: true,
+              },
+            },
+          },
+        },
+        schoolSupervisor: {
+          include: {
+            department: {
+              include: {
+                faculty: true,
+              },
+            },
+          },
+        },
+        siwesSession: true,
+        admin: true,
+      },
+    });
+  }
+
+  // Alias for service compatibility
+  async findBySupervisor(
+    schoolSupervisorId: string,
+  ): Promise<StudentSupervisorAssignment[]> {
+    return prisma.studentSupervisorAssignment.findMany({
+      where: {
+        schoolSupervisorId,
       },
       include: {
         student: {

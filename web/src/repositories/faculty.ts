@@ -9,7 +9,15 @@ export class FacultyRepository {
     return prisma.faculty.findUnique({
       where: { id },
       include: {
-        departments: true,
+        departments: {
+          include: {
+            _count: {
+              select: {
+                students: true,
+              },
+            },
+          },
+        },
       },
     });
   }
@@ -18,7 +26,15 @@ export class FacultyRepository {
     return prisma.faculty.findUnique({
       where: { code },
       include: {
-        departments: true,
+        departments: {
+          include: {
+            _count: {
+              select: {
+                students: true,
+              },
+            },
+          },
+        },
       },
     });
   }
@@ -27,7 +43,15 @@ export class FacultyRepository {
     return prisma.faculty.findUnique({
       where: { name },
       include: {
-        departments: true,
+        departments: {
+          include: {
+            _count: {
+              select: {
+                students: true,
+              },
+            },
+          },
+        },
       },
     });
   }
@@ -66,7 +90,15 @@ export class FacultyRepository {
     return prisma.faculty.findMany({
       ...params,
       include: {
-        departments: true,
+        departments: {
+          include: {
+            _count: {
+              select: {
+                students: true,
+              },
+            },
+          },
+        },
       },
     });
   }
@@ -89,6 +121,96 @@ export class FacultyRepository {
       where: { name },
     });
     return count > 0;
+  }
+
+  // Department management methods
+  async addDepartment(
+    facultyId: string,
+    data: { name: string; code: string },
+  ): Promise<Faculty> {
+    return prisma.faculty.update({
+      where: { id: facultyId },
+      data: {
+        departments: {
+          create: data,
+        },
+      },
+      include: {
+        departments: {
+          include: {
+            _count: {
+              select: {
+                students: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  async updateDepartment(
+    departmentId: string,
+    data: { name?: string; code?: string },
+  ): Promise<Faculty> {
+    const department = await prisma.department.findUnique({
+      where: { id: departmentId },
+      select: { facultyId: true },
+    });
+
+    if (!department) {
+      throw new Error("Department not found");
+    }
+
+    await prisma.department.update({
+      where: { id: departmentId },
+      data,
+    });
+
+    return prisma.faculty.findUniqueOrThrow({
+      where: { id: department.facultyId },
+      include: {
+        departments: {
+          include: {
+            _count: {
+              select: {
+                students: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  async deleteDepartment(departmentId: string): Promise<Faculty> {
+    const department = await prisma.department.findUnique({
+      where: { id: departmentId },
+      select: { facultyId: true },
+    });
+
+    if (!department) {
+      throw new Error("Department not found");
+    }
+
+    await prisma.department.delete({
+      where: { id: departmentId },
+    });
+
+    return prisma.faculty.findUniqueOrThrow({
+      where: { id: department.facultyId },
+      include: {
+        departments: {
+          include: {
+            _count: {
+              select: {
+                students: true,
+              },
+            },
+          },
+        },
+      },
+    });
   }
 }
 

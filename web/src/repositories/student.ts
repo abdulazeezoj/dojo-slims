@@ -1,11 +1,22 @@
 import type { Prisma, Student } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+// Type for Student with included relations
+type StudentWithDepartment = Prisma.StudentGetPayload<{
+  include: {
+    department: {
+      include: {
+        faculty: true;
+      };
+    };
+  };
+}>;
+
 /**
  * Student Repository - Thin data access layer for Student entity
  */
 export class StudentRepository {
-  async findById(id: string): Promise<Student | null> {
+  async findById(id: string): Promise<StudentWithDepartment | null> {
     return prisma.student.findUnique({
       where: { id },
       include: {
@@ -18,7 +29,9 @@ export class StudentRepository {
     });
   }
 
-  async findByMatricNumber(matricNumber: string): Promise<Student | null> {
+  async findByMatricNumber(
+    matricNumber: string,
+  ): Promise<StudentWithDepartment | null> {
     return prisma.student.findUnique({
       where: { matricNumber },
       include: {
@@ -31,7 +44,7 @@ export class StudentRepository {
     });
   }
 
-  async findByEmail(email: string): Promise<Student | null> {
+  async findByEmail(email: string): Promise<StudentWithDepartment | null> {
     return prisma.student.findFirst({
       where: { email },
       include: {
@@ -77,7 +90,9 @@ export class StudentRepository {
     });
   }
 
-  async findByDepartment(departmentId: string): Promise<Student[]> {
+  async findByDepartment(
+    departmentId: string,
+  ): Promise<StudentWithDepartment[]> {
     return prisma.student.findMany({
       where: { departmentId },
       include: {
@@ -95,7 +110,7 @@ export class StudentRepository {
     skip?: number;
     take?: number;
     orderBy?: Prisma.StudentOrderByWithRelationInput;
-  }): Promise<Student[]> {
+  }): Promise<StudentWithDepartment[]> {
     return prisma.student.findMany({
       ...params,
       include: {
@@ -141,6 +156,70 @@ export class StudentRepository {
       where: { id },
       data: { isActive: true },
     });
+  }
+
+  // Alias for service compatibility
+  async findByMatricNo(matricNo: string): Promise<Student | null> {
+    return this.findByMatricNumber(matricNo);
+  }
+
+  // Helper methods for services
+  async findByBetterAuthUserId(
+    betterAuthUserId: string,
+  ): Promise<Student | null> {
+    return prisma.student.findUnique({
+      where: { betterAuthUserId },
+      include: {
+        department: {
+          include: {
+            faculty: true,
+          },
+        },
+      },
+    });
+  }
+
+  async hasActiveEnrollments(studentId: string): Promise<boolean> {
+    const count = await prisma.studentSessionEnrollment.count({
+      where: {
+        studentId,
+        siwesSession: {
+          status: \"ACTIVE\",
+        },
+      },
+    });
+    return count > 0;
+  }
+
+  async findDepartmentByCode(code: string) {
+    return prisma.department.findFirst({
+      where: { code },
+      include: {
+        faculty: true,
+      },
+    });
+  }
+
+  async countActiveEnrollments(
+    where?: Prisma.StudentWhereInput,
+  ): Promise<number> {
+    const students = await prisma.student.findMany({
+      where,
+      include: {
+        studentSessionEnrollments: {
+          where: {
+            siwesSession: {
+              status: \"ACTIVE\",
+            },
+          },
+        },
+      },
+    });
+
+    return students.reduce(
+      (total, student) => total + student.studentSessionEnrollments.length,
+      0,
+    );
   }
 }
 

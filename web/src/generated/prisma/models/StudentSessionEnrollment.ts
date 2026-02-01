@@ -28,7 +28,6 @@ export type StudentSessionEnrollmentMinAggregateOutputType = {
   id: string | null
   studentId: string | null
   siwesSessionId: string | null
-  isActive: boolean | null
   enrolledAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -38,7 +37,6 @@ export type StudentSessionEnrollmentMaxAggregateOutputType = {
   id: string | null
   studentId: string | null
   siwesSessionId: string | null
-  isActive: boolean | null
   enrolledAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -48,7 +46,6 @@ export type StudentSessionEnrollmentCountAggregateOutputType = {
   id: number
   studentId: number
   siwesSessionId: number
-  isActive: number
   enrolledAt: number
   createdAt: number
   updatedAt: number
@@ -60,7 +57,6 @@ export type StudentSessionEnrollmentMinAggregateInputType = {
   id?: true
   studentId?: true
   siwesSessionId?: true
-  isActive?: true
   enrolledAt?: true
   createdAt?: true
   updatedAt?: true
@@ -70,7 +66,6 @@ export type StudentSessionEnrollmentMaxAggregateInputType = {
   id?: true
   studentId?: true
   siwesSessionId?: true
-  isActive?: true
   enrolledAt?: true
   createdAt?: true
   updatedAt?: true
@@ -80,7 +75,6 @@ export type StudentSessionEnrollmentCountAggregateInputType = {
   id?: true
   studentId?: true
   siwesSessionId?: true
-  isActive?: true
   enrolledAt?: true
   createdAt?: true
   updatedAt?: true
@@ -163,7 +157,6 @@ export type StudentSessionEnrollmentGroupByOutputType = {
   id: string
   studentId: string
   siwesSessionId: string
-  isActive: boolean
   enrolledAt: Date
   createdAt: Date
   updatedAt: Date
@@ -194,7 +187,6 @@ export type StudentSessionEnrollmentWhereInput = {
   id?: Prisma.StringFilter<"StudentSessionEnrollment"> | string
   studentId?: Prisma.StringFilter<"StudentSessionEnrollment"> | string
   siwesSessionId?: Prisma.StringFilter<"StudentSessionEnrollment"> | string
-  isActive?: Prisma.BoolFilter<"StudentSessionEnrollment"> | boolean
   enrolledAt?: Prisma.DateTimeFilter<"StudentSessionEnrollment"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"StudentSessionEnrollment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StudentSessionEnrollment"> | Date | string
@@ -206,7 +198,6 @@ export type StudentSessionEnrollmentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
   siwesSessionId?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
   enrolledAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -222,7 +213,6 @@ export type StudentSessionEnrollmentWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.StudentSessionEnrollmentWhereInput | Prisma.StudentSessionEnrollmentWhereInput[]
   studentId?: Prisma.StringFilter<"StudentSessionEnrollment"> | string
   siwesSessionId?: Prisma.StringFilter<"StudentSessionEnrollment"> | string
-  isActive?: Prisma.BoolFilter<"StudentSessionEnrollment"> | boolean
   enrolledAt?: Prisma.DateTimeFilter<"StudentSessionEnrollment"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"StudentSessionEnrollment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StudentSessionEnrollment"> | Date | string
@@ -234,7 +224,6 @@ export type StudentSessionEnrollmentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
   siwesSessionId?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
   enrolledAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -250,7 +239,6 @@ export type StudentSessionEnrollmentScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"StudentSessionEnrollment"> | string
   studentId?: Prisma.StringWithAggregatesFilter<"StudentSessionEnrollment"> | string
   siwesSessionId?: Prisma.StringWithAggregatesFilter<"StudentSessionEnrollment"> | string
-  isActive?: Prisma.BoolWithAggregatesFilter<"StudentSessionEnrollment"> | boolean
   enrolledAt?: Prisma.DateTimeWithAggregatesFilter<"StudentSessionEnrollment"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"StudentSessionEnrollment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"StudentSessionEnrollment"> | Date | string
@@ -258,7 +246,6 @@ export type StudentSessionEnrollmentScalarWhereWithAggregatesInput = {
 
 export type StudentSessionEnrollmentCreateInput = {
   id?: string
-  isActive?: boolean
   enrolledAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -270,7 +257,6 @@ export type StudentSessionEnrollmentUncheckedCreateInput = {
   id?: string
   studentId: string
   siwesSessionId: string
-  isActive?: boolean
   enrolledAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -278,7 +264,6 @@ export type StudentSessionEnrollmentUncheckedCreateInput = {
 
 export type StudentSessionEnrollmentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -290,7 +275,6 @@ export type StudentSessionEnrollmentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   siwesSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -300,7 +284,6 @@ export type StudentSessionEnrollmentCreateManyInput = {
   id?: string
   studentId: string
   siwesSessionId: string
-  isActive?: boolean
   enrolledAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -308,7 +291,6 @@ export type StudentSessionEnrollmentCreateManyInput = {
 
 export type StudentSessionEnrollmentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -318,7 +300,6 @@ export type StudentSessionEnrollmentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   siwesSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -343,7 +324,6 @@ export type StudentSessionEnrollmentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
   siwesSessionId?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
   enrolledAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -353,7 +333,6 @@ export type StudentSessionEnrollmentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
   siwesSessionId?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
   enrolledAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -363,7 +342,6 @@ export type StudentSessionEnrollmentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
   siwesSessionId?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
   enrolledAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -455,7 +433,6 @@ export type StudentSessionEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
 
 export type StudentSessionEnrollmentCreateWithoutSiwesSessionInput = {
   id?: string
-  isActive?: boolean
   enrolledAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -465,7 +442,6 @@ export type StudentSessionEnrollmentCreateWithoutSiwesSessionInput = {
 export type StudentSessionEnrollmentUncheckedCreateWithoutSiwesSessionInput = {
   id?: string
   studentId: string
-  isActive?: boolean
   enrolledAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -504,7 +480,6 @@ export type StudentSessionEnrollmentScalarWhereInput = {
   id?: Prisma.StringFilter<"StudentSessionEnrollment"> | string
   studentId?: Prisma.StringFilter<"StudentSessionEnrollment"> | string
   siwesSessionId?: Prisma.StringFilter<"StudentSessionEnrollment"> | string
-  isActive?: Prisma.BoolFilter<"StudentSessionEnrollment"> | boolean
   enrolledAt?: Prisma.DateTimeFilter<"StudentSessionEnrollment"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"StudentSessionEnrollment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StudentSessionEnrollment"> | Date | string
@@ -512,7 +487,6 @@ export type StudentSessionEnrollmentScalarWhereInput = {
 
 export type StudentSessionEnrollmentCreateWithoutStudentInput = {
   id?: string
-  isActive?: boolean
   enrolledAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -522,7 +496,6 @@ export type StudentSessionEnrollmentCreateWithoutStudentInput = {
 export type StudentSessionEnrollmentUncheckedCreateWithoutStudentInput = {
   id?: string
   siwesSessionId: string
-  isActive?: boolean
   enrolledAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -557,7 +530,6 @@ export type StudentSessionEnrollmentUpdateManyWithWhereWithoutStudentInput = {
 export type StudentSessionEnrollmentCreateManySiwesSessionInput = {
   id?: string
   studentId: string
-  isActive?: boolean
   enrolledAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -565,7 +537,6 @@ export type StudentSessionEnrollmentCreateManySiwesSessionInput = {
 
 export type StudentSessionEnrollmentUpdateWithoutSiwesSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -575,7 +546,6 @@ export type StudentSessionEnrollmentUpdateWithoutSiwesSessionInput = {
 export type StudentSessionEnrollmentUncheckedUpdateWithoutSiwesSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -584,7 +554,6 @@ export type StudentSessionEnrollmentUncheckedUpdateWithoutSiwesSessionInput = {
 export type StudentSessionEnrollmentUncheckedUpdateManyWithoutSiwesSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -593,7 +562,6 @@ export type StudentSessionEnrollmentUncheckedUpdateManyWithoutSiwesSessionInput 
 export type StudentSessionEnrollmentCreateManyStudentInput = {
   id?: string
   siwesSessionId: string
-  isActive?: boolean
   enrolledAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -601,7 +569,6 @@ export type StudentSessionEnrollmentCreateManyStudentInput = {
 
 export type StudentSessionEnrollmentUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -611,7 +578,6 @@ export type StudentSessionEnrollmentUpdateWithoutStudentInput = {
 export type StudentSessionEnrollmentUncheckedUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   siwesSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -620,7 +586,6 @@ export type StudentSessionEnrollmentUncheckedUpdateWithoutStudentInput = {
 export type StudentSessionEnrollmentUncheckedUpdateManyWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   siwesSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -632,7 +597,6 @@ export type StudentSessionEnrollmentSelect<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   studentId?: boolean
   siwesSessionId?: boolean
-  isActive?: boolean
   enrolledAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -644,7 +608,6 @@ export type StudentSessionEnrollmentSelectCreateManyAndReturn<ExtArgs extends ru
   id?: boolean
   studentId?: boolean
   siwesSessionId?: boolean
-  isActive?: boolean
   enrolledAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -656,7 +619,6 @@ export type StudentSessionEnrollmentSelectUpdateManyAndReturn<ExtArgs extends ru
   id?: boolean
   studentId?: boolean
   siwesSessionId?: boolean
-  isActive?: boolean
   enrolledAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -668,13 +630,12 @@ export type StudentSessionEnrollmentSelectScalar = {
   id?: boolean
   studentId?: boolean
   siwesSessionId?: boolean
-  isActive?: boolean
   enrolledAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type StudentSessionEnrollmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "siwesSessionId" | "isActive" | "enrolledAt" | "createdAt" | "updatedAt", ExtArgs["result"]["studentSessionEnrollment"]>
+export type StudentSessionEnrollmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "siwesSessionId" | "enrolledAt" | "createdAt" | "updatedAt", ExtArgs["result"]["studentSessionEnrollment"]>
 export type StudentSessionEnrollmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   siwesSession?: boolean | Prisma.SiwesSessionDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
@@ -698,7 +659,6 @@ export type $StudentSessionEnrollmentPayload<ExtArgs extends runtime.Types.Exten
     id: string
     studentId: string
     siwesSessionId: string
-    isActive: boolean
     enrolledAt: Date
     createdAt: Date
     updatedAt: Date
@@ -1130,7 +1090,6 @@ export interface StudentSessionEnrollmentFieldRefs {
   readonly id: Prisma.FieldRef<"StudentSessionEnrollment", 'String'>
   readonly studentId: Prisma.FieldRef<"StudentSessionEnrollment", 'String'>
   readonly siwesSessionId: Prisma.FieldRef<"StudentSessionEnrollment", 'String'>
-  readonly isActive: Prisma.FieldRef<"StudentSessionEnrollment", 'Boolean'>
   readonly enrolledAt: Prisma.FieldRef<"StudentSessionEnrollment", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"StudentSessionEnrollment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"StudentSessionEnrollment", 'DateTime'>

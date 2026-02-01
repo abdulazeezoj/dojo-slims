@@ -31,6 +31,11 @@ export class AdminRepository {
     });
   }
 
+  // Alias for service compatibility
+  async findByUserId(userId: string): Promise<AdminUser | null> {
+    return this.findByBetterAuthUserId(userId);
+  }
+
   async create(data: Prisma.AdminUserCreateInput): Promise<AdminUser> {
     return prisma.adminUser.create({
       data,

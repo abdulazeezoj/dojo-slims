@@ -1,5 +1,4 @@
 import Redis from "ioredis";
-import "server-only";
 
 import { config } from "./config";
 import { getLogger } from "./logger";

@@ -5,11 +5,30 @@ import type {
 } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+// Type for StudentSessionEnrollment with included relations
+type StudentSessionEnrollmentWithRelations =
+  Prisma.StudentSessionEnrollmentGetPayload<{
+    include: {
+      student: {
+        include: {
+          department: {
+            include: {
+              faculty: true;
+            };
+          };
+        };
+      };
+      siwesSession: true;
+    };
+  }>;
+
 /**
  * Student Session Enrollment Repository - Thin data access layer for StudentSessionEnrollment entity
  */
 export class StudentEnrollmentRepository {
-  async findById(id: string): Promise<StudentSessionEnrollment | null> {
+  async findById(
+    id: string,
+  ): Promise<StudentSessionEnrollmentWithRelations | null> {
     return prisma.studentSessionEnrollment.findUnique({
       where: { id },
       include: {
@@ -30,7 +49,7 @@ export class StudentEnrollmentRepository {
   async findByStudentSession(
     studentId: string,
     siwesSessionId: string,
-  ): Promise<StudentSessionEnrollment | null> {
+  ): Promise<StudentSessionEnrollmentWithRelations | null> {
     return prisma.studentSessionEnrollment.findUnique({
       where: {
         studentId_siwesSessionId: {
@@ -53,7 +72,9 @@ export class StudentEnrollmentRepository {
     });
   }
 
-  async findByStudent(studentId: string): Promise<StudentSessionEnrollment[]> {
+  async findByStudent(
+    studentId: string,
+  ): Promise<StudentSessionEnrollmentWithRelations[]> {
     return prisma.studentSessionEnrollment.findMany({
       where: { studentId },
       include: {
@@ -76,7 +97,7 @@ export class StudentEnrollmentRepository {
 
   async findBySession(
     siwesSessionId: string,
-  ): Promise<StudentSessionEnrollment[]> {
+  ): Promise<StudentSessionEnrollmentWithRelations[]> {
     return prisma.studentSessionEnrollment.findMany({
       where: { siwesSessionId },
       include: {
@@ -96,7 +117,7 @@ export class StudentEnrollmentRepository {
 
   async findActiveBySession(
     siwesSessionId: string,
-  ): Promise<StudentSessionEnrollment[]> {
+  ): Promise<StudentSessionEnrollmentWithRelations[]> {
     return prisma.studentSessionEnrollment.findMany({
       where: {
         siwesSessionId,
@@ -192,6 +213,49 @@ export class StudentEnrollmentRepository {
     return prisma.studentSessionEnrollment.update({
       where: { id },
       data: { isActive: true },
+    });
+  }
+
+  async findByStudentAndSession(
+    studentId: string,
+    siwesSessionId: string,
+  ): Promise<StudentSessionEnrollmentWithRelations | null> {
+    return this.findByStudentSession(studentId, siwesSessionId);
+  }
+
+  async findMany(params: {
+    where?: Prisma.StudentSessionEnrollmentWhereInput;
+    include?: Prisma.StudentSessionEnrollmentInclude;
+    orderBy?: Prisma.StudentSessionEnrollmentOrderByWithRelationInput;
+    take?: number;
+    skip?: number;
+  }): Promise<StudentSessionEnrollment[]> {
+    return prisma.studentSessionEnrollment.findMany(params);
+  }
+
+  async count(
+    where?: Prisma.StudentSessionEnrollmentWhereInput,
+  ): Promise<number> {
+    return prisma.studentSessionEnrollment.count({ where });
+  }
+
+  async createWeekEntry(
+    studentId: string,
+    sessionId: string,
+    weekNumber: number,
+  ) {
+    // This creates a weekly entry placeholder
+    return prisma.weeklyEntry.create({
+      data: {
+        student: {
+          connect: { id: studentId },
+        },
+        siwesSession: {
+          connect: { id: sessionId },
+        },
+        weekNumber,
+        isLocked: false,
+      },
     });
   }
 }
@@ -349,6 +413,13 @@ export class SupervisorEnrollmentRepository {
     return prisma.supervisorSessionEnrollment.count({
       where: { siwesSessionId },
     });
+  }
+
+  async findBySupervisorAndSession(
+    schoolSupervisorId: string,
+    siwesSessionId: string,
+  ): Promise<SupervisorSessionEnrollment | null> {
+    return this.findBySupervisorSession(schoolSupervisorId, siwesSessionId);
   }
 }
 

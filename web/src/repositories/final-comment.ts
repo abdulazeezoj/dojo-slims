@@ -51,6 +51,19 @@ export class FinalCommentRepository {
     });
   }
 
+  // Alias for service compatibility
+  async findByStudentSessionAndType(
+    studentId: string,
+    siwesSessionId: string,
+    commenterType: "INDUSTRY_SUPERVISOR" | "SCHOOL_SUPERVISOR",
+  ): Promise<FinalComment | null> {
+    return this.findByStudentSessionCommenterType(
+      studentId,
+      siwesSessionId,
+      commenterType,
+    );
+  }
+
   async findByStudentSession(
     studentId: string,
     siwesSessionId: string,

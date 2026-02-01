@@ -5,11 +5,22 @@ import type {
 } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+// Type for SchoolSupervisor with included relations
+type SchoolSupervisorWithDepartment = Prisma.SchoolSupervisorGetPayload<{
+  include: {
+    department: {
+      include: {
+        faculty: true;
+      };
+    };
+  };
+}>;
+
 /**
  * School Supervisor Repository - Thin data access layer for SchoolSupervisor entity
  */
 export class SchoolSupervisorRepository {
-  async findById(id: string): Promise<SchoolSupervisor | null> {
+  async findById(id: string): Promise<SchoolSupervisorWithDepartment | null> {
     return prisma.schoolSupervisor.findUnique({
       where: { id },
       include: {
@@ -22,7 +33,9 @@ export class SchoolSupervisorRepository {
     });
   }
 
-  async findByStaffId(staffId: string): Promise<SchoolSupervisor | null> {
+  async findByStaffId(
+    staffId: string,
+  ): Promise<SchoolSupervisorWithDepartment | null> {
     return prisma.schoolSupervisor.findUnique({
       where: { staffId },
       include: {
@@ -35,7 +48,9 @@ export class SchoolSupervisorRepository {
     });
   }
 
-  async findByEmail(email: string): Promise<SchoolSupervisor | null> {
+  async findByEmail(
+    email: string,
+  ): Promise<SchoolSupervisorWithDepartment | null> {
     return prisma.schoolSupervisor.findUnique({
       where: { email },
       include: {
@@ -50,7 +65,7 @@ export class SchoolSupervisorRepository {
 
   async create(
     data: Prisma.SchoolSupervisorCreateInput,
-  ): Promise<SchoolSupervisor> {
+  ): Promise<SchoolSupervisorWithDepartment> {
     return prisma.schoolSupervisor.create({
       data,
       include: {
@@ -66,7 +81,7 @@ export class SchoolSupervisorRepository {
   async update(
     id: string,
     data: Prisma.SchoolSupervisorUpdateInput,
-  ): Promise<SchoolSupervisor> {
+  ): Promise<SchoolSupervisorWithDepartment> {
     return prisma.schoolSupervisor.update({
       where: { id },
       data,
@@ -86,7 +101,9 @@ export class SchoolSupervisorRepository {
     });
   }
 
-  async findByDepartment(departmentId: string): Promise<SchoolSupervisor[]> {
+  async findByDepartment(
+    departmentId: string,
+  ): Promise<SchoolSupervisorWithDepartment[]> {
     return prisma.schoolSupervisor.findMany({
       where: { departmentId },
       include: {
@@ -104,7 +121,7 @@ export class SchoolSupervisorRepository {
     skip?: number;
     take?: number;
     orderBy?: Prisma.SchoolSupervisorOrderByWithRelationInput;
-  }): Promise<SchoolSupervisor[]> {
+  }): Promise<SchoolSupervisorWithDepartment[]> {
     return prisma.schoolSupervisor.findMany({
       ...params,
       include: {
@@ -145,6 +162,50 @@ export class SchoolSupervisorRepository {
       where: { id },
       data: { isActive: true },
     });
+  }
+
+  async hasActiveAssignments(supervisorId: string): Promise<boolean> {
+    const count = await prisma.studentSupervisorAssignment.count({
+      where: {
+        schoolSupervisorId: supervisorId,
+        siwesSession: {
+          status: "ACTIVE",
+        },
+      },
+    });
+    return count > 0;
+  }
+
+  async findDepartmentByCode(code: string) {
+    return prisma.department.findFirst({
+      where: { code },
+      include: {
+        faculty: true,
+      },
+    });
+  }
+
+  async countActiveAssignments(
+    where?: Prisma.SchoolSupervisorWhereInput,
+  ): Promise<number> {
+    const supervisors = await prisma.schoolSupervisor.findMany({
+      where,
+      include: {
+        studentSupervisorAssignments: {
+          where: {
+            siwesSession: {
+              status: "ACTIVE",
+            },
+          },
+        },
+      },
+    });
+
+    return supervisors.reduce(
+      (total, supervisor) =>
+        total + supervisor.studentSupervisorAssignments.length,
+      0,
+    );
   }
 }
 
@@ -253,6 +314,30 @@ export class IndustrySupervisorRepository {
       where: { id },
       data: { isActive: true },
     });
+  }
+
+  async getAssignedStudents(supervisorId: string) {
+    // Get students assigned to this industry supervisor via SIWES details
+    const siwesDetails = await prisma.studentSiwesDetail.findMany({
+      where: {
+        industrySupervisorId: supervisorId,
+      },
+      include: {
+        student: {
+          include: {
+            department: {
+              include: {
+                faculty: true,
+              },
+            },
+          },
+        },
+        siwesSession: true,
+        placementOrganization: true,
+      },
+    });
+
+    return siwesDetails.map((detail) => detail.student);
   }
 }
 

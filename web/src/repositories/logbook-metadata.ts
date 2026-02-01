@@ -171,6 +171,26 @@ export class LogbookMetadataRepository {
     });
     return count > 0;
   }
+
+  async deleteByStudentSession(
+    studentId: string,
+    siwesSessionId: string,
+  ): Promise<void> {
+    await prisma.logbookMetadata.deleteMany({
+      where: {
+        studentId,
+        siwesSessionId,
+      },
+    });
+
+    // Also delete all weekly entries for this student/session
+    await prisma.weeklyEntry.deleteMany({
+      where: {
+        studentId,
+        siwesSessionId,
+      },
+    });
+  }
 }
 
 export const logbookMetadataRepository = new LogbookMetadataRepository();

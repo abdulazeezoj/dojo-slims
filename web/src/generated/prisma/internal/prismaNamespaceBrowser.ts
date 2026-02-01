@@ -104,7 +104,11 @@ export const UserScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   username: 'username',
-  displayUsername: 'displayUsername'
+  displayUsername: 'displayUsername',
+  role: 'role',
+  banned: 'banned',
+  banReason: 'banReason',
+  banExpires: 'banExpires'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -118,7 +122,8 @@ export const SessionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   ipAddress: 'ipAddress',
   userAgent: 'userAgent',
-  userId: 'userId'
+  userId: 'userId',
+  impersonatedBy: 'impersonatedBy'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
@@ -212,7 +217,6 @@ export const AdminUserScalarFieldEnum = {
   adminId: 'adminId',
   name: 'name',
   email: 'email',
-  passwordHash: 'passwordHash',
   isActive: 'isActive',
   betterAuthUserId: 'betterAuthUserId',
   createdAt: 'createdAt',
@@ -228,7 +232,6 @@ export const StudentScalarFieldEnum = {
   name: 'name',
   email: 'email',
   departmentId: 'departmentId',
-  passwordHash: 'passwordHash',
   isActive: 'isActive',
   betterAuthUserId: 'betterAuthUserId',
   createdAt: 'createdAt',
@@ -244,7 +247,6 @@ export const SchoolSupervisorScalarFieldEnum = {
   name: 'name',
   email: 'email',
   departmentId: 'departmentId',
-  passwordHash: 'passwordHash',
   isActive: 'isActive',
   betterAuthUserId: 'betterAuthUserId',
   createdAt: 'createdAt',
@@ -274,7 +276,6 @@ export const StudentSessionEnrollmentScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
   siwesSessionId: 'siwesSessionId',
-  isActive: 'isActive',
   enrolledAt: 'enrolledAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

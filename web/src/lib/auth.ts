@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { magicLink, username } from "better-auth/plugins";
+import { admin, magicLink, username } from "better-auth/plugins";
 
 import { authService } from "../services/auth";
 import { config } from "./config";
@@ -88,6 +88,10 @@ export const auth = betterAuth({
         const pattern = /^[A-Z0-9\/]+$/;
         return pattern.test(username);
       },
+    }),
+    admin({
+      defaultRole: "user",
+      adminRoles: ["admin"],
     }),
   ],
   async onSession(session: any, request: any) {
