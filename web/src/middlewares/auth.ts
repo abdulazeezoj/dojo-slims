@@ -56,6 +56,7 @@ export interface AuthUser {
   email: string | null;
   name: string | null;
   userType: UserType;
+  role: string;
   userReferenceId: string;
   isActive: boolean;
 }
@@ -89,7 +90,7 @@ function extractSessionToken(request: NextRequest): string | null {
  */
 async function getSession(token: string): Promise<AuthSession | null> {
   try {
-    let cachedSession = await sessionStore.get(token);
+    const cachedSession = await sessionStore.get(token);
 
     if (cachedSession) {
       if (new Date(cachedSession.expiresAt) > new Date()) {
@@ -123,6 +124,7 @@ async function getSession(token: string): Promise<AuthSession | null> {
         email: dbSession.user.email,
         name: dbSession.user.name,
         userType: dbSession.user.userType as UserType,
+        role: dbSession.user.role,
         userReferenceId: dbSession.user.userReferenceId,
         isActive: dbSession.user.isActive,
       },
@@ -210,13 +212,17 @@ export async function authMiddleware(
 /**
  * Require authentication - returns 401 if not authenticated
  */
-export function requireAuth(
+export function requireAuth<TContext = unknown>(
   handler: (
     request: NextRequest,
     session: AuthSession,
+    context: TContext,
   ) => Promise<NextResponse>,
 ) {
-  return async (request: NextRequest): Promise<NextResponse> => {
+  return async (
+    request: NextRequest,
+    context: TContext,
+  ): Promise<NextResponse> => {
     const token = extractSessionToken(request);
 
     if (!token) {
@@ -246,51 +252,99 @@ export function requireAuth(
       });
     }
 
-    return handler(request, session);
+    return handler(request, session, context);
   };
 }
 
 /**
  * Require specific user type(s) - returns 403 if user type doesn't match
  */
-export function requireUserType(...allowedTypes: UserType[]) {
+export function requireUserType<TContext = unknown>(
+  ...allowedTypes: UserType[]
+) {
   return (
     handler: (
       request: NextRequest,
       session: AuthSession,
+      context: TContext,
     ) => Promise<NextResponse>,
   ) => {
-    return requireAuth(async (request: NextRequest, session: AuthSession) => {
-      if (!allowedTypes.includes(session.user.userType)) {
-        logger.warn("User type not allowed", {
-          userId: session.user.id,
-          userType: session.user.userType,
-          allowedTypes,
-        });
-        return createErrorResponse("Insufficient permissions", {
-          status: 403,
-          code: "INSUFFICIENT_PERMISSIONS",
-        });
-      }
+    return requireAuth<TContext>(
+      async (request: NextRequest, session: AuthSession, context: TContext) => {
+        if (!allowedTypes.includes(session.user.userType)) {
+          logger.warn("User type not allowed", {
+            userId: session.user.id,
+            userType: session.user.userType,
+            allowedTypes,
+          });
+          return createErrorResponse("Insufficient permissions", {
+            status: 403,
+            code: "INSUFFICIENT_PERMISSIONS",
+          });
+        }
 
-      return handler(request, session);
-    });
+        return handler(request, session, context);
+      },
+    );
   };
 }
 
 /**
  * Convenience guards for specific user types
  */
-export const requireAdmin = requireUserType("ADMIN");
-export const requireStudent = requireUserType("STUDENT");
-export const requireSchoolSupervisor = requireUserType("SCHOOL_SUPERVISOR");
-export const requireIndustrySupervisor = requireUserType("INDUSTRY_SUPERVISOR");
-export const requireAnySuper = requireUserType(
-  "SCHOOL_SUPERVISOR",
-  "INDUSTRY_SUPERVISOR",
-);
-export const requireStudentOrSupervisor = requireUserType(
-  "STUDENT",
-  "SCHOOL_SUPERVISOR",
-  "INDUSTRY_SUPERVISOR",
-);
+export const requireAdmin = <TContext = unknown>(
+  handler: (
+    request: NextRequest,
+    session: AuthSession,
+    context: TContext,
+  ) => Promise<NextResponse>,
+) => requireUserType<TContext>("ADMIN")(handler);
+
+export const requireStudent = <TContext = unknown>(
+  handler: (
+    request: NextRequest,
+    session: AuthSession,
+    context: TContext,
+  ) => Promise<NextResponse>,
+) => requireUserType<TContext>("STUDENT")(handler);
+
+export const requireSchoolSupervisor = <TContext = unknown>(
+  handler: (
+    request: NextRequest,
+    session: AuthSession,
+    context: TContext,
+  ) => Promise<NextResponse>,
+) => requireUserType<TContext>("SCHOOL_SUPERVISOR")(handler);
+
+export const requireIndustrySupervisor = <TContext = unknown>(
+  handler: (
+    request: NextRequest,
+    session: AuthSession,
+    context: TContext,
+  ) => Promise<NextResponse>,
+) => requireUserType<TContext>("INDUSTRY_SUPERVISOR")(handler);
+
+export const requireAnySuper = <TContext = unknown>(
+  handler: (
+    request: NextRequest,
+    session: AuthSession,
+    context: TContext,
+  ) => Promise<NextResponse>,
+) =>
+  requireUserType<TContext>(
+    "SCHOOL_SUPERVISOR",
+    "INDUSTRY_SUPERVISOR",
+  )(handler);
+
+export const requireStudentOrSupervisor = <TContext = unknown>(
+  handler: (
+    request: NextRequest,
+    session: AuthSession,
+    context: TContext,
+  ) => Promise<NextResponse>,
+) =>
+  requireUserType<TContext>(
+    "STUDENT",
+    "SCHOOL_SUPERVISOR",
+    "INDUSTRY_SUPERVISOR",
+  )(handler);

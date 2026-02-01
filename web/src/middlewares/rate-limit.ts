@@ -56,7 +56,13 @@ const PATH_RATE_LIMITS: Array<{
     description: "General auth endpoints",
   },
 
-  // File upload endpoints - moderate limits
+  // File upload endpoints - strict limits for security
+  {
+    pattern: "/api/**/diagram",
+    limit: config.UPLOAD_RATE_LIMIT_MAX,
+    windowMs: config.UPLOAD_RATE_LIMIT_WINDOW_MS,
+    description: "Diagram uploads",
+  },
   {
     pattern: "/api/**/upload",
     limit: 10,

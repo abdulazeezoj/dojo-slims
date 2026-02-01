@@ -16,10 +16,10 @@ export const POST = requireStudent(
   async (
     request: NextRequest,
     session,
-    { params }: { params: { weekId: string } },
+    context: { params: { weekId: string } },
   ) => {
     try {
-      const { weekId } = params;
+      const { weekId } = context.params;
 
       // Verify ownership
       const week = await logbookService.getWeekDetails(weekId);
@@ -42,14 +42,6 @@ export const POST = requireStudent(
 
       // Upload file
       const uploadResult = await fileUploader.uploadFile(file, {
-        maxSize: 10 * 1024 * 1024, // 10MB
-        allowedTypes: [
-          "image/jpeg",
-          "image/jpg",
-          "image/png",
-          "image/gif",
-          "image/webp",
-        ],
         directory: `${week.studentId}/${weekId}`,
       });
 
@@ -63,11 +55,13 @@ export const POST = requireStudent(
       const diagram = await logbookService.uploadWeeklyDiagram(
         weekId,
         uploadResult.fileUrl!,
+        uploadResult.fileName!,
+        uploadResult.size!,
+        uploadResult.mimeType!,
         caption || undefined,
       );
 
       return createSuccessResponse(diagram, {
-        message: "Diagram uploaded successfully",
         status: 201,
       });
     } catch (error) {
@@ -90,10 +84,10 @@ export const DELETE = requireStudent(
   async (
     request: NextRequest,
     session,
-    { params }: { params: { weekId: string } },
+    context: { params: { weekId: string } },
   ) => {
     try {
-      const { weekId } = params;
+      const { weekId } = context.params;
       const { searchParams } = new URL(request.url);
       const diagramId = searchParams.get("diagramId");
 
@@ -113,17 +107,15 @@ export const DELETE = requireStudent(
 
       // Get diagram details before deletion to delete file
       const diagram = week.diagrams?.find((d) => d.id === diagramId);
-      if (diagram && diagram.imageUrl) {
+      if (diagram && diagram.filePath) {
         // Delete physical file
-        await fileUploader.deleteFile(diagram.imageUrl);
+        await fileUploader.deleteFile(diagram.filePath);
       }
 
       // Delete from database
       await logbookService.deleteWeeklyDiagram(diagramId);
 
-      return createSuccessResponse(null, {
-        message: "Diagram deleted successfully",
-      });
+      return createSuccessResponse(null);
     } catch (error) {
       return createErrorResponse(
         error instanceof Error ? error.message : "Failed to delete diagram",

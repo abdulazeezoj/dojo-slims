@@ -41,11 +41,25 @@ const envSchema = z.object({
   SMTP_PASS: z.string().default(""),
   SMTP_FROM_NAME: z.string().default("SLIMS"),
   SMTP_FROM_EMAIL: z.string().default("noreply@slims.edu.ng"),
-  BASE_UPLOAD_PATH: z.string().default("./uploads"),
-  MAX_FILE_SIZE: z.coerce.number().default(5242880),
+  BASE_UPLOAD_PATH: z.string().default("./upload"),
+  MAX_FILE_SIZE: z.coerce.number().default(5242880), // 5MB default
   ALLOWED_MIME_TYPES: z
     .string()
-    .default("image/jpeg,image/png,image/gif,application/pdf"),
+    .default("image/jpeg,image/png,image/gif,image/webp"),
+  BLACKLISTED_MIME_TYPES: z
+    .string()
+    .default(
+      "application/x-executable,application/x-msdownload,application/x-sh,text/x-php,application/x-httpd-php",
+    ),
+  ALLOWED_FILE_EXTENSIONS: z.string().default("jpg,jpeg,png,gif,webp"),
+  UPLOAD_ENABLE_MAGIC_NUMBER_CHECK: z.coerce.boolean().default(true),
+  UPLOAD_ENABLE_IMAGE_PROCESSING: z.coerce.boolean().default(true),
+  UPLOAD_MAX_IMAGE_WIDTH: z.coerce.number().default(2000),
+  UPLOAD_MAX_IMAGE_HEIGHT: z.coerce.number().default(2000),
+  UPLOAD_IMAGE_QUALITY: z.coerce.number().min(1).max(100).default(90),
+  UPLOAD_RATE_LIMIT_MAX: z.coerce.number().default(10), // 10 uploads per window
+  UPLOAD_RATE_LIMIT_WINDOW_MS: z.coerce.number().default(60000), // 1 minute
+  UPLOAD_USER_QUOTA_MB: z.coerce.number().default(100), // 100MB per user
   QUERY_POLLING_INTERVAL_MS: z.coerce.number().default(1000),
   QUERY_MAX_POLLING_ATTEMPTS: z.coerce.number().default(30),
   CORS_ALLOWED_ORIGINS: z
@@ -98,6 +112,17 @@ function loadEnv(): Env {
     BASE_UPLOAD_PATH: process.env.BASE_UPLOAD_PATH,
     MAX_FILE_SIZE: process.env.MAX_FILE_SIZE,
     ALLOWED_MIME_TYPES: process.env.ALLOWED_MIME_TYPES,
+    BLACKLISTED_MIME_TYPES: process.env.BLACKLISTED_MIME_TYPES,
+    ALLOWED_FILE_EXTENSIONS: process.env.ALLOWED_FILE_EXTENSIONS,
+    UPLOAD_ENABLE_MAGIC_NUMBER_CHECK:
+      process.env.UPLOAD_ENABLE_MAGIC_NUMBER_CHECK,
+    UPLOAD_ENABLE_IMAGE_PROCESSING: process.env.UPLOAD_ENABLE_IMAGE_PROCESSING,
+    UPLOAD_MAX_IMAGE_WIDTH: process.env.UPLOAD_MAX_IMAGE_WIDTH,
+    UPLOAD_MAX_IMAGE_HEIGHT: process.env.UPLOAD_MAX_IMAGE_HEIGHT,
+    UPLOAD_IMAGE_QUALITY: process.env.UPLOAD_IMAGE_QUALITY,
+    UPLOAD_RATE_LIMIT_MAX: process.env.UPLOAD_RATE_LIMIT_MAX,
+    UPLOAD_RATE_LIMIT_WINDOW_MS: process.env.UPLOAD_RATE_LIMIT_WINDOW_MS,
+    UPLOAD_USER_QUOTA_MB: process.env.UPLOAD_USER_QUOTA_MB,
     QUERY_POLLING_INTERVAL_MS:
       process.env.QUERY_POLLING_INTERVAL_MS ||
       process.env.NEXT_PUBLIC_QUERY_POLLING_INTERVAL_MS,

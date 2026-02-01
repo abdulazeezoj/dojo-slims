@@ -19,7 +19,7 @@ export const GET = requireStudent(
 
       // Week details already include comments via repository include
       return createSuccessResponse(week.weeklyComments || [], {
-        message: "Comments loaded successfully",
+        status: 200,
       });
     } catch (error) {
       return createErrorResponse(
