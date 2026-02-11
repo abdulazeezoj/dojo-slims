@@ -1,5 +1,3 @@
-"use client";
-
 import {
   DashboardHeader,
   DashboardStats,
@@ -7,6 +5,12 @@ import {
   DashboardMetrics,
   DashboardRecentActivities,
 } from "@/components/admin/dashboard";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard | SIWES Admin Portal",
+  description: "View system statistics and recent activities",
+};
 
 export default function Page() {
   return (
