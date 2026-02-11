@@ -847,7 +847,7 @@ export class PdfGeneratorService {
   async generateCustomLogbookPdf(
     studentId: string,
     sessionId: string,
-    options: {
+    _options: {
       includeCoverPage?: boolean;
       includeSignatures?: boolean;
       watermark?: string;
