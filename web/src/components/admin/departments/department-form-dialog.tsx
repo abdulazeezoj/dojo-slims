@@ -71,16 +71,18 @@ export function DepartmentFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        render={
-          trigger || (
+      {trigger ? (
+        <DialogTrigger render={trigger as React.ReactElement} />
+      ) : (
+        <DialogTrigger
+          render={
             <Button>
               <PlusIcon className="mr-2 h-4 w-4" />
               New Department
             </Button>
-          )
-        }
-      />
+          }
+        />
+      )}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
@@ -97,8 +99,8 @@ export function DepartmentFormDialog({
             <div className="grid gap-2">
               <Label htmlFor="faculty">Faculty</Label>
               <Select
-                value={facultyId ? [facultyId] : undefined}
-                onValueChange={(value) => value && setFacultyId(value[0])}
+                value={facultyId}
+                onValueChange={(value) => setFacultyId(value || "")}
                 required
               >
                 <SelectTrigger id="faculty">
