@@ -386,19 +386,28 @@ export class SupervisorManagementService {
     // Send bulk welcome emails for all successfully created supervisors
     if (credentials.length > 0) {
       try {
-        const emailData = credentials.map((cred) => {
-          // Find corresponding supervisor data for name and staffId
-          const supervisorData = supervisors.find((s) => s.email === cred.email);
-          return {
-            email: cred.email,
-            name: supervisorData?.name || "Supervisor",
-            userType: "School Supervisor",
-            loginCredential: supervisorData?.staffId || cred.email,
-            temporaryPassword: cred.password,
-          };
-        });
+        const emailData = credentials
+          .map((cred) => {
+            // Find corresponding supervisor data for name and staffId
+            const supervisorData = supervisors.find((s) => s.email === cred.email);
+            // supervisorData should always exist since we only add to credentials on success
+            if (!supervisorData) {
+              console.error(`Supervisor data not found for ${cred.email}`);
+              return null;
+            }
+            return {
+              email: cred.email,
+              name: supervisorData.name,
+              userType: "School Supervisor",
+              loginCredential: supervisorData.staffId,
+              temporaryPassword: cred.password,
+            };
+          })
+          .filter((data): data is NonNullable<typeof data> => data !== null);
         
-        await notificationService.sendBulkWelcomeEmails(emailData);
+        if (emailData.length > 0) {
+          await notificationService.sendBulkWelcomeEmails(emailData);
+        }
       } catch (error) {
         // Log error but don't fail the bulk creation
         // Users are created successfully, just email sending failed

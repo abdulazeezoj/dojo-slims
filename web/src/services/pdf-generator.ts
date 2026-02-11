@@ -843,6 +843,14 @@ export class PdfGeneratorService {
 
   /**
    * Generate PDF with custom branding
+   * 
+   * Note: This is a pass-through method for MVP. Custom branding options
+   * are defined in the API interface but not yet implemented.
+   * Future versions will support:
+   * - Cover page inclusion control
+   * - Signature field addition
+   * - Custom watermarks
+   * - Institution logo integration
    */
   async generateCustomLogbookPdf(
     studentId: string,
@@ -854,17 +862,9 @@ export class PdfGeneratorService {
       institutionLogo?: string;
     },
   ): Promise<Buffer> {
-    // For MVP, we'll use the standard generation but note the options
-    // Future enhancement: implement custom branding based on options
-    const standardPdf = await this.generateLogbookPdf(studentId, sessionId);
-    
-    // Options are available for future customization:
-    // - includeCoverPage: Add/remove cover page
-    // - includeSignatures: Add signature fields
-    // - watermark: Add watermark text
-    // - institutionLogo: Add institution logo
-    
-    return standardPdf;
+    // MVP: Return standard PDF generation
+    // Custom options will be implemented in a future release
+    return this.generateLogbookPdf(studentId, sessionId);
   }
 }
 
