@@ -8,10 +8,16 @@ import crypto from "crypto";
 
 import type { Prisma, SchoolSupervisor } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
-import { schoolSupervisorRepository, userRepository } from "@/repositories";
+import {
+  departmentRepository,
+  schoolSupervisorRepository,
+  studentRepository,
+  studentSessionEnrollmentRepository,
+  studentSupervisorAssignmentRepository,
+  userRepository,
+} from "@/repositories";
 
 import { notificationService } from "./notifications";
-
 
 export class SupervisorManagementService {
   /**
@@ -44,8 +50,13 @@ export class SupervisorManagementService {
     };
 
     const [supervisors, total] = await Promise.all([
-      schoolSupervisorRepository.findMany({ where, skip, take, orderBy }),
-      schoolSupervisorRepository.count(where),
+      schoolSupervisorRepository.prisma.findMany({
+        where,
+        skip,
+        take,
+        orderBy,
+      }),
+      schoolSupervisorRepository.prisma.count({ where }),
     ]);
 
     return { supervisors, total };
@@ -55,7 +66,7 @@ export class SupervisorManagementService {
    * Get supervisor by ID
    */
   async getSupervisorById(id: string): Promise<SchoolSupervisor | null> {
-    return schoolSupervisorRepository.findById(id);
+    return schoolSupervisorRepository.prisma.findUnique({ where: { id } });
   }
 
   /**
@@ -64,7 +75,7 @@ export class SupervisorManagementService {
   async getSupervisorByStaffId(
     staffId: string,
   ): Promise<SchoolSupervisor | null> {
-    return schoolSupervisorRepository.findByStaffId(staffId);
+    return schoolSupervisorRepository.findByStaffIdWithDetails(staffId);
   }
 
   /**
@@ -78,9 +89,8 @@ export class SupervisorManagementService {
     password?: string;
   }): Promise<SchoolSupervisor> {
     // Check if staff ID already exists
-    const existingSupervisor = await schoolSupervisorRepository.findByStaffId(
-      data.staffId,
-    );
+    const existingSupervisor =
+      await schoolSupervisorRepository.findByStaffIdWithDetails(data.staffId);
     if (existingSupervisor) {
       throw new Error(
         `Supervisor with staff ID ${data.staffId} already exists`,
@@ -112,18 +122,20 @@ export class SupervisorManagementService {
     const userId = userResult.user.id;
 
     // Create supervisor profile
-    const supervisor = await schoolSupervisorRepository.create({
-      name: data.name,
-      email: data.email,
-      staffId: data.staffId,
-      department: { connect: { id: data.departmentId } },
-      betterAuthUser: { connect: { id: userId } },
+    const supervisor = await schoolSupervisorRepository.prisma.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        staffId: data.staffId,
+        department: { connect: { id: data.departmentId } },
+        user: { connect: { id: userId } },
+      },
     });
 
-    // Update User with userType and userReferenceId
-    await userRepository.update(userId, {
-      userType: "SCHOOL_SUPERVISOR",
-      userReferenceId: supervisor.id,
+    // Update User with userType
+    await userRepository.prisma.update({
+      where: { id: userId },
+      data: { userType: "SCHOOL_SUPERVISOR" },
     });
 
     // Send welcome email with credentials
@@ -152,16 +164,17 @@ export class SupervisorManagementService {
       isActive?: boolean;
     },
   ): Promise<SchoolSupervisor> {
-    const supervisor = await schoolSupervisorRepository.findById(id);
+    const supervisor = await schoolSupervisorRepository.prisma.findUnique({
+      where: { id },
+    });
     if (!supervisor) {
       throw new Error("Supervisor not found");
     }
 
     // Check staff ID uniqueness if being changed
     if (data.staffId && data.staffId !== supervisor.staffId) {
-      const existing = await schoolSupervisorRepository.findByStaffId(
-        data.staffId,
-      );
+      const existing =
+        await schoolSupervisorRepository.findByStaffIdWithDetails(data.staffId);
       if (existing) {
         throw new Error(
           `Supervisor with staff ID ${data.staffId} already exists`,
@@ -172,16 +185,19 @@ export class SupervisorManagementService {
     // Check email uniqueness if being changed
     if (data.email && data.email !== supervisor.email) {
       const existingUser = await userRepository.findByEmail(data.email);
-      if (existingUser && existingUser.id !== supervisor.betterAuthUserId) {
+      if (existingUser && existingUser.id !== supervisor.userId) {
         throw new Error(`User with email ${data.email} already exists`);
       }
     }
 
     // Update User record if email or name changed
     if (data.email || data.name) {
-      await userRepository.update(supervisor.betterAuthUserId, {
-        ...(data.email && { email: data.email }),
-        ...(data.name && { name: data.name }),
+      await userRepository.prisma.update({
+        where: { id: supervisor.userId },
+        data: {
+          ...(data.email && { email: data.email }),
+          ...(data.name && { name: data.name }),
+        },
       });
     }
 
@@ -205,33 +221,37 @@ export class SupervisorManagementService {
       ...(data.isActive !== undefined && { isActive: data.isActive }),
     };
 
-    return schoolSupervisorRepository.update(id, updateData);
+    return schoolSupervisorRepository.updateProfile(id, updateData);
   }
 
   /**
    * Delete supervisor
    */
   async deleteSupervisor(id: string): Promise<void> {
-    const supervisor = await schoolSupervisorRepository.findById(id);
+    const supervisor = await schoolSupervisorRepository.prisma.findUnique({
+      where: { id },
+    });
     if (!supervisor) {
       throw new Error("Supervisor not found");
     }
 
     // Check if supervisor has active assignments
-    const hasAssignments =
-      await schoolSupervisorRepository.hasActiveAssignments(id);
-    if (hasAssignments) {
+    const assignmentCount =
+      await studentSupervisorAssignmentRepository.prisma.count({
+        where: { schoolSupervisorId: id },
+      });
+    if (assignmentCount > 0) {
       throw new Error(
         "Cannot delete supervisor with active student assignments. Reassign students first.",
       );
     }
 
     // Delete supervisor (cascade delete configured in schema will handle related records)
-    await schoolSupervisorRepository.delete(id);
+    await schoolSupervisorRepository.prisma.delete({ where: { id } });
 
     // Delete the associated User account
-    if (supervisor.betterAuthUserId) {
-      await userRepository.delete(supervisor.betterAuthUserId);
+    if (supervisor.userId) {
+      await userRepository.prisma.delete({ where: { id: supervisor.userId } });
     }
   }
 
@@ -267,10 +287,9 @@ export class SupervisorManagementService {
         const rowNumber = i + index + 1;
         try {
           // Find department by code
-          const department =
-            await schoolSupervisorRepository.findDepartmentByCode(
-              supervisorData.departmentCode,
-            );
+          const department = await departmentRepository.prisma.findFirst({
+            where: { code: supervisorData.departmentCode },
+          });
           if (!department) {
             errors.push({
               row: rowNumber,
@@ -282,7 +301,7 @@ export class SupervisorManagementService {
 
           // Check staff ID uniqueness
           const existingSupervisor =
-            await schoolSupervisorRepository.findByStaffId(
+            await schoolSupervisorRepository.findByStaffIdWithDetails(
               supervisorData.staffId,
             );
           if (existingSupervisor) {
@@ -331,18 +350,20 @@ export class SupervisorManagementService {
           const userId = userResult.user.id;
 
           // Create supervisor
-          const supervisor = await schoolSupervisorRepository.create({
-            name: supervisorData.name,
-            email: supervisorData.email,
-            staffId: supervisorData.staffId,
-            department: { connect: { id: department.id } },
-            betterAuthUser: { connect: { id: userId } },
+          const _supervisor = await schoolSupervisorRepository.prisma.create({
+            data: {
+              name: supervisorData.name,
+              email: supervisorData.email,
+              staffId: supervisorData.staffId,
+              department: { connect: { id: department.id } },
+              user: { connect: { id: userId } },
+            },
           });
 
-          // Update User with userType and userReferenceId
-          await userRepository.update(userId, {
-            userType: "SCHOOL_SUPERVISOR",
-            userReferenceId: supervisor.id,
+          // Update User with userType
+          await userRepository.prisma.update({
+            where: { id: userId },
+            data: { userType: "SCHOOL_SUPERVISOR" },
           });
 
           credentials.push({
@@ -381,8 +402,8 @@ export class SupervisorManagementService {
       : {};
 
     const [totalSupervisors, activeAssignments] = await Promise.all([
-      schoolSupervisorRepository.count(where),
-      schoolSupervisorRepository.countActiveAssignments(where),
+      schoolSupervisorRepository.prisma.count({ where }),
+      studentSupervisorAssignmentRepository.prisma.count({ where: {} }),
     ]);
 
     const averageWorkload =
@@ -398,7 +419,7 @@ export class SupervisorManagementService {
   /**
    * Get supervisor workload report
    */
-  async getSupervisorWorkload(_params?: {
+  async getSupervisorWorkload(params?: {
     departmentId?: string;
     sessionId?: string;
   }): Promise<
@@ -410,15 +431,63 @@ export class SupervisorManagementService {
       departmentName: string;
     }>
   > {
-    // This would require complex joins across repositories
-    // Implementation depends on specific repository methods
-    return [];
+    // Build filter for supervisors
+    const supervisorFilter: Prisma.SchoolSupervisorWhereInput = {
+      isActive: true,
+    };
+
+    if (params?.departmentId) {
+      supervisorFilter.departmentId = params.departmentId;
+    }
+
+    // Get all supervisors matching the filter
+    const supervisors = await schoolSupervisorRepository.prisma.findMany({
+      where: supervisorFilter,
+    });
+
+    // For each supervisor, get their workload
+    const workloadReport = await Promise.all(
+      supervisors.map(async (supervisor: SchoolSupervisor) => {
+        // Get department info
+        const department = await departmentRepository.prisma.findUnique({
+          where: { id: supervisor.departmentId },
+        });
+
+        // Get assignment count for this supervisor
+        let assignedStudents = 0;
+        if (params?.sessionId) {
+          assignedStudents =
+            await studentSupervisorAssignmentRepository.prisma.count({
+              where: {
+                schoolSupervisorId: supervisor.id,
+                siwesSessionId: params.sessionId,
+              },
+            });
+        } else {
+          // Count all assignments across all sessions
+          assignedStudents =
+            await studentSupervisorAssignmentRepository.prisma.count({
+              where: { schoolSupervisorId: supervisor.id },
+            });
+        }
+
+        return {
+          supervisorId: supervisor.id,
+          supervisorName: supervisor.name,
+          staffId: supervisor.staffId,
+          assignedStudents,
+          departmentName: department?.name || "Unknown Department",
+        };
+      }),
+    );
+
+    return workloadReport;
   }
 
   /**
    * Get unassigned students for a supervisor to review
    */
-  async getUnassignedStudents(_params?: {
+  async getUnassignedStudents(params?: {
     departmentId?: string;
     sessionId?: string;
   }): Promise<
@@ -426,12 +495,61 @@ export class SupervisorManagementService {
       studentId: string;
       studentName: string;
       matricNo: string;
-      level: number;
     }>
   > {
-    // This would require checking students without supervisor assignments
-    // Implementation depends on assignment repository methods
-    return [];
+    if (!params?.sessionId) {
+      throw new Error(
+        "Session ID is required to check for unassigned students",
+      );
+    }
+
+    // Get all student enrollments for this session
+    const enrollmentFilter: Prisma.StudentSessionEnrollmentWhereInput = {
+      siwesSessionId: params.sessionId,
+    };
+
+    const enrollments =
+      await studentSessionEnrollmentRepository.prisma.findMany({
+        where: enrollmentFilter,
+      });
+
+    // Get all assignments for this session
+    const assignments =
+      await studentSupervisorAssignmentRepository.prisma.findMany({
+        where: {
+          siwesSessionId: params.sessionId,
+        },
+      });
+
+    // Create a Set of assigned student IDs for fast lookup
+    const assignedStudentIds = new Set(
+      assignments.map((a: { studentId: string }) => a.studentId),
+    );
+
+    // Filter to get unassigned student IDs
+    const unassignedStudentIds = enrollments
+      .filter(
+        (enrollment: { studentId: string }) =>
+          !assignedStudentIds.has(enrollment.studentId),
+      )
+      .map((enrollment: { studentId: string }) => enrollment.studentId);
+
+    // Get student details for unassigned students
+    const students = await studentRepository.prisma.findMany({
+      where: {
+        id: { in: unassignedStudentIds },
+        ...(params.departmentId && { departmentId: params.departmentId }),
+      },
+    });
+
+    // Map to required format
+    return students.map(
+      (student: { id: string; name: string; matricNumber: string }) => ({
+        studentId: student.id,
+        studentName: student.name,
+        matricNo: student.matricNumber,
+      }),
+    );
   }
 }
 

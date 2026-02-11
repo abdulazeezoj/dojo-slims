@@ -28,11 +28,12 @@ export type IndustrySupervisorMinAggregateOutputType = {
   id: string | null
   name: string | null
   email: string | null
-  placementOrganizationId: string | null
-  position: string | null
   phone: string | null
+  position: string | null
+  placementOrganizationId: string | null
+  currentSiwesSessionId: string | null
   isActive: boolean | null
-  betterAuthUserId: string | null
+  userId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -41,11 +42,12 @@ export type IndustrySupervisorMaxAggregateOutputType = {
   id: string | null
   name: string | null
   email: string | null
-  placementOrganizationId: string | null
-  position: string | null
   phone: string | null
+  position: string | null
+  placementOrganizationId: string | null
+  currentSiwesSessionId: string | null
   isActive: boolean | null
-  betterAuthUserId: string | null
+  userId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,11 +56,12 @@ export type IndustrySupervisorCountAggregateOutputType = {
   id: number
   name: number
   email: number
-  placementOrganizationId: number
-  position: number
   phone: number
+  position: number
+  placementOrganizationId: number
+  currentSiwesSessionId: number
   isActive: number
-  betterAuthUserId: number
+  userId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -69,11 +72,12 @@ export type IndustrySupervisorMinAggregateInputType = {
   id?: true
   name?: true
   email?: true
-  placementOrganizationId?: true
-  position?: true
   phone?: true
+  position?: true
+  placementOrganizationId?: true
+  currentSiwesSessionId?: true
   isActive?: true
-  betterAuthUserId?: true
+  userId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,11 +86,12 @@ export type IndustrySupervisorMaxAggregateInputType = {
   id?: true
   name?: true
   email?: true
-  placementOrganizationId?: true
-  position?: true
   phone?: true
+  position?: true
+  placementOrganizationId?: true
+  currentSiwesSessionId?: true
   isActive?: true
-  betterAuthUserId?: true
+  userId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -95,11 +100,12 @@ export type IndustrySupervisorCountAggregateInputType = {
   id?: true
   name?: true
   email?: true
-  placementOrganizationId?: true
-  position?: true
   phone?: true
+  position?: true
+  placementOrganizationId?: true
+  currentSiwesSessionId?: true
   isActive?: true
-  betterAuthUserId?: true
+  userId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -181,11 +187,12 @@ export type IndustrySupervisorGroupByOutputType = {
   id: string
   name: string
   email: string
-  placementOrganizationId: string
-  position: string | null
   phone: string | null
+  position: string | null
+  placementOrganizationId: string
+  currentSiwesSessionId: string | null
   isActive: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt: Date
   updatedAt: Date
   _count: IndustrySupervisorCountAggregateOutputType | null
@@ -215,65 +222,78 @@ export type IndustrySupervisorWhereInput = {
   id?: Prisma.StringFilter<"IndustrySupervisor"> | string
   name?: Prisma.StringFilter<"IndustrySupervisor"> | string
   email?: Prisma.StringFilter<"IndustrySupervisor"> | string
-  placementOrganizationId?: Prisma.StringFilter<"IndustrySupervisor"> | string
-  position?: Prisma.StringNullableFilter<"IndustrySupervisor"> | string | null
   phone?: Prisma.StringNullableFilter<"IndustrySupervisor"> | string | null
+  position?: Prisma.StringNullableFilter<"IndustrySupervisor"> | string | null
+  placementOrganizationId?: Prisma.StringFilter<"IndustrySupervisor"> | string
+  currentSiwesSessionId?: Prisma.StringNullableFilter<"IndustrySupervisor"> | string | null
   isActive?: Prisma.BoolFilter<"IndustrySupervisor"> | boolean
-  betterAuthUserId?: Prisma.StringFilter<"IndustrySupervisor"> | string
+  userId?: Prisma.StringFilter<"IndustrySupervisor"> | string
   createdAt?: Prisma.DateTimeFilter<"IndustrySupervisor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"IndustrySupervisor"> | Date | string
-  betterAuthUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  currentSiwesSession?: Prisma.XOR<Prisma.SiwesSessionNullableScalarRelationFilter, Prisma.SiwesSessionWhereInput> | null
   placementOrganization?: Prisma.XOR<Prisma.PlacementOrganizationScalarRelationFilter, Prisma.PlacementOrganizationWhereInput>
-  reviewRequests?: Prisma.ReviewRequestListRelationFilter
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestListRelationFilter
   studentSiwesDetails?: Prisma.StudentSiwesDetailListRelationFilter
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentListRelationFilter
+  finalComments?: Prisma.IndustrySupervisorFinalCommentListRelationFilter
 }
 
 export type IndustrySupervisorOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  placementOrganizationId?: Prisma.SortOrder
-  position?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  position?: Prisma.SortOrderInput | Prisma.SortOrder
+  placementOrganizationId?: Prisma.SortOrder
+  currentSiwesSessionId?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  betterAuthUser?: Prisma.UserOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
+  currentSiwesSession?: Prisma.SiwesSessionOrderByWithRelationInput
   placementOrganization?: Prisma.PlacementOrganizationOrderByWithRelationInput
-  reviewRequests?: Prisma.ReviewRequestOrderByRelationAggregateInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestOrderByRelationAggregateInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailOrderByRelationAggregateInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentOrderByRelationAggregateInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentOrderByRelationAggregateInput
 }
 
 export type IndustrySupervisorWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   email?: string
-  betterAuthUserId?: string
+  userId?: string
   AND?: Prisma.IndustrySupervisorWhereInput | Prisma.IndustrySupervisorWhereInput[]
   OR?: Prisma.IndustrySupervisorWhereInput[]
   NOT?: Prisma.IndustrySupervisorWhereInput | Prisma.IndustrySupervisorWhereInput[]
   name?: Prisma.StringFilter<"IndustrySupervisor"> | string
-  placementOrganizationId?: Prisma.StringFilter<"IndustrySupervisor"> | string
-  position?: Prisma.StringNullableFilter<"IndustrySupervisor"> | string | null
   phone?: Prisma.StringNullableFilter<"IndustrySupervisor"> | string | null
+  position?: Prisma.StringNullableFilter<"IndustrySupervisor"> | string | null
+  placementOrganizationId?: Prisma.StringFilter<"IndustrySupervisor"> | string
+  currentSiwesSessionId?: Prisma.StringNullableFilter<"IndustrySupervisor"> | string | null
   isActive?: Prisma.BoolFilter<"IndustrySupervisor"> | boolean
   createdAt?: Prisma.DateTimeFilter<"IndustrySupervisor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"IndustrySupervisor"> | Date | string
-  betterAuthUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  currentSiwesSession?: Prisma.XOR<Prisma.SiwesSessionNullableScalarRelationFilter, Prisma.SiwesSessionWhereInput> | null
   placementOrganization?: Prisma.XOR<Prisma.PlacementOrganizationScalarRelationFilter, Prisma.PlacementOrganizationWhereInput>
-  reviewRequests?: Prisma.ReviewRequestListRelationFilter
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestListRelationFilter
   studentSiwesDetails?: Prisma.StudentSiwesDetailListRelationFilter
-}, "id" | "email" | "betterAuthUserId">
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentListRelationFilter
+  finalComments?: Prisma.IndustrySupervisorFinalCommentListRelationFilter
+}, "id" | "email" | "userId">
 
 export type IndustrySupervisorOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  placementOrganizationId?: Prisma.SortOrder
-  position?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  position?: Prisma.SortOrderInput | Prisma.SortOrder
+  placementOrganizationId?: Prisma.SortOrder
+  currentSiwesSessionId?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.IndustrySupervisorCountOrderByAggregateInput
@@ -288,11 +308,12 @@ export type IndustrySupervisorScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"IndustrySupervisor"> | string
   name?: Prisma.StringWithAggregatesFilter<"IndustrySupervisor"> | string
   email?: Prisma.StringWithAggregatesFilter<"IndustrySupervisor"> | string
-  placementOrganizationId?: Prisma.StringWithAggregatesFilter<"IndustrySupervisor"> | string
-  position?: Prisma.StringNullableWithAggregatesFilter<"IndustrySupervisor"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"IndustrySupervisor"> | string | null
+  position?: Prisma.StringNullableWithAggregatesFilter<"IndustrySupervisor"> | string | null
+  placementOrganizationId?: Prisma.StringWithAggregatesFilter<"IndustrySupervisor"> | string
+  currentSiwesSessionId?: Prisma.StringNullableWithAggregatesFilter<"IndustrySupervisor"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"IndustrySupervisor"> | boolean
-  betterAuthUserId?: Prisma.StringWithAggregatesFilter<"IndustrySupervisor"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"IndustrySupervisor"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"IndustrySupervisor"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"IndustrySupervisor"> | Date | string
 }
@@ -301,71 +322,84 @@ export type IndustrySupervisorCreateInput = {
   id?: string
   name: string
   email: string
-  position?: string | null
   phone?: string | null
+  position?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutIndustrySupervisorProfileInput
+  user: Prisma.UserCreateNestedOneWithoutIndustrySupervisorProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutIndustrySupervisorsWithCurrentSiwesSessionInput
   placementOrganization: Prisma.PlacementOrganizationCreateNestedOneWithoutIndustrySupervisorsInput
-  reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutIndustrySupervisorInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutIndustrySupervisorInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutIndustrySupervisorInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentCreateNestedManyWithoutIndustrySupervisorInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutIndustrySupervisorInput
 }
 
 export type IndustrySupervisorUncheckedCreateInput = {
   id?: string
   name: string
   email: string
-  placementOrganizationId: string
-  position?: string | null
   phone?: string | null
+  position?: string | null
+  placementOrganizationId: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  reviewRequests?: Prisma.ReviewRequestUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutIndustrySupervisorInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutIndustrySupervisorInput
 }
 
 export type IndustrySupervisorUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutIndustrySupervisorProfileNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutIndustrySupervisorProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutIndustrySupervisorsWithCurrentSiwesSessionNestedInput
   placementOrganization?: Prisma.PlacementOrganizationUpdateOneRequiredWithoutIndustrySupervisorsNestedInput
-  reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutIndustrySupervisorNestedInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutIndustrySupervisorNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutIndustrySupervisorNestedInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUpdateManyWithoutIndustrySupervisorNestedInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutIndustrySupervisorNestedInput
 }
 
 export type IndustrySupervisorUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  placementOrganizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placementOrganizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  reviewRequests?: Prisma.ReviewRequestUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
 }
 
 export type IndustrySupervisorCreateManyInput = {
   id?: string
   name: string
   email: string
-  placementOrganizationId: string
-  position?: string | null
   phone?: string | null
+  position?: string | null
+  placementOrganizationId: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -374,8 +408,8 @@ export type IndustrySupervisorUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -385,11 +419,12 @@ export type IndustrySupervisorUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  placementOrganizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placementOrganizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -413,11 +448,12 @@ export type IndustrySupervisorCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  placementOrganizationId?: Prisma.SortOrder
-  position?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  position?: Prisma.SortOrder
+  placementOrganizationId?: Prisma.SortOrder
+  currentSiwesSessionId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -426,11 +462,12 @@ export type IndustrySupervisorMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  placementOrganizationId?: Prisma.SortOrder
-  position?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  position?: Prisma.SortOrder
+  placementOrganizationId?: Prisma.SortOrder
+  currentSiwesSessionId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -439,11 +476,12 @@ export type IndustrySupervisorMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  placementOrganizationId?: Prisma.SortOrder
-  position?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  position?: Prisma.SortOrder
+  placementOrganizationId?: Prisma.SortOrder
+  currentSiwesSessionId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -453,36 +491,36 @@ export type IndustrySupervisorScalarRelationFilter = {
   isNot?: Prisma.IndustrySupervisorWhereInput
 }
 
-export type IndustrySupervisorCreateNestedOneWithoutBetterAuthUserInput = {
-  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutBetterAuthUserInput, Prisma.IndustrySupervisorUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutBetterAuthUserInput
+export type IndustrySupervisorCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutUserInput, Prisma.IndustrySupervisorUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutUserInput
   connect?: Prisma.IndustrySupervisorWhereUniqueInput
 }
 
-export type IndustrySupervisorUncheckedCreateNestedOneWithoutBetterAuthUserInput = {
-  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutBetterAuthUserInput, Prisma.IndustrySupervisorUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutBetterAuthUserInput
+export type IndustrySupervisorUncheckedCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutUserInput, Prisma.IndustrySupervisorUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutUserInput
   connect?: Prisma.IndustrySupervisorWhereUniqueInput
 }
 
-export type IndustrySupervisorUpdateOneWithoutBetterAuthUserNestedInput = {
-  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutBetterAuthUserInput, Prisma.IndustrySupervisorUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutBetterAuthUserInput
-  upsert?: Prisma.IndustrySupervisorUpsertWithoutBetterAuthUserInput
+export type IndustrySupervisorUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutUserInput, Prisma.IndustrySupervisorUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutUserInput
+  upsert?: Prisma.IndustrySupervisorUpsertWithoutUserInput
   disconnect?: Prisma.IndustrySupervisorWhereInput | boolean
   delete?: Prisma.IndustrySupervisorWhereInput | boolean
   connect?: Prisma.IndustrySupervisorWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.IndustrySupervisorUpdateToOneWithWhereWithoutBetterAuthUserInput, Prisma.IndustrySupervisorUpdateWithoutBetterAuthUserInput>, Prisma.IndustrySupervisorUncheckedUpdateWithoutBetterAuthUserInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.IndustrySupervisorUpdateToOneWithWhereWithoutUserInput, Prisma.IndustrySupervisorUpdateWithoutUserInput>, Prisma.IndustrySupervisorUncheckedUpdateWithoutUserInput>
 }
 
-export type IndustrySupervisorUncheckedUpdateOneWithoutBetterAuthUserNestedInput = {
-  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutBetterAuthUserInput, Prisma.IndustrySupervisorUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutBetterAuthUserInput
-  upsert?: Prisma.IndustrySupervisorUpsertWithoutBetterAuthUserInput
+export type IndustrySupervisorUncheckedUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutUserInput, Prisma.IndustrySupervisorUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutUserInput
+  upsert?: Prisma.IndustrySupervisorUpsertWithoutUserInput
   disconnect?: Prisma.IndustrySupervisorWhereInput | boolean
   delete?: Prisma.IndustrySupervisorWhereInput | boolean
   connect?: Prisma.IndustrySupervisorWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.IndustrySupervisorUpdateToOneWithWhereWithoutBetterAuthUserInput, Prisma.IndustrySupervisorUpdateWithoutBetterAuthUserInput>, Prisma.IndustrySupervisorUncheckedUpdateWithoutBetterAuthUserInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.IndustrySupervisorUpdateToOneWithWhereWithoutUserInput, Prisma.IndustrySupervisorUpdateWithoutUserInput>, Prisma.IndustrySupervisorUncheckedUpdateWithoutUserInput>
 }
 
 export type IndustrySupervisorCreateNestedManyWithoutPlacementOrganizationInput = {
@@ -527,6 +565,48 @@ export type IndustrySupervisorUncheckedUpdateManyWithoutPlacementOrganizationNes
   deleteMany?: Prisma.IndustrySupervisorScalarWhereInput | Prisma.IndustrySupervisorScalarWhereInput[]
 }
 
+export type IndustrySupervisorCreateNestedManyWithoutCurrentSiwesSessionInput = {
+  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutCurrentSiwesSessionInput, Prisma.IndustrySupervisorUncheckedCreateWithoutCurrentSiwesSessionInput> | Prisma.IndustrySupervisorCreateWithoutCurrentSiwesSessionInput[] | Prisma.IndustrySupervisorUncheckedCreateWithoutCurrentSiwesSessionInput[]
+  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutCurrentSiwesSessionInput | Prisma.IndustrySupervisorCreateOrConnectWithoutCurrentSiwesSessionInput[]
+  createMany?: Prisma.IndustrySupervisorCreateManyCurrentSiwesSessionInputEnvelope
+  connect?: Prisma.IndustrySupervisorWhereUniqueInput | Prisma.IndustrySupervisorWhereUniqueInput[]
+}
+
+export type IndustrySupervisorUncheckedCreateNestedManyWithoutCurrentSiwesSessionInput = {
+  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutCurrentSiwesSessionInput, Prisma.IndustrySupervisorUncheckedCreateWithoutCurrentSiwesSessionInput> | Prisma.IndustrySupervisorCreateWithoutCurrentSiwesSessionInput[] | Prisma.IndustrySupervisorUncheckedCreateWithoutCurrentSiwesSessionInput[]
+  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutCurrentSiwesSessionInput | Prisma.IndustrySupervisorCreateOrConnectWithoutCurrentSiwesSessionInput[]
+  createMany?: Prisma.IndustrySupervisorCreateManyCurrentSiwesSessionInputEnvelope
+  connect?: Prisma.IndustrySupervisorWhereUniqueInput | Prisma.IndustrySupervisorWhereUniqueInput[]
+}
+
+export type IndustrySupervisorUpdateManyWithoutCurrentSiwesSessionNestedInput = {
+  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutCurrentSiwesSessionInput, Prisma.IndustrySupervisorUncheckedCreateWithoutCurrentSiwesSessionInput> | Prisma.IndustrySupervisorCreateWithoutCurrentSiwesSessionInput[] | Prisma.IndustrySupervisorUncheckedCreateWithoutCurrentSiwesSessionInput[]
+  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutCurrentSiwesSessionInput | Prisma.IndustrySupervisorCreateOrConnectWithoutCurrentSiwesSessionInput[]
+  upsert?: Prisma.IndustrySupervisorUpsertWithWhereUniqueWithoutCurrentSiwesSessionInput | Prisma.IndustrySupervisorUpsertWithWhereUniqueWithoutCurrentSiwesSessionInput[]
+  createMany?: Prisma.IndustrySupervisorCreateManyCurrentSiwesSessionInputEnvelope
+  set?: Prisma.IndustrySupervisorWhereUniqueInput | Prisma.IndustrySupervisorWhereUniqueInput[]
+  disconnect?: Prisma.IndustrySupervisorWhereUniqueInput | Prisma.IndustrySupervisorWhereUniqueInput[]
+  delete?: Prisma.IndustrySupervisorWhereUniqueInput | Prisma.IndustrySupervisorWhereUniqueInput[]
+  connect?: Prisma.IndustrySupervisorWhereUniqueInput | Prisma.IndustrySupervisorWhereUniqueInput[]
+  update?: Prisma.IndustrySupervisorUpdateWithWhereUniqueWithoutCurrentSiwesSessionInput | Prisma.IndustrySupervisorUpdateWithWhereUniqueWithoutCurrentSiwesSessionInput[]
+  updateMany?: Prisma.IndustrySupervisorUpdateManyWithWhereWithoutCurrentSiwesSessionInput | Prisma.IndustrySupervisorUpdateManyWithWhereWithoutCurrentSiwesSessionInput[]
+  deleteMany?: Prisma.IndustrySupervisorScalarWhereInput | Prisma.IndustrySupervisorScalarWhereInput[]
+}
+
+export type IndustrySupervisorUncheckedUpdateManyWithoutCurrentSiwesSessionNestedInput = {
+  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutCurrentSiwesSessionInput, Prisma.IndustrySupervisorUncheckedCreateWithoutCurrentSiwesSessionInput> | Prisma.IndustrySupervisorCreateWithoutCurrentSiwesSessionInput[] | Prisma.IndustrySupervisorUncheckedCreateWithoutCurrentSiwesSessionInput[]
+  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutCurrentSiwesSessionInput | Prisma.IndustrySupervisorCreateOrConnectWithoutCurrentSiwesSessionInput[]
+  upsert?: Prisma.IndustrySupervisorUpsertWithWhereUniqueWithoutCurrentSiwesSessionInput | Prisma.IndustrySupervisorUpsertWithWhereUniqueWithoutCurrentSiwesSessionInput[]
+  createMany?: Prisma.IndustrySupervisorCreateManyCurrentSiwesSessionInputEnvelope
+  set?: Prisma.IndustrySupervisorWhereUniqueInput | Prisma.IndustrySupervisorWhereUniqueInput[]
+  disconnect?: Prisma.IndustrySupervisorWhereUniqueInput | Prisma.IndustrySupervisorWhereUniqueInput[]
+  delete?: Prisma.IndustrySupervisorWhereUniqueInput | Prisma.IndustrySupervisorWhereUniqueInput[]
+  connect?: Prisma.IndustrySupervisorWhereUniqueInput | Prisma.IndustrySupervisorWhereUniqueInput[]
+  update?: Prisma.IndustrySupervisorUpdateWithWhereUniqueWithoutCurrentSiwesSessionInput | Prisma.IndustrySupervisorUpdateWithWhereUniqueWithoutCurrentSiwesSessionInput[]
+  updateMany?: Prisma.IndustrySupervisorUpdateManyWithWhereWithoutCurrentSiwesSessionInput | Prisma.IndustrySupervisorUpdateManyWithWhereWithoutCurrentSiwesSessionInput[]
+  deleteMany?: Prisma.IndustrySupervisorScalarWhereInput | Prisma.IndustrySupervisorScalarWhereInput[]
+}
+
 export type IndustrySupervisorCreateNestedOneWithoutStudentSiwesDetailsInput = {
   create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutStudentSiwesDetailsInput, Prisma.IndustrySupervisorUncheckedCreateWithoutStudentSiwesDetailsInput>
   connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutStudentSiwesDetailsInput
@@ -539,6 +619,20 @@ export type IndustrySupervisorUpdateOneRequiredWithoutStudentSiwesDetailsNestedI
   upsert?: Prisma.IndustrySupervisorUpsertWithoutStudentSiwesDetailsInput
   connect?: Prisma.IndustrySupervisorWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.IndustrySupervisorUpdateToOneWithWhereWithoutStudentSiwesDetailsInput, Prisma.IndustrySupervisorUpdateWithoutStudentSiwesDetailsInput>, Prisma.IndustrySupervisorUncheckedUpdateWithoutStudentSiwesDetailsInput>
+}
+
+export type IndustrySupervisorCreateNestedOneWithoutWeeklyCommentsInput = {
+  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutWeeklyCommentsInput, Prisma.IndustrySupervisorUncheckedCreateWithoutWeeklyCommentsInput>
+  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutWeeklyCommentsInput
+  connect?: Prisma.IndustrySupervisorWhereUniqueInput
+}
+
+export type IndustrySupervisorUpdateOneRequiredWithoutWeeklyCommentsNestedInput = {
+  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutWeeklyCommentsInput, Prisma.IndustrySupervisorUncheckedCreateWithoutWeeklyCommentsInput>
+  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutWeeklyCommentsInput
+  upsert?: Prisma.IndustrySupervisorUpsertWithoutWeeklyCommentsInput
+  connect?: Prisma.IndustrySupervisorWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.IndustrySupervisorUpdateToOneWithWhereWithoutWeeklyCommentsInput, Prisma.IndustrySupervisorUpdateWithoutWeeklyCommentsInput>, Prisma.IndustrySupervisorUncheckedUpdateWithoutWeeklyCommentsInput>
 }
 
 export type IndustrySupervisorCreateNestedOneWithoutReviewRequestsInput = {
@@ -555,104 +649,136 @@ export type IndustrySupervisorUpdateOneRequiredWithoutReviewRequestsNestedInput 
   update?: Prisma.XOR<Prisma.XOR<Prisma.IndustrySupervisorUpdateToOneWithWhereWithoutReviewRequestsInput, Prisma.IndustrySupervisorUpdateWithoutReviewRequestsInput>, Prisma.IndustrySupervisorUncheckedUpdateWithoutReviewRequestsInput>
 }
 
-export type IndustrySupervisorCreateWithoutBetterAuthUserInput = {
+export type IndustrySupervisorCreateNestedOneWithoutFinalCommentsInput = {
+  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutFinalCommentsInput, Prisma.IndustrySupervisorUncheckedCreateWithoutFinalCommentsInput>
+  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutFinalCommentsInput
+  connect?: Prisma.IndustrySupervisorWhereUniqueInput
+}
+
+export type IndustrySupervisorUpdateOneRequiredWithoutFinalCommentsNestedInput = {
+  create?: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutFinalCommentsInput, Prisma.IndustrySupervisorUncheckedCreateWithoutFinalCommentsInput>
+  connectOrCreate?: Prisma.IndustrySupervisorCreateOrConnectWithoutFinalCommentsInput
+  upsert?: Prisma.IndustrySupervisorUpsertWithoutFinalCommentsInput
+  connect?: Prisma.IndustrySupervisorWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.IndustrySupervisorUpdateToOneWithWhereWithoutFinalCommentsInput, Prisma.IndustrySupervisorUpdateWithoutFinalCommentsInput>, Prisma.IndustrySupervisorUncheckedUpdateWithoutFinalCommentsInput>
+}
+
+export type IndustrySupervisorCreateWithoutUserInput = {
   id?: string
   name: string
   email: string
-  position?: string | null
   phone?: string | null
+  position?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutIndustrySupervisorsWithCurrentSiwesSessionInput
   placementOrganization: Prisma.PlacementOrganizationCreateNestedOneWithoutIndustrySupervisorsInput
-  reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutIndustrySupervisorInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutIndustrySupervisorInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutIndustrySupervisorInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentCreateNestedManyWithoutIndustrySupervisorInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutIndustrySupervisorInput
 }
 
-export type IndustrySupervisorUncheckedCreateWithoutBetterAuthUserInput = {
+export type IndustrySupervisorUncheckedCreateWithoutUserInput = {
   id?: string
   name: string
   email: string
-  placementOrganizationId: string
-  position?: string | null
   phone?: string | null
+  position?: string | null
+  placementOrganizationId: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  reviewRequests?: Prisma.ReviewRequestUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutIndustrySupervisorInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutIndustrySupervisorInput
 }
 
-export type IndustrySupervisorCreateOrConnectWithoutBetterAuthUserInput = {
+export type IndustrySupervisorCreateOrConnectWithoutUserInput = {
   where: Prisma.IndustrySupervisorWhereUniqueInput
-  create: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutBetterAuthUserInput, Prisma.IndustrySupervisorUncheckedCreateWithoutBetterAuthUserInput>
+  create: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutUserInput, Prisma.IndustrySupervisorUncheckedCreateWithoutUserInput>
 }
 
-export type IndustrySupervisorUpsertWithoutBetterAuthUserInput = {
-  update: Prisma.XOR<Prisma.IndustrySupervisorUpdateWithoutBetterAuthUserInput, Prisma.IndustrySupervisorUncheckedUpdateWithoutBetterAuthUserInput>
-  create: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutBetterAuthUserInput, Prisma.IndustrySupervisorUncheckedCreateWithoutBetterAuthUserInput>
+export type IndustrySupervisorUpsertWithoutUserInput = {
+  update: Prisma.XOR<Prisma.IndustrySupervisorUpdateWithoutUserInput, Prisma.IndustrySupervisorUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutUserInput, Prisma.IndustrySupervisorUncheckedCreateWithoutUserInput>
   where?: Prisma.IndustrySupervisorWhereInput
 }
 
-export type IndustrySupervisorUpdateToOneWithWhereWithoutBetterAuthUserInput = {
+export type IndustrySupervisorUpdateToOneWithWhereWithoutUserInput = {
   where?: Prisma.IndustrySupervisorWhereInput
-  data: Prisma.XOR<Prisma.IndustrySupervisorUpdateWithoutBetterAuthUserInput, Prisma.IndustrySupervisorUncheckedUpdateWithoutBetterAuthUserInput>
+  data: Prisma.XOR<Prisma.IndustrySupervisorUpdateWithoutUserInput, Prisma.IndustrySupervisorUncheckedUpdateWithoutUserInput>
 }
 
-export type IndustrySupervisorUpdateWithoutBetterAuthUserInput = {
+export type IndustrySupervisorUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutIndustrySupervisorsWithCurrentSiwesSessionNestedInput
   placementOrganization?: Prisma.PlacementOrganizationUpdateOneRequiredWithoutIndustrySupervisorsNestedInput
-  reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutIndustrySupervisorNestedInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutIndustrySupervisorNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutIndustrySupervisorNestedInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUpdateManyWithoutIndustrySupervisorNestedInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutIndustrySupervisorNestedInput
 }
 
-export type IndustrySupervisorUncheckedUpdateWithoutBetterAuthUserInput = {
+export type IndustrySupervisorUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  placementOrganizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placementOrganizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  reviewRequests?: Prisma.ReviewRequestUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
 }
 
 export type IndustrySupervisorCreateWithoutPlacementOrganizationInput = {
   id?: string
   name: string
   email: string
-  position?: string | null
   phone?: string | null
+  position?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutIndustrySupervisorProfileInput
-  reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutIndustrySupervisorInput
+  user: Prisma.UserCreateNestedOneWithoutIndustrySupervisorProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutIndustrySupervisorsWithCurrentSiwesSessionInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutIndustrySupervisorInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutIndustrySupervisorInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentCreateNestedManyWithoutIndustrySupervisorInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutIndustrySupervisorInput
 }
 
 export type IndustrySupervisorUncheckedCreateWithoutPlacementOrganizationInput = {
   id?: string
   name: string
   email: string
-  position?: string | null
   phone?: string | null
+  position?: string | null
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  reviewRequests?: Prisma.ReviewRequestUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutIndustrySupervisorInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutIndustrySupervisorInput
 }
 
 export type IndustrySupervisorCreateOrConnectWithoutPlacementOrganizationInput = {
@@ -688,41 +814,108 @@ export type IndustrySupervisorScalarWhereInput = {
   id?: Prisma.StringFilter<"IndustrySupervisor"> | string
   name?: Prisma.StringFilter<"IndustrySupervisor"> | string
   email?: Prisma.StringFilter<"IndustrySupervisor"> | string
-  placementOrganizationId?: Prisma.StringFilter<"IndustrySupervisor"> | string
-  position?: Prisma.StringNullableFilter<"IndustrySupervisor"> | string | null
   phone?: Prisma.StringNullableFilter<"IndustrySupervisor"> | string | null
+  position?: Prisma.StringNullableFilter<"IndustrySupervisor"> | string | null
+  placementOrganizationId?: Prisma.StringFilter<"IndustrySupervisor"> | string
+  currentSiwesSessionId?: Prisma.StringNullableFilter<"IndustrySupervisor"> | string | null
   isActive?: Prisma.BoolFilter<"IndustrySupervisor"> | boolean
-  betterAuthUserId?: Prisma.StringFilter<"IndustrySupervisor"> | string
+  userId?: Prisma.StringFilter<"IndustrySupervisor"> | string
   createdAt?: Prisma.DateTimeFilter<"IndustrySupervisor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"IndustrySupervisor"> | Date | string
+}
+
+export type IndustrySupervisorCreateWithoutCurrentSiwesSessionInput = {
+  id?: string
+  name: string
+  email: string
+  phone?: string | null
+  position?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutIndustrySupervisorProfileInput
+  placementOrganization: Prisma.PlacementOrganizationCreateNestedOneWithoutIndustrySupervisorsInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutIndustrySupervisorInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutIndustrySupervisorInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentCreateNestedManyWithoutIndustrySupervisorInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutIndustrySupervisorInput
+}
+
+export type IndustrySupervisorUncheckedCreateWithoutCurrentSiwesSessionInput = {
+  id?: string
+  name: string
+  email: string
+  phone?: string | null
+  position?: string | null
+  placementOrganizationId: string
+  isActive?: boolean
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+}
+
+export type IndustrySupervisorCreateOrConnectWithoutCurrentSiwesSessionInput = {
+  where: Prisma.IndustrySupervisorWhereUniqueInput
+  create: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutCurrentSiwesSessionInput, Prisma.IndustrySupervisorUncheckedCreateWithoutCurrentSiwesSessionInput>
+}
+
+export type IndustrySupervisorCreateManyCurrentSiwesSessionInputEnvelope = {
+  data: Prisma.IndustrySupervisorCreateManyCurrentSiwesSessionInput | Prisma.IndustrySupervisorCreateManyCurrentSiwesSessionInput[]
+  skipDuplicates?: boolean
+}
+
+export type IndustrySupervisorUpsertWithWhereUniqueWithoutCurrentSiwesSessionInput = {
+  where: Prisma.IndustrySupervisorWhereUniqueInput
+  update: Prisma.XOR<Prisma.IndustrySupervisorUpdateWithoutCurrentSiwesSessionInput, Prisma.IndustrySupervisorUncheckedUpdateWithoutCurrentSiwesSessionInput>
+  create: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutCurrentSiwesSessionInput, Prisma.IndustrySupervisorUncheckedCreateWithoutCurrentSiwesSessionInput>
+}
+
+export type IndustrySupervisorUpdateWithWhereUniqueWithoutCurrentSiwesSessionInput = {
+  where: Prisma.IndustrySupervisorWhereUniqueInput
+  data: Prisma.XOR<Prisma.IndustrySupervisorUpdateWithoutCurrentSiwesSessionInput, Prisma.IndustrySupervisorUncheckedUpdateWithoutCurrentSiwesSessionInput>
+}
+
+export type IndustrySupervisorUpdateManyWithWhereWithoutCurrentSiwesSessionInput = {
+  where: Prisma.IndustrySupervisorScalarWhereInput
+  data: Prisma.XOR<Prisma.IndustrySupervisorUpdateManyMutationInput, Prisma.IndustrySupervisorUncheckedUpdateManyWithoutCurrentSiwesSessionInput>
 }
 
 export type IndustrySupervisorCreateWithoutStudentSiwesDetailsInput = {
   id?: string
   name: string
   email: string
-  position?: string | null
   phone?: string | null
+  position?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutIndustrySupervisorProfileInput
+  user: Prisma.UserCreateNestedOneWithoutIndustrySupervisorProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutIndustrySupervisorsWithCurrentSiwesSessionInput
   placementOrganization: Prisma.PlacementOrganizationCreateNestedOneWithoutIndustrySupervisorsInput
-  reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutIndustrySupervisorInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutIndustrySupervisorInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentCreateNestedManyWithoutIndustrySupervisorInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutIndustrySupervisorInput
 }
 
 export type IndustrySupervisorUncheckedCreateWithoutStudentSiwesDetailsInput = {
   id?: string
   name: string
   email: string
-  placementOrganizationId: string
-  position?: string | null
   phone?: string | null
+  position?: string | null
+  placementOrganizationId: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  reviewRequests?: Prisma.ReviewRequestUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutIndustrySupervisorInput
 }
 
 export type IndustrySupervisorCreateOrConnectWithoutStudentSiwesDetailsInput = {
@@ -745,56 +938,152 @@ export type IndustrySupervisorUpdateWithoutStudentSiwesDetailsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutIndustrySupervisorProfileNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutIndustrySupervisorProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutIndustrySupervisorsWithCurrentSiwesSessionNestedInput
   placementOrganization?: Prisma.PlacementOrganizationUpdateOneRequiredWithoutIndustrySupervisorsNestedInput
-  reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutIndustrySupervisorNestedInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutIndustrySupervisorNestedInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUpdateManyWithoutIndustrySupervisorNestedInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutIndustrySupervisorNestedInput
 }
 
 export type IndustrySupervisorUncheckedUpdateWithoutStudentSiwesDetailsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  placementOrganizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placementOrganizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  reviewRequests?: Prisma.ReviewRequestUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+}
+
+export type IndustrySupervisorCreateWithoutWeeklyCommentsInput = {
+  id?: string
+  name: string
+  email: string
+  phone?: string | null
+  position?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutIndustrySupervisorProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutIndustrySupervisorsWithCurrentSiwesSessionInput
+  placementOrganization: Prisma.PlacementOrganizationCreateNestedOneWithoutIndustrySupervisorsInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutIndustrySupervisorInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutIndustrySupervisorInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutIndustrySupervisorInput
+}
+
+export type IndustrySupervisorUncheckedCreateWithoutWeeklyCommentsInput = {
+  id?: string
+  name: string
+  email: string
+  phone?: string | null
+  position?: string | null
+  placementOrganizationId: string
+  currentSiwesSessionId?: string | null
+  isActive?: boolean
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+}
+
+export type IndustrySupervisorCreateOrConnectWithoutWeeklyCommentsInput = {
+  where: Prisma.IndustrySupervisorWhereUniqueInput
+  create: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutWeeklyCommentsInput, Prisma.IndustrySupervisorUncheckedCreateWithoutWeeklyCommentsInput>
+}
+
+export type IndustrySupervisorUpsertWithoutWeeklyCommentsInput = {
+  update: Prisma.XOR<Prisma.IndustrySupervisorUpdateWithoutWeeklyCommentsInput, Prisma.IndustrySupervisorUncheckedUpdateWithoutWeeklyCommentsInput>
+  create: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutWeeklyCommentsInput, Prisma.IndustrySupervisorUncheckedCreateWithoutWeeklyCommentsInput>
+  where?: Prisma.IndustrySupervisorWhereInput
+}
+
+export type IndustrySupervisorUpdateToOneWithWhereWithoutWeeklyCommentsInput = {
+  where?: Prisma.IndustrySupervisorWhereInput
+  data: Prisma.XOR<Prisma.IndustrySupervisorUpdateWithoutWeeklyCommentsInput, Prisma.IndustrySupervisorUncheckedUpdateWithoutWeeklyCommentsInput>
+}
+
+export type IndustrySupervisorUpdateWithoutWeeklyCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutIndustrySupervisorProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutIndustrySupervisorsWithCurrentSiwesSessionNestedInput
+  placementOrganization?: Prisma.PlacementOrganizationUpdateOneRequiredWithoutIndustrySupervisorsNestedInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutIndustrySupervisorNestedInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutIndustrySupervisorNestedInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutIndustrySupervisorNestedInput
+}
+
+export type IndustrySupervisorUncheckedUpdateWithoutWeeklyCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placementOrganizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
 }
 
 export type IndustrySupervisorCreateWithoutReviewRequestsInput = {
   id?: string
   name: string
   email: string
-  position?: string | null
   phone?: string | null
+  position?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutIndustrySupervisorProfileInput
+  user: Prisma.UserCreateNestedOneWithoutIndustrySupervisorProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutIndustrySupervisorsWithCurrentSiwesSessionInput
   placementOrganization: Prisma.PlacementOrganizationCreateNestedOneWithoutIndustrySupervisorsInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutIndustrySupervisorInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentCreateNestedManyWithoutIndustrySupervisorInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutIndustrySupervisorInput
 }
 
 export type IndustrySupervisorUncheckedCreateWithoutReviewRequestsInput = {
   id?: string
   name: string
   email: string
-  placementOrganizationId: string
-  position?: string | null
   phone?: string | null
+  position?: string | null
+  placementOrganizationId: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutIndustrySupervisorInput
 }
 
 export type IndustrySupervisorCreateOrConnectWithoutReviewRequestsInput = {
@@ -817,38 +1106,129 @@ export type IndustrySupervisorUpdateWithoutReviewRequestsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutIndustrySupervisorProfileNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutIndustrySupervisorProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutIndustrySupervisorsWithCurrentSiwesSessionNestedInput
   placementOrganization?: Prisma.PlacementOrganizationUpdateOneRequiredWithoutIndustrySupervisorsNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutIndustrySupervisorNestedInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUpdateManyWithoutIndustrySupervisorNestedInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutIndustrySupervisorNestedInput
 }
 
 export type IndustrySupervisorUncheckedUpdateWithoutReviewRequestsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  placementOrganizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placementOrganizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+}
+
+export type IndustrySupervisorCreateWithoutFinalCommentsInput = {
+  id?: string
+  name: string
+  email: string
+  phone?: string | null
+  position?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutIndustrySupervisorProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutIndustrySupervisorsWithCurrentSiwesSessionInput
+  placementOrganization: Prisma.PlacementOrganizationCreateNestedOneWithoutIndustrySupervisorsInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutIndustrySupervisorInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutIndustrySupervisorInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentCreateNestedManyWithoutIndustrySupervisorInput
+}
+
+export type IndustrySupervisorUncheckedCreateWithoutFinalCommentsInput = {
+  id?: string
+  name: string
+  email: string
+  phone?: string | null
+  position?: string | null
+  placementOrganizationId: string
+  currentSiwesSessionId?: string | null
+  isActive?: boolean
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedCreateNestedManyWithoutIndustrySupervisorInput
+}
+
+export type IndustrySupervisorCreateOrConnectWithoutFinalCommentsInput = {
+  where: Prisma.IndustrySupervisorWhereUniqueInput
+  create: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutFinalCommentsInput, Prisma.IndustrySupervisorUncheckedCreateWithoutFinalCommentsInput>
+}
+
+export type IndustrySupervisorUpsertWithoutFinalCommentsInput = {
+  update: Prisma.XOR<Prisma.IndustrySupervisorUpdateWithoutFinalCommentsInput, Prisma.IndustrySupervisorUncheckedUpdateWithoutFinalCommentsInput>
+  create: Prisma.XOR<Prisma.IndustrySupervisorCreateWithoutFinalCommentsInput, Prisma.IndustrySupervisorUncheckedCreateWithoutFinalCommentsInput>
+  where?: Prisma.IndustrySupervisorWhereInput
+}
+
+export type IndustrySupervisorUpdateToOneWithWhereWithoutFinalCommentsInput = {
+  where?: Prisma.IndustrySupervisorWhereInput
+  data: Prisma.XOR<Prisma.IndustrySupervisorUpdateWithoutFinalCommentsInput, Prisma.IndustrySupervisorUncheckedUpdateWithoutFinalCommentsInput>
+}
+
+export type IndustrySupervisorUpdateWithoutFinalCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutIndustrySupervisorProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutIndustrySupervisorsWithCurrentSiwesSessionNestedInput
+  placementOrganization?: Prisma.PlacementOrganizationUpdateOneRequiredWithoutIndustrySupervisorsNestedInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutIndustrySupervisorNestedInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutIndustrySupervisorNestedInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUpdateManyWithoutIndustrySupervisorNestedInput
+}
+
+export type IndustrySupervisorUncheckedUpdateWithoutFinalCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placementOrganizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
 }
 
 export type IndustrySupervisorCreateManyPlacementOrganizationInput = {
   id?: string
   name: string
   email: string
-  position?: string | null
   phone?: string | null
+  position?: string | null
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -857,38 +1237,105 @@ export type IndustrySupervisorUpdateWithoutPlacementOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutIndustrySupervisorProfileNestedInput
-  reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutIndustrySupervisorNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutIndustrySupervisorProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutIndustrySupervisorsWithCurrentSiwesSessionNestedInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutIndustrySupervisorNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutIndustrySupervisorNestedInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUpdateManyWithoutIndustrySupervisorNestedInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutIndustrySupervisorNestedInput
 }
 
 export type IndustrySupervisorUncheckedUpdateWithoutPlacementOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  reviewRequests?: Prisma.ReviewRequestUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
 }
 
 export type IndustrySupervisorUncheckedUpdateManyWithoutPlacementOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type IndustrySupervisorCreateManyCurrentSiwesSessionInput = {
+  id?: string
+  name: string
+  email: string
+  phone?: string | null
+  position?: string | null
+  placementOrganizationId: string
+  isActive?: boolean
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type IndustrySupervisorUpdateWithoutCurrentSiwesSessionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutIndustrySupervisorProfileNestedInput
+  placementOrganization?: Prisma.PlacementOrganizationUpdateOneRequiredWithoutIndustrySupervisorsNestedInput
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutIndustrySupervisorNestedInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutIndustrySupervisorNestedInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUpdateManyWithoutIndustrySupervisorNestedInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutIndustrySupervisorNestedInput
+}
+
+export type IndustrySupervisorUncheckedUpdateWithoutCurrentSiwesSessionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placementOrganizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewRequests?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  weeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+  finalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutIndustrySupervisorNestedInput
+}
+
+export type IndustrySupervisorUncheckedUpdateManyWithoutCurrentSiwesSessionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placementOrganizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -901,11 +1348,15 @@ export type IndustrySupervisorUncheckedUpdateManyWithoutPlacementOrganizationInp
 export type IndustrySupervisorCountOutputType = {
   reviewRequests: number
   studentSiwesDetails: number
+  weeklyComments: number
+  finalComments: number
 }
 
 export type IndustrySupervisorCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   reviewRequests?: boolean | IndustrySupervisorCountOutputTypeCountReviewRequestsArgs
   studentSiwesDetails?: boolean | IndustrySupervisorCountOutputTypeCountStudentSiwesDetailsArgs
+  weeklyComments?: boolean | IndustrySupervisorCountOutputTypeCountWeeklyCommentsArgs
+  finalComments?: boolean | IndustrySupervisorCountOutputTypeCountFinalCommentsArgs
 }
 
 /**
@@ -922,7 +1373,7 @@ export type IndustrySupervisorCountOutputTypeDefaultArgs<ExtArgs extends runtime
  * IndustrySupervisorCountOutputType without action
  */
 export type IndustrySupervisorCountOutputTypeCountReviewRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ReviewRequestWhereInput
+  where?: Prisma.IndustrySupervisorReviewRequestWhereInput
 }
 
 /**
@@ -932,22 +1383,40 @@ export type IndustrySupervisorCountOutputTypeCountStudentSiwesDetailsArgs<ExtArg
   where?: Prisma.StudentSiwesDetailWhereInput
 }
 
+/**
+ * IndustrySupervisorCountOutputType without action
+ */
+export type IndustrySupervisorCountOutputTypeCountWeeklyCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IndustrySupervisorWeeklyCommentWhereInput
+}
+
+/**
+ * IndustrySupervisorCountOutputType without action
+ */
+export type IndustrySupervisorCountOutputTypeCountFinalCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IndustrySupervisorFinalCommentWhereInput
+}
+
 
 export type IndustrySupervisorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   email?: boolean
-  placementOrganizationId?: boolean
-  position?: boolean
   phone?: boolean
+  position?: boolean
+  placementOrganizationId?: boolean
+  currentSiwesSessionId?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.IndustrySupervisor$currentSiwesSessionArgs<ExtArgs>
   placementOrganization?: boolean | Prisma.PlacementOrganizationDefaultArgs<ExtArgs>
   reviewRequests?: boolean | Prisma.IndustrySupervisor$reviewRequestsArgs<ExtArgs>
   studentSiwesDetails?: boolean | Prisma.IndustrySupervisor$studentSiwesDetailsArgs<ExtArgs>
+  weeklyComments?: boolean | Prisma.IndustrySupervisor$weeklyCommentsArgs<ExtArgs>
+  finalComments?: boolean | Prisma.IndustrySupervisor$finalCommentsArgs<ExtArgs>
   _count?: boolean | Prisma.IndustrySupervisorCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["industrySupervisor"]>
 
@@ -955,14 +1424,16 @@ export type IndustrySupervisorSelectCreateManyAndReturn<ExtArgs extends runtime.
   id?: boolean
   name?: boolean
   email?: boolean
-  placementOrganizationId?: boolean
-  position?: boolean
   phone?: boolean
+  position?: boolean
+  placementOrganizationId?: boolean
+  currentSiwesSessionId?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.IndustrySupervisor$currentSiwesSessionArgs<ExtArgs>
   placementOrganization?: boolean | Prisma.PlacementOrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["industrySupervisor"]>
 
@@ -970,14 +1441,16 @@ export type IndustrySupervisorSelectUpdateManyAndReturn<ExtArgs extends runtime.
   id?: boolean
   name?: boolean
   email?: boolean
-  placementOrganizationId?: boolean
-  position?: boolean
   phone?: boolean
+  position?: boolean
+  placementOrganizationId?: boolean
+  currentSiwesSessionId?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.IndustrySupervisor$currentSiwesSessionArgs<ExtArgs>
   placementOrganization?: boolean | Prisma.PlacementOrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["industrySupervisor"]>
 
@@ -985,49 +1458,59 @@ export type IndustrySupervisorSelectScalar = {
   id?: boolean
   name?: boolean
   email?: boolean
-  placementOrganizationId?: boolean
-  position?: boolean
   phone?: boolean
+  position?: boolean
+  placementOrganizationId?: boolean
+  currentSiwesSessionId?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type IndustrySupervisorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "placementOrganizationId" | "position" | "phone" | "isActive" | "betterAuthUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["industrySupervisor"]>
+export type IndustrySupervisorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "phone" | "position" | "placementOrganizationId" | "currentSiwesSessionId" | "isActive" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["industrySupervisor"]>
 export type IndustrySupervisorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.IndustrySupervisor$currentSiwesSessionArgs<ExtArgs>
   placementOrganization?: boolean | Prisma.PlacementOrganizationDefaultArgs<ExtArgs>
   reviewRequests?: boolean | Prisma.IndustrySupervisor$reviewRequestsArgs<ExtArgs>
   studentSiwesDetails?: boolean | Prisma.IndustrySupervisor$studentSiwesDetailsArgs<ExtArgs>
+  weeklyComments?: boolean | Prisma.IndustrySupervisor$weeklyCommentsArgs<ExtArgs>
+  finalComments?: boolean | Prisma.IndustrySupervisor$finalCommentsArgs<ExtArgs>
   _count?: boolean | Prisma.IndustrySupervisorCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type IndustrySupervisorIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.IndustrySupervisor$currentSiwesSessionArgs<ExtArgs>
   placementOrganization?: boolean | Prisma.PlacementOrganizationDefaultArgs<ExtArgs>
 }
 export type IndustrySupervisorIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.IndustrySupervisor$currentSiwesSessionArgs<ExtArgs>
   placementOrganization?: boolean | Prisma.PlacementOrganizationDefaultArgs<ExtArgs>
 }
 
 export type $IndustrySupervisorPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "IndustrySupervisor"
   objects: {
-    betterAuthUser: Prisma.$UserPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs>
+    currentSiwesSession: Prisma.$SiwesSessionPayload<ExtArgs> | null
     placementOrganization: Prisma.$PlacementOrganizationPayload<ExtArgs>
-    reviewRequests: Prisma.$ReviewRequestPayload<ExtArgs>[]
+    reviewRequests: Prisma.$IndustrySupervisorReviewRequestPayload<ExtArgs>[]
     studentSiwesDetails: Prisma.$StudentSiwesDetailPayload<ExtArgs>[]
+    weeklyComments: Prisma.$IndustrySupervisorWeeklyCommentPayload<ExtArgs>[]
+    finalComments: Prisma.$IndustrySupervisorFinalCommentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     email: string
-    placementOrganizationId: string
-    position: string | null
     phone: string | null
+    position: string | null
+    placementOrganizationId: string
+    currentSiwesSessionId: string | null
     isActive: boolean
-    betterAuthUserId: string
+    userId: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["industrySupervisor"]>
@@ -1424,10 +1907,13 @@ readonly fields: IndustrySupervisorFieldRefs;
  */
 export interface Prisma__IndustrySupervisorClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  betterAuthUser<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  currentSiwesSession<T extends Prisma.IndustrySupervisor$currentSiwesSessionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IndustrySupervisor$currentSiwesSessionArgs<ExtArgs>>): Prisma.Prisma__SiwesSessionClient<runtime.Types.Result.GetResult<Prisma.$SiwesSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   placementOrganization<T extends Prisma.PlacementOrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PlacementOrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__PlacementOrganizationClient<runtime.Types.Result.GetResult<Prisma.$PlacementOrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  reviewRequests<T extends Prisma.IndustrySupervisor$reviewRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IndustrySupervisor$reviewRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewRequests<T extends Prisma.IndustrySupervisor$reviewRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IndustrySupervisor$reviewRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IndustrySupervisorReviewRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   studentSiwesDetails<T extends Prisma.IndustrySupervisor$studentSiwesDetailsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IndustrySupervisor$studentSiwesDetailsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentSiwesDetailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  weeklyComments<T extends Prisma.IndustrySupervisor$weeklyCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IndustrySupervisor$weeklyCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IndustrySupervisorWeeklyCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  finalComments<T extends Prisma.IndustrySupervisor$finalCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IndustrySupervisor$finalCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IndustrySupervisorFinalCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1460,11 +1946,12 @@ export interface IndustrySupervisorFieldRefs {
   readonly id: Prisma.FieldRef<"IndustrySupervisor", 'String'>
   readonly name: Prisma.FieldRef<"IndustrySupervisor", 'String'>
   readonly email: Prisma.FieldRef<"IndustrySupervisor", 'String'>
-  readonly placementOrganizationId: Prisma.FieldRef<"IndustrySupervisor", 'String'>
-  readonly position: Prisma.FieldRef<"IndustrySupervisor", 'String'>
   readonly phone: Prisma.FieldRef<"IndustrySupervisor", 'String'>
+  readonly position: Prisma.FieldRef<"IndustrySupervisor", 'String'>
+  readonly placementOrganizationId: Prisma.FieldRef<"IndustrySupervisor", 'String'>
+  readonly currentSiwesSessionId: Prisma.FieldRef<"IndustrySupervisor", 'String'>
   readonly isActive: Prisma.FieldRef<"IndustrySupervisor", 'Boolean'>
-  readonly betterAuthUserId: Prisma.FieldRef<"IndustrySupervisor", 'String'>
+  readonly userId: Prisma.FieldRef<"IndustrySupervisor", 'String'>
   readonly createdAt: Prisma.FieldRef<"IndustrySupervisor", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"IndustrySupervisor", 'DateTime'>
 }
@@ -1863,27 +2350,46 @@ export type IndustrySupervisorDeleteManyArgs<ExtArgs extends runtime.Types.Exten
 }
 
 /**
+ * IndustrySupervisor.currentSiwesSession
+ */
+export type IndustrySupervisor$currentSiwesSessionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SiwesSession
+   */
+  select?: Prisma.SiwesSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SiwesSession
+   */
+  omit?: Prisma.SiwesSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SiwesSessionInclude<ExtArgs> | null
+  where?: Prisma.SiwesSessionWhereInput
+}
+
+/**
  * IndustrySupervisor.reviewRequests
  */
 export type IndustrySupervisor$reviewRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ReviewRequest
+   * Select specific fields to fetch from the IndustrySupervisorReviewRequest
    */
-  select?: Prisma.ReviewRequestSelect<ExtArgs> | null
+  select?: Prisma.IndustrySupervisorReviewRequestSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ReviewRequest
+   * Omit specific fields from the IndustrySupervisorReviewRequest
    */
-  omit?: Prisma.ReviewRequestOmit<ExtArgs> | null
+  omit?: Prisma.IndustrySupervisorReviewRequestOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ReviewRequestInclude<ExtArgs> | null
-  where?: Prisma.ReviewRequestWhereInput
-  orderBy?: Prisma.ReviewRequestOrderByWithRelationInput | Prisma.ReviewRequestOrderByWithRelationInput[]
-  cursor?: Prisma.ReviewRequestWhereUniqueInput
+  include?: Prisma.IndustrySupervisorReviewRequestInclude<ExtArgs> | null
+  where?: Prisma.IndustrySupervisorReviewRequestWhereInput
+  orderBy?: Prisma.IndustrySupervisorReviewRequestOrderByWithRelationInput | Prisma.IndustrySupervisorReviewRequestOrderByWithRelationInput[]
+  cursor?: Prisma.IndustrySupervisorReviewRequestWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.ReviewRequestScalarFieldEnum | Prisma.ReviewRequestScalarFieldEnum[]
+  distinct?: Prisma.IndustrySupervisorReviewRequestScalarFieldEnum | Prisma.IndustrySupervisorReviewRequestScalarFieldEnum[]
 }
 
 /**
@@ -1908,6 +2414,54 @@ export type IndustrySupervisor$studentSiwesDetailsArgs<ExtArgs extends runtime.T
   take?: number
   skip?: number
   distinct?: Prisma.StudentSiwesDetailScalarFieldEnum | Prisma.StudentSiwesDetailScalarFieldEnum[]
+}
+
+/**
+ * IndustrySupervisor.weeklyComments
+ */
+export type IndustrySupervisor$weeklyCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the IndustrySupervisorWeeklyComment
+   */
+  select?: Prisma.IndustrySupervisorWeeklyCommentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the IndustrySupervisorWeeklyComment
+   */
+  omit?: Prisma.IndustrySupervisorWeeklyCommentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IndustrySupervisorWeeklyCommentInclude<ExtArgs> | null
+  where?: Prisma.IndustrySupervisorWeeklyCommentWhereInput
+  orderBy?: Prisma.IndustrySupervisorWeeklyCommentOrderByWithRelationInput | Prisma.IndustrySupervisorWeeklyCommentOrderByWithRelationInput[]
+  cursor?: Prisma.IndustrySupervisorWeeklyCommentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.IndustrySupervisorWeeklyCommentScalarFieldEnum | Prisma.IndustrySupervisorWeeklyCommentScalarFieldEnum[]
+}
+
+/**
+ * IndustrySupervisor.finalComments
+ */
+export type IndustrySupervisor$finalCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the IndustrySupervisorFinalComment
+   */
+  select?: Prisma.IndustrySupervisorFinalCommentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the IndustrySupervisorFinalComment
+   */
+  omit?: Prisma.IndustrySupervisorFinalCommentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IndustrySupervisorFinalCommentInclude<ExtArgs> | null
+  where?: Prisma.IndustrySupervisorFinalCommentWhereInput
+  orderBy?: Prisma.IndustrySupervisorFinalCommentOrderByWithRelationInput | Prisma.IndustrySupervisorFinalCommentOrderByWithRelationInput[]
+  cursor?: Prisma.IndustrySupervisorFinalCommentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.IndustrySupervisorFinalCommentScalarFieldEnum | Prisma.IndustrySupervisorFinalCommentScalarFieldEnum[]
 }
 
 /**

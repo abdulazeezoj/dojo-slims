@@ -1,13 +1,17 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireIndustrySupervisor } from "@/middlewares/auth";
+import { requireIndustrySupervisor } from "@/lib/auth-server";
 import { addFinalCommentSchema } from "@/schemas";
 import { reviewService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
 export const POST = requireIndustrySupervisor(
-  async (request: NextRequest, session, context: { params: { studentId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { studentId: string } },
+  ) => {
     try {
       const supervisorId = session.user.userReferenceId;
       const { studentId } = context.params;
@@ -34,7 +38,7 @@ export const POST = requireIndustrySupervisor(
         supervisorId,
         "INDUSTRY_SUPERVISOR",
         body.comment,
-        body.rating
+        body.rating,
       );
 
       return createSuccessResponse(result, {
@@ -42,7 +46,9 @@ export const POST = requireIndustrySupervisor(
       });
     } catch (error) {
       return createErrorResponse(
-        error instanceof Error ? error.message : "Failed to submit final comment",
+        error instanceof Error
+          ? error.message
+          : "Failed to submit final comment",
         { status: 500 },
       );
     }

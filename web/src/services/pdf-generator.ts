@@ -5,9 +5,9 @@
 
 import type { Student } from "@/generated/prisma/client";
 import {
-  siwesDetailRepository,
-  studentEnrollmentRepository,
   studentRepository,
+  studentSessionEnrollmentRepository,
+  studentSiwesDetailRepository,
   weeklyEntryRepository,
   type WeeklyEntryWithRelations,
 } from "@/repositories";
@@ -21,31 +21,35 @@ export class PdfGeneratorService {
     sessionId: string,
   ): Promise<Buffer> {
     // Get student with all related data
-    const student = await studentRepository.findById(studentId);
+    const student = await studentRepository.prisma.findUnique({
+      where: { id: studentId },
+    });
     if (!student) {
       throw new Error("Student not found");
     }
 
     // Get all weekly entries for the session
-    const weeklyEntries = await weeklyEntryRepository.findByStudentSession(
+    const weeklyEntries = await weeklyEntryRepository.findManyByStudentSession(
       studentId,
       sessionId,
     );
 
     // Get SIWES details and placement info
-    const enrollment = await studentEnrollmentRepository.findByStudentSession(
-      studentId,
-      sessionId,
-    );
+    const enrollment =
+      await studentSessionEnrollmentRepository.findByStudentAndSession(
+        studentId,
+        sessionId,
+      );
     if (!enrollment) {
       throw new Error("Student enrollment not found for this session");
     }
 
     // Get student SIWES details (placement organization, industry supervisor)
-    const siwesDetail = await siwesDetailRepository.findByStudentSession(
-      studentId,
-      sessionId,
-    );
+    const siwesDetail =
+      await studentSiwesDetailRepository.findByStudentAndSession(
+        studentId,
+        sessionId,
+      );
 
     // TODO: Implement PDF generation using a library like pdfkit or puppeteer
     // For now, return a placeholder
@@ -113,13 +117,13 @@ export class PdfGeneratorService {
 
     // Get all enrolled students for the session
     const enrollments =
-      await studentEnrollmentRepository.findBySession(sessionId);
+      await studentSessionEnrollmentRepository.findManyBySession(sessionId);
 
     // Filter students by department if specified
-    let students = enrollments.map((e) => e.student);
+    let students = enrollments.map((e: { student: Student }) => e.student);
     if (filters?.departmentId) {
       students = students.filter(
-        (s) => s.departmentId === filters.departmentId,
+        (s: Student) => s.departmentId === filters.departmentId,
       );
     }
 
@@ -129,7 +133,7 @@ export class PdfGeneratorService {
       const batch = students.slice(i, i + batchSize);
 
       await Promise.all(
-        batch.map(async (student) => {
+        batch.map(async (student: Student) => {
           try {
             const _pdfBuffer = await this.generateLogbookPdf(
               student.id,
@@ -167,7 +171,9 @@ export class PdfGeneratorService {
    * Preview PDF for a specific week
    */
   async generateWeekPreviewPdf(weeklyEntryId: string): Promise<Buffer> {
-    const weeklyEntry = await weeklyEntryRepository.findById(weeklyEntryId);
+    const weeklyEntry = await weeklyEntryRepository.prisma.findUnique({
+      where: { id: weeklyEntryId },
+    });
     if (!weeklyEntry) {
       throw new Error("Weekly entry not found");
     }
@@ -206,14 +212,16 @@ export class PdfGeneratorService {
     missingWeeks: number[];
     warnings: string[];
   }> {
-    const weeklyEntries = await weeklyEntryRepository.findByStudentSession(
+    const weeklyEntries = await weeklyEntryRepository.findManyByStudentSession(
       studentId,
       sessionId,
     );
 
     // Check for 24 weeks
     const totalWeeks = 24;
-    const existingWeeks = weeklyEntries.map((entry) => entry.weekNumber);
+    const existingWeeks = weeklyEntries.map(
+      (entry: WeeklyEntryWithRelations) => entry.weekNumber,
+    );
     const missingWeeks = Array.from(
       { length: totalWeeks },
       (_, i) => i + 1,
@@ -222,16 +230,18 @@ export class PdfGeneratorService {
     const warnings: string[] = [];
 
     // Check for missing activities
-    const weeksWithoutActivities = weeklyEntries.filter((entry) => {
-      const hasAnyActivity =
-        entry.mondayEntry ||
-        entry.tuesdayEntry ||
-        entry.wednesdayEntry ||
-        entry.thursdayEntry ||
-        entry.fridayEntry ||
-        entry.saturdayEntry;
-      return !hasAnyActivity;
-    });
+    const weeksWithoutActivities = weeklyEntries.filter(
+      (entry: WeeklyEntryWithRelations) => {
+        const hasAnyActivity =
+          entry.mondayEntry ||
+          entry.tuesdayEntry ||
+          entry.wednesdayEntry ||
+          entry.thursdayEntry ||
+          entry.fridayEntry ||
+          entry.saturdayEntry;
+        return !hasAnyActivity;
+      },
+    );
     if (weeksWithoutActivities.length > 0) {
       warnings.push(
         `${weeksWithoutActivities.length} week(s) missing activities`,
@@ -240,9 +250,9 @@ export class PdfGeneratorService {
 
     // Check for missing industry comments
     const weeksWithoutIndustryComments = weeklyEntries.filter(
-      (entry) =>
-        !entry.weeklyComments?.some(
-          (c) => c.commenterType === "INDUSTRY_SUPERVISOR",
+      (entry: WeeklyEntryWithRelations) =>
+        !entry.industrySupervisorWeeklyComments?.some(
+          (c: { comment: string }) => c.comment,
         ),
     );
     if (weeksWithoutIndustryComments.length > 0) {
@@ -253,9 +263,9 @@ export class PdfGeneratorService {
 
     // Check for missing school comments
     const weeksWithoutSchoolComments = weeklyEntries.filter(
-      (entry) =>
-        !entry.weeklyComments?.some(
-          (c) => c.commenterType === "SCHOOL_SUPERVISOR",
+      (entry: WeeklyEntryWithRelations) =>
+        !entry.schoolSupervisorWeeklyComments?.some(
+          (c: { comment: string }) => c.comment,
         ),
     );
     if (weeksWithoutSchoolComments.length > 0) {

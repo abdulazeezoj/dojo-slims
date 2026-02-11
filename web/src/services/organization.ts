@@ -4,8 +4,7 @@
  */
 
 import type { PlacementOrganization, Prisma } from "@/generated/prisma/client";
-import { placementRepository } from "@/repositories";
-
+import { placementOrganizationRepository } from "@/repositories";
 
 export class OrganizationService {
   /**
@@ -33,8 +32,13 @@ export class OrganizationService {
       : {};
 
     const [organizations, total] = await Promise.all([
-      placementRepository.findMany({ where, skip, take, orderBy }),
-      placementRepository.count(where),
+      placementOrganizationRepository.prisma.findMany({
+        where,
+        skip,
+        take,
+        orderBy,
+      }),
+      placementOrganizationRepository.prisma.count({ where }),
     ]);
 
     return { organizations, total };
@@ -44,7 +48,7 @@ export class OrganizationService {
    * Get organization by ID
    */
   async getOrganizationById(id: string): Promise<PlacementOrganization | null> {
-    return placementRepository.findById(id);
+    return placementOrganizationRepository.prisma.findUnique({ where: { id } });
   }
 
   /**
@@ -53,7 +57,15 @@ export class OrganizationService {
   async getOrganizationsByStudentId(
     studentId: string,
   ): Promise<PlacementOrganization[]> {
-    return placementRepository.findByStudentId(studentId);
+    return placementOrganizationRepository.prisma.findMany({
+      where: {
+        studentSiwesDetails: {
+          some: {
+            studentId,
+          },
+        },
+      },
+    });
   }
 
   /**
@@ -68,12 +80,14 @@ export class OrganizationService {
     email?: string;
   }): Promise<PlacementOrganization> {
     // Check if organization with same name already exists
-    const existing = await placementRepository.findByName(data.name);
+    const existing = await placementOrganizationRepository.findByNameWithStats(
+      data.name,
+    );
     if (existing) {
       throw new Error("Organization with this name already exists");
     }
 
-    return placementRepository.create(data);
+    return placementOrganizationRepository.create(data);
   }
 
   /**
@@ -90,32 +104,39 @@ export class OrganizationService {
       email?: string;
     },
   ): Promise<PlacementOrganization> {
-    const organization = await placementRepository.findById(id);
+    const organization =
+      await placementOrganizationRepository.prisma.findUnique({
+        where: { id },
+      });
     if (!organization) {
       throw new Error("Organization not found");
     }
 
     // Check name uniqueness if updating name
     if (data.name && data.name !== organization.name) {
-      const existing = await placementRepository.findByName(data.name);
+      const existing =
+        await placementOrganizationRepository.findByNameWithStats(data.name);
       if (existing) {
         throw new Error("Organization with this name already exists");
       }
     }
 
-    return placementRepository.update(id, data);
+    return placementOrganizationRepository.update(id, data);
   }
 
   /**
    * Delete organization
    */
   async deleteOrganization(id: string): Promise<void> {
-    const organization = await placementRepository.findById(id);
+    const organization =
+      await placementOrganizationRepository.prisma.findUnique({
+        where: { id },
+      });
     if (!organization) {
       throw new Error("Organization not found");
     }
 
-    await placementRepository.delete(id);
+    await placementOrganizationRepository.delete(id);
   }
 
   /**
@@ -145,52 +166,67 @@ export class OrganizationService {
       const batch = organizations.slice(i, i + batchSize);
 
       await Promise.all(
-        batch.map(async (org, index) => {
-          const rowNumber = i + index + 1;
-          try {
-            // Check if organization already exists
-            const existing = await placementRepository.findByName(org.name);
-            if (existing) {
+        batch.map(
+          async (
+            org: {
+              name: string;
+              address?: string;
+              city?: string;
+              state?: string;
+              phone?: string;
+              email?: string;
+            },
+            index,
+          ) => {
+            const rowNumber = i + index + 1;
+            try {
+              // Check if organization already exists
+              const existing =
+                await placementOrganizationRepository.findByNameWithStats(
+                  org.name,
+                );
+              if (existing) {
+                errors.push({
+                  row: rowNumber,
+                  error: `Organization "${org.name}" already exists`,
+                });
+                failed++;
+                return;
+              }
+
+              // Validate required fields
+              if (!org.name || org.name.trim().length === 0) {
+                errors.push({
+                  row: rowNumber,
+                  error: "Organization name is required",
+                });
+                failed++;
+                return;
+              }
+
+              // Create organization
+              await placementOrganizationRepository.create({
+                name: org.name,
+                address: org.address,
+                city: org.city,
+                state: org.state,
+                phone: org.phone,
+                email: org.email,
+              });
+
+              successful++;
+            } catch (error) {
               errors.push({
                 row: rowNumber,
-                error: `Organization "${org.name}" already exists`,
+                error:
+                  error instanceof Error
+                    ? error.message
+                    : "Unknown error occurred",
               });
               failed++;
-              return;
             }
-
-            // Validate required fields
-            if (!org.name || org.name.trim().length === 0) {
-              errors.push({
-                row: rowNumber,
-                error: "Organization name is required",
-              });
-              failed++;
-              return;
-            }
-
-            // Create organization
-            await placementRepository.create({
-              name: org.name,
-              address: org.address,
-              city: org.city,
-              state: org.state,
-              phone: org.phone,
-              email: org.email,
-            });
-
-            successful++;
-          } catch (error) {
-            errors.push({
-              row: rowNumber,
-              error:
-                error instanceof Error
-                  ? error.message
-                  : "Unknown error occurred",
-            });
-            failed++;
-          }
-        }),
+          },
+        ),
       );
     }
 
@@ -205,16 +241,20 @@ export class OrganizationService {
     uniqueOrganizations: number;
     studentsWithPlacement: number;
   }> {
-    const [totalOrganizations, uniqueOrgs, studentsWithPlacement] =
-      await Promise.all([
-        placementRepository.count({}),
-        placementRepository.countUniqueOrganizations(),
-        placementRepository.countStudentsWithPlacement(),
-      ]);
+    const [totalOrganizations, studentsWithPlacement] = await Promise.all([
+      placementOrganizationRepository.countAll(),
+      placementOrganizationRepository.prisma.count({
+        where: {
+          studentSiwesDetails: {
+            some: {},
+          },
+        },
+      }),
+    ]);
 
     return {
       totalOrganizations,
-      uniqueOrganizations: uniqueOrgs,
+      uniqueOrganizations: totalOrganizations, // All organizations are unique by definition
       studentsWithPlacement,
     };
   }
@@ -226,16 +266,21 @@ export class OrganizationService {
     searchTerm: string,
     limit: number = 10,
   ): Promise<string[]> {
-    const organizations = await placementRepository.findMany({
-      where: {
-        name: { contains: searchTerm, mode: "insensitive" },
+    const organizations = await placementOrganizationRepository.prisma.findMany(
+      {
+        where: {
+          name: { contains: searchTerm, mode: "insensitive" },
+        },
+        take: limit,
+        select: {
+          name: true,
+        },
       },
-      take: limit,
-    });
+    );
 
     // Return unique organization names
     const uniqueNames = Array.from(
-      new Set(organizations.map((org) => org.name)),
+      new Set(organizations.map((org: { name: string }) => org.name)),
     );
     return uniqueNames;
   }

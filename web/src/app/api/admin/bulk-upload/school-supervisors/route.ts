@@ -1,5 +1,5 @@
-
-import { apiResponse } from "@/lib/api-response";
+import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
+import { requireAdmin } from "@/lib/auth-server";
 import { getLogger } from "@/lib/logger";
 import { bulkUploadService } from "@/services";
 
@@ -11,13 +11,13 @@ const logger = getLogger(["api", "admin", "bulk-upload", "school-supervisors"]);
  * POST /api/admin/bulk-upload/school-supervisors
  * Upload Excel file to bulk create school supervisors
  */
-export async function POST(request: NextRequest) {
+export const POST = requireAdmin(async (request: NextRequest, _session) => {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
 
     if (!file) {
-      return apiResponse.error("No file provided", 400);
+      return createErrorResponse("No file provided", { status: 400 });
     }
 
     // Validate file type
@@ -26,18 +26,18 @@ export async function POST(request: NextRequest) {
       !file.name.endsWith(".xlsx") &&
       !file.name.endsWith(".xls")
     ) {
-      return apiResponse.error(
+      return createErrorResponse(
         "Invalid file type. Please upload an Excel file (.xlsx or .xls)",
-        400,
+        { status: 400 },
       );
     }
 
     // Validate file size (max 5MB)
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
-      return apiResponse.error(
+      return createErrorResponse(
         "File size exceeds maximum allowed size of 5MB",
-        400,
+        { status: 400 },
       );
     }
 
@@ -53,10 +53,9 @@ export async function POST(request: NextRequest) {
     const result = await bulkUploadService.uploadSupervisors(buffer);
 
     if (!result.success) {
-      return apiResponse.error(
+      return createErrorResponse(
         "Bulk upload failed. No supervisors were created.",
-        400,
-        { result },
+        { status: 400, details: result },
       );
     }
 
@@ -66,18 +65,18 @@ export async function POST(request: NextRequest) {
       failed: result.failedCount,
     });
 
-    return apiResponse.success(
+    return createSuccessResponse(
       {
         message: `Bulk upload completed. ${result.successCount} school supervisors created successfully.`,
         ...result,
       },
-      result.failedCount > 0 ? 207 : 200, // 207 Multi-Status if there are partial failures
+      { status: result.failedCount > 0 ? 207 : 200 }, // 207 Multi-Status if there are partial failures
     );
   } catch (error) {
     logger.error("School supervisor bulk upload failed", { error });
-    return apiResponse.error(
+    return createErrorResponse(
       error instanceof Error ? error.message : "Bulk upload failed",
-      500,
+      { status: 500 },
     );
   }
-}
+});

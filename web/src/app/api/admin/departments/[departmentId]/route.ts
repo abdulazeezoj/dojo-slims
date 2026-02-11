@@ -1,16 +1,21 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireAdmin } from "@/middlewares/auth";
+import { requireAdmin } from "@/lib/auth-server";
 import { updateDepartmentSchema } from "@/schemas";
 import { departmentService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
 export const GET = requireAdmin(
-  async (request: NextRequest, session, context: { params: { departmentId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { departmentId: string } },
+  ) => {
     try {
       const { departmentId } = context.params;
-      const department = await departmentService.getDepartmentById(departmentId);
+      const department =
+        await departmentService.getDepartmentById(departmentId);
       if (!department) {
         return createErrorResponse("Department not found", { status: 404 });
       }
@@ -25,14 +30,25 @@ export const GET = requireAdmin(
 );
 
 export const PATCH = requireAdmin(
-  async (request: NextRequest, session, context: { params: { departmentId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { departmentId: string } },
+  ) => {
     try {
       const { departmentId } = context.params;
-      const validation = await validateRequest(request, { body: updateDepartmentSchema });
-      if (!validation.success) {return validation.error;}
+      const validation = await validateRequest(request, {
+        body: updateDepartmentSchema,
+      });
+      if (!validation.success) {
+        return validation.error;
+      }
 
       const { body } = validation.data;
-      const updated = await departmentService.updateDepartment(departmentId, body);
+      const updated = await departmentService.updateDepartment(
+        departmentId,
+        body,
+      );
 
       return createSuccessResponse(updated, {
         message: "Department updated successfully",
@@ -47,7 +63,11 @@ export const PATCH = requireAdmin(
 );
 
 export const DELETE = requireAdmin(
-  async (request: NextRequest, session, context: { params: { departmentId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { departmentId: string } },
+  ) => {
     try {
       const { departmentId } = context.params;
       await departmentService.deleteDepartment(departmentId);

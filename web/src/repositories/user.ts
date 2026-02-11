@@ -1,91 +1,190 @@
 import type { Prisma, User } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+// ===== TYPE DEFINITIONS =====
 
 /**
- * User Repository - Thin data access layer for User entity
+ * Pagination parameters
+ */
+export interface PaginationParams {
+  skip?: number;
+  take?: number;
+}
+
+/**
+ * User with all profile types included (student, supervisor, admin)
+ * Used for authentication and profile loading
+ */
+export type UserWithProfile = Prisma.UserGetPayload<{
+  include: {
+    studentProfile: {
+      include: {
+        department: {
+          include: {
+            faculty: true;
+          };
+        };
+      };
+    };
+    schoolSupervisorProfile: {
+      include: {
+        department: {
+          include: {
+            faculty: true;
+          };
+        };
+      };
+    };
+    industrySupervisorProfile: {
+      include: {
+        placementOrganization: true;
+      };
+    };
+    adminProfile: true;
+  };
+}>;
+
+// ===== REPOSITORY CLASS =====
+
+/**
+ * User Repository
+ *
+ * Provides data access for User entity with:
+ * - Full Prisma API via .prisma property
+ * - Custom methods for MVP features from Feature List
+ *
+ * Note: Password changes and email updates are handled through Better Auth API
  */
 export class UserRepository {
+  readonly prisma = prisma.user;
+
+  // ===== MVP-FOCUSED CUSTOM METHODS =====
+
+  /**
+   * Find user by ID
+   */
   async findById(id: string): Promise<User | null> {
-    return prisma.user.findUnique({
+    return this.prisma.findUnique({
       where: { id },
     });
   }
 
+  /**
+   * Find user by email with all profile relations loaded
+   * @feature #1, #2, #3, #4 - Login for all user types
+   */
+  async findByEmailWithProfile(email: string): Promise<UserWithProfile | null> {
+    return this.prisma.findUnique({
+      where: { email },
+      include: {
+        studentProfile: {
+          include: {
+            department: {
+              include: {
+                faculty: true,
+              },
+            },
+          },
+        },
+        schoolSupervisorProfile: {
+          include: {
+            department: {
+              include: {
+                faculty: true,
+              },
+            },
+          },
+        },
+        industrySupervisorProfile: {
+          include: {
+            placementOrganization: true,
+          },
+        },
+        adminProfile: true,
+      },
+    });
+  }
+
+  /**
+   * Find user by username with all profile relations loaded
+   * @feature #1, #2, #3, #4 - Login for all user types (alternative credential)
+   */
+  async findByUsernameWithProfile(
+    username: string,
+  ): Promise<UserWithProfile | null> {
+    return this.prisma.findUnique({
+      where: { username },
+      include: {
+        studentProfile: {
+          include: {
+            department: {
+              include: {
+                faculty: true,
+              },
+            },
+          },
+        },
+        schoolSupervisorProfile: {
+          include: {
+            department: {
+              include: {
+                faculty: true,
+              },
+            },
+          },
+        },
+        industrySupervisorProfile: {
+          include: {
+            placementOrganization: true,
+          },
+        },
+        adminProfile: true,
+      },
+    });
+  }
+
+  /**
+   * Find user by email (without profile relations)
+   */
   async findByEmail(email: string): Promise<User | null> {
-    return prisma.user.findUnique({
+    return this.prisma.findUnique({
       where: { email },
     });
   }
 
   /**
-   * Find user by type and reference ID (composite unique key)
+   * Check if user exists by email
    */
-  async findByTypeAndReference(
-    userType: User["userType"],
-    userReferenceId: string,
-  ): Promise<User | null> {
-    return prisma.user.findUnique({
-      where: {
-        userType_userReferenceId: {
-          userType,
-          userReferenceId,
-        },
-      },
-    });
-  }
-
-  async create(data: Prisma.UserCreateInput): Promise<User> {
-    return prisma.user.create({
-      data,
-    });
-  }
-
-  async update(id: string, data: Prisma.UserUpdateInput): Promise<User> {
-    return prisma.user.update({
-      where: { id },
-      data,
-    });
-  }
-
-  async delete(id: string): Promise<User> {
-    return prisma.user.delete({
-      where: { id },
-    });
-  }
-
-  async findMany(where?: Prisma.UserWhereInput): Promise<User[]> {
-    return prisma.user.findMany({
-      where,
-    });
-  }
-
-  async count(where?: Prisma.UserWhereInput): Promise<number> {
-    return prisma.user.count({
-      where,
-    });
-  }
-
   async existsByEmail(email: string): Promise<boolean> {
-    const count = await prisma.user.count({
+    const count = await this.prisma.count({
       where: { email },
     });
     return count > 0;
   }
 
-  async deactivate(id: string): Promise<User> {
-    return prisma.user.update({
-      where: { id },
-      data: { isActive: false },
-    });
-  }
-
+  /**
+   * Activate user account
+   * @feature #13, #16, #21, #24 - Profile management for all user types
+   */
   async activate(id: string): Promise<User> {
-    return prisma.user.update({
+    return this.prisma.update({
       where: { id },
       data: { isActive: true },
     });
   }
+
+  /**
+   * Deactivate user account
+   * @feature #13, #16, #21, #24 - Profile management for all user types
+   */
+  async deactivate(id: string): Promise<User> {
+    return this.prisma.update({
+      where: { id },
+      data: { isActive: false },
+    });
+  }
 }
+
+// ===== EXPORT SINGLETON =====
 
 export const userRepository = new UserRepository();

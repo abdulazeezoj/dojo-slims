@@ -1,34 +1,58 @@
 import type { LogbookMetadata, Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+/**
+ * Type Definitions
+ */
 
 /**
- * Logbook Metadata Repository - Thin data access layer for LogbookMetadata entity
+ * Interface for pagination parameters
+ */
+interface PaginationParams {
+  skip?: number;
+  take?: number;
+}
+
+/**
+ * Logbook Metadata with student and session relationships
+ */
+type LogbookMetadataWithEntries = Prisma.LogbookMetadataGetPayload<{
+  include: {
+    student: {
+      include: {
+        user: true;
+        department: {
+          include: {
+            faculty: true;
+          };
+        };
+      };
+    };
+    siwesSession: true;
+  };
+}>;
+
+/**
+ * Logbook Metadata Repository
+ *
+ * Handles logbook metadata and overall logbook management for students.
+ * MVP Features: #5 (Session selection on dashboard), #11 (PDF generation)
  */
 export class LogbookMetadataRepository {
-  async findById(id: string): Promise<LogbookMetadata | null> {
-    return prisma.logbookMetadata.findUnique({
-      where: { id },
-      include: {
-        student: {
-          include: {
-            department: {
-              include: {
-                faculty: true,
-              },
-            },
-          },
-        },
-        siwesSession: true,
-      },
-    });
-  }
+  readonly prisma = prisma.logbookMetadata;
 
-  async findByStudentSession(
+  // ==================== Custom Methods ====================
+
+  /**
+   * Find logbook metadata by student and session
+   * @feature #5 Session Selection on Dashboard
+   * @feature #11 PDF Generation
+   */
+  async findByStudentAndSession(
     studentId: string,
     siwesSessionId: string,
-  ): Promise<LogbookMetadata | null> {
-    return prisma.logbookMetadata.findUnique({
+  ): Promise<LogbookMetadataWithEntries | null> {
+    return this.prisma.findUnique({
       where: {
         studentId_siwesSessionId: {
           studentId,
@@ -38,6 +62,7 @@ export class LogbookMetadataRepository {
       include: {
         student: {
           include: {
+            user: true,
             department: {
               include: {
                 faculty: true,
@@ -50,12 +75,31 @@ export class LogbookMetadataRepository {
     });
   }
 
-  async findByStudent(studentId: string): Promise<LogbookMetadata[]> {
-    return prisma.logbookMetadata.findMany({
+  /**
+   * Find logbook for PDF generation with all necessary data
+   * @feature #11 PDF Generation
+   */
+  async findForPdfGeneration(
+    studentId: string,
+    siwesSessionId: string,
+  ): Promise<LogbookMetadataWithEntries | null> {
+    return this.findByStudentAndSession(studentId, siwesSessionId);
+  }
+
+  /**
+   * Find all logbooks by student with pagination
+   * @feature #5 Session Selection on Dashboard
+   */
+  async findManyByStudent(
+    studentId: string,
+    params?: PaginationParams,
+  ): Promise<LogbookMetadataWithEntries[]> {
+    return this.prisma.findMany({
       where: { studentId },
       include: {
         student: {
           include: {
+            user: true,
             department: {
               include: {
                 faculty: true,
@@ -65,15 +109,28 @@ export class LogbookMetadataRepository {
         },
         siwesSession: true,
       },
+      skip: params?.skip,
+      take: params?.take,
+      orderBy: {
+        createdAt: "desc",
+      },
     });
   }
 
-  async findBySession(siwesSessionId: string): Promise<LogbookMetadata[]> {
-    return prisma.logbookMetadata.findMany({
+  /**
+   * Find all logbooks by session with pagination
+   * @feature #5 Session Selection on Dashboard
+   */
+  async findManyBySession(
+    siwesSessionId: string,
+    params?: PaginationParams,
+  ): Promise<LogbookMetadataWithEntries[]> {
+    return this.prisma.findMany({
       where: { siwesSessionId },
       include: {
         student: {
           include: {
+            user: true,
             department: {
               include: {
                 faculty: true,
@@ -83,114 +140,60 @@ export class LogbookMetadataRepository {
         },
         siwesSession: true,
       },
+      skip: params?.skip,
+      take: params?.take,
+      orderBy: {
+        createdAt: "desc",
+      },
     });
   }
 
+  /**
+   * Create logbook metadata
+   * @feature #5 Session Selection on Dashboard
+   */
   async create(
     data: Prisma.LogbookMetadataCreateInput,
   ): Promise<LogbookMetadata> {
-    return prisma.logbookMetadata.create({
+    return this.prisma.create({
       data,
-      include: {
-        student: {
-          include: {
-            department: {
-              include: {
-                faculty: true,
-              },
-            },
-          },
-        },
-        siwesSession: true,
-      },
     });
   }
 
+  /**
+   * Update logbook metadata
+   * @feature #11 PDF Generation
+   */
   async update(
     id: string,
     data: Prisma.LogbookMetadataUpdateInput,
   ): Promise<LogbookMetadata> {
-    return prisma.logbookMetadata.update({
+    return this.prisma.update({
       where: { id },
       data,
-      include: {
-        student: {
-          include: {
-            department: {
-              include: {
-                faculty: true,
-              },
-            },
-          },
-        },
-        siwesSession: true,
-      },
     });
   }
 
+  /**
+   * Delete logbook metadata
+   */
   async delete(id: string): Promise<LogbookMetadata> {
-    return prisma.logbookMetadata.delete({
+    return this.prisma.delete({
       where: { id },
     });
   }
 
-  async findMany(params?: {
-    where?: Prisma.LogbookMetadataWhereInput;
-    skip?: number;
-    take?: number;
-    orderBy?: Prisma.LogbookMetadataOrderByWithRelationInput;
-  }): Promise<LogbookMetadata[]> {
-    return prisma.logbookMetadata.findMany({
-      ...params,
-      include: {
-        student: {
-          include: {
-            department: {
-              include: {
-                faculty: true,
-              },
-            },
-          },
-        },
-        siwesSession: true,
-      },
-    });
-  }
-
-  async count(where?: Prisma.LogbookMetadataWhereInput): Promise<number> {
-    return prisma.logbookMetadata.count({
-      where,
-    });
-  }
-
+  /**
+   * Check if logbook exists for student and session
+   */
   async exists(studentId: string, siwesSessionId: string): Promise<boolean> {
-    const count = await prisma.logbookMetadata.count({
+    const count = await this.prisma.count({
       where: {
         studentId,
         siwesSessionId,
       },
     });
     return count > 0;
-  }
-
-  async deleteByStudentSession(
-    studentId: string,
-    siwesSessionId: string,
-  ): Promise<void> {
-    await prisma.logbookMetadata.deleteMany({
-      where: {
-        studentId,
-        siwesSessionId,
-      },
-    });
-
-    // Also delete all weekly entries for this student/session
-    await prisma.weeklyEntry.deleteMany({
-      where: {
-        studentId,
-        siwesSessionId,
-      },
-    });
   }
 }
 

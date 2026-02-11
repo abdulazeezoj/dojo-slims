@@ -17,6 +17,10 @@ interface HealthCheck {
   status: "up" | "down";
   message?: string;
   latency?: number;
+  responseTime?: number;
+  error?: string;
+  waitingJobs?: number;
+  activeJobs?: number;
 }
 
 export interface HealthDetails extends HealthSummary {

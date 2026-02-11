@@ -27,8 +27,8 @@ export class FacultyService {
       : {};
 
     const [faculties, total] = await Promise.all([
-      facultyRepository.findMany({ where, skip, take }),
-      facultyRepository.count(where),
+      facultyRepository.prisma.findMany({ where, skip, take }),
+      facultyRepository.prisma.count({ where }),
     ]);
 
     return { faculties, total };
@@ -38,14 +38,17 @@ export class FacultyService {
    * Get faculty by ID with departments
    */
   async getFacultyById(id: string): Promise<Faculty | null> {
-    return facultyRepository.findById(id);
+    return facultyRepository.prisma.findUnique({
+      where: { id },
+      include: { departments: true },
+    });
   }
 
   /**
    * Get faculty by code
    */
   async getFacultyByCode(code: string): Promise<Faculty | null> {
-    return facultyRepository.findByCode(code);
+    return facultyRepository.findByCodeWithDepartments(code);
   }
 
   /**
@@ -60,7 +63,7 @@ export class FacultyService {
     }[];
   }): Promise<Faculty> {
     // Check if faculty code already exists
-    const existing = await facultyRepository.findByCode(data.code);
+    const existing = await facultyRepository.existsByCode(data.code);
     if (existing) {
       throw new Error(`Faculty with code ${data.code} already exists`);
     }
@@ -84,14 +87,16 @@ export class FacultyService {
       code?: string;
     },
   ): Promise<Faculty> {
-    const faculty = await facultyRepository.findById(id);
+    const faculty = await facultyRepository.prisma.findUnique({
+      where: { id },
+    });
     if (!faculty) {
       throw new Error("Faculty not found");
     }
 
     // If code is being changed, check for conflicts
     if (data.code && data.code !== faculty.code) {
-      const existing = await facultyRepository.findByCode(data.code);
+      const existing = await facultyRepository.existsByCode(data.code);
       if (existing) {
         throw new Error(`Faculty with code ${data.code} already exists`);
       }
@@ -104,7 +109,20 @@ export class FacultyService {
    * Delete faculty
    */
   async deleteFaculty(id: string): Promise<void> {
-    const faculty = await facultyRepository.findById(id);
+    const faculty = await facultyRepository.prisma.findUnique({
+      where: { id },
+      include: {
+        departments: {
+          include: {
+            _count: {
+              select: {
+                students: true,
+              },
+            },
+          },
+        },
+      },
+    });
     if (!faculty) {
       throw new Error("Faculty not found");
     }

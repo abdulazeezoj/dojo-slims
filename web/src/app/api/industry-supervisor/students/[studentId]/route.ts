@@ -1,11 +1,15 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { requireIndustrySupervisor } from "@/middlewares/auth";
+import { requireIndustrySupervisor } from "@/lib/auth-server";
 import { supervisorService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
 export const GET = requireIndustrySupervisor(
-  async (request: NextRequest, session, context: { params: { studentId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { studentId: string } },
+  ) => {
     try {
       const supervisorId = session.user.userReferenceId;
       const { studentId } = context.params;
@@ -13,11 +17,13 @@ export const GET = requireIndustrySupervisor(
       const student = await supervisorService.getStudentDetails(
         studentId,
         supervisorId,
-        "INDUSTRY_SUPERVISOR"
+        "INDUSTRY_SUPERVISOR",
       );
 
       if (!student) {
-        return createErrorResponse("Student not found or not assigned", { status: 404 });
+        return createErrorResponse("Student not found or not assigned", {
+          status: 404,
+        });
       }
 
       return createSuccessResponse(student);

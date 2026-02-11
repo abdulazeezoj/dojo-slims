@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -9,49 +8,47 @@ datasource db {
 }
 
 model User {
-  id              String    @id
-  name            String?
-  email           String    @unique  
-  emailVerified   Boolean   @default(false)
-  image           String?
-  userType        UserType
-  userReferenceId String
-  isActive        Boolean   @default(true)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  accounts        Account[]
-  sessions        Session[]
+  id            String    @id
+  name          String?
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  userType      UserType
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  accounts      Account[]
+  sessions      Session[]
 
-  username        String?   @unique
+  username        String? @unique
   displayUsername String?
 
-  role            String    @default("user")  
-  banned          Boolean   @default(false)   
-  banReason       String?
-  banExpires      DateTime?
+  role       String    @default("user")
+  banned     Boolean   @default(false)
+  banReason  String?
+  banExpires DateTime?
 
   studentProfile            Student?            @relation("StudentUser")
   schoolSupervisorProfile   SchoolSupervisor?   @relation("SchoolSupervisorUser")
   industrySupervisorProfile IndustrySupervisor? @relation("IndustrySupervisorUser")
   adminProfile              AdminUser?          @relation("AdminUser")
 
-  @@unique([userType, userReferenceId])
-  @@index([userType, userReferenceId])
-  @@index([email])  
+  @@index([userType])
+  @@index([email])
   @@map("user")
 }
 
 model Session {
-  id             String   @id
-  expiresAt      DateTime
-  token          String   @unique
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  ipAddress      String?
-  userAgent      String?
-  userId         String
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   impersonatedBy String?
 
   @@index([userId])
@@ -140,21 +137,25 @@ model PlacementOrganization {
 }
 
 model SiwesSession {
-  id                           String                        @id @default(uuid())
-  name                         String
-  startDate                    DateTime
-  endDate                      DateTime
-  totalWeeks                   Int                           @default(24)
-  status                       SessionStatus                 @default(ACTIVE)
-  createdAt                    DateTime                      @default(now())
-  updatedAt                    DateTime                      @updatedAt
-  finalComments                FinalComment[]
-  logbookMetadata              LogbookMetadata[]
-  studentSessionEnrollments    StudentSessionEnrollment[]
-  studentSiwesDetails          StudentSiwesDetail[]
-  studentSupervisorAssignments StudentSupervisorAssignment[]
-  supervisorSessionEnrollments SupervisorSessionEnrollment[]
-  weeklyEntries                WeeklyEntry[]
+  id                                         String                           @id @default(uuid())
+  name                                       String
+  startDate                                  DateTime
+  endDate                                    DateTime
+  totalWeeks                                 Int                              @default(24)
+  status                                     SessionStatus                    @default(ACTIVE)
+  createdAt                                  DateTime                         @default(now())
+  updatedAt                                  DateTime                         @updatedAt
+  studentsWithCurrentSiwesSession            Student[]                        @relation("StudentCurrentSiwesSession")
+  schoolSupervisorsWithCurrentSiwesSession   SchoolSupervisor[]               @relation("SchoolSupervisorCurrentSiwesSession")
+  industrySupervisorsWithCurrentSiwesSession IndustrySupervisor[]             @relation("IndustrySupervisorCurrentSiwesSession")
+  logbookMetadata                            LogbookMetadata[]
+  studentSessionEnrollments                  StudentSessionEnrollment[]
+  studentSiwesDetails                        StudentSiwesDetail[]
+  studentSupervisorAssignments               StudentSupervisorAssignment[]
+  supervisorSessionEnrollments               SupervisorSessionEnrollment[]
+  schoolSupervisorFinalComments              SchoolSupervisorFinalComment[]
+  industrySupervisorFinalComments            IndustrySupervisorFinalComment[]
+  weeklyEntries                              WeeklyEntry[]
 
   @@index([status])
   @@index([startDate, endDate])
@@ -162,127 +163,140 @@ model SiwesSession {
 }
 
 model AdminUser {
-  id                           String                        @id @default(uuid())
-  adminId                      String                        @unique
-  name                         String
-  email                        String                        @unique
-  isActive                     Boolean                       @default(true)
-  betterAuthUserId             String                        @unique
-  createdAt                    DateTime                      @default(now())
-  updatedAt                    DateTime                      @updatedAt
+  id        String   @id @default(uuid())
+  adminId   String   @unique
+  name      String
+  email     String   @unique
+  isActive  Boolean  @default(true)
+  userId    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  betterAuthUser               User                          @relation("AdminUser", fields: [betterAuthUserId], references: [id], onDelete: Cascade)
-  
+  user User @relation("AdminUser", fields: [userId], references: [id], onDelete: Cascade)
+
   studentSupervisorAssignments StudentSupervisorAssignment[]
 
   @@index([adminId])
   @@index([email])
-  @@index([betterAuthUserId])
+  @@index([userId])
   @@map("admin_users")
 }
 
 model Student {
-  id                           String                        @id @default(uuid())
-  matricNumber                 String                        @unique
-  name                         String
-  email                        String                        @unique  
-  departmentId                 String
-  isActive                     Boolean                       @default(true)
-  betterAuthUserId             String                        @unique
-  createdAt                    DateTime                      @default(now())
-  updatedAt                    DateTime                      @updatedAt
+  id                    String   @id @default(uuid())
+  matricNumber          String   @unique
+  name                  String
+  email                 String   @unique
+  departmentId          String
+  currentSiwesSessionId String?
+  isActive              Boolean  @default(true)
+  userId                String   @unique
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
-  betterAuthUser               User                          @relation("StudentUser", fields: [betterAuthUserId], references: [id], onDelete: Cascade)
+  user                User          @relation("StudentUser", fields: [userId], references: [id], onDelete: Cascade)
+  currentSiwesSession SiwesSession? @relation("StudentCurrentSiwesSession", fields: [currentSiwesSessionId], references: [id], onDelete: SetNull)
 
-  finalComments                FinalComment[]
-  logbookMetadata              LogbookMetadata[]
-  reviewRequests               ReviewRequest[]
-  studentSessionEnrollments    StudentSessionEnrollment[]
-  studentSiwesDetails          StudentSiwesDetail[]
-  studentSupervisorAssignments StudentSupervisorAssignment[]
-  department                   Department                    @relation(fields: [departmentId], references: [id])
-  weeklyEntries                WeeklyEntry[]
+  logbookMetadata                 LogbookMetadata[]
+  industrySupervisorReviewRequest IndustrySupervisorReviewRequest[]
+  studentSessionEnrollments       StudentSessionEnrollment[]
+  studentSiwesDetails             StudentSiwesDetail[]
+  studentSupervisorAssignments    StudentSupervisorAssignment[]
+  schoolSupervisorFinalComments   SchoolSupervisorFinalComment[]
+  industrySupervisorFinalComments IndustrySupervisorFinalComment[]
+  department                      Department                        @relation(fields: [departmentId], references: [id])
+  weeklyEntries                   WeeklyEntry[]
 
   @@index([matricNumber])
   @@index([departmentId])
   @@index([email])
-  @@index([betterAuthUserId])
+  @@index([userId])
   @@map("students")
 }
 
 model SchoolSupervisor {
-  id                           String                        @id @default(uuid())
-  staffId                      String                        @unique
-  name                         String
-  email                        String                        @unique
-  departmentId                 String
-  isActive                     Boolean                       @default(true)
-  betterAuthUserId             String                        @unique
-  createdAt                    DateTime                      @default(now())
-  updatedAt                    DateTime                      @updatedAt
+  id                    String   @id @default(uuid())
+  staffId               String   @unique
+  name                  String
+  email                 String   @unique
+  departmentId          String
+  phone                 String?
+  currentSiwesSessionId String?
+  isActive              Boolean  @default(true)
+  userId                String   @unique
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
-  betterAuthUser               User                          @relation("SchoolSupervisorUser", fields: [betterAuthUserId], references: [id], onDelete: Cascade)
+  user                User          @relation("SchoolSupervisorUser", fields: [userId], references: [id], onDelete: Cascade)
+  currentSiwesSession SiwesSession? @relation("SchoolSupervisorCurrentSiwesSession", fields: [currentSiwesSessionId], references: [id], onDelete: SetNull)
 
-  department                   Department                    @relation(fields: [departmentId], references: [id])
+  department                   Department                      @relation(fields: [departmentId], references: [id])
   studentSupervisorAssignments StudentSupervisorAssignment[]
   supervisorSessionEnrollments SupervisorSessionEnrollment[]
+  weeklyComments               SchoolSupervisorWeeklyComment[]
+  finalComments                SchoolSupervisorFinalComment[]
 
   @@index([staffId])
   @@index([departmentId])
   @@index([email])
-  @@index([betterAuthUserId])
+  @@index([userId])
   @@map("school_supervisors")
 }
 
 model IndustrySupervisor {
-  id                      String                @id @default(uuid())
+  id                      String   @id @default(uuid())
   name                    String
-  email                   String                @unique
-  placementOrganizationId String
-  position                String?
+  email                   String   @unique
   phone                   String?
-  isActive                Boolean               @default(true)
-  betterAuthUserId        String                @unique
-  createdAt               DateTime              @default(now())
-  updatedAt               DateTime              @updatedAt
+  position                String?
+  placementOrganizationId String
+  currentSiwesSessionId   String?
+  isActive                Boolean  @default(true)
+  userId                  String   @unique
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
-  betterAuthUser          User                  @relation("IndustrySupervisorUser", fields: [betterAuthUserId], references: [id], onDelete: Cascade)
+  user                User          @relation("IndustrySupervisorUser", fields: [userId], references: [id], onDelete: Cascade)
+  currentSiwesSession SiwesSession? @relation("IndustrySupervisorCurrentSiwesSession", fields: [currentSiwesSessionId], references: [id], onDelete: SetNull)
 
-  placementOrganization   PlacementOrganization @relation(fields: [placementOrganizationId], references: [id])
-  reviewRequests          ReviewRequest[]
-  studentSiwesDetails     StudentSiwesDetail[]
+  placementOrganization PlacementOrganization             @relation(fields: [placementOrganizationId], references: [id])
+  reviewRequests        IndustrySupervisorReviewRequest[]
+  studentSiwesDetails   StudentSiwesDetail[]
+  weeklyComments        IndustrySupervisorWeeklyComment[]
+  finalComments         IndustrySupervisorFinalComment[]
 
   @@index([email])
   @@index([placementOrganizationId])
-  @@index([betterAuthUserId])
+  @@index([userId])
   @@map("industry_supervisors")
 }
 
 model StudentSessionEnrollment {
-  id             String       @id @default(uuid())
+  id             String   @id @default(uuid())
   studentId      String
   siwesSessionId String
-  enrolledAt     DateTime
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  siwesSession   SiwesSession @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
-  student        Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  enrolledAt     DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  siwesSession SiwesSession @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
+  student      Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, siwesSessionId])
   @@index([studentId, siwesSessionId])
-  @@index([siwesSessionId])
   @@map("student_session_enrollments")
 }
 
 model SupervisorSessionEnrollment {
-  id                 String           @id @default(uuid())
+  id                 String   @id @default(uuid())
   schoolSupervisorId String
   siwesSessionId     String
-  enrolledAt         DateTime
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-  schoolSupervisor   SchoolSupervisor @relation(fields: [schoolSupervisorId], references: [id], onDelete: Cascade)
-  siwesSession       SiwesSession     @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
+  enrolledAt         DateTime @default(now())
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  schoolSupervisor SchoolSupervisor @relation(fields: [schoolSupervisorId], references: [id], onDelete: Cascade)
+  siwesSession     SiwesSession     @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
 
   @@unique([schoolSupervisorId, siwesSessionId])
   @@index([schoolSupervisorId, siwesSessionId])
@@ -295,25 +309,26 @@ model StudentSupervisorAssignment {
   studentId          String
   schoolSupervisorId String
   siwesSessionId     String
-  assignedBy         String
+  assignedBy         String?
   assignmentMethod   AssignmentMethod
   assignedAt         DateTime
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
-  admin              AdminUser        @relation(fields: [assignedBy], references: [id])
-  schoolSupervisor   SchoolSupervisor @relation(fields: [schoolSupervisorId], references: [id], onDelete: Cascade)
-  siwesSession       SiwesSession     @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
-  student            Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  admin            AdminUser?       @relation(fields: [assignedBy], references: [id], onDelete: SetNull)
+  schoolSupervisor SchoolSupervisor @relation(fields: [schoolSupervisorId], references: [id], onDelete: Cascade)
+  siwesSession     SiwesSession     @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
+  student          Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, schoolSupervisorId, siwesSessionId])
   @@index([studentId, siwesSessionId])
   @@index([schoolSupervisorId, siwesSessionId])
-  @@index([assignedBy])  
+  @@index([assignedBy])
   @@map("student_supervisor_assignments")
 }
 
 model StudentSiwesDetail {
-  id                      String                @id @default(uuid())
+  id                      String   @id @default(uuid())
   studentId               String
   siwesSessionId          String
   placementOrganizationId String
@@ -322,12 +337,13 @@ model StudentSiwesDetail {
   trainingEndDate         DateTime
   jobTitle                String?
   departmentAtOrg         String?
-  createdAt               DateTime              @default(now())
-  updatedAt               DateTime              @updatedAt
-  industrySupervisor      IndustrySupervisor    @relation(fields: [industrySupervisorId], references: [id])
-  placementOrganization   PlacementOrganization @relation(fields: [placementOrganizationId], references: [id])
-  siwesSession            SiwesSession          @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
-  student                 Student               @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  industrySupervisor    IndustrySupervisor    @relation(fields: [industrySupervisorId], references: [id])
+  placementOrganization PlacementOrganization @relation(fields: [placementOrganizationId], references: [id])
+  siwesSession          SiwesSession          @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
+  student               Student               @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, siwesSessionId])
   @@index([studentId, siwesSessionId])
@@ -337,7 +353,7 @@ model StudentSiwesDetail {
 }
 
 model LogbookMetadata {
-  id                   String       @id @default(uuid())
+  id                   String   @id @default(uuid())
   studentId            String
   siwesSessionId       String
   programOfStudy       String
@@ -345,10 +361,11 @@ model LogbookMetadata {
   session              String
   trainingDuration     String
   areaOfSpecialization String?
-  createdAt            DateTime     @default(now())
-  updatedAt            DateTime     @updatedAt
-  siwesSession         SiwesSession @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
-  student              Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  siwesSession SiwesSession @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
+  student      Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, siwesSessionId])
   @@index([studentId, siwesSessionId])
@@ -356,7 +373,7 @@ model LogbookMetadata {
 }
 
 model WeeklyEntry {
-  id             String          @id @default(uuid())
+  id             String    @id @default(uuid())
   studentId      String
   siwesSessionId String
   weekNumber     Int
@@ -366,16 +383,19 @@ model WeeklyEntry {
   thursdayEntry  String?
   fridayEntry    String?
   saturdayEntry  String?
-  isLocked       Boolean         @default(false)
+  isLocked       Boolean   @default(false)
   lockedBy       LockedBy?
   lockedAt       DateTime?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  diagrams       Diagram[]
-  reviewRequest  ReviewRequest?
-  weeklyComments WeeklyComment[]
-  siwesSession   SiwesSession    @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
-  student        Student         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  diagrams                         Diagram[]
+  industrySupervisorReviewRequest  IndustrySupervisorReviewRequest?
+  schoolSupervisorWeeklyComments   SchoolSupervisorWeeklyComment[]
+  industrySupervisorWeeklyComments IndustrySupervisorWeeklyComment[]
+
+  siwesSession SiwesSession @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
+  student      Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, siwesSessionId, weekNumber])
   @@index([studentId, siwesSessionId, weekNumber])
@@ -384,7 +404,7 @@ model WeeklyEntry {
 }
 
 model Diagram {
-  id            String      @id @default(uuid())
+  id            String   @id @default(uuid())
   weeklyEntryId String
   fileName      String
   filePath      String
@@ -392,85 +412,110 @@ model Diagram {
   mimeType      String
   caption       String?
   uploadedAt    DateTime
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  weeklyEntry   WeeklyEntry @relation(fields: [weeklyEntryId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  weeklyEntry WeeklyEntry @relation(fields: [weeklyEntryId], references: [id], onDelete: Cascade)
 
   @@index([weeklyEntryId])
   @@map("diagrams")
 }
 
-model WeeklyComment {
-  id            String        @id @default(uuid())
-  weeklyEntryId String
-  commenterType CommenterType
-  commenterId   String
-  comment       String
-  commentedAt   DateTime
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  weeklyEntry   WeeklyEntry   @relation(fields: [weeklyEntryId], references: [id], onDelete: Cascade)
+model SchoolSupervisorWeeklyComment {
+  id                 String   @id @default(uuid())
+  weeklyEntryId      String
+  schoolSupervisorId String
+  comment            String
+  commentedAt        DateTime
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
-  @@index([weeklyEntryId, commenterType])
-  @@index([commenterId, commenterType])
-  @@map("weekly_comments")
+  weeklyEntry      WeeklyEntry      @relation(fields: [weeklyEntryId], references: [id], onDelete: Cascade)
+  schoolSupervisor SchoolSupervisor @relation(fields: [schoolSupervisorId], references: [id], onDelete: Cascade)
+
+  @@index([weeklyEntryId])
+  @@index([schoolSupervisorId])
+  @@map("school_supervisor_weekly_comments")
 }
 
-model ReviewRequest {
-  id                   String             @id @default(uuid())
-  weeklyEntryId        String             @unique
+model IndustrySupervisorWeeklyComment {
+  id                   String   @id @default(uuid())
+  weeklyEntryId        String
+  industrySupervisorId String
+  comment              String
+  commentedAt          DateTime
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  weeklyEntry        WeeklyEntry        @relation(fields: [weeklyEntryId], references: [id], onDelete: Cascade)
+  industrySupervisor IndustrySupervisor @relation(fields: [industrySupervisorId], references: [id], onDelete: Cascade)
+
+  @@index([weeklyEntryId])
+  @@index([industrySupervisorId])
+  @@map("industry_supervisor_weekly_comments")
+}
+
+model IndustrySupervisorReviewRequest {
+  id                   String       @id @default(uuid())
+  weeklyEntryId        String       @unique
   studentId            String
   industrySupervisorId String
-  status               ReviewStatus       @default(PENDING)
+  status               ReviewStatus @default(PENDING)
   requestedAt          DateTime
   reviewedAt           DateTime?
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt
-  industrySupervisor   IndustrySupervisor @relation(fields: [industrySupervisorId], references: [id])
-  student              Student            @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  weeklyEntry          WeeklyEntry        @relation(fields: [weeklyEntryId], references: [id], onDelete: Cascade)
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+
+  industrySupervisor IndustrySupervisor @relation(fields: [industrySupervisorId], references: [id])
+  student            Student            @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  weeklyEntry        WeeklyEntry        @relation(fields: [weeklyEntryId], references: [id], onDelete: Cascade)
 
   @@index([weeklyEntryId])
   @@index([industrySupervisorId, status])
   @@index([studentId])
-  @@map("review_requests")
+  @@map("industry_supervisor_review_requests")
 }
 
-model FinalComment {
-  id             String        @id @default(uuid())
-  studentId      String
-  siwesSessionId String
-  commenterType  CommenterType
-  commenterId    String
-  comment        String
-  rating         String?
-  commentedAt    DateTime
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  siwesSession   SiwesSession  @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
-  student        Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+model SchoolSupervisorFinalComment {
+  id                 String   @id @default(uuid())
+  studentId          String
+  siwesSessionId     String
+  schoolSupervisorId String
+  comment            String
+  rating             String?
+  commentedAt        DateTime
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
-  @@unique([studentId, siwesSessionId, commenterType])
-  @@index([studentId, siwesSessionId, commenterType])
-  @@index([commenterId, commenterType])
-  @@map("final_comments")
+  siwesSession     SiwesSession     @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
+  student          Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  schoolSupervisor SchoolSupervisor @relation(fields: [schoolSupervisorId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, siwesSessionId, schoolSupervisorId])
+  @@index([studentId, siwesSessionId])
+  @@index([schoolSupervisorId])
+  @@map("school_supervisor_final_comments")
 }
 
-model ActivityLog {
-  id         String   @id @default(uuid())
-  userType   UserType
-  userId     String
-  action     String
-  entityType String?
-  entityId   String?
-  details    Json?
-  ipAddress  String?
-  createdAt  DateTime @default(now())
+model IndustrySupervisorFinalComment {
+  id                   String   @id @default(uuid())
+  studentId            String
+  siwesSessionId       String
+  industrySupervisorId String
+  comment              String
+  rating               String?
+  commentedAt          DateTime
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
-  @@index([userType, userId])
-  @@index([entityType, entityId])
-  @@index([createdAt])
-  @@map("activity_logs")
+  siwesSession       SiwesSession       @relation(fields: [siwesSessionId], references: [id], onDelete: Cascade)
+  student            Student            @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  industrySupervisor IndustrySupervisor @relation(fields: [industrySupervisorId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, siwesSessionId, industrySupervisorId])
+  @@index([studentId, siwesSessionId])
+  @@index([industrySupervisorId])
+  @@map("industry_supervisor_final_comments")
 }
 
 enum UserType {
@@ -502,13 +547,6 @@ enum LockedBy {
   MANUAL
 
   @@map("locked_by")
-}
-
-enum CommenterType {
-  INDUSTRY_SUPERVISOR
-  SCHOOL_SUPERVISOR
-
-  @@map("commenter_type")
 }
 
 enum ReviewStatus {

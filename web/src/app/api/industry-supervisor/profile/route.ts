@@ -1,6 +1,6 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireIndustrySupervisor } from "@/middlewares/auth";
+import { requireIndustrySupervisor } from "@/lib/auth-server";
 import { updateIndustrySupervisorProfileSchema } from "@/schemas";
 import { supervisorService } from "@/services";
 

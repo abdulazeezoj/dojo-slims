@@ -1,10 +1,12 @@
 import { randomUUID } from "crypto";
 
 import { getLogger } from "@/lib/logger";
+import prisma from "@/lib/prisma";
 import {
   industrySupervisorRepository,
-  siwesDetailRepository,
-  studentEnrollmentRepository,
+  siwesSessionRepository,
+  studentSessionEnrollmentRepository,
+  studentSiwesDetailRepository,
   userRepository,
 } from "@/repositories";
 
@@ -20,7 +22,18 @@ export class SiwesDetailService {
   async getSiwesDetails(studentId: string) {
     logger.info("Getting SIWES details", { studentId });
 
-    const details = await siwesDetailRepository.findByStudent(studentId);
+    const details = await studentSiwesDetailRepository.prisma.findMany({
+      where: { studentId },
+      include: {
+        siwesSession: true,
+        placementOrganization: true,
+        industrySupervisor: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
     return details;
   }
 
@@ -49,13 +62,43 @@ export class SiwesDetailService {
 
     // Check if enrollment exists
     const enrollment =
-      await studentEnrollmentRepository.findByStudentAndSession(
+      await studentSessionEnrollmentRepository.findByStudentAndSession(
         studentId,
         sessionId,
       );
 
     if (!enrollment) {
       throw new Error("Student not enrolled in this session");
+    }
+
+    // Get session details for date validation
+    const session = await siwesSessionRepository.prisma.findUnique({
+      where: { id: sessionId },
+    });
+    if (!session) {
+      throw new Error("SIWES session not found");
+    }
+
+    // Validate training date range
+    const startDate = new Date(data.trainingStartDate);
+    const endDate = new Date(data.trainingEndDate);
+    const sessionStart = new Date(session.startDate);
+    const sessionEnd = new Date(session.endDate);
+
+    if (startDate >= endDate) {
+      throw new Error("Training start date must be before training end date");
+    }
+
+    if (startDate < sessionStart) {
+      throw new Error(
+        `Training start date cannot be before session start date (${sessionStart.toLocaleDateString()})`,
+      );
+    }
+
+    if (endDate > sessionEnd) {
+      throw new Error(
+        `Training end date cannot be after session end date (${sessionEnd.toLocaleDateString()})`,
+      );
     }
 
     // Create or get industry supervisor (required in schema)
@@ -65,14 +108,14 @@ export class SiwesDetailService {
     );
 
     // Check if SIWES details already exist
-    const existing = await siwesDetailRepository.findByStudentSession(
+    const existing = await studentSiwesDetailRepository.findByStudentAndSession(
       studentId,
       sessionId,
     );
 
     if (existing) {
       // Update existing
-      return siwesDetailRepository.update(existing.id, {
+      return studentSiwesDetailRepository.update(existing.id, {
         placementOrganization: {
           connect: { id: data.placementOrganizationId },
         },
@@ -86,7 +129,7 @@ export class SiwesDetailService {
       });
     } else {
       // Create new
-      return siwesDetailRepository.create({
+      return studentSiwesDetailRepository.createSiwesDetail({
         student: {
           connect: { id: studentId },
         },
@@ -125,7 +168,7 @@ export class SiwesDetailService {
     });
 
     // Check if supervisor already exists by email
-    const existing = await industrySupervisorRepository.findByEmail(
+    const existing = await industrySupervisorRepository.findByEmailWithDetails(
       supervisorData.email,
     );
 
@@ -144,40 +187,43 @@ export class SiwesDetailService {
       );
     }
 
-    // Create User record directly for magic link authentication
-    // Industry supervisors don't get passwords - they use magic link login
-    const userId = randomUUID();
-    const user = await userRepository.create({
-      id: userId,
-      email: supervisorData.email,
-      name: supervisorData.name,
-      emailVerified: false,
-      userType: "INDUSTRY_SUPERVISOR",
-      userReferenceId: "", // Will be updated after supervisor is created
-    });
+    // Use transaction to ensure data consistency
+    // Create User and IndustrySupervisor atomically
+    const industrySupervisor = await prisma.$transaction(async (tx) => {
+      const userId = randomUUID();
 
-    // Create industry supervisor record
-    const industrySupervisor = await industrySupervisorRepository.create({
-      name: supervisorData.name,
-      email: supervisorData.email,
-      phone: supervisorData.phone,
-      position: supervisorData.position,
-      placementOrganization: {
-        connect: { id: placementOrganizationId },
-      },
-      betterAuthUser: {
-        connect: { id: user.id },
-      },
-    });
+      // Create User record for magic link authentication
+      await tx.user.create({
+        data: {
+          id: userId,
+          email: supervisorData.email,
+          name: supervisorData.name,
+          emailVerified: false,
+          userType: "INDUSTRY_SUPERVISOR",
+        },
+      });
 
-    // Update User with userReferenceId now that supervisor is created
-    await userRepository.update(user.id, {
-      userReferenceId: industrySupervisor.id,
+      // Create industry supervisor record
+      const newSupervisor = await tx.industrySupervisor.create({
+        data: {
+          name: supervisorData.name,
+          email: supervisorData.email,
+          phone: supervisorData.phone,
+          position: supervisorData.position,
+          placementOrganization: {
+            connect: { id: placementOrganizationId },
+          },
+          user: {
+            connect: { id: userId },
+          },
+        },
+      });
+
+      return newSupervisor;
     });
 
     logger.info("Created industry supervisor for magic link authentication", {
       supervisorId: industrySupervisor.id,
-      userId: user.id,
     });
 
     // Note: Magic link will be sent when industry supervisor needs to access the system

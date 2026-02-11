@@ -1,13 +1,17 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireAdmin } from "@/middlewares/auth";
+import { requireAdmin } from "@/lib/auth-server";
 import { updateOrganizationSchema } from "@/schemas";
 import { organizationService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
 export const GET = requireAdmin(
-  async (request: NextRequest, session, context: { params: { orgId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { orgId: string } },
+  ) => {
     try {
       const { orgId } = context.params;
       const organization = await organizationService.getOrganizationById(orgId);
@@ -25,11 +29,19 @@ export const GET = requireAdmin(
 );
 
 export const PATCH = requireAdmin(
-  async (request: NextRequest, session, context: { params: { orgId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { orgId: string } },
+  ) => {
     try {
       const { orgId } = context.params;
-      const validation = await validateRequest(request, { body: updateOrganizationSchema });
-      if (!validation.success) {return validation.error;}
+      const validation = await validateRequest(request, {
+        body: updateOrganizationSchema,
+      });
+      if (!validation.success) {
+        return validation.error;
+      }
 
       const { body } = validation.data;
       const updated = await organizationService.updateOrganization(orgId, body);
@@ -39,7 +51,9 @@ export const PATCH = requireAdmin(
       });
     } catch (error) {
       return createErrorResponse(
-        error instanceof Error ? error.message : "Failed to update organization",
+        error instanceof Error
+          ? error.message
+          : "Failed to update organization",
         { status: 500 },
       );
     }
@@ -47,7 +61,11 @@ export const PATCH = requireAdmin(
 );
 
 export const DELETE = requireAdmin(
-  async (request: NextRequest, session, context: { params: { orgId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { orgId: string } },
+  ) => {
     try {
       const { orgId } = context.params;
       await organizationService.deleteOrganization(orgId);
@@ -57,7 +75,9 @@ export const DELETE = requireAdmin(
       });
     } catch (error) {
       return createErrorResponse(
-        error instanceof Error ? error.message : "Failed to delete organization",
+        error instanceof Error
+          ? error.message
+          : "Failed to delete organization",
         { status: 500 },
       );
     }

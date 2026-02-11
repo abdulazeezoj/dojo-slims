@@ -1,16 +1,21 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireAdmin } from "@/middlewares/auth";
+import { requireAdmin } from "@/lib/auth-server";
 import { updateSchoolSupervisorSchema } from "@/schemas";
 import { supervisorManagementService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
 export const GET = requireAdmin(
-  async (request: NextRequest, session, context: { params: { supervisorId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { supervisorId: string } },
+  ) => {
     try {
       const { supervisorId } = context.params;
-      const supervisor = await supervisorManagementService.getSupervisorById(supervisorId);
+      const supervisor =
+        await supervisorManagementService.getSupervisorById(supervisorId);
 
       if (!supervisor) {
         return createErrorResponse("Supervisor not found", { status: 404 });
@@ -27,14 +32,25 @@ export const GET = requireAdmin(
 );
 
 export const PATCH = requireAdmin(
-  async (request: NextRequest, session, context: { params: { supervisorId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { supervisorId: string } },
+  ) => {
     try {
       const { supervisorId } = context.params;
-      const validation = await validateRequest(request, { body: updateSchoolSupervisorSchema });
-      if (!validation.success) {return validation.error;}
+      const validation = await validateRequest(request, {
+        body: updateSchoolSupervisorSchema,
+      });
+      if (!validation.success) {
+        return validation.error;
+      }
 
       const { body } = validation.data;
-      const updated = await supervisorManagementService.updateSupervisor(supervisorId, body);
+      const updated = await supervisorManagementService.updateSupervisor(
+        supervisorId,
+        body,
+      );
 
       return createSuccessResponse(updated, {
         message: "Supervisor updated successfully",
@@ -49,7 +65,11 @@ export const PATCH = requireAdmin(
 );
 
 export const DELETE = requireAdmin(
-  async (request: NextRequest, session, context: { params: { supervisorId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { supervisorId: string } },
+  ) => {
     try {
       const { supervisorId } = context.params;
       await supervisorManagementService.deleteSupervisor(supervisorId);

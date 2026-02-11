@@ -1,8 +1,9 @@
-
 import { AuthFooter } from "@/components/auth/footer";
 import { AuthHeader } from "@/components/auth/header";
+import { getDashboardUrl, getServerSession } from "@/lib/auth-server";
 
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: {
@@ -11,7 +12,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Redirect authenticated users to their dashboard
+  const session = await getServerSession();
+
+  if (session) {
+    const dashboardUrl = await getDashboardUrl(session.user.userType);
+    redirect(dashboardUrl);
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-muted/50">
       {/* Header */}

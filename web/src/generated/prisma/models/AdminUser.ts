@@ -30,7 +30,7 @@ export type AdminUserMinAggregateOutputType = {
   name: string | null
   email: string | null
   isActive: boolean | null
-  betterAuthUserId: string | null
+  userId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -41,7 +41,7 @@ export type AdminUserMaxAggregateOutputType = {
   name: string | null
   email: string | null
   isActive: boolean | null
-  betterAuthUserId: string | null
+  userId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -52,7 +52,7 @@ export type AdminUserCountAggregateOutputType = {
   name: number
   email: number
   isActive: number
-  betterAuthUserId: number
+  userId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -65,7 +65,7 @@ export type AdminUserMinAggregateInputType = {
   name?: true
   email?: true
   isActive?: true
-  betterAuthUserId?: true
+  userId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -76,7 +76,7 @@ export type AdminUserMaxAggregateInputType = {
   name?: true
   email?: true
   isActive?: true
-  betterAuthUserId?: true
+  userId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -87,7 +87,7 @@ export type AdminUserCountAggregateInputType = {
   name?: true
   email?: true
   isActive?: true
-  betterAuthUserId?: true
+  userId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -171,7 +171,7 @@ export type AdminUserGroupByOutputType = {
   name: string
   email: string
   isActive: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt: Date
   updatedAt: Date
   _count: AdminUserCountAggregateOutputType | null
@@ -203,10 +203,10 @@ export type AdminUserWhereInput = {
   name?: Prisma.StringFilter<"AdminUser"> | string
   email?: Prisma.StringFilter<"AdminUser"> | string
   isActive?: Prisma.BoolFilter<"AdminUser"> | boolean
-  betterAuthUserId?: Prisma.StringFilter<"AdminUser"> | string
+  userId?: Prisma.StringFilter<"AdminUser"> | string
   createdAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
-  betterAuthUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentListRelationFilter
 }
 
@@ -216,10 +216,10 @@ export type AdminUserOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  betterAuthUser?: Prisma.UserOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentOrderByRelationAggregateInput
 }
 
@@ -227,7 +227,7 @@ export type AdminUserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   adminId?: string
   email?: string
-  betterAuthUserId?: string
+  userId?: string
   AND?: Prisma.AdminUserWhereInput | Prisma.AdminUserWhereInput[]
   OR?: Prisma.AdminUserWhereInput[]
   NOT?: Prisma.AdminUserWhereInput | Prisma.AdminUserWhereInput[]
@@ -235,9 +235,9 @@ export type AdminUserWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolFilter<"AdminUser"> | boolean
   createdAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
-  betterAuthUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentListRelationFilter
-}, "id" | "adminId" | "email" | "betterAuthUserId">
+}, "id" | "adminId" | "email" | "userId">
 
 export type AdminUserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -245,7 +245,7 @@ export type AdminUserOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.AdminUserCountOrderByAggregateInput
@@ -262,7 +262,7 @@ export type AdminUserScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"AdminUser"> | string
   email?: Prisma.StringWithAggregatesFilter<"AdminUser"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"AdminUser"> | boolean
-  betterAuthUserId?: Prisma.StringWithAggregatesFilter<"AdminUser"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"AdminUser"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AdminUser"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AdminUser"> | Date | string
 }
@@ -275,7 +275,7 @@ export type AdminUserCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutAdminProfileInput
+  user: Prisma.UserCreateNestedOneWithoutAdminProfileInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutAdminInput
 }
 
@@ -285,7 +285,7 @@ export type AdminUserUncheckedCreateInput = {
   name: string
   email: string
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutAdminInput
@@ -299,7 +299,7 @@ export type AdminUserUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutAdminProfileNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutAdminProfileNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutAdminNestedInput
 }
 
@@ -309,7 +309,7 @@ export type AdminUserUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutAdminNestedInput
@@ -321,7 +321,7 @@ export type AdminUserCreateManyInput = {
   name: string
   email: string
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -342,7 +342,7 @@ export type AdminUserUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -358,7 +358,7 @@ export type AdminUserCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -369,7 +369,7 @@ export type AdminUserMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -380,46 +380,41 @@ export type AdminUserMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
-export type AdminUserScalarRelationFilter = {
-  is?: Prisma.AdminUserWhereInput
-  isNot?: Prisma.AdminUserWhereInput
-}
-
-export type AdminUserCreateNestedOneWithoutBetterAuthUserInput = {
-  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutBetterAuthUserInput, Prisma.AdminUserUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutBetterAuthUserInput
+export type AdminUserCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutUserInput, Prisma.AdminUserUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutUserInput
   connect?: Prisma.AdminUserWhereUniqueInput
 }
 
-export type AdminUserUncheckedCreateNestedOneWithoutBetterAuthUserInput = {
-  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutBetterAuthUserInput, Prisma.AdminUserUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutBetterAuthUserInput
+export type AdminUserUncheckedCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutUserInput, Prisma.AdminUserUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutUserInput
   connect?: Prisma.AdminUserWhereUniqueInput
 }
 
-export type AdminUserUpdateOneWithoutBetterAuthUserNestedInput = {
-  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutBetterAuthUserInput, Prisma.AdminUserUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutBetterAuthUserInput
-  upsert?: Prisma.AdminUserUpsertWithoutBetterAuthUserInput
+export type AdminUserUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutUserInput, Prisma.AdminUserUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutUserInput
+  upsert?: Prisma.AdminUserUpsertWithoutUserInput
   disconnect?: Prisma.AdminUserWhereInput | boolean
   delete?: Prisma.AdminUserWhereInput | boolean
   connect?: Prisma.AdminUserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutBetterAuthUserInput, Prisma.AdminUserUpdateWithoutBetterAuthUserInput>, Prisma.AdminUserUncheckedUpdateWithoutBetterAuthUserInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutUserInput, Prisma.AdminUserUpdateWithoutUserInput>, Prisma.AdminUserUncheckedUpdateWithoutUserInput>
 }
 
-export type AdminUserUncheckedUpdateOneWithoutBetterAuthUserNestedInput = {
-  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutBetterAuthUserInput, Prisma.AdminUserUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutBetterAuthUserInput
-  upsert?: Prisma.AdminUserUpsertWithoutBetterAuthUserInput
+export type AdminUserUncheckedUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutUserInput, Prisma.AdminUserUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutUserInput
+  upsert?: Prisma.AdminUserUpsertWithoutUserInput
   disconnect?: Prisma.AdminUserWhereInput | boolean
   delete?: Prisma.AdminUserWhereInput | boolean
   connect?: Prisma.AdminUserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutBetterAuthUserInput, Prisma.AdminUserUpdateWithoutBetterAuthUserInput>, Prisma.AdminUserUncheckedUpdateWithoutBetterAuthUserInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutUserInput, Prisma.AdminUserUpdateWithoutUserInput>, Prisma.AdminUserUncheckedUpdateWithoutUserInput>
 }
 
 export type AdminUserCreateNestedOneWithoutStudentSupervisorAssignmentsInput = {
@@ -428,15 +423,17 @@ export type AdminUserCreateNestedOneWithoutStudentSupervisorAssignmentsInput = {
   connect?: Prisma.AdminUserWhereUniqueInput
 }
 
-export type AdminUserUpdateOneRequiredWithoutStudentSupervisorAssignmentsNestedInput = {
+export type AdminUserUpdateOneWithoutStudentSupervisorAssignmentsNestedInput = {
   create?: Prisma.XOR<Prisma.AdminUserCreateWithoutStudentSupervisorAssignmentsInput, Prisma.AdminUserUncheckedCreateWithoutStudentSupervisorAssignmentsInput>
   connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutStudentSupervisorAssignmentsInput
   upsert?: Prisma.AdminUserUpsertWithoutStudentSupervisorAssignmentsInput
+  disconnect?: Prisma.AdminUserWhereInput | boolean
+  delete?: Prisma.AdminUserWhereInput | boolean
   connect?: Prisma.AdminUserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutStudentSupervisorAssignmentsInput, Prisma.AdminUserUpdateWithoutStudentSupervisorAssignmentsInput>, Prisma.AdminUserUncheckedUpdateWithoutStudentSupervisorAssignmentsInput>
 }
 
-export type AdminUserCreateWithoutBetterAuthUserInput = {
+export type AdminUserCreateWithoutUserInput = {
   id?: string
   adminId: string
   name: string
@@ -447,7 +444,7 @@ export type AdminUserCreateWithoutBetterAuthUserInput = {
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutAdminInput
 }
 
-export type AdminUserUncheckedCreateWithoutBetterAuthUserInput = {
+export type AdminUserUncheckedCreateWithoutUserInput = {
   id?: string
   adminId: string
   name: string
@@ -458,23 +455,23 @@ export type AdminUserUncheckedCreateWithoutBetterAuthUserInput = {
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutAdminInput
 }
 
-export type AdminUserCreateOrConnectWithoutBetterAuthUserInput = {
+export type AdminUserCreateOrConnectWithoutUserInput = {
   where: Prisma.AdminUserWhereUniqueInput
-  create: Prisma.XOR<Prisma.AdminUserCreateWithoutBetterAuthUserInput, Prisma.AdminUserUncheckedCreateWithoutBetterAuthUserInput>
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutUserInput, Prisma.AdminUserUncheckedCreateWithoutUserInput>
 }
 
-export type AdminUserUpsertWithoutBetterAuthUserInput = {
-  update: Prisma.XOR<Prisma.AdminUserUpdateWithoutBetterAuthUserInput, Prisma.AdminUserUncheckedUpdateWithoutBetterAuthUserInput>
-  create: Prisma.XOR<Prisma.AdminUserCreateWithoutBetterAuthUserInput, Prisma.AdminUserUncheckedCreateWithoutBetterAuthUserInput>
+export type AdminUserUpsertWithoutUserInput = {
+  update: Prisma.XOR<Prisma.AdminUserUpdateWithoutUserInput, Prisma.AdminUserUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutUserInput, Prisma.AdminUserUncheckedCreateWithoutUserInput>
   where?: Prisma.AdminUserWhereInput
 }
 
-export type AdminUserUpdateToOneWithWhereWithoutBetterAuthUserInput = {
+export type AdminUserUpdateToOneWithWhereWithoutUserInput = {
   where?: Prisma.AdminUserWhereInput
-  data: Prisma.XOR<Prisma.AdminUserUpdateWithoutBetterAuthUserInput, Prisma.AdminUserUncheckedUpdateWithoutBetterAuthUserInput>
+  data: Prisma.XOR<Prisma.AdminUserUpdateWithoutUserInput, Prisma.AdminUserUncheckedUpdateWithoutUserInput>
 }
 
-export type AdminUserUpdateWithoutBetterAuthUserInput = {
+export type AdminUserUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   adminId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -485,7 +482,7 @@ export type AdminUserUpdateWithoutBetterAuthUserInput = {
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutAdminNestedInput
 }
 
-export type AdminUserUncheckedUpdateWithoutBetterAuthUserInput = {
+export type AdminUserUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   adminId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -504,7 +501,7 @@ export type AdminUserCreateWithoutStudentSupervisorAssignmentsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutAdminProfileInput
+  user: Prisma.UserCreateNestedOneWithoutAdminProfileInput
 }
 
 export type AdminUserUncheckedCreateWithoutStudentSupervisorAssignmentsInput = {
@@ -513,7 +510,7 @@ export type AdminUserUncheckedCreateWithoutStudentSupervisorAssignmentsInput = {
   name: string
   email: string
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -542,7 +539,7 @@ export type AdminUserUpdateWithoutStudentSupervisorAssignmentsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutAdminProfileNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutAdminProfileNestedInput
 }
 
 export type AdminUserUncheckedUpdateWithoutStudentSupervisorAssignmentsInput = {
@@ -551,7 +548,7 @@ export type AdminUserUncheckedUpdateWithoutStudentSupervisorAssignmentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -593,10 +590,10 @@ export type AdminUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   name?: boolean
   email?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   studentSupervisorAssignments?: boolean | Prisma.AdminUser$studentSupervisorAssignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.AdminUserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["adminUser"]>
@@ -607,10 +604,10 @@ export type AdminUserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   name?: boolean
   email?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["adminUser"]>
 
 export type AdminUserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -619,10 +616,10 @@ export type AdminUserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   name?: boolean
   email?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["adminUser"]>
 
 export type AdminUserSelectScalar = {
@@ -631,28 +628,28 @@ export type AdminUserSelectScalar = {
   name?: boolean
   email?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type AdminUserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "adminId" | "name" | "email" | "isActive" | "betterAuthUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["adminUser"]>
+export type AdminUserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "adminId" | "name" | "email" | "isActive" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["adminUser"]>
 export type AdminUserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   studentSupervisorAssignments?: boolean | Prisma.AdminUser$studentSupervisorAssignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.AdminUserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AdminUserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type AdminUserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $AdminUserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AdminUser"
   objects: {
-    betterAuthUser: Prisma.$UserPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs>
     studentSupervisorAssignments: Prisma.$StudentSupervisorAssignmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -661,7 +658,7 @@ export type $AdminUserPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     name: string
     email: string
     isActive: boolean
-    betterAuthUserId: string
+    userId: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["adminUser"]>
@@ -1058,7 +1055,7 @@ readonly fields: AdminUserFieldRefs;
  */
 export interface Prisma__AdminUserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  betterAuthUser<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   studentSupervisorAssignments<T extends Prisma.AdminUser$studentSupervisorAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$studentSupervisorAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentSupervisorAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1094,7 +1091,7 @@ export interface AdminUserFieldRefs {
   readonly name: Prisma.FieldRef<"AdminUser", 'String'>
   readonly email: Prisma.FieldRef<"AdminUser", 'String'>
   readonly isActive: Prisma.FieldRef<"AdminUser", 'Boolean'>
-  readonly betterAuthUserId: Prisma.FieldRef<"AdminUser", 'String'>
+  readonly userId: Prisma.FieldRef<"AdminUser", 'String'>
   readonly createdAt: Prisma.FieldRef<"AdminUser", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"AdminUser", 'DateTime'>
 }

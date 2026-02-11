@@ -1,4 +1,13 @@
-export default function Layout({ children }: { children: React.ReactNode }) {
+import { requireServerSchoolSupervisor } from "@/lib/auth-server";
+
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Validate school supervisor access before rendering
+  await requireServerSchoolSupervisor();
+
   return (
     <div className="flex min-h-screen">
       {/* Sidebar will go here */}

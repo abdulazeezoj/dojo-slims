@@ -1,11 +1,10 @@
 import { getLogger } from "@/lib/logger";
 import {
-  activityLogRepository,
-  placementRepository,
+  placementOrganizationRepository,
   schoolSupervisorRepository,
-  sessionRepository,
-  studentEnrollmentRepository,
+  siwesSessionRepository,
   studentRepository,
+  studentSessionEnrollmentRepository,
 } from "@/repositories";
 
 const logger = getLogger(["services", "admin-dashboard"]);
@@ -21,23 +20,29 @@ export class AdminDashboardService {
     logger.info("Getting dashboard stats");
 
     // Get active sessions count
-    const activeSessions = await sessionRepository.findActive();
+    const activeSessions = await siwesSessionRepository.findAllActive();
 
     // Get total students
-    const totalStudents = await studentRepository.count();
+    const totalStudents = await studentRepository.prisma.count();
 
     // Get total school supervisors
-    const totalSupervisors = await schoolSupervisorRepository.count();
+    const totalSupervisors = await schoolSupervisorRepository.prisma.count();
 
     // Get total placement organizations
-    const totalOrganizations = await placementRepository.count();
+    const totalOrganizations =
+      await placementOrganizationRepository.prisma.count();
 
     // Get active enrollments (students in active sessions)
-    const activeEnrollments = await studentEnrollmentRepository.count({
-      siwesSession: {
-        status: "ACTIVE",
-      },
-    });
+    // First get active session IDs, then count enrollments
+    const activeSessionIds = activeSessions.map((s) => s.id);
+    const activeEnrollments =
+      await studentSessionEnrollmentRepository.prisma.count({
+        where: {
+          siwesSessionId: {
+            in: activeSessionIds,
+          },
+        },
+      });
 
     return {
       activeSessions: activeSessions.length,
@@ -49,42 +54,36 @@ export class AdminDashboardService {
   }
 
   /**
-   * Get recent activities
-   */
-  async getRecentActivities(limit: number = 20) {
-    logger.info("Getting recent activities", { limit });
-
-    const activities = await activityLogRepository.findMany({
-      take: limit,
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
-    return activities;
-  }
-
-  /**
    * Get active sessions with enrollment counts
    */
   async getActiveSessions() {
     logger.info("Getting active sessions");
 
-    const sessions = await sessionRepository.findActive();
+    const sessions = await siwesSessionRepository.findAllActive();
 
-    // Get enrollment counts for each session
-    const sessionsWithCounts = await Promise.all(
-      sessions.map(async (session) => {
-        const studentCount = await studentEnrollmentRepository.count({
-          siwesSessionId: session.id,
-        });
+    // Get all enrollments for active sessions in one query
+    const sessionIds = sessions.map((s) => s.id);
+    const allEnrollments =
+      await studentSessionEnrollmentRepository.prisma.findMany({
+        where: {
+          siwesSessionId: {
+            in: sessionIds,
+          },
+        },
+      });
 
-        return {
-          ...session,
-          studentCount,
-        };
-      }),
-    );
+    // Group enrollments by session ID
+    const enrollmentCounts = new Map<string, number>();
+    for (const enrollment of allEnrollments) {
+      const count = enrollmentCounts.get(enrollment.siwesSessionId) || 0;
+      enrollmentCounts.set(enrollment.siwesSessionId, count + 1);
+    }
+
+    // Map sessions with counts
+    const sessionsWithCounts = sessions.map((session) => ({
+      ...session,
+      studentCount: enrollmentCounts.get(session.id) || 0,
+    }));
 
     return sessionsWithCounts;
   }
@@ -95,42 +94,49 @@ export class AdminDashboardService {
   async getSystemMetrics() {
     logger.info("Getting system metrics");
 
-    const activeSessions = await sessionRepository.findActive();
+    const activeSessions = await siwesSessionRepository.findAllActive();
 
     const metrics = await Promise.all(
       activeSessions.map(async (session) => {
         // Get all enrollments for this session
-        const enrollments = await studentEnrollmentRepository.findMany({
-          where: {
-            siwesSessionId: session.id,
-          },
-        });
+        const enrollments =
+          await studentSessionEnrollmentRepository.prisma.findMany({
+            where: {
+              siwesSessionId: session.id,
+            },
+          });
 
         const totalEnrolled = enrollments.length;
 
         // Count students with SIWES details for this session
-        const withSiwesDetails = await studentEnrollmentRepository.count({
-          siwesSessionId: session.id,
-          student: {
-            studentSiwesDetails: {
-              some: {
-                siwesSessionId: session.id,
+        const withSiwesDetails =
+          await studentSessionEnrollmentRepository.prisma.count({
+            where: {
+              siwesSessionId: session.id,
+              student: {
+                studentSiwesDetails: {
+                  some: {
+                    siwesSessionId: session.id,
+                  },
+                },
               },
             },
-          },
-        });
+          });
 
         // Count students with supervisor assignments for this session
-        const withSupervisor = await studentEnrollmentRepository.count({
-          siwesSessionId: session.id,
-          student: {
-            studentSupervisorAssignments: {
-              some: {
-                siwesSessionId: session.id,
+        const withSupervisor =
+          await studentSessionEnrollmentRepository.prisma.count({
+            where: {
+              siwesSessionId: session.id,
+              student: {
+                studentSupervisorAssignments: {
+                  some: {
+                    siwesSessionId: session.id,
+                  },
+                },
               },
             },
-          },
-        });
+          });
 
         return {
           sessionId: session.id,

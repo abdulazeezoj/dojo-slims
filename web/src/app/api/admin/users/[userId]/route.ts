@@ -1,13 +1,17 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireAdmin } from "@/middlewares/auth";
+import { requireAdmin } from "@/lib/auth-server";
 import { updateAdminSchema } from "@/schemas";
 import { adminUserService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
 export const GET = requireAdmin(
-  async (request: NextRequest, session, context: { params: { userId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { userId: string } },
+  ) => {
     try {
       const { userId } = context.params;
       const admin = await adminUserService.getAdminById(userId);
@@ -27,7 +31,11 @@ export const GET = requireAdmin(
 );
 
 export const PATCH = requireAdmin(
-  async (request: NextRequest, session, context: { params: { userId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { userId: string } },
+  ) => {
     try {
       const { userId } = context.params;
       const validation = await validateRequest(request, {
@@ -54,7 +62,11 @@ export const PATCH = requireAdmin(
 );
 
 export const DELETE = requireAdmin(
-  async (request: NextRequest, session, context: { params: { userId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { userId: string } },
+  ) => {
     try {
       const { userId } = context.params;
       await adminUserService.deleteAdmin(userId);

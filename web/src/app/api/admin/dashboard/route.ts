@@ -1,18 +1,15 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { requireAdmin } from "@/middlewares/auth";
+import { requireAdmin } from "@/lib/auth-server";
 import { adminDashboardService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
-export const GET = requireAdmin(async (request: NextRequest, _session) => {
+export const GET = requireAdmin(async (_request: NextRequest, _session) => {
   try {
-    const { searchParams } = new URL(request.url);
-    const sessionId = searchParams.get("sessionId") || undefined;
-
-    const dashboard = await adminDashboardService.getDashboardStats(sessionId);
+    const dashboard = await adminDashboardService.getDashboardStats();
 
     return createSuccessResponse(dashboard, {
-      message: "Dashboard loaded successfully",
+      status: 200,
     });
   } catch (error) {
     return createErrorResponse(

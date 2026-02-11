@@ -1,6 +1,6 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireAdmin } from "@/middlewares/auth";
+import { requireAdmin } from "@/lib/auth-server";
 import { createFacultySchema } from "@/schemas";
 import { facultyService } from "@/services";
 
@@ -23,7 +23,9 @@ export const POST = requireAdmin(async (request: NextRequest, _session) => {
     const validation = await validateRequest(request, {
       body: createFacultySchema,
     });
-    if (!validation.success) {return validation.error;}
+    if (!validation.success) {
+      return validation.error;
+    }
 
     const { body } = validation.data;
     const faculty = await facultyService.createFaculty(body);

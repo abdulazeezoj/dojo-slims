@@ -1,11 +1,15 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { requireAdmin } from "@/middlewares/auth";
+import { requireAdmin } from "@/lib/auth-server";
 import { enrollmentService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
 export const DELETE = requireAdmin(
-  async (request: NextRequest, session, context: { params: { enrollmentId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { enrollmentId: string } },
+  ) => {
     try {
       const { enrollmentId } = context.params;
       await enrollmentService.removeEnrollment(enrollmentId);

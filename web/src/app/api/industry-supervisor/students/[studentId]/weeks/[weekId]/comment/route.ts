@@ -1,13 +1,17 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireIndustrySupervisor } from "@/middlewares/auth";
+import { requireIndustrySupervisor } from "@/lib/auth-server";
 import { addWeeklyCommentSchema } from "@/schemas";
 import { reviewService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
 export const POST = requireIndustrySupervisor(
-  async (request: NextRequest, session, context: { params: { studentId: string; weekId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { studentId: string; weekId: string } },
+  ) => {
     try {
       const supervisorId = session.user.userReferenceId;
       const { weekId } = context.params;
@@ -26,7 +30,7 @@ export const POST = requireIndustrySupervisor(
         weekId,
         supervisorId,
         "INDUSTRY_SUPERVISOR",
-        body.comment
+        body.comment,
       );
 
       return createSuccessResponse(result, {

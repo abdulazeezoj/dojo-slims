@@ -1,13 +1,17 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireAdmin } from "@/middlewares/auth";
+import { requireAdmin } from "@/lib/auth-server";
 import { updateFacultySchema } from "@/schemas";
 import { facultyService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
 export const GET = requireAdmin(
-  async (request: NextRequest, session, context: { params: { facultyId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { facultyId: string } },
+  ) => {
     try {
       const { facultyId } = context.params;
       const faculty = await facultyService.getFacultyById(facultyId);
@@ -25,11 +29,19 @@ export const GET = requireAdmin(
 );
 
 export const PATCH = requireAdmin(
-  async (request: NextRequest, session, context: { params: { facultyId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { facultyId: string } },
+  ) => {
     try {
       const { facultyId } = context.params;
-      const validation = await validateRequest(request, { body: updateFacultySchema });
-      if (!validation.success) {return validation.error;}
+      const validation = await validateRequest(request, {
+        body: updateFacultySchema,
+      });
+      if (!validation.success) {
+        return validation.error;
+      }
 
       const { body } = validation.data;
       const updated = await facultyService.updateFaculty(facultyId, body);
@@ -47,7 +59,11 @@ export const PATCH = requireAdmin(
 );
 
 export const DELETE = requireAdmin(
-  async (request: NextRequest, session, context: { params: { facultyId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { facultyId: string } },
+  ) => {
     try {
       const { facultyId } = context.params;
       await facultyService.deleteFaculty(facultyId);

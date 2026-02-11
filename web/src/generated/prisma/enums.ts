@@ -44,14 +44,6 @@ export const LockedBy = {
 export type LockedBy = (typeof LockedBy)[keyof typeof LockedBy]
 
 
-export const CommenterType = {
-  INDUSTRY_SUPERVISOR: 'INDUSTRY_SUPERVISOR',
-  SCHOOL_SUPERVISOR: 'SCHOOL_SUPERVISOR'
-} as const
-
-export type CommenterType = (typeof CommenterType)[keyof typeof CommenterType]
-
-
 export const ReviewStatus = {
   PENDING: 'PENDING',
   REVIEWED: 'REVIEWED',

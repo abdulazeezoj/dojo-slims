@@ -1,15 +1,29 @@
+import {
+  DashboardAlerts,
+  DashboardHeader,
+  DashboardPlacement,
+  DashboardQuickActions,
+  DashboardStats,
+} from "@/components/student/dashboard";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Dashboard | SIWES Logbook",
+  title: "Dashboard",
   description:
-    "View your SIWES session details, alerts, and placement information",
+    "View your SIWES progress, placement information, and important alerts.",
 };
 
 export default function Page() {
   return (
-    <div className="flex min-h-100 items-center justify-center">
-      <h1 className="text-2xl font-bold">Student Dashboard</h1>
+    <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+      <DashboardHeader />
+      <DashboardAlerts />
+      <DashboardStats />
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <DashboardPlacement />
+        <DashboardQuickActions />
+      </div>
     </div>
   );
 }

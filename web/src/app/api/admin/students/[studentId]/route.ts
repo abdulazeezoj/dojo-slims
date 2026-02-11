@@ -1,13 +1,17 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireAdmin } from "@/middlewares/auth";
+import { requireAdmin } from "@/lib/auth-server";
 import { updateStudentSchema } from "@/schemas";
 import { studentManagementService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
 export const GET = requireAdmin(
-  async (request: NextRequest, session, context: { params: { studentId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { studentId: string } },
+  ) => {
     try {
       const { studentId } = context.params;
       const student = await studentManagementService.getStudentById(studentId);
@@ -27,14 +31,25 @@ export const GET = requireAdmin(
 );
 
 export const PATCH = requireAdmin(
-  async (request: NextRequest, session, context: { params: { studentId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { studentId: string } },
+  ) => {
     try {
       const { studentId } = context.params;
-      const validation = await validateRequest(request, { body: updateStudentSchema });
-      if (!validation.success) {return validation.error;}
+      const validation = await validateRequest(request, {
+        body: updateStudentSchema,
+      });
+      if (!validation.success) {
+        return validation.error;
+      }
 
       const { body } = validation.data;
-      const updated = await studentManagementService.updateStudent(studentId, body);
+      const updated = await studentManagementService.updateStudent(
+        studentId,
+        body,
+      );
 
       return createSuccessResponse(updated, {
         message: "Student updated successfully",
@@ -49,7 +64,11 @@ export const PATCH = requireAdmin(
 );
 
 export const DELETE = requireAdmin(
-  async (request: NextRequest, session, context: { params: { studentId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { studentId: string } },
+  ) => {
     try {
       const { studentId } = context.params;
       await studentManagementService.deleteStudent(studentId);

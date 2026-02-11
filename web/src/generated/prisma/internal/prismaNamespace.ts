@@ -403,10 +403,11 @@ export const ModelName = {
   LogbookMetadata: 'LogbookMetadata',
   WeeklyEntry: 'WeeklyEntry',
   Diagram: 'Diagram',
-  WeeklyComment: 'WeeklyComment',
-  ReviewRequest: 'ReviewRequest',
-  FinalComment: 'FinalComment',
-  ActivityLog: 'ActivityLog'
+  SchoolSupervisorWeeklyComment: 'SchoolSupervisorWeeklyComment',
+  IndustrySupervisorWeeklyComment: 'IndustrySupervisorWeeklyComment',
+  IndustrySupervisorReviewRequest: 'IndustrySupervisorReviewRequest',
+  SchoolSupervisorFinalComment: 'SchoolSupervisorFinalComment',
+  IndustrySupervisorFinalComment: 'IndustrySupervisorFinalComment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -422,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "faculty" | "department" | "placementOrganization" | "siwesSession" | "adminUser" | "student" | "schoolSupervisor" | "industrySupervisor" | "studentSessionEnrollment" | "supervisorSessionEnrollment" | "studentSupervisorAssignment" | "studentSiwesDetail" | "logbookMetadata" | "weeklyEntry" | "diagram" | "weeklyComment" | "reviewRequest" | "finalComment" | "activityLog"
+    modelProps: "user" | "session" | "account" | "verification" | "faculty" | "department" | "placementOrganization" | "siwesSession" | "adminUser" | "student" | "schoolSupervisor" | "industrySupervisor" | "studentSessionEnrollment" | "supervisorSessionEnrollment" | "studentSupervisorAssignment" | "studentSiwesDetail" | "logbookMetadata" | "weeklyEntry" | "diagram" | "schoolSupervisorWeeklyComment" | "industrySupervisorWeeklyComment" | "industrySupervisorReviewRequest" | "schoolSupervisorFinalComment" | "industrySupervisorFinalComment"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1832,299 +1833,373 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    WeeklyComment: {
-      payload: Prisma.$WeeklyCommentPayload<ExtArgs>
-      fields: Prisma.WeeklyCommentFieldRefs
+    SchoolSupervisorWeeklyComment: {
+      payload: Prisma.$SchoolSupervisorWeeklyCommentPayload<ExtArgs>
+      fields: Prisma.SchoolSupervisorWeeklyCommentFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.WeeklyCommentFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyCommentPayload> | null
+          args: Prisma.SchoolSupervisorWeeklyCommentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorWeeklyCommentPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.WeeklyCommentFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyCommentPayload>
+          args: Prisma.SchoolSupervisorWeeklyCommentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorWeeklyCommentPayload>
         }
         findFirst: {
-          args: Prisma.WeeklyCommentFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyCommentPayload> | null
+          args: Prisma.SchoolSupervisorWeeklyCommentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorWeeklyCommentPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.WeeklyCommentFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyCommentPayload>
+          args: Prisma.SchoolSupervisorWeeklyCommentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorWeeklyCommentPayload>
         }
         findMany: {
-          args: Prisma.WeeklyCommentFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyCommentPayload>[]
+          args: Prisma.SchoolSupervisorWeeklyCommentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorWeeklyCommentPayload>[]
         }
         create: {
-          args: Prisma.WeeklyCommentCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyCommentPayload>
+          args: Prisma.SchoolSupervisorWeeklyCommentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorWeeklyCommentPayload>
         }
         createMany: {
-          args: Prisma.WeeklyCommentCreateManyArgs<ExtArgs>
+          args: Prisma.SchoolSupervisorWeeklyCommentCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.WeeklyCommentCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyCommentPayload>[]
+          args: Prisma.SchoolSupervisorWeeklyCommentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorWeeklyCommentPayload>[]
         }
         delete: {
-          args: Prisma.WeeklyCommentDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyCommentPayload>
+          args: Prisma.SchoolSupervisorWeeklyCommentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorWeeklyCommentPayload>
         }
         update: {
-          args: Prisma.WeeklyCommentUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyCommentPayload>
+          args: Prisma.SchoolSupervisorWeeklyCommentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorWeeklyCommentPayload>
         }
         deleteMany: {
-          args: Prisma.WeeklyCommentDeleteManyArgs<ExtArgs>
+          args: Prisma.SchoolSupervisorWeeklyCommentDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.WeeklyCommentUpdateManyArgs<ExtArgs>
+          args: Prisma.SchoolSupervisorWeeklyCommentUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.WeeklyCommentUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyCommentPayload>[]
+          args: Prisma.SchoolSupervisorWeeklyCommentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorWeeklyCommentPayload>[]
         }
         upsert: {
-          args: Prisma.WeeklyCommentUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyCommentPayload>
+          args: Prisma.SchoolSupervisorWeeklyCommentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorWeeklyCommentPayload>
         }
         aggregate: {
-          args: Prisma.WeeklyCommentAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateWeeklyComment>
+          args: Prisma.SchoolSupervisorWeeklyCommentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSchoolSupervisorWeeklyComment>
         }
         groupBy: {
-          args: Prisma.WeeklyCommentGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.WeeklyCommentGroupByOutputType>[]
+          args: Prisma.SchoolSupervisorWeeklyCommentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SchoolSupervisorWeeklyCommentGroupByOutputType>[]
         }
         count: {
-          args: Prisma.WeeklyCommentCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.WeeklyCommentCountAggregateOutputType> | number
+          args: Prisma.SchoolSupervisorWeeklyCommentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SchoolSupervisorWeeklyCommentCountAggregateOutputType> | number
         }
       }
     }
-    ReviewRequest: {
-      payload: Prisma.$ReviewRequestPayload<ExtArgs>
-      fields: Prisma.ReviewRequestFieldRefs
+    IndustrySupervisorWeeklyComment: {
+      payload: Prisma.$IndustrySupervisorWeeklyCommentPayload<ExtArgs>
+      fields: Prisma.IndustrySupervisorWeeklyCommentFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.ReviewRequestFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewRequestPayload> | null
+          args: Prisma.IndustrySupervisorWeeklyCommentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorWeeklyCommentPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.ReviewRequestFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewRequestPayload>
+          args: Prisma.IndustrySupervisorWeeklyCommentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorWeeklyCommentPayload>
         }
         findFirst: {
-          args: Prisma.ReviewRequestFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewRequestPayload> | null
+          args: Prisma.IndustrySupervisorWeeklyCommentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorWeeklyCommentPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.ReviewRequestFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewRequestPayload>
+          args: Prisma.IndustrySupervisorWeeklyCommentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorWeeklyCommentPayload>
         }
         findMany: {
-          args: Prisma.ReviewRequestFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewRequestPayload>[]
+          args: Prisma.IndustrySupervisorWeeklyCommentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorWeeklyCommentPayload>[]
         }
         create: {
-          args: Prisma.ReviewRequestCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewRequestPayload>
+          args: Prisma.IndustrySupervisorWeeklyCommentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorWeeklyCommentPayload>
         }
         createMany: {
-          args: Prisma.ReviewRequestCreateManyArgs<ExtArgs>
+          args: Prisma.IndustrySupervisorWeeklyCommentCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.ReviewRequestCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewRequestPayload>[]
+          args: Prisma.IndustrySupervisorWeeklyCommentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorWeeklyCommentPayload>[]
         }
         delete: {
-          args: Prisma.ReviewRequestDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewRequestPayload>
+          args: Prisma.IndustrySupervisorWeeklyCommentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorWeeklyCommentPayload>
         }
         update: {
-          args: Prisma.ReviewRequestUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewRequestPayload>
+          args: Prisma.IndustrySupervisorWeeklyCommentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorWeeklyCommentPayload>
         }
         deleteMany: {
-          args: Prisma.ReviewRequestDeleteManyArgs<ExtArgs>
+          args: Prisma.IndustrySupervisorWeeklyCommentDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.ReviewRequestUpdateManyArgs<ExtArgs>
+          args: Prisma.IndustrySupervisorWeeklyCommentUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.ReviewRequestUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewRequestPayload>[]
+          args: Prisma.IndustrySupervisorWeeklyCommentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorWeeklyCommentPayload>[]
         }
         upsert: {
-          args: Prisma.ReviewRequestUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewRequestPayload>
+          args: Prisma.IndustrySupervisorWeeklyCommentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorWeeklyCommentPayload>
         }
         aggregate: {
-          args: Prisma.ReviewRequestAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateReviewRequest>
+          args: Prisma.IndustrySupervisorWeeklyCommentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIndustrySupervisorWeeklyComment>
         }
         groupBy: {
-          args: Prisma.ReviewRequestGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ReviewRequestGroupByOutputType>[]
+          args: Prisma.IndustrySupervisorWeeklyCommentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IndustrySupervisorWeeklyCommentGroupByOutputType>[]
         }
         count: {
-          args: Prisma.ReviewRequestCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ReviewRequestCountAggregateOutputType> | number
+          args: Prisma.IndustrySupervisorWeeklyCommentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IndustrySupervisorWeeklyCommentCountAggregateOutputType> | number
         }
       }
     }
-    FinalComment: {
-      payload: Prisma.$FinalCommentPayload<ExtArgs>
-      fields: Prisma.FinalCommentFieldRefs
+    IndustrySupervisorReviewRequest: {
+      payload: Prisma.$IndustrySupervisorReviewRequestPayload<ExtArgs>
+      fields: Prisma.IndustrySupervisorReviewRequestFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.FinalCommentFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalCommentPayload> | null
+          args: Prisma.IndustrySupervisorReviewRequestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorReviewRequestPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.FinalCommentFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalCommentPayload>
+          args: Prisma.IndustrySupervisorReviewRequestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorReviewRequestPayload>
         }
         findFirst: {
-          args: Prisma.FinalCommentFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalCommentPayload> | null
+          args: Prisma.IndustrySupervisorReviewRequestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorReviewRequestPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.FinalCommentFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalCommentPayload>
+          args: Prisma.IndustrySupervisorReviewRequestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorReviewRequestPayload>
         }
         findMany: {
-          args: Prisma.FinalCommentFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalCommentPayload>[]
+          args: Prisma.IndustrySupervisorReviewRequestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorReviewRequestPayload>[]
         }
         create: {
-          args: Prisma.FinalCommentCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalCommentPayload>
+          args: Prisma.IndustrySupervisorReviewRequestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorReviewRequestPayload>
         }
         createMany: {
-          args: Prisma.FinalCommentCreateManyArgs<ExtArgs>
+          args: Prisma.IndustrySupervisorReviewRequestCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.FinalCommentCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalCommentPayload>[]
+          args: Prisma.IndustrySupervisorReviewRequestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorReviewRequestPayload>[]
         }
         delete: {
-          args: Prisma.FinalCommentDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalCommentPayload>
+          args: Prisma.IndustrySupervisorReviewRequestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorReviewRequestPayload>
         }
         update: {
-          args: Prisma.FinalCommentUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalCommentPayload>
+          args: Prisma.IndustrySupervisorReviewRequestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorReviewRequestPayload>
         }
         deleteMany: {
-          args: Prisma.FinalCommentDeleteManyArgs<ExtArgs>
+          args: Prisma.IndustrySupervisorReviewRequestDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.FinalCommentUpdateManyArgs<ExtArgs>
+          args: Prisma.IndustrySupervisorReviewRequestUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.FinalCommentUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalCommentPayload>[]
+          args: Prisma.IndustrySupervisorReviewRequestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorReviewRequestPayload>[]
         }
         upsert: {
-          args: Prisma.FinalCommentUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalCommentPayload>
+          args: Prisma.IndustrySupervisorReviewRequestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorReviewRequestPayload>
         }
         aggregate: {
-          args: Prisma.FinalCommentAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateFinalComment>
+          args: Prisma.IndustrySupervisorReviewRequestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIndustrySupervisorReviewRequest>
         }
         groupBy: {
-          args: Prisma.FinalCommentGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.FinalCommentGroupByOutputType>[]
+          args: Prisma.IndustrySupervisorReviewRequestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IndustrySupervisorReviewRequestGroupByOutputType>[]
         }
         count: {
-          args: Prisma.FinalCommentCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.FinalCommentCountAggregateOutputType> | number
+          args: Prisma.IndustrySupervisorReviewRequestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IndustrySupervisorReviewRequestCountAggregateOutputType> | number
         }
       }
     }
-    ActivityLog: {
-      payload: Prisma.$ActivityLogPayload<ExtArgs>
-      fields: Prisma.ActivityLogFieldRefs
+    SchoolSupervisorFinalComment: {
+      payload: Prisma.$SchoolSupervisorFinalCommentPayload<ExtArgs>
+      fields: Prisma.SchoolSupervisorFinalCommentFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.ActivityLogFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityLogPayload> | null
+          args: Prisma.SchoolSupervisorFinalCommentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorFinalCommentPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.ActivityLogFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityLogPayload>
+          args: Prisma.SchoolSupervisorFinalCommentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorFinalCommentPayload>
         }
         findFirst: {
-          args: Prisma.ActivityLogFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityLogPayload> | null
+          args: Prisma.SchoolSupervisorFinalCommentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorFinalCommentPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.ActivityLogFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityLogPayload>
+          args: Prisma.SchoolSupervisorFinalCommentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorFinalCommentPayload>
         }
         findMany: {
-          args: Prisma.ActivityLogFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityLogPayload>[]
+          args: Prisma.SchoolSupervisorFinalCommentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorFinalCommentPayload>[]
         }
         create: {
-          args: Prisma.ActivityLogCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityLogPayload>
+          args: Prisma.SchoolSupervisorFinalCommentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorFinalCommentPayload>
         }
         createMany: {
-          args: Prisma.ActivityLogCreateManyArgs<ExtArgs>
+          args: Prisma.SchoolSupervisorFinalCommentCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.ActivityLogCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityLogPayload>[]
+          args: Prisma.SchoolSupervisorFinalCommentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorFinalCommentPayload>[]
         }
         delete: {
-          args: Prisma.ActivityLogDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityLogPayload>
+          args: Prisma.SchoolSupervisorFinalCommentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorFinalCommentPayload>
         }
         update: {
-          args: Prisma.ActivityLogUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityLogPayload>
+          args: Prisma.SchoolSupervisorFinalCommentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorFinalCommentPayload>
         }
         deleteMany: {
-          args: Prisma.ActivityLogDeleteManyArgs<ExtArgs>
+          args: Prisma.SchoolSupervisorFinalCommentDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.ActivityLogUpdateManyArgs<ExtArgs>
+          args: Prisma.SchoolSupervisorFinalCommentUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.ActivityLogUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityLogPayload>[]
+          args: Prisma.SchoolSupervisorFinalCommentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorFinalCommentPayload>[]
         }
         upsert: {
-          args: Prisma.ActivityLogUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityLogPayload>
+          args: Prisma.SchoolSupervisorFinalCommentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchoolSupervisorFinalCommentPayload>
         }
         aggregate: {
-          args: Prisma.ActivityLogAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateActivityLog>
+          args: Prisma.SchoolSupervisorFinalCommentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSchoolSupervisorFinalComment>
         }
         groupBy: {
-          args: Prisma.ActivityLogGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ActivityLogGroupByOutputType>[]
+          args: Prisma.SchoolSupervisorFinalCommentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SchoolSupervisorFinalCommentGroupByOutputType>[]
         }
         count: {
-          args: Prisma.ActivityLogCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ActivityLogCountAggregateOutputType> | number
+          args: Prisma.SchoolSupervisorFinalCommentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SchoolSupervisorFinalCommentCountAggregateOutputType> | number
+        }
+      }
+    }
+    IndustrySupervisorFinalComment: {
+      payload: Prisma.$IndustrySupervisorFinalCommentPayload<ExtArgs>
+      fields: Prisma.IndustrySupervisorFinalCommentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IndustrySupervisorFinalCommentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorFinalCommentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IndustrySupervisorFinalCommentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorFinalCommentPayload>
+        }
+        findFirst: {
+          args: Prisma.IndustrySupervisorFinalCommentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorFinalCommentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IndustrySupervisorFinalCommentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorFinalCommentPayload>
+        }
+        findMany: {
+          args: Prisma.IndustrySupervisorFinalCommentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorFinalCommentPayload>[]
+        }
+        create: {
+          args: Prisma.IndustrySupervisorFinalCommentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorFinalCommentPayload>
+        }
+        createMany: {
+          args: Prisma.IndustrySupervisorFinalCommentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IndustrySupervisorFinalCommentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorFinalCommentPayload>[]
+        }
+        delete: {
+          args: Prisma.IndustrySupervisorFinalCommentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorFinalCommentPayload>
+        }
+        update: {
+          args: Prisma.IndustrySupervisorFinalCommentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorFinalCommentPayload>
+        }
+        deleteMany: {
+          args: Prisma.IndustrySupervisorFinalCommentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IndustrySupervisorFinalCommentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IndustrySupervisorFinalCommentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorFinalCommentPayload>[]
+        }
+        upsert: {
+          args: Prisma.IndustrySupervisorFinalCommentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IndustrySupervisorFinalCommentPayload>
+        }
+        aggregate: {
+          args: Prisma.IndustrySupervisorFinalCommentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIndustrySupervisorFinalComment>
+        }
+        groupBy: {
+          args: Prisma.IndustrySupervisorFinalCommentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IndustrySupervisorFinalCommentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IndustrySupervisorFinalCommentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IndustrySupervisorFinalCommentCountAggregateOutputType> | number
         }
       }
     }
@@ -2174,7 +2249,6 @@ export const UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   image: 'image',
   userType: 'userType',
-  userReferenceId: 'userReferenceId',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -2293,7 +2367,7 @@ export const AdminUserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   isActive: 'isActive',
-  betterAuthUserId: 'betterAuthUserId',
+  userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2307,8 +2381,9 @@ export const StudentScalarFieldEnum = {
   name: 'name',
   email: 'email',
   departmentId: 'departmentId',
+  currentSiwesSessionId: 'currentSiwesSessionId',
   isActive: 'isActive',
-  betterAuthUserId: 'betterAuthUserId',
+  userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2322,8 +2397,10 @@ export const SchoolSupervisorScalarFieldEnum = {
   name: 'name',
   email: 'email',
   departmentId: 'departmentId',
+  phone: 'phone',
+  currentSiwesSessionId: 'currentSiwesSessionId',
   isActive: 'isActive',
-  betterAuthUserId: 'betterAuthUserId',
+  userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2335,11 +2412,12 @@ export const IndustrySupervisorScalarFieldEnum = {
   id: 'id',
   name: 'name',
   email: 'email',
-  placementOrganizationId: 'placementOrganizationId',
-  position: 'position',
   phone: 'phone',
+  position: 'position',
+  placementOrganizationId: 'placementOrganizationId',
+  currentSiwesSessionId: 'currentSiwesSessionId',
   isActive: 'isActive',
-  betterAuthUserId: 'betterAuthUserId',
+  userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2456,21 +2534,33 @@ export const DiagramScalarFieldEnum = {
 export type DiagramScalarFieldEnum = (typeof DiagramScalarFieldEnum)[keyof typeof DiagramScalarFieldEnum]
 
 
-export const WeeklyCommentScalarFieldEnum = {
+export const SchoolSupervisorWeeklyCommentScalarFieldEnum = {
   id: 'id',
   weeklyEntryId: 'weeklyEntryId',
-  commenterType: 'commenterType',
-  commenterId: 'commenterId',
+  schoolSupervisorId: 'schoolSupervisorId',
   comment: 'comment',
   commentedAt: 'commentedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type WeeklyCommentScalarFieldEnum = (typeof WeeklyCommentScalarFieldEnum)[keyof typeof WeeklyCommentScalarFieldEnum]
+export type SchoolSupervisorWeeklyCommentScalarFieldEnum = (typeof SchoolSupervisorWeeklyCommentScalarFieldEnum)[keyof typeof SchoolSupervisorWeeklyCommentScalarFieldEnum]
 
 
-export const ReviewRequestScalarFieldEnum = {
+export const IndustrySupervisorWeeklyCommentScalarFieldEnum = {
+  id: 'id',
+  weeklyEntryId: 'weeklyEntryId',
+  industrySupervisorId: 'industrySupervisorId',
+  comment: 'comment',
+  commentedAt: 'commentedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IndustrySupervisorWeeklyCommentScalarFieldEnum = (typeof IndustrySupervisorWeeklyCommentScalarFieldEnum)[keyof typeof IndustrySupervisorWeeklyCommentScalarFieldEnum]
+
+
+export const IndustrySupervisorReviewRequestScalarFieldEnum = {
   id: 'id',
   weeklyEntryId: 'weeklyEntryId',
   studentId: 'studentId',
@@ -2482,15 +2572,14 @@ export const ReviewRequestScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type ReviewRequestScalarFieldEnum = (typeof ReviewRequestScalarFieldEnum)[keyof typeof ReviewRequestScalarFieldEnum]
+export type IndustrySupervisorReviewRequestScalarFieldEnum = (typeof IndustrySupervisorReviewRequestScalarFieldEnum)[keyof typeof IndustrySupervisorReviewRequestScalarFieldEnum]
 
 
-export const FinalCommentScalarFieldEnum = {
+export const SchoolSupervisorFinalCommentScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
   siwesSessionId: 'siwesSessionId',
-  commenterType: 'commenterType',
-  commenterId: 'commenterId',
+  schoolSupervisorId: 'schoolSupervisorId',
   comment: 'comment',
   rating: 'rating',
   commentedAt: 'commentedAt',
@@ -2498,22 +2587,22 @@ export const FinalCommentScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type FinalCommentScalarFieldEnum = (typeof FinalCommentScalarFieldEnum)[keyof typeof FinalCommentScalarFieldEnum]
+export type SchoolSupervisorFinalCommentScalarFieldEnum = (typeof SchoolSupervisorFinalCommentScalarFieldEnum)[keyof typeof SchoolSupervisorFinalCommentScalarFieldEnum]
 
 
-export const ActivityLogScalarFieldEnum = {
+export const IndustrySupervisorFinalCommentScalarFieldEnum = {
   id: 'id',
-  userType: 'userType',
-  userId: 'userId',
-  action: 'action',
-  entityType: 'entityType',
-  entityId: 'entityId',
-  details: 'details',
-  ipAddress: 'ipAddress',
-  createdAt: 'createdAt'
+  studentId: 'studentId',
+  siwesSessionId: 'siwesSessionId',
+  industrySupervisorId: 'industrySupervisorId',
+  comment: 'comment',
+  rating: 'rating',
+  commentedAt: 'commentedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type ActivityLogScalarFieldEnum = (typeof ActivityLogScalarFieldEnum)[keyof typeof ActivityLogScalarFieldEnum]
+export type IndustrySupervisorFinalCommentScalarFieldEnum = (typeof IndustrySupervisorFinalCommentScalarFieldEnum)[keyof typeof IndustrySupervisorFinalCommentScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2522,14 +2611,6 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const NullableJsonNullValueInput = {
-  DbNull: DbNull,
-  JsonNull: JsonNull
-} as const
-
-export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -2546,15 +2627,6 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
-export const JsonNullValueFilter = {
-  DbNull: DbNull,
-  JsonNull: JsonNull,
-  AnyNull: AnyNull
-} as const
-
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -2669,20 +2741,6 @@ export type ListEnumLockedByFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 
 
 /**
- * Reference to a field of type 'CommenterType'
- */
-export type EnumCommenterTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CommenterType'>
-    
-
-
-/**
- * Reference to a field of type 'CommenterType[]'
- */
-export type ListEnumCommenterTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CommenterType[]'>
-    
-
-
-/**
  * Reference to a field of type 'ReviewStatus'
  */
 export type EnumReviewStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReviewStatus'>
@@ -2693,20 +2751,6 @@ export type EnumReviewStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'ReviewStatus[]'
  */
 export type ListEnumReviewStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReviewStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'Json'
- */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-/**
- * Reference to a field of type 'QueryMode'
- */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -2837,10 +2881,11 @@ export type GlobalOmitConfig = {
   logbookMetadata?: Prisma.LogbookMetadataOmit
   weeklyEntry?: Prisma.WeeklyEntryOmit
   diagram?: Prisma.DiagramOmit
-  weeklyComment?: Prisma.WeeklyCommentOmit
-  reviewRequest?: Prisma.ReviewRequestOmit
-  finalComment?: Prisma.FinalCommentOmit
-  activityLog?: Prisma.ActivityLogOmit
+  schoolSupervisorWeeklyComment?: Prisma.SchoolSupervisorWeeklyCommentOmit
+  industrySupervisorWeeklyComment?: Prisma.IndustrySupervisorWeeklyCommentOmit
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestOmit
+  schoolSupervisorFinalComment?: Prisma.SchoolSupervisorFinalCommentOmit
+  industrySupervisorFinalComment?: Prisma.IndustrySupervisorFinalCommentOmit
 }
 
 /* Types for Logging */

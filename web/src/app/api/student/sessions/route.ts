@@ -1,17 +1,15 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { requireStudent } from "@/middlewares/auth";
+import { requireStudent } from "@/lib/auth-server";
 import { studentService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
 export const GET = requireStudent(async (request: NextRequest, session) => {
   try {
-    const studentId = session.user.userReferenceId;
-    const sessions = await studentService.getStudentSessions(studentId);
+    const userId = session.user.id;
+    const sessions = await studentService.getStudentSessions(userId);
 
-    return createSuccessResponse(sessions, {
-      message: "Sessions loaded successfully",
-    });
+    return createSuccessResponse(sessions);
   } catch (error) {
     return createErrorResponse(
       error instanceof Error ? error.message : "Failed to load sessions",

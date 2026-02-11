@@ -1,11 +1,15 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { requireAdmin } from "@/middlewares/auth";
+import { requireAdmin } from "@/lib/auth-server";
 import { studentManagementService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
 export const POST = requireAdmin(
-  async (request: NextRequest, session, context: { params: { studentId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { studentId: string } },
+  ) => {
     try {
       const { studentId } = context.params;
       const student = await studentManagementService.activateStudent(studentId);

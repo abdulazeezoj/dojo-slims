@@ -1,75 +1,94 @@
-import type { FinalComment, Prisma } from "@/generated/prisma/client";
+import type {
+  IndustrySupervisorFinalComment,
+  Prisma,
+  SchoolSupervisorFinalComment,
+} from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+/**
+ * Type Definitions
+ */
 
 /**
- * Final Comment Repository - Thin data access layer for FinalComment entity
+ * Interface for pagination parameters
  */
-export class FinalCommentRepository {
-  async findById(id: string): Promise<FinalComment | null> {
-    return prisma.finalComment.findUnique({
-      where: { id },
-      include: {
-        student: {
-          include: {
-            department: {
-              include: {
-                faculty: true,
-              },
-            },
-          },
-        },
-        siwesSession: true,
-      },
-    });
-  }
+interface PaginationParams {
+  skip?: number;
+  take?: number;
+}
 
-  async findByStudentSessionCommenterType(
+/**
+ * School Supervisor Final Comment with relations
+ */
+type SchoolSupervisorFinalCommentWithRelations =
+  Prisma.SchoolSupervisorFinalCommentGetPayload<{
+    include: {
+      student: {
+        include: {
+          user: true;
+          department: {
+            include: {
+              faculty: true;
+            };
+          };
+        };
+      };
+      siwesSession: true;
+      schoolSupervisor: {
+        include: {
+          user: true;
+          department: true;
+        };
+      };
+    };
+  }>;
+
+/**
+ * Industry Supervisor Final Comment with relations
+ */
+type IndustrySupervisorFinalCommentWithRelations =
+  Prisma.IndustrySupervisorFinalCommentGetPayload<{
+    include: {
+      student: {
+        include: {
+          user: true;
+          department: {
+            include: {
+              faculty: true;
+            };
+          };
+        };
+      };
+      siwesSession: true;
+      industrySupervisor: {
+        include: {
+          user: true;
+          placementOrganization: true;
+        };
+      };
+    };
+  }>;
+
+/**
+ * School Supervisor Final Comment Repository
+ *
+ * Handles final comments from school supervisors at end of SIWES training.
+ * MVP Features: #22 (School supervisor final comment)
+ */
+export class SchoolSupervisorFinalCommentRepository {
+  readonly prisma = prisma.schoolSupervisorFinalComment;
+
+  // ==================== Custom Methods ====================
+
+  /**
+   * Find final comment by student and session
+   * @feature #22 School Supervisor Final Comment
+   */
+  async findByStudentAndSession(
     studentId: string,
     siwesSessionId: string,
-    commenterType: "INDUSTRY_SUPERVISOR" | "SCHOOL_SUPERVISOR",
-  ): Promise<FinalComment | null> {
-    return prisma.finalComment.findUnique({
-      where: {
-        studentId_siwesSessionId_commenterType: {
-          studentId,
-          siwesSessionId,
-          commenterType,
-        },
-      },
-      include: {
-        student: {
-          include: {
-            department: {
-              include: {
-                faculty: true,
-              },
-            },
-          },
-        },
-        siwesSession: true,
-      },
-    });
-  }
-
-  // Alias for service compatibility
-  async findByStudentSessionAndType(
-    studentId: string,
-    siwesSessionId: string,
-    commenterType: "INDUSTRY_SUPERVISOR" | "SCHOOL_SUPERVISOR",
-  ): Promise<FinalComment | null> {
-    return this.findByStudentSessionCommenterType(
-      studentId,
-      siwesSessionId,
-      commenterType,
-    );
-  }
-
-  async findByStudentSession(
-    studentId: string,
-    siwesSessionId: string,
-  ): Promise<FinalComment[]> {
-    return prisma.finalComment.findMany({
+  ): Promise<SchoolSupervisorFinalCommentWithRelations | null> {
+    return this.prisma.findFirst({
       where: {
         studentId,
         siwesSessionId,
@@ -77,6 +96,7 @@ export class FinalCommentRepository {
       include: {
         student: {
           include: {
+            user: true,
             department: {
               include: {
                 faculty: true,
@@ -85,16 +105,67 @@ export class FinalCommentRepository {
           },
         },
         siwesSession: true,
+        schoolSupervisor: {
+          include: {
+            user: true,
+            department: true,
+          },
+        },
       },
     });
   }
 
-  async findByStudent(studentId: string): Promise<FinalComment[]> {
-    return prisma.finalComment.findMany({
+  /**
+   * Find all final comments by school supervisor with pagination
+   * @feature #22 School Supervisor Final Comment
+   */
+  async findBySchoolSupervisor(
+    schoolSupervisorId: string,
+    params?: PaginationParams,
+  ): Promise<SchoolSupervisorFinalCommentWithRelations[]> {
+    return this.prisma.findMany({
+      where: { schoolSupervisorId },
+      include: {
+        student: {
+          include: {
+            user: true,
+            department: {
+              include: {
+                faculty: true,
+              },
+            },
+          },
+        },
+        siwesSession: true,
+        schoolSupervisor: {
+          include: {
+            user: true,
+            department: true,
+          },
+        },
+      },
+      skip: params?.skip,
+      take: params?.take,
+      orderBy: {
+        commentedAt: "desc",
+      },
+    });
+  }
+
+  /**
+   * Find all final comments for a student with pagination
+   * @feature #22 School Supervisor Final Comment
+   */
+  async findByStudent(
+    studentId: string,
+    params?: PaginationParams,
+  ): Promise<SchoolSupervisorFinalCommentWithRelations[]> {
+    return this.prisma.findMany({
       where: { studentId },
       include: {
         student: {
           include: {
+            user: true,
             department: {
               include: {
                 faculty: true,
@@ -103,19 +174,35 @@ export class FinalCommentRepository {
           },
         },
         siwesSession: true,
+        schoolSupervisor: {
+          include: {
+            user: true,
+            department: true,
+          },
+        },
       },
+      skip: params?.skip,
+      take: params?.take,
       orderBy: {
         commentedAt: "desc",
       },
     });
   }
 
-  async findBySession(siwesSessionId: string): Promise<FinalComment[]> {
-    return prisma.finalComment.findMany({
+  /**
+   * Find all final comments for a session with pagination
+   * @feature #22 School Supervisor Final Comment
+   */
+  async findBySession(
+    siwesSessionId: string,
+    params?: PaginationParams,
+  ): Promise<SchoolSupervisorFinalCommentWithRelations[]> {
+    return this.prisma.findMany({
       where: { siwesSessionId },
       include: {
         student: {
           include: {
+            user: true,
             department: {
               include: {
                 faculty: true,
@@ -124,126 +211,295 @@ export class FinalCommentRepository {
           },
         },
         siwesSession: true,
-      },
-    });
-  }
-
-  async findByCommenter(
-    commenterId: string,
-    commenterType: "INDUSTRY_SUPERVISOR" | "SCHOOL_SUPERVISOR",
-  ): Promise<FinalComment[]> {
-    return prisma.finalComment.findMany({
-      where: {
-        commenterId,
-        commenterType,
-      },
-      include: {
-        student: {
+        schoolSupervisor: {
           include: {
-            department: {
-              include: {
-                faculty: true,
-              },
-            },
+            user: true,
+            department: true,
           },
         },
-        siwesSession: true,
       },
+      skip: params?.skip,
+      take: params?.take,
       orderBy: {
         commentedAt: "desc",
       },
     });
   }
 
-  async create(data: Prisma.FinalCommentCreateInput): Promise<FinalComment> {
-    return prisma.finalComment.create({
+  /**
+   * Create a school supervisor final comment
+   * @feature #22 School Supervisor Final Comment
+   */
+  async create(
+    data: Prisma.SchoolSupervisorFinalCommentCreateInput,
+  ): Promise<SchoolSupervisorFinalComment> {
+    return this.prisma.create({
       data,
-      include: {
-        student: {
-          include: {
-            department: {
-              include: {
-                faculty: true,
-              },
-            },
-          },
-        },
-        siwesSession: true,
-      },
     });
   }
 
+  /**
+   * Update a final comment
+   * @feature #22 School Supervisor Final Comment
+   */
   async update(
     id: string,
-    data: Prisma.FinalCommentUpdateInput,
-  ): Promise<FinalComment> {
-    return prisma.finalComment.update({
+    data: Prisma.SchoolSupervisorFinalCommentUpdateInput,
+  ): Promise<SchoolSupervisorFinalComment> {
+    return this.prisma.update({
       where: { id },
       data,
-      include: {
-        student: {
-          include: {
-            department: {
-              include: {
-                faculty: true,
-              },
-            },
-          },
-        },
-        siwesSession: true,
-      },
     });
   }
 
-  async delete(id: string): Promise<FinalComment> {
-    return prisma.finalComment.delete({
+  /**
+   * Delete a final comment
+   * @feature #22 School Supervisor Final Comment
+   */
+  async delete(id: string): Promise<SchoolSupervisorFinalComment> {
+    return this.prisma.delete({
       where: { id },
     });
   }
 
-  async findMany(params?: {
-    where?: Prisma.FinalCommentWhereInput;
-    skip?: number;
-    take?: number;
-    orderBy?: Prisma.FinalCommentOrderByWithRelationInput;
-  }): Promise<FinalComment[]> {
-    return prisma.finalComment.findMany({
-      ...params,
-      include: {
-        student: {
-          include: {
-            department: {
-              include: {
-                faculty: true,
-              },
-            },
-          },
-        },
-        siwesSession: true,
-      },
+  /**
+   * Count final comments by school supervisor
+   * @feature #22 School Supervisor Final Comment
+   */
+  async countBySchoolSupervisor(schoolSupervisorId: string): Promise<number> {
+    return this.prisma.count({
+      where: { schoolSupervisorId },
     });
   }
 
-  async count(where?: Prisma.FinalCommentWhereInput): Promise<number> {
-    return prisma.finalComment.count({
-      where,
+  /**
+   * Count final comments for a session
+   * @feature #22 School Supervisor Final Comment
+   */
+  async countBySession(siwesSessionId: string): Promise<number> {
+    return this.prisma.count({
+      where: { siwesSessionId },
     });
-  }
-
-  async exists(
-    studentId: string,
-    siwesSessionId: string,
-    commenterType: "INDUSTRY_SUPERVISOR" | "SCHOOL_SUPERVISOR",
-  ): Promise<boolean> {
-    const count = await prisma.finalComment.count({
-      where: {
-        studentId,
-        siwesSessionId,
-        commenterType,
-      },
-    });
-    return count > 0;
   }
 }
 
-export const finalCommentRepository = new FinalCommentRepository();
+/**
+ * Industry Supervisor Final Comment Repository
+ *
+ * Handles final comments from industry supervisors at end of SIWES training.
+ * MVP Features: #17 (Industry supervisor final comment)
+ */
+export class IndustrySupervisorFinalCommentRepository {
+  readonly prisma = prisma.industrySupervisorFinalComment;
+
+  // ==================== Custom Methods ====================
+
+  /**
+   * Find final comment by student and session
+   * @feature #17 Industry Supervisor Final Comment
+   */
+  async findByStudentAndSession(
+    studentId: string,
+    siwesSessionId: string,
+  ): Promise<IndustrySupervisorFinalCommentWithRelations | null> {
+    return this.prisma.findFirst({
+      where: {
+        studentId,
+        siwesSessionId,
+      },
+      include: {
+        student: {
+          include: {
+            user: true,
+            department: {
+              include: {
+                faculty: true,
+              },
+            },
+          },
+        },
+        siwesSession: true,
+        industrySupervisor: {
+          include: {
+            user: true,
+            placementOrganization: true,
+          },
+        },
+      },
+    });
+  }
+
+  /**
+   * Find all final comments by industry supervisor with pagination
+   * @feature #17 Industry Supervisor Final Comment
+   */
+  async findByIndustrySupervisor(
+    industrySupervisorId: string,
+    params?: PaginationParams,
+  ): Promise<IndustrySupervisorFinalCommentWithRelations[]> {
+    return this.prisma.findMany({
+      where: { industrySupervisorId },
+      include: {
+        student: {
+          include: {
+            user: true,
+            department: {
+              include: {
+                faculty: true,
+              },
+            },
+          },
+        },
+        siwesSession: true,
+        industrySupervisor: {
+          include: {
+            user: true,
+            placementOrganization: true,
+          },
+        },
+      },
+      skip: params?.skip,
+      take: params?.take,
+      orderBy: {
+        commentedAt: "desc",
+      },
+    });
+  }
+
+  /**
+   * Find all final comments for a student with pagination
+   * @feature #17 Industry Supervisor Final Comment
+   */
+  async findByStudent(
+    studentId: string,
+    params?: PaginationParams,
+  ): Promise<IndustrySupervisorFinalCommentWithRelations[]> {
+    return this.prisma.findMany({
+      where: { studentId },
+      include: {
+        student: {
+          include: {
+            user: true,
+            department: {
+              include: {
+                faculty: true,
+              },
+            },
+          },
+        },
+        siwesSession: true,
+        industrySupervisor: {
+          include: {
+            user: true,
+            placementOrganization: true,
+          },
+        },
+      },
+      skip: params?.skip,
+      take: params?.take,
+      orderBy: {
+        commentedAt: "desc",
+      },
+    });
+  }
+
+  /**
+   * Find all final comments for a session with pagination
+   * @feature #17 Industry Supervisor Final Comment
+   */
+  async findBySession(
+    siwesSessionId: string,
+    params?: PaginationParams,
+  ): Promise<IndustrySupervisorFinalCommentWithRelations[]> {
+    return this.prisma.findMany({
+      where: { siwesSessionId },
+      include: {
+        student: {
+          include: {
+            user: true,
+            department: {
+              include: {
+                faculty: true,
+              },
+            },
+          },
+        },
+        siwesSession: true,
+        industrySupervisor: {
+          include: {
+            user: true,
+            placementOrganization: true,
+          },
+        },
+      },
+      skip: params?.skip,
+      take: params?.take,
+      orderBy: {
+        commentedAt: "desc",
+      },
+    });
+  }
+
+  /**
+   * Create an industry supervisor final comment
+   * @feature #17 Industry Supervisor Final Comment
+   */
+  async create(
+    data: Prisma.IndustrySupervisorFinalCommentCreateInput,
+  ): Promise<IndustrySupervisorFinalComment> {
+    return this.prisma.create({
+      data,
+    });
+  }
+
+  /**
+   * Update a final comment
+   * @feature #17 Industry Supervisor Final Comment
+   */
+  async update(
+    id: string,
+    data: Prisma.IndustrySupervisorFinalCommentUpdateInput,
+  ): Promise<IndustrySupervisorFinalComment> {
+    return this.prisma.update({
+      where: { id },
+      data,
+    });
+  }
+
+  /**
+   * Delete a final comment
+   * @feature #17 Industry Supervisor Final Comment
+   */
+  async delete(id: string): Promise<IndustrySupervisorFinalComment> {
+    return this.prisma.delete({
+      where: { id },
+    });
+  }
+
+  /**
+   * Count final comments by industry supervisor
+   * @feature #17 Industry Supervisor Final Comment
+   */
+  async countByIndustrySupervisor(
+    industrySupervisorId: string,
+  ): Promise<number> {
+    return this.prisma.count({
+      where: { industrySupervisorId },
+    });
+  }
+
+  /**
+   * Count final comments for a session
+   * @feature #17 Industry Supervisor Final Comment
+   */
+  async countBySession(siwesSessionId: string): Promise<number> {
+    return this.prisma.count({
+      where: { siwesSessionId },
+    });
+  }
+}
+
+export const schoolSupervisorFinalCommentRepository =
+  new SchoolSupervisorFinalCommentRepository();
+export const industrySupervisorFinalCommentRepository =
+  new IndustrySupervisorFinalCommentRepository();

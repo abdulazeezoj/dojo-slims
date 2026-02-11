@@ -176,7 +176,7 @@ export type StudentSupervisorAssignmentGroupByOutputType = {
   studentId: string
   schoolSupervisorId: string
   siwesSessionId: string
-  assignedBy: string
+  assignedBy: string | null
   assignmentMethod: $Enums.AssignmentMethod
   assignedAt: Date
   createdAt: Date
@@ -209,12 +209,12 @@ export type StudentSupervisorAssignmentWhereInput = {
   studentId?: Prisma.StringFilter<"StudentSupervisorAssignment"> | string
   schoolSupervisorId?: Prisma.StringFilter<"StudentSupervisorAssignment"> | string
   siwesSessionId?: Prisma.StringFilter<"StudentSupervisorAssignment"> | string
-  assignedBy?: Prisma.StringFilter<"StudentSupervisorAssignment"> | string
+  assignedBy?: Prisma.StringNullableFilter<"StudentSupervisorAssignment"> | string | null
   assignmentMethod?: Prisma.EnumAssignmentMethodFilter<"StudentSupervisorAssignment"> | $Enums.AssignmentMethod
   assignedAt?: Prisma.DateTimeFilter<"StudentSupervisorAssignment"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"StudentSupervisorAssignment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StudentSupervisorAssignment"> | Date | string
-  admin?: Prisma.XOR<Prisma.AdminUserScalarRelationFilter, Prisma.AdminUserWhereInput>
+  admin?: Prisma.XOR<Prisma.AdminUserNullableScalarRelationFilter, Prisma.AdminUserWhereInput> | null
   schoolSupervisor?: Prisma.XOR<Prisma.SchoolSupervisorScalarRelationFilter, Prisma.SchoolSupervisorWhereInput>
   siwesSession?: Prisma.XOR<Prisma.SiwesSessionScalarRelationFilter, Prisma.SiwesSessionWhereInput>
   student?: Prisma.XOR<Prisma.StudentScalarRelationFilter, Prisma.StudentWhereInput>
@@ -225,7 +225,7 @@ export type StudentSupervisorAssignmentOrderByWithRelationInput = {
   studentId?: Prisma.SortOrder
   schoolSupervisorId?: Prisma.SortOrder
   siwesSessionId?: Prisma.SortOrder
-  assignedBy?: Prisma.SortOrder
+  assignedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   assignmentMethod?: Prisma.SortOrder
   assignedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -245,12 +245,12 @@ export type StudentSupervisorAssignmentWhereUniqueInput = Prisma.AtLeast<{
   studentId?: Prisma.StringFilter<"StudentSupervisorAssignment"> | string
   schoolSupervisorId?: Prisma.StringFilter<"StudentSupervisorAssignment"> | string
   siwesSessionId?: Prisma.StringFilter<"StudentSupervisorAssignment"> | string
-  assignedBy?: Prisma.StringFilter<"StudentSupervisorAssignment"> | string
+  assignedBy?: Prisma.StringNullableFilter<"StudentSupervisorAssignment"> | string | null
   assignmentMethod?: Prisma.EnumAssignmentMethodFilter<"StudentSupervisorAssignment"> | $Enums.AssignmentMethod
   assignedAt?: Prisma.DateTimeFilter<"StudentSupervisorAssignment"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"StudentSupervisorAssignment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StudentSupervisorAssignment"> | Date | string
-  admin?: Prisma.XOR<Prisma.AdminUserScalarRelationFilter, Prisma.AdminUserWhereInput>
+  admin?: Prisma.XOR<Prisma.AdminUserNullableScalarRelationFilter, Prisma.AdminUserWhereInput> | null
   schoolSupervisor?: Prisma.XOR<Prisma.SchoolSupervisorScalarRelationFilter, Prisma.SchoolSupervisorWhereInput>
   siwesSession?: Prisma.XOR<Prisma.SiwesSessionScalarRelationFilter, Prisma.SiwesSessionWhereInput>
   student?: Prisma.XOR<Prisma.StudentScalarRelationFilter, Prisma.StudentWhereInput>
@@ -261,7 +261,7 @@ export type StudentSupervisorAssignmentOrderByWithAggregationInput = {
   studentId?: Prisma.SortOrder
   schoolSupervisorId?: Prisma.SortOrder
   siwesSessionId?: Prisma.SortOrder
-  assignedBy?: Prisma.SortOrder
+  assignedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   assignmentMethod?: Prisma.SortOrder
   assignedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -279,7 +279,7 @@ export type StudentSupervisorAssignmentScalarWhereWithAggregatesInput = {
   studentId?: Prisma.StringWithAggregatesFilter<"StudentSupervisorAssignment"> | string
   schoolSupervisorId?: Prisma.StringWithAggregatesFilter<"StudentSupervisorAssignment"> | string
   siwesSessionId?: Prisma.StringWithAggregatesFilter<"StudentSupervisorAssignment"> | string
-  assignedBy?: Prisma.StringWithAggregatesFilter<"StudentSupervisorAssignment"> | string
+  assignedBy?: Prisma.StringNullableWithAggregatesFilter<"StudentSupervisorAssignment"> | string | null
   assignmentMethod?: Prisma.EnumAssignmentMethodWithAggregatesFilter<"StudentSupervisorAssignment"> | $Enums.AssignmentMethod
   assignedAt?: Prisma.DateTimeWithAggregatesFilter<"StudentSupervisorAssignment"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"StudentSupervisorAssignment"> | Date | string
@@ -292,7 +292,7 @@ export type StudentSupervisorAssignmentCreateInput = {
   assignedAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  admin: Prisma.AdminUserCreateNestedOneWithoutStudentSupervisorAssignmentsInput
+  admin?: Prisma.AdminUserCreateNestedOneWithoutStudentSupervisorAssignmentsInput
   schoolSupervisor: Prisma.SchoolSupervisorCreateNestedOneWithoutStudentSupervisorAssignmentsInput
   siwesSession: Prisma.SiwesSessionCreateNestedOneWithoutStudentSupervisorAssignmentsInput
   student: Prisma.StudentCreateNestedOneWithoutStudentSupervisorAssignmentsInput
@@ -303,7 +303,7 @@ export type StudentSupervisorAssignmentUncheckedCreateInput = {
   studentId: string
   schoolSupervisorId: string
   siwesSessionId: string
-  assignedBy: string
+  assignedBy?: string | null
   assignmentMethod: $Enums.AssignmentMethod
   assignedAt: Date | string
   createdAt?: Date | string
@@ -316,7 +316,7 @@ export type StudentSupervisorAssignmentUpdateInput = {
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  admin?: Prisma.AdminUserUpdateOneRequiredWithoutStudentSupervisorAssignmentsNestedInput
+  admin?: Prisma.AdminUserUpdateOneWithoutStudentSupervisorAssignmentsNestedInput
   schoolSupervisor?: Prisma.SchoolSupervisorUpdateOneRequiredWithoutStudentSupervisorAssignmentsNestedInput
   siwesSession?: Prisma.SiwesSessionUpdateOneRequiredWithoutStudentSupervisorAssignmentsNestedInput
   student?: Prisma.StudentUpdateOneRequiredWithoutStudentSupervisorAssignmentsNestedInput
@@ -327,7 +327,7 @@ export type StudentSupervisorAssignmentUncheckedUpdateInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   schoolSupervisorId?: Prisma.StringFieldUpdateOperationsInput | string
   siwesSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  assignedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignmentMethod?: Prisma.EnumAssignmentMethodFieldUpdateOperationsInput | $Enums.AssignmentMethod
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -339,7 +339,7 @@ export type StudentSupervisorAssignmentCreateManyInput = {
   studentId: string
   schoolSupervisorId: string
   siwesSessionId: string
-  assignedBy: string
+  assignedBy?: string | null
   assignmentMethod: $Enums.AssignmentMethod
   assignedAt: Date | string
   createdAt?: Date | string
@@ -359,7 +359,7 @@ export type StudentSupervisorAssignmentUncheckedUpdateManyInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   schoolSupervisorId?: Prisma.StringFieldUpdateOperationsInput | string
   siwesSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  assignedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignmentMethod?: Prisma.EnumAssignmentMethodFieldUpdateOperationsInput | $Enums.AssignmentMethod
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -596,7 +596,7 @@ export type StudentSupervisorAssignmentCreateWithoutSiwesSessionInput = {
   assignedAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  admin: Prisma.AdminUserCreateNestedOneWithoutStudentSupervisorAssignmentsInput
+  admin?: Prisma.AdminUserCreateNestedOneWithoutStudentSupervisorAssignmentsInput
   schoolSupervisor: Prisma.SchoolSupervisorCreateNestedOneWithoutStudentSupervisorAssignmentsInput
   student: Prisma.StudentCreateNestedOneWithoutStudentSupervisorAssignmentsInput
 }
@@ -605,7 +605,7 @@ export type StudentSupervisorAssignmentUncheckedCreateWithoutSiwesSessionInput =
   id?: string
   studentId: string
   schoolSupervisorId: string
-  assignedBy: string
+  assignedBy?: string | null
   assignmentMethod: $Enums.AssignmentMethod
   assignedAt: Date | string
   createdAt?: Date | string
@@ -646,7 +646,7 @@ export type StudentSupervisorAssignmentScalarWhereInput = {
   studentId?: Prisma.StringFilter<"StudentSupervisorAssignment"> | string
   schoolSupervisorId?: Prisma.StringFilter<"StudentSupervisorAssignment"> | string
   siwesSessionId?: Prisma.StringFilter<"StudentSupervisorAssignment"> | string
-  assignedBy?: Prisma.StringFilter<"StudentSupervisorAssignment"> | string
+  assignedBy?: Prisma.StringNullableFilter<"StudentSupervisorAssignment"> | string | null
   assignmentMethod?: Prisma.EnumAssignmentMethodFilter<"StudentSupervisorAssignment"> | $Enums.AssignmentMethod
   assignedAt?: Prisma.DateTimeFilter<"StudentSupervisorAssignment"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"StudentSupervisorAssignment"> | Date | string
@@ -707,7 +707,7 @@ export type StudentSupervisorAssignmentCreateWithoutStudentInput = {
   assignedAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  admin: Prisma.AdminUserCreateNestedOneWithoutStudentSupervisorAssignmentsInput
+  admin?: Prisma.AdminUserCreateNestedOneWithoutStudentSupervisorAssignmentsInput
   schoolSupervisor: Prisma.SchoolSupervisorCreateNestedOneWithoutStudentSupervisorAssignmentsInput
   siwesSession: Prisma.SiwesSessionCreateNestedOneWithoutStudentSupervisorAssignmentsInput
 }
@@ -716,7 +716,7 @@ export type StudentSupervisorAssignmentUncheckedCreateWithoutStudentInput = {
   id?: string
   schoolSupervisorId: string
   siwesSessionId: string
-  assignedBy: string
+  assignedBy?: string | null
   assignmentMethod: $Enums.AssignmentMethod
   assignedAt: Date | string
   createdAt?: Date | string
@@ -755,7 +755,7 @@ export type StudentSupervisorAssignmentCreateWithoutSchoolSupervisorInput = {
   assignedAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  admin: Prisma.AdminUserCreateNestedOneWithoutStudentSupervisorAssignmentsInput
+  admin?: Prisma.AdminUserCreateNestedOneWithoutStudentSupervisorAssignmentsInput
   siwesSession: Prisma.SiwesSessionCreateNestedOneWithoutStudentSupervisorAssignmentsInput
   student: Prisma.StudentCreateNestedOneWithoutStudentSupervisorAssignmentsInput
 }
@@ -764,7 +764,7 @@ export type StudentSupervisorAssignmentUncheckedCreateWithoutSchoolSupervisorInp
   id?: string
   studentId: string
   siwesSessionId: string
-  assignedBy: string
+  assignedBy?: string | null
   assignmentMethod: $Enums.AssignmentMethod
   assignedAt: Date | string
   createdAt?: Date | string
@@ -801,7 +801,7 @@ export type StudentSupervisorAssignmentCreateManySiwesSessionInput = {
   id?: string
   studentId: string
   schoolSupervisorId: string
-  assignedBy: string
+  assignedBy?: string | null
   assignmentMethod: $Enums.AssignmentMethod
   assignedAt: Date | string
   createdAt?: Date | string
@@ -814,7 +814,7 @@ export type StudentSupervisorAssignmentUpdateWithoutSiwesSessionInput = {
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  admin?: Prisma.AdminUserUpdateOneRequiredWithoutStudentSupervisorAssignmentsNestedInput
+  admin?: Prisma.AdminUserUpdateOneWithoutStudentSupervisorAssignmentsNestedInput
   schoolSupervisor?: Prisma.SchoolSupervisorUpdateOneRequiredWithoutStudentSupervisorAssignmentsNestedInput
   student?: Prisma.StudentUpdateOneRequiredWithoutStudentSupervisorAssignmentsNestedInput
 }
@@ -823,7 +823,7 @@ export type StudentSupervisorAssignmentUncheckedUpdateWithoutSiwesSessionInput =
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   schoolSupervisorId?: Prisma.StringFieldUpdateOperationsInput | string
-  assignedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignmentMethod?: Prisma.EnumAssignmentMethodFieldUpdateOperationsInput | $Enums.AssignmentMethod
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -834,7 +834,7 @@ export type StudentSupervisorAssignmentUncheckedUpdateManyWithoutSiwesSessionInp
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   schoolSupervisorId?: Prisma.StringFieldUpdateOperationsInput | string
-  assignedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignmentMethod?: Prisma.EnumAssignmentMethodFieldUpdateOperationsInput | $Enums.AssignmentMethod
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -889,7 +889,7 @@ export type StudentSupervisorAssignmentCreateManyStudentInput = {
   id?: string
   schoolSupervisorId: string
   siwesSessionId: string
-  assignedBy: string
+  assignedBy?: string | null
   assignmentMethod: $Enums.AssignmentMethod
   assignedAt: Date | string
   createdAt?: Date | string
@@ -902,7 +902,7 @@ export type StudentSupervisorAssignmentUpdateWithoutStudentInput = {
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  admin?: Prisma.AdminUserUpdateOneRequiredWithoutStudentSupervisorAssignmentsNestedInput
+  admin?: Prisma.AdminUserUpdateOneWithoutStudentSupervisorAssignmentsNestedInput
   schoolSupervisor?: Prisma.SchoolSupervisorUpdateOneRequiredWithoutStudentSupervisorAssignmentsNestedInput
   siwesSession?: Prisma.SiwesSessionUpdateOneRequiredWithoutStudentSupervisorAssignmentsNestedInput
 }
@@ -911,7 +911,7 @@ export type StudentSupervisorAssignmentUncheckedUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   schoolSupervisorId?: Prisma.StringFieldUpdateOperationsInput | string
   siwesSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  assignedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignmentMethod?: Prisma.EnumAssignmentMethodFieldUpdateOperationsInput | $Enums.AssignmentMethod
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -922,7 +922,7 @@ export type StudentSupervisorAssignmentUncheckedUpdateManyWithoutStudentInput = 
   id?: Prisma.StringFieldUpdateOperationsInput | string
   schoolSupervisorId?: Prisma.StringFieldUpdateOperationsInput | string
   siwesSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  assignedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignmentMethod?: Prisma.EnumAssignmentMethodFieldUpdateOperationsInput | $Enums.AssignmentMethod
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -933,7 +933,7 @@ export type StudentSupervisorAssignmentCreateManySchoolSupervisorInput = {
   id?: string
   studentId: string
   siwesSessionId: string
-  assignedBy: string
+  assignedBy?: string | null
   assignmentMethod: $Enums.AssignmentMethod
   assignedAt: Date | string
   createdAt?: Date | string
@@ -946,7 +946,7 @@ export type StudentSupervisorAssignmentUpdateWithoutSchoolSupervisorInput = {
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  admin?: Prisma.AdminUserUpdateOneRequiredWithoutStudentSupervisorAssignmentsNestedInput
+  admin?: Prisma.AdminUserUpdateOneWithoutStudentSupervisorAssignmentsNestedInput
   siwesSession?: Prisma.SiwesSessionUpdateOneRequiredWithoutStudentSupervisorAssignmentsNestedInput
   student?: Prisma.StudentUpdateOneRequiredWithoutStudentSupervisorAssignmentsNestedInput
 }
@@ -955,7 +955,7 @@ export type StudentSupervisorAssignmentUncheckedUpdateWithoutSchoolSupervisorInp
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   siwesSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  assignedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignmentMethod?: Prisma.EnumAssignmentMethodFieldUpdateOperationsInput | $Enums.AssignmentMethod
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -966,7 +966,7 @@ export type StudentSupervisorAssignmentUncheckedUpdateManyWithoutSchoolSuperviso
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   siwesSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  assignedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignmentMethod?: Prisma.EnumAssignmentMethodFieldUpdateOperationsInput | $Enums.AssignmentMethod
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -985,7 +985,7 @@ export type StudentSupervisorAssignmentSelect<ExtArgs extends runtime.Types.Exte
   assignedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  admin?: boolean | Prisma.AdminUserDefaultArgs<ExtArgs>
+  admin?: boolean | Prisma.StudentSupervisorAssignment$adminArgs<ExtArgs>
   schoolSupervisor?: boolean | Prisma.SchoolSupervisorDefaultArgs<ExtArgs>
   siwesSession?: boolean | Prisma.SiwesSessionDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
@@ -1001,7 +1001,7 @@ export type StudentSupervisorAssignmentSelectCreateManyAndReturn<ExtArgs extends
   assignedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  admin?: boolean | Prisma.AdminUserDefaultArgs<ExtArgs>
+  admin?: boolean | Prisma.StudentSupervisorAssignment$adminArgs<ExtArgs>
   schoolSupervisor?: boolean | Prisma.SchoolSupervisorDefaultArgs<ExtArgs>
   siwesSession?: boolean | Prisma.SiwesSessionDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
@@ -1017,7 +1017,7 @@ export type StudentSupervisorAssignmentSelectUpdateManyAndReturn<ExtArgs extends
   assignedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  admin?: boolean | Prisma.AdminUserDefaultArgs<ExtArgs>
+  admin?: boolean | Prisma.StudentSupervisorAssignment$adminArgs<ExtArgs>
   schoolSupervisor?: boolean | Prisma.SchoolSupervisorDefaultArgs<ExtArgs>
   siwesSession?: boolean | Prisma.SiwesSessionDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
@@ -1037,19 +1037,19 @@ export type StudentSupervisorAssignmentSelectScalar = {
 
 export type StudentSupervisorAssignmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "schoolSupervisorId" | "siwesSessionId" | "assignedBy" | "assignmentMethod" | "assignedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["studentSupervisorAssignment"]>
 export type StudentSupervisorAssignmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  admin?: boolean | Prisma.AdminUserDefaultArgs<ExtArgs>
+  admin?: boolean | Prisma.StudentSupervisorAssignment$adminArgs<ExtArgs>
   schoolSupervisor?: boolean | Prisma.SchoolSupervisorDefaultArgs<ExtArgs>
   siwesSession?: boolean | Prisma.SiwesSessionDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
 }
 export type StudentSupervisorAssignmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  admin?: boolean | Prisma.AdminUserDefaultArgs<ExtArgs>
+  admin?: boolean | Prisma.StudentSupervisorAssignment$adminArgs<ExtArgs>
   schoolSupervisor?: boolean | Prisma.SchoolSupervisorDefaultArgs<ExtArgs>
   siwesSession?: boolean | Prisma.SiwesSessionDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
 }
 export type StudentSupervisorAssignmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  admin?: boolean | Prisma.AdminUserDefaultArgs<ExtArgs>
+  admin?: boolean | Prisma.StudentSupervisorAssignment$adminArgs<ExtArgs>
   schoolSupervisor?: boolean | Prisma.SchoolSupervisorDefaultArgs<ExtArgs>
   siwesSession?: boolean | Prisma.SiwesSessionDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
@@ -1058,7 +1058,7 @@ export type StudentSupervisorAssignmentIncludeUpdateManyAndReturn<ExtArgs extend
 export type $StudentSupervisorAssignmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "StudentSupervisorAssignment"
   objects: {
-    admin: Prisma.$AdminUserPayload<ExtArgs>
+    admin: Prisma.$AdminUserPayload<ExtArgs> | null
     schoolSupervisor: Prisma.$SchoolSupervisorPayload<ExtArgs>
     siwesSession: Prisma.$SiwesSessionPayload<ExtArgs>
     student: Prisma.$StudentPayload<ExtArgs>
@@ -1068,7 +1068,7 @@ export type $StudentSupervisorAssignmentPayload<ExtArgs extends runtime.Types.Ex
     studentId: string
     schoolSupervisorId: string
     siwesSessionId: string
-    assignedBy: string
+    assignedBy: string | null
     assignmentMethod: $Enums.AssignmentMethod
     assignedAt: Date
     createdAt: Date
@@ -1467,7 +1467,7 @@ readonly fields: StudentSupervisorAssignmentFieldRefs;
  */
 export interface Prisma__StudentSupervisorAssignmentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  admin<T extends Prisma.AdminUserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUserDefaultArgs<ExtArgs>>): Prisma.Prisma__AdminUserClient<runtime.Types.Result.GetResult<Prisma.$AdminUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  admin<T extends Prisma.StudentSupervisorAssignment$adminArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StudentSupervisorAssignment$adminArgs<ExtArgs>>): Prisma.Prisma__AdminUserClient<runtime.Types.Result.GetResult<Prisma.$AdminUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   schoolSupervisor<T extends Prisma.SchoolSupervisorDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SchoolSupervisorDefaultArgs<ExtArgs>>): Prisma.Prisma__SchoolSupervisorClient<runtime.Types.Result.GetResult<Prisma.$SchoolSupervisorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   siwesSession<T extends Prisma.SiwesSessionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SiwesSessionDefaultArgs<ExtArgs>>): Prisma.Prisma__SiwesSessionClient<runtime.Types.Result.GetResult<Prisma.$SiwesSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   student<T extends Prisma.StudentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StudentDefaultArgs<ExtArgs>>): Prisma.Prisma__StudentClient<runtime.Types.Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -1902,6 +1902,25 @@ export type StudentSupervisorAssignmentDeleteManyArgs<ExtArgs extends runtime.Ty
    * Limit how many StudentSupervisorAssignments to delete.
    */
   limit?: number
+}
+
+/**
+ * StudentSupervisorAssignment.admin
+ */
+export type StudentSupervisorAssignment$adminArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AdminUser
+   */
+  select?: Prisma.AdminUserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AdminUser
+   */
+  omit?: Prisma.AdminUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminUserInclude<ExtArgs> | null
+  where?: Prisma.AdminUserWhereInput
 }
 
 /**

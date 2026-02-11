@@ -70,10 +70,11 @@ export const ModelName = {
   LogbookMetadata: 'LogbookMetadata',
   WeeklyEntry: 'WeeklyEntry',
   Diagram: 'Diagram',
-  WeeklyComment: 'WeeklyComment',
-  ReviewRequest: 'ReviewRequest',
-  FinalComment: 'FinalComment',
-  ActivityLog: 'ActivityLog'
+  SchoolSupervisorWeeklyComment: 'SchoolSupervisorWeeklyComment',
+  IndustrySupervisorWeeklyComment: 'IndustrySupervisorWeeklyComment',
+  IndustrySupervisorReviewRequest: 'IndustrySupervisorReviewRequest',
+  SchoolSupervisorFinalComment: 'SchoolSupervisorFinalComment',
+  IndustrySupervisorFinalComment: 'IndustrySupervisorFinalComment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -99,7 +100,6 @@ export const UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   image: 'image',
   userType: 'userType',
-  userReferenceId: 'userReferenceId',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -218,7 +218,7 @@ export const AdminUserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   isActive: 'isActive',
-  betterAuthUserId: 'betterAuthUserId',
+  userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -232,8 +232,9 @@ export const StudentScalarFieldEnum = {
   name: 'name',
   email: 'email',
   departmentId: 'departmentId',
+  currentSiwesSessionId: 'currentSiwesSessionId',
   isActive: 'isActive',
-  betterAuthUserId: 'betterAuthUserId',
+  userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -247,8 +248,10 @@ export const SchoolSupervisorScalarFieldEnum = {
   name: 'name',
   email: 'email',
   departmentId: 'departmentId',
+  phone: 'phone',
+  currentSiwesSessionId: 'currentSiwesSessionId',
   isActive: 'isActive',
-  betterAuthUserId: 'betterAuthUserId',
+  userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -260,11 +263,12 @@ export const IndustrySupervisorScalarFieldEnum = {
   id: 'id',
   name: 'name',
   email: 'email',
-  placementOrganizationId: 'placementOrganizationId',
-  position: 'position',
   phone: 'phone',
+  position: 'position',
+  placementOrganizationId: 'placementOrganizationId',
+  currentSiwesSessionId: 'currentSiwesSessionId',
   isActive: 'isActive',
-  betterAuthUserId: 'betterAuthUserId',
+  userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -381,21 +385,33 @@ export const DiagramScalarFieldEnum = {
 export type DiagramScalarFieldEnum = (typeof DiagramScalarFieldEnum)[keyof typeof DiagramScalarFieldEnum]
 
 
-export const WeeklyCommentScalarFieldEnum = {
+export const SchoolSupervisorWeeklyCommentScalarFieldEnum = {
   id: 'id',
   weeklyEntryId: 'weeklyEntryId',
-  commenterType: 'commenterType',
-  commenterId: 'commenterId',
+  schoolSupervisorId: 'schoolSupervisorId',
   comment: 'comment',
   commentedAt: 'commentedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type WeeklyCommentScalarFieldEnum = (typeof WeeklyCommentScalarFieldEnum)[keyof typeof WeeklyCommentScalarFieldEnum]
+export type SchoolSupervisorWeeklyCommentScalarFieldEnum = (typeof SchoolSupervisorWeeklyCommentScalarFieldEnum)[keyof typeof SchoolSupervisorWeeklyCommentScalarFieldEnum]
 
 
-export const ReviewRequestScalarFieldEnum = {
+export const IndustrySupervisorWeeklyCommentScalarFieldEnum = {
+  id: 'id',
+  weeklyEntryId: 'weeklyEntryId',
+  industrySupervisorId: 'industrySupervisorId',
+  comment: 'comment',
+  commentedAt: 'commentedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IndustrySupervisorWeeklyCommentScalarFieldEnum = (typeof IndustrySupervisorWeeklyCommentScalarFieldEnum)[keyof typeof IndustrySupervisorWeeklyCommentScalarFieldEnum]
+
+
+export const IndustrySupervisorReviewRequestScalarFieldEnum = {
   id: 'id',
   weeklyEntryId: 'weeklyEntryId',
   studentId: 'studentId',
@@ -407,15 +423,14 @@ export const ReviewRequestScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type ReviewRequestScalarFieldEnum = (typeof ReviewRequestScalarFieldEnum)[keyof typeof ReviewRequestScalarFieldEnum]
+export type IndustrySupervisorReviewRequestScalarFieldEnum = (typeof IndustrySupervisorReviewRequestScalarFieldEnum)[keyof typeof IndustrySupervisorReviewRequestScalarFieldEnum]
 
 
-export const FinalCommentScalarFieldEnum = {
+export const SchoolSupervisorFinalCommentScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
   siwesSessionId: 'siwesSessionId',
-  commenterType: 'commenterType',
-  commenterId: 'commenterId',
+  schoolSupervisorId: 'schoolSupervisorId',
   comment: 'comment',
   rating: 'rating',
   commentedAt: 'commentedAt',
@@ -423,22 +438,22 @@ export const FinalCommentScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type FinalCommentScalarFieldEnum = (typeof FinalCommentScalarFieldEnum)[keyof typeof FinalCommentScalarFieldEnum]
+export type SchoolSupervisorFinalCommentScalarFieldEnum = (typeof SchoolSupervisorFinalCommentScalarFieldEnum)[keyof typeof SchoolSupervisorFinalCommentScalarFieldEnum]
 
 
-export const ActivityLogScalarFieldEnum = {
+export const IndustrySupervisorFinalCommentScalarFieldEnum = {
   id: 'id',
-  userType: 'userType',
-  userId: 'userId',
-  action: 'action',
-  entityType: 'entityType',
-  entityId: 'entityId',
-  details: 'details',
-  ipAddress: 'ipAddress',
-  createdAt: 'createdAt'
+  studentId: 'studentId',
+  siwesSessionId: 'siwesSessionId',
+  industrySupervisorId: 'industrySupervisorId',
+  comment: 'comment',
+  rating: 'rating',
+  commentedAt: 'commentedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type ActivityLogScalarFieldEnum = (typeof ActivityLogScalarFieldEnum)[keyof typeof ActivityLogScalarFieldEnum]
+export type IndustrySupervisorFinalCommentScalarFieldEnum = (typeof IndustrySupervisorFinalCommentScalarFieldEnum)[keyof typeof IndustrySupervisorFinalCommentScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -447,14 +462,6 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const NullableJsonNullValueInput = {
-  DbNull: DbNull,
-  JsonNull: JsonNull
-} as const
-
-export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -471,13 +478,4 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
-export const JsonNullValueFilter = {
-  DbNull: DbNull,
-  JsonNull: JsonNull,
-  AnyNull: AnyNull
-} as const
-
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

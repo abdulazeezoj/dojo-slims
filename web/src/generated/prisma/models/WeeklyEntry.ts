@@ -297,8 +297,9 @@ export type WeeklyEntryWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"WeeklyEntry"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"WeeklyEntry"> | Date | string
   diagrams?: Prisma.DiagramListRelationFilter
-  reviewRequest?: Prisma.XOR<Prisma.ReviewRequestNullableScalarRelationFilter, Prisma.ReviewRequestWhereInput> | null
-  weeklyComments?: Prisma.WeeklyCommentListRelationFilter
+  industrySupervisorReviewRequest?: Prisma.XOR<Prisma.IndustrySupervisorReviewRequestNullableScalarRelationFilter, Prisma.IndustrySupervisorReviewRequestWhereInput> | null
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentListRelationFilter
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentListRelationFilter
   siwesSession?: Prisma.XOR<Prisma.SiwesSessionScalarRelationFilter, Prisma.SiwesSessionWhereInput>
   student?: Prisma.XOR<Prisma.StudentScalarRelationFilter, Prisma.StudentWhereInput>
 }
@@ -320,8 +321,9 @@ export type WeeklyEntryOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   diagrams?: Prisma.DiagramOrderByRelationAggregateInput
-  reviewRequest?: Prisma.ReviewRequestOrderByWithRelationInput
-  weeklyComments?: Prisma.WeeklyCommentOrderByRelationAggregateInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestOrderByWithRelationInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentOrderByRelationAggregateInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentOrderByRelationAggregateInput
   siwesSession?: Prisma.SiwesSessionOrderByWithRelationInput
   student?: Prisma.StudentOrderByWithRelationInput
 }
@@ -347,8 +349,9 @@ export type WeeklyEntryWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"WeeklyEntry"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"WeeklyEntry"> | Date | string
   diagrams?: Prisma.DiagramListRelationFilter
-  reviewRequest?: Prisma.XOR<Prisma.ReviewRequestNullableScalarRelationFilter, Prisma.ReviewRequestWhereInput> | null
-  weeklyComments?: Prisma.WeeklyCommentListRelationFilter
+  industrySupervisorReviewRequest?: Prisma.XOR<Prisma.IndustrySupervisorReviewRequestNullableScalarRelationFilter, Prisma.IndustrySupervisorReviewRequestWhereInput> | null
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentListRelationFilter
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentListRelationFilter
   siwesSession?: Prisma.XOR<Prisma.SiwesSessionScalarRelationFilter, Prisma.SiwesSessionWhereInput>
   student?: Prisma.XOR<Prisma.StudentScalarRelationFilter, Prisma.StudentWhereInput>
 }, "id" | "studentId_siwesSessionId_weekNumber">
@@ -412,8 +415,9 @@ export type WeeklyEntryCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   diagrams?: Prisma.DiagramCreateNestedManyWithoutWeeklyEntryInput
-  reviewRequest?: Prisma.ReviewRequestCreateNestedOneWithoutWeeklyEntryInput
-  weeklyComments?: Prisma.WeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedOneWithoutWeeklyEntryInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
   siwesSession: Prisma.SiwesSessionCreateNestedOneWithoutWeeklyEntriesInput
   student: Prisma.StudentCreateNestedOneWithoutWeeklyEntriesInput
 }
@@ -435,8 +439,9 @@ export type WeeklyEntryUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   diagrams?: Prisma.DiagramUncheckedCreateNestedManyWithoutWeeklyEntryInput
-  reviewRequest?: Prisma.ReviewRequestUncheckedCreateNestedOneWithoutWeeklyEntryInput
-  weeklyComments?: Prisma.WeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedOneWithoutWeeklyEntryInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
 }
 
 export type WeeklyEntryUpdateInput = {
@@ -454,8 +459,9 @@ export type WeeklyEntryUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diagrams?: Prisma.DiagramUpdateManyWithoutWeeklyEntryNestedInput
-  reviewRequest?: Prisma.ReviewRequestUpdateOneWithoutWeeklyEntryNestedInput
-  weeklyComments?: Prisma.WeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateOneWithoutWeeklyEntryNestedInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
   siwesSession?: Prisma.SiwesSessionUpdateOneRequiredWithoutWeeklyEntriesNestedInput
   student?: Prisma.StudentUpdateOneRequiredWithoutWeeklyEntriesNestedInput
 }
@@ -477,8 +483,9 @@ export type WeeklyEntryUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diagrams?: Prisma.DiagramUncheckedUpdateManyWithoutWeeklyEntryNestedInput
-  reviewRequest?: Prisma.ReviewRequestUncheckedUpdateOneWithoutWeeklyEntryNestedInput
-  weeklyComments?: Prisma.WeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateOneWithoutWeeklyEntryNestedInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
 }
 
 export type WeeklyEntryCreateManyInput = {
@@ -718,32 +725,46 @@ export type WeeklyEntryUpdateOneRequiredWithoutDiagramsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.WeeklyEntryUpdateToOneWithWhereWithoutDiagramsInput, Prisma.WeeklyEntryUpdateWithoutDiagramsInput>, Prisma.WeeklyEntryUncheckedUpdateWithoutDiagramsInput>
 }
 
-export type WeeklyEntryCreateNestedOneWithoutWeeklyCommentsInput = {
-  create?: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedCreateWithoutWeeklyCommentsInput>
-  connectOrCreate?: Prisma.WeeklyEntryCreateOrConnectWithoutWeeklyCommentsInput
+export type WeeklyEntryCreateNestedOneWithoutSchoolSupervisorWeeklyCommentsInput = {
+  create?: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutSchoolSupervisorWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedCreateWithoutSchoolSupervisorWeeklyCommentsInput>
+  connectOrCreate?: Prisma.WeeklyEntryCreateOrConnectWithoutSchoolSupervisorWeeklyCommentsInput
   connect?: Prisma.WeeklyEntryWhereUniqueInput
 }
 
-export type WeeklyEntryUpdateOneRequiredWithoutWeeklyCommentsNestedInput = {
-  create?: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedCreateWithoutWeeklyCommentsInput>
-  connectOrCreate?: Prisma.WeeklyEntryCreateOrConnectWithoutWeeklyCommentsInput
-  upsert?: Prisma.WeeklyEntryUpsertWithoutWeeklyCommentsInput
+export type WeeklyEntryUpdateOneRequiredWithoutSchoolSupervisorWeeklyCommentsNestedInput = {
+  create?: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutSchoolSupervisorWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedCreateWithoutSchoolSupervisorWeeklyCommentsInput>
+  connectOrCreate?: Prisma.WeeklyEntryCreateOrConnectWithoutSchoolSupervisorWeeklyCommentsInput
+  upsert?: Prisma.WeeklyEntryUpsertWithoutSchoolSupervisorWeeklyCommentsInput
   connect?: Prisma.WeeklyEntryWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.WeeklyEntryUpdateToOneWithWhereWithoutWeeklyCommentsInput, Prisma.WeeklyEntryUpdateWithoutWeeklyCommentsInput>, Prisma.WeeklyEntryUncheckedUpdateWithoutWeeklyCommentsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WeeklyEntryUpdateToOneWithWhereWithoutSchoolSupervisorWeeklyCommentsInput, Prisma.WeeklyEntryUpdateWithoutSchoolSupervisorWeeklyCommentsInput>, Prisma.WeeklyEntryUncheckedUpdateWithoutSchoolSupervisorWeeklyCommentsInput>
 }
 
-export type WeeklyEntryCreateNestedOneWithoutReviewRequestInput = {
-  create?: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutReviewRequestInput, Prisma.WeeklyEntryUncheckedCreateWithoutReviewRequestInput>
-  connectOrCreate?: Prisma.WeeklyEntryCreateOrConnectWithoutReviewRequestInput
+export type WeeklyEntryCreateNestedOneWithoutIndustrySupervisorWeeklyCommentsInput = {
+  create?: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutIndustrySupervisorWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedCreateWithoutIndustrySupervisorWeeklyCommentsInput>
+  connectOrCreate?: Prisma.WeeklyEntryCreateOrConnectWithoutIndustrySupervisorWeeklyCommentsInput
   connect?: Prisma.WeeklyEntryWhereUniqueInput
 }
 
-export type WeeklyEntryUpdateOneRequiredWithoutReviewRequestNestedInput = {
-  create?: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutReviewRequestInput, Prisma.WeeklyEntryUncheckedCreateWithoutReviewRequestInput>
-  connectOrCreate?: Prisma.WeeklyEntryCreateOrConnectWithoutReviewRequestInput
-  upsert?: Prisma.WeeklyEntryUpsertWithoutReviewRequestInput
+export type WeeklyEntryUpdateOneRequiredWithoutIndustrySupervisorWeeklyCommentsNestedInput = {
+  create?: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutIndustrySupervisorWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedCreateWithoutIndustrySupervisorWeeklyCommentsInput>
+  connectOrCreate?: Prisma.WeeklyEntryCreateOrConnectWithoutIndustrySupervisorWeeklyCommentsInput
+  upsert?: Prisma.WeeklyEntryUpsertWithoutIndustrySupervisorWeeklyCommentsInput
   connect?: Prisma.WeeklyEntryWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.WeeklyEntryUpdateToOneWithWhereWithoutReviewRequestInput, Prisma.WeeklyEntryUpdateWithoutReviewRequestInput>, Prisma.WeeklyEntryUncheckedUpdateWithoutReviewRequestInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WeeklyEntryUpdateToOneWithWhereWithoutIndustrySupervisorWeeklyCommentsInput, Prisma.WeeklyEntryUpdateWithoutIndustrySupervisorWeeklyCommentsInput>, Prisma.WeeklyEntryUncheckedUpdateWithoutIndustrySupervisorWeeklyCommentsInput>
+}
+
+export type WeeklyEntryCreateNestedOneWithoutIndustrySupervisorReviewRequestInput = {
+  create?: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutIndustrySupervisorReviewRequestInput, Prisma.WeeklyEntryUncheckedCreateWithoutIndustrySupervisorReviewRequestInput>
+  connectOrCreate?: Prisma.WeeklyEntryCreateOrConnectWithoutIndustrySupervisorReviewRequestInput
+  connect?: Prisma.WeeklyEntryWhereUniqueInput
+}
+
+export type WeeklyEntryUpdateOneRequiredWithoutIndustrySupervisorReviewRequestNestedInput = {
+  create?: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutIndustrySupervisorReviewRequestInput, Prisma.WeeklyEntryUncheckedCreateWithoutIndustrySupervisorReviewRequestInput>
+  connectOrCreate?: Prisma.WeeklyEntryCreateOrConnectWithoutIndustrySupervisorReviewRequestInput
+  upsert?: Prisma.WeeklyEntryUpsertWithoutIndustrySupervisorReviewRequestInput
+  connect?: Prisma.WeeklyEntryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WeeklyEntryUpdateToOneWithWhereWithoutIndustrySupervisorReviewRequestInput, Prisma.WeeklyEntryUpdateWithoutIndustrySupervisorReviewRequestInput>, Prisma.WeeklyEntryUncheckedUpdateWithoutIndustrySupervisorReviewRequestInput>
 }
 
 export type WeeklyEntryCreateWithoutSiwesSessionInput = {
@@ -761,8 +782,9 @@ export type WeeklyEntryCreateWithoutSiwesSessionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   diagrams?: Prisma.DiagramCreateNestedManyWithoutWeeklyEntryInput
-  reviewRequest?: Prisma.ReviewRequestCreateNestedOneWithoutWeeklyEntryInput
-  weeklyComments?: Prisma.WeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedOneWithoutWeeklyEntryInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
   student: Prisma.StudentCreateNestedOneWithoutWeeklyEntriesInput
 }
 
@@ -782,8 +804,9 @@ export type WeeklyEntryUncheckedCreateWithoutSiwesSessionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   diagrams?: Prisma.DiagramUncheckedCreateNestedManyWithoutWeeklyEntryInput
-  reviewRequest?: Prisma.ReviewRequestUncheckedCreateNestedOneWithoutWeeklyEntryInput
-  weeklyComments?: Prisma.WeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedOneWithoutWeeklyEntryInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
 }
 
 export type WeeklyEntryCreateOrConnectWithoutSiwesSessionInput = {
@@ -848,8 +871,9 @@ export type WeeklyEntryCreateWithoutStudentInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   diagrams?: Prisma.DiagramCreateNestedManyWithoutWeeklyEntryInput
-  reviewRequest?: Prisma.ReviewRequestCreateNestedOneWithoutWeeklyEntryInput
-  weeklyComments?: Prisma.WeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedOneWithoutWeeklyEntryInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
   siwesSession: Prisma.SiwesSessionCreateNestedOneWithoutWeeklyEntriesInput
 }
 
@@ -869,8 +893,9 @@ export type WeeklyEntryUncheckedCreateWithoutStudentInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   diagrams?: Prisma.DiagramUncheckedCreateNestedManyWithoutWeeklyEntryInput
-  reviewRequest?: Prisma.ReviewRequestUncheckedCreateNestedOneWithoutWeeklyEntryInput
-  weeklyComments?: Prisma.WeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedOneWithoutWeeklyEntryInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
 }
 
 export type WeeklyEntryCreateOrConnectWithoutStudentInput = {
@@ -913,8 +938,9 @@ export type WeeklyEntryCreateWithoutDiagramsInput = {
   lockedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  reviewRequest?: Prisma.ReviewRequestCreateNestedOneWithoutWeeklyEntryInput
-  weeklyComments?: Prisma.WeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedOneWithoutWeeklyEntryInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
   siwesSession: Prisma.SiwesSessionCreateNestedOneWithoutWeeklyEntriesInput
   student: Prisma.StudentCreateNestedOneWithoutWeeklyEntriesInput
 }
@@ -935,8 +961,9 @@ export type WeeklyEntryUncheckedCreateWithoutDiagramsInput = {
   lockedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  reviewRequest?: Prisma.ReviewRequestUncheckedCreateNestedOneWithoutWeeklyEntryInput
-  weeklyComments?: Prisma.WeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedOneWithoutWeeklyEntryInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
 }
 
 export type WeeklyEntryCreateOrConnectWithoutDiagramsInput = {
@@ -969,8 +996,9 @@ export type WeeklyEntryUpdateWithoutDiagramsInput = {
   lockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  reviewRequest?: Prisma.ReviewRequestUpdateOneWithoutWeeklyEntryNestedInput
-  weeklyComments?: Prisma.WeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateOneWithoutWeeklyEntryNestedInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
   siwesSession?: Prisma.SiwesSessionUpdateOneRequiredWithoutWeeklyEntriesNestedInput
   student?: Prisma.StudentUpdateOneRequiredWithoutWeeklyEntriesNestedInput
 }
@@ -991,11 +1019,12 @@ export type WeeklyEntryUncheckedUpdateWithoutDiagramsInput = {
   lockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  reviewRequest?: Prisma.ReviewRequestUncheckedUpdateOneWithoutWeeklyEntryNestedInput
-  weeklyComments?: Prisma.WeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateOneWithoutWeeklyEntryNestedInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
 }
 
-export type WeeklyEntryCreateWithoutWeeklyCommentsInput = {
+export type WeeklyEntryCreateWithoutSchoolSupervisorWeeklyCommentsInput = {
   id?: string
   weekNumber: number
   mondayEntry?: string | null
@@ -1010,12 +1039,13 @@ export type WeeklyEntryCreateWithoutWeeklyCommentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   diagrams?: Prisma.DiagramCreateNestedManyWithoutWeeklyEntryInput
-  reviewRequest?: Prisma.ReviewRequestCreateNestedOneWithoutWeeklyEntryInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedOneWithoutWeeklyEntryInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
   siwesSession: Prisma.SiwesSessionCreateNestedOneWithoutWeeklyEntriesInput
   student: Prisma.StudentCreateNestedOneWithoutWeeklyEntriesInput
 }
 
-export type WeeklyEntryUncheckedCreateWithoutWeeklyCommentsInput = {
+export type WeeklyEntryUncheckedCreateWithoutSchoolSupervisorWeeklyCommentsInput = {
   id?: string
   studentId: string
   siwesSessionId: string
@@ -1032,26 +1062,27 @@ export type WeeklyEntryUncheckedCreateWithoutWeeklyCommentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   diagrams?: Prisma.DiagramUncheckedCreateNestedManyWithoutWeeklyEntryInput
-  reviewRequest?: Prisma.ReviewRequestUncheckedCreateNestedOneWithoutWeeklyEntryInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedOneWithoutWeeklyEntryInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
 }
 
-export type WeeklyEntryCreateOrConnectWithoutWeeklyCommentsInput = {
+export type WeeklyEntryCreateOrConnectWithoutSchoolSupervisorWeeklyCommentsInput = {
   where: Prisma.WeeklyEntryWhereUniqueInput
-  create: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedCreateWithoutWeeklyCommentsInput>
+  create: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutSchoolSupervisorWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedCreateWithoutSchoolSupervisorWeeklyCommentsInput>
 }
 
-export type WeeklyEntryUpsertWithoutWeeklyCommentsInput = {
-  update: Prisma.XOR<Prisma.WeeklyEntryUpdateWithoutWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedUpdateWithoutWeeklyCommentsInput>
-  create: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedCreateWithoutWeeklyCommentsInput>
+export type WeeklyEntryUpsertWithoutSchoolSupervisorWeeklyCommentsInput = {
+  update: Prisma.XOR<Prisma.WeeklyEntryUpdateWithoutSchoolSupervisorWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedUpdateWithoutSchoolSupervisorWeeklyCommentsInput>
+  create: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutSchoolSupervisorWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedCreateWithoutSchoolSupervisorWeeklyCommentsInput>
   where?: Prisma.WeeklyEntryWhereInput
 }
 
-export type WeeklyEntryUpdateToOneWithWhereWithoutWeeklyCommentsInput = {
+export type WeeklyEntryUpdateToOneWithWhereWithoutSchoolSupervisorWeeklyCommentsInput = {
   where?: Prisma.WeeklyEntryWhereInput
-  data: Prisma.XOR<Prisma.WeeklyEntryUpdateWithoutWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedUpdateWithoutWeeklyCommentsInput>
+  data: Prisma.XOR<Prisma.WeeklyEntryUpdateWithoutSchoolSupervisorWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedUpdateWithoutSchoolSupervisorWeeklyCommentsInput>
 }
 
-export type WeeklyEntryUpdateWithoutWeeklyCommentsInput = {
+export type WeeklyEntryUpdateWithoutSchoolSupervisorWeeklyCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   weekNumber?: Prisma.IntFieldUpdateOperationsInput | number
   mondayEntry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1066,12 +1097,13 @@ export type WeeklyEntryUpdateWithoutWeeklyCommentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diagrams?: Prisma.DiagramUpdateManyWithoutWeeklyEntryNestedInput
-  reviewRequest?: Prisma.ReviewRequestUpdateOneWithoutWeeklyEntryNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateOneWithoutWeeklyEntryNestedInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
   siwesSession?: Prisma.SiwesSessionUpdateOneRequiredWithoutWeeklyEntriesNestedInput
   student?: Prisma.StudentUpdateOneRequiredWithoutWeeklyEntriesNestedInput
 }
 
-export type WeeklyEntryUncheckedUpdateWithoutWeeklyCommentsInput = {
+export type WeeklyEntryUncheckedUpdateWithoutSchoolSupervisorWeeklyCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   siwesSessionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1088,10 +1120,11 @@ export type WeeklyEntryUncheckedUpdateWithoutWeeklyCommentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diagrams?: Prisma.DiagramUncheckedUpdateManyWithoutWeeklyEntryNestedInput
-  reviewRequest?: Prisma.ReviewRequestUncheckedUpdateOneWithoutWeeklyEntryNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateOneWithoutWeeklyEntryNestedInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
 }
 
-export type WeeklyEntryCreateWithoutReviewRequestInput = {
+export type WeeklyEntryCreateWithoutIndustrySupervisorWeeklyCommentsInput = {
   id?: string
   weekNumber: number
   mondayEntry?: string | null
@@ -1106,12 +1139,13 @@ export type WeeklyEntryCreateWithoutReviewRequestInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   diagrams?: Prisma.DiagramCreateNestedManyWithoutWeeklyEntryInput
-  weeklyComments?: Prisma.WeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedOneWithoutWeeklyEntryInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
   siwesSession: Prisma.SiwesSessionCreateNestedOneWithoutWeeklyEntriesInput
   student: Prisma.StudentCreateNestedOneWithoutWeeklyEntriesInput
 }
 
-export type WeeklyEntryUncheckedCreateWithoutReviewRequestInput = {
+export type WeeklyEntryUncheckedCreateWithoutIndustrySupervisorWeeklyCommentsInput = {
   id?: string
   studentId: string
   siwesSessionId: string
@@ -1128,26 +1162,27 @@ export type WeeklyEntryUncheckedCreateWithoutReviewRequestInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   diagrams?: Prisma.DiagramUncheckedCreateNestedManyWithoutWeeklyEntryInput
-  weeklyComments?: Prisma.WeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedOneWithoutWeeklyEntryInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
 }
 
-export type WeeklyEntryCreateOrConnectWithoutReviewRequestInput = {
+export type WeeklyEntryCreateOrConnectWithoutIndustrySupervisorWeeklyCommentsInput = {
   where: Prisma.WeeklyEntryWhereUniqueInput
-  create: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutReviewRequestInput, Prisma.WeeklyEntryUncheckedCreateWithoutReviewRequestInput>
+  create: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutIndustrySupervisorWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedCreateWithoutIndustrySupervisorWeeklyCommentsInput>
 }
 
-export type WeeklyEntryUpsertWithoutReviewRequestInput = {
-  update: Prisma.XOR<Prisma.WeeklyEntryUpdateWithoutReviewRequestInput, Prisma.WeeklyEntryUncheckedUpdateWithoutReviewRequestInput>
-  create: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutReviewRequestInput, Prisma.WeeklyEntryUncheckedCreateWithoutReviewRequestInput>
+export type WeeklyEntryUpsertWithoutIndustrySupervisorWeeklyCommentsInput = {
+  update: Prisma.XOR<Prisma.WeeklyEntryUpdateWithoutIndustrySupervisorWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedUpdateWithoutIndustrySupervisorWeeklyCommentsInput>
+  create: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutIndustrySupervisorWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedCreateWithoutIndustrySupervisorWeeklyCommentsInput>
   where?: Prisma.WeeklyEntryWhereInput
 }
 
-export type WeeklyEntryUpdateToOneWithWhereWithoutReviewRequestInput = {
+export type WeeklyEntryUpdateToOneWithWhereWithoutIndustrySupervisorWeeklyCommentsInput = {
   where?: Prisma.WeeklyEntryWhereInput
-  data: Prisma.XOR<Prisma.WeeklyEntryUpdateWithoutReviewRequestInput, Prisma.WeeklyEntryUncheckedUpdateWithoutReviewRequestInput>
+  data: Prisma.XOR<Prisma.WeeklyEntryUpdateWithoutIndustrySupervisorWeeklyCommentsInput, Prisma.WeeklyEntryUncheckedUpdateWithoutIndustrySupervisorWeeklyCommentsInput>
 }
 
-export type WeeklyEntryUpdateWithoutReviewRequestInput = {
+export type WeeklyEntryUpdateWithoutIndustrySupervisorWeeklyCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   weekNumber?: Prisma.IntFieldUpdateOperationsInput | number
   mondayEntry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1162,12 +1197,13 @@ export type WeeklyEntryUpdateWithoutReviewRequestInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diagrams?: Prisma.DiagramUpdateManyWithoutWeeklyEntryNestedInput
-  weeklyComments?: Prisma.WeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateOneWithoutWeeklyEntryNestedInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
   siwesSession?: Prisma.SiwesSessionUpdateOneRequiredWithoutWeeklyEntriesNestedInput
   student?: Prisma.StudentUpdateOneRequiredWithoutWeeklyEntriesNestedInput
 }
 
-export type WeeklyEntryUncheckedUpdateWithoutReviewRequestInput = {
+export type WeeklyEntryUncheckedUpdateWithoutIndustrySupervisorWeeklyCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   siwesSessionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1184,7 +1220,108 @@ export type WeeklyEntryUncheckedUpdateWithoutReviewRequestInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diagrams?: Prisma.DiagramUncheckedUpdateManyWithoutWeeklyEntryNestedInput
-  weeklyComments?: Prisma.WeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateOneWithoutWeeklyEntryNestedInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
+}
+
+export type WeeklyEntryCreateWithoutIndustrySupervisorReviewRequestInput = {
+  id?: string
+  weekNumber: number
+  mondayEntry?: string | null
+  tuesdayEntry?: string | null
+  wednesdayEntry?: string | null
+  thursdayEntry?: string | null
+  fridayEntry?: string | null
+  saturdayEntry?: string | null
+  isLocked?: boolean
+  lockedBy?: $Enums.LockedBy | null
+  lockedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  diagrams?: Prisma.DiagramCreateNestedManyWithoutWeeklyEntryInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentCreateNestedManyWithoutWeeklyEntryInput
+  siwesSession: Prisma.SiwesSessionCreateNestedOneWithoutWeeklyEntriesInput
+  student: Prisma.StudentCreateNestedOneWithoutWeeklyEntriesInput
+}
+
+export type WeeklyEntryUncheckedCreateWithoutIndustrySupervisorReviewRequestInput = {
+  id?: string
+  studentId: string
+  siwesSessionId: string
+  weekNumber: number
+  mondayEntry?: string | null
+  tuesdayEntry?: string | null
+  wednesdayEntry?: string | null
+  thursdayEntry?: string | null
+  fridayEntry?: string | null
+  saturdayEntry?: string | null
+  isLocked?: boolean
+  lockedBy?: $Enums.LockedBy | null
+  lockedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  diagrams?: Prisma.DiagramUncheckedCreateNestedManyWithoutWeeklyEntryInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedCreateNestedManyWithoutWeeklyEntryInput
+}
+
+export type WeeklyEntryCreateOrConnectWithoutIndustrySupervisorReviewRequestInput = {
+  where: Prisma.WeeklyEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutIndustrySupervisorReviewRequestInput, Prisma.WeeklyEntryUncheckedCreateWithoutIndustrySupervisorReviewRequestInput>
+}
+
+export type WeeklyEntryUpsertWithoutIndustrySupervisorReviewRequestInput = {
+  update: Prisma.XOR<Prisma.WeeklyEntryUpdateWithoutIndustrySupervisorReviewRequestInput, Prisma.WeeklyEntryUncheckedUpdateWithoutIndustrySupervisorReviewRequestInput>
+  create: Prisma.XOR<Prisma.WeeklyEntryCreateWithoutIndustrySupervisorReviewRequestInput, Prisma.WeeklyEntryUncheckedCreateWithoutIndustrySupervisorReviewRequestInput>
+  where?: Prisma.WeeklyEntryWhereInput
+}
+
+export type WeeklyEntryUpdateToOneWithWhereWithoutIndustrySupervisorReviewRequestInput = {
+  where?: Prisma.WeeklyEntryWhereInput
+  data: Prisma.XOR<Prisma.WeeklyEntryUpdateWithoutIndustrySupervisorReviewRequestInput, Prisma.WeeklyEntryUncheckedUpdateWithoutIndustrySupervisorReviewRequestInput>
+}
+
+export type WeeklyEntryUpdateWithoutIndustrySupervisorReviewRequestInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  weekNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  mondayEntry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tuesdayEntry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wednesdayEntry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thursdayEntry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fridayEntry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  saturdayEntry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lockedBy?: Prisma.NullableEnumLockedByFieldUpdateOperationsInput | $Enums.LockedBy | null
+  lockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  diagrams?: Prisma.DiagramUpdateManyWithoutWeeklyEntryNestedInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
+  siwesSession?: Prisma.SiwesSessionUpdateOneRequiredWithoutWeeklyEntriesNestedInput
+  student?: Prisma.StudentUpdateOneRequiredWithoutWeeklyEntriesNestedInput
+}
+
+export type WeeklyEntryUncheckedUpdateWithoutIndustrySupervisorReviewRequestInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  siwesSessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  weekNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  mondayEntry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tuesdayEntry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wednesdayEntry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thursdayEntry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fridayEntry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  saturdayEntry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lockedBy?: Prisma.NullableEnumLockedByFieldUpdateOperationsInput | $Enums.LockedBy | null
+  lockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  diagrams?: Prisma.DiagramUncheckedUpdateManyWithoutWeeklyEntryNestedInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
 }
 
 export type WeeklyEntryCreateManySiwesSessionInput = {
@@ -1219,8 +1356,9 @@ export type WeeklyEntryUpdateWithoutSiwesSessionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diagrams?: Prisma.DiagramUpdateManyWithoutWeeklyEntryNestedInput
-  reviewRequest?: Prisma.ReviewRequestUpdateOneWithoutWeeklyEntryNestedInput
-  weeklyComments?: Prisma.WeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateOneWithoutWeeklyEntryNestedInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
   student?: Prisma.StudentUpdateOneRequiredWithoutWeeklyEntriesNestedInput
 }
 
@@ -1240,8 +1378,9 @@ export type WeeklyEntryUncheckedUpdateWithoutSiwesSessionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diagrams?: Prisma.DiagramUncheckedUpdateManyWithoutWeeklyEntryNestedInput
-  reviewRequest?: Prisma.ReviewRequestUncheckedUpdateOneWithoutWeeklyEntryNestedInput
-  weeklyComments?: Prisma.WeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateOneWithoutWeeklyEntryNestedInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
 }
 
 export type WeeklyEntryUncheckedUpdateManyWithoutSiwesSessionInput = {
@@ -1293,8 +1432,9 @@ export type WeeklyEntryUpdateWithoutStudentInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diagrams?: Prisma.DiagramUpdateManyWithoutWeeklyEntryNestedInput
-  reviewRequest?: Prisma.ReviewRequestUpdateOneWithoutWeeklyEntryNestedInput
-  weeklyComments?: Prisma.WeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateOneWithoutWeeklyEntryNestedInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUpdateManyWithoutWeeklyEntryNestedInput
   siwesSession?: Prisma.SiwesSessionUpdateOneRequiredWithoutWeeklyEntriesNestedInput
 }
 
@@ -1314,8 +1454,9 @@ export type WeeklyEntryUncheckedUpdateWithoutStudentInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diagrams?: Prisma.DiagramUncheckedUpdateManyWithoutWeeklyEntryNestedInput
-  reviewRequest?: Prisma.ReviewRequestUncheckedUpdateOneWithoutWeeklyEntryNestedInput
-  weeklyComments?: Prisma.WeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateOneWithoutWeeklyEntryNestedInput
+  schoolSupervisorWeeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
+  industrySupervisorWeeklyComments?: Prisma.IndustrySupervisorWeeklyCommentUncheckedUpdateManyWithoutWeeklyEntryNestedInput
 }
 
 export type WeeklyEntryUncheckedUpdateManyWithoutStudentInput = {
@@ -1342,12 +1483,14 @@ export type WeeklyEntryUncheckedUpdateManyWithoutStudentInput = {
 
 export type WeeklyEntryCountOutputType = {
   diagrams: number
-  weeklyComments: number
+  schoolSupervisorWeeklyComments: number
+  industrySupervisorWeeklyComments: number
 }
 
 export type WeeklyEntryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   diagrams?: boolean | WeeklyEntryCountOutputTypeCountDiagramsArgs
-  weeklyComments?: boolean | WeeklyEntryCountOutputTypeCountWeeklyCommentsArgs
+  schoolSupervisorWeeklyComments?: boolean | WeeklyEntryCountOutputTypeCountSchoolSupervisorWeeklyCommentsArgs
+  industrySupervisorWeeklyComments?: boolean | WeeklyEntryCountOutputTypeCountIndustrySupervisorWeeklyCommentsArgs
 }
 
 /**
@@ -1370,8 +1513,15 @@ export type WeeklyEntryCountOutputTypeCountDiagramsArgs<ExtArgs extends runtime.
 /**
  * WeeklyEntryCountOutputType without action
  */
-export type WeeklyEntryCountOutputTypeCountWeeklyCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WeeklyCommentWhereInput
+export type WeeklyEntryCountOutputTypeCountSchoolSupervisorWeeklyCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SchoolSupervisorWeeklyCommentWhereInput
+}
+
+/**
+ * WeeklyEntryCountOutputType without action
+ */
+export type WeeklyEntryCountOutputTypeCountIndustrySupervisorWeeklyCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IndustrySupervisorWeeklyCommentWhereInput
 }
 
 
@@ -1392,8 +1542,9 @@ export type WeeklyEntrySelect<ExtArgs extends runtime.Types.Extensions.InternalA
   createdAt?: boolean
   updatedAt?: boolean
   diagrams?: boolean | Prisma.WeeklyEntry$diagramsArgs<ExtArgs>
-  reviewRequest?: boolean | Prisma.WeeklyEntry$reviewRequestArgs<ExtArgs>
-  weeklyComments?: boolean | Prisma.WeeklyEntry$weeklyCommentsArgs<ExtArgs>
+  industrySupervisorReviewRequest?: boolean | Prisma.WeeklyEntry$industrySupervisorReviewRequestArgs<ExtArgs>
+  schoolSupervisorWeeklyComments?: boolean | Prisma.WeeklyEntry$schoolSupervisorWeeklyCommentsArgs<ExtArgs>
+  industrySupervisorWeeklyComments?: boolean | Prisma.WeeklyEntry$industrySupervisorWeeklyCommentsArgs<ExtArgs>
   siwesSession?: boolean | Prisma.SiwesSessionDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.WeeklyEntryCountOutputTypeDefaultArgs<ExtArgs>
@@ -1460,8 +1611,9 @@ export type WeeklyEntrySelectScalar = {
 export type WeeklyEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "siwesSessionId" | "weekNumber" | "mondayEntry" | "tuesdayEntry" | "wednesdayEntry" | "thursdayEntry" | "fridayEntry" | "saturdayEntry" | "isLocked" | "lockedBy" | "lockedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["weeklyEntry"]>
 export type WeeklyEntryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   diagrams?: boolean | Prisma.WeeklyEntry$diagramsArgs<ExtArgs>
-  reviewRequest?: boolean | Prisma.WeeklyEntry$reviewRequestArgs<ExtArgs>
-  weeklyComments?: boolean | Prisma.WeeklyEntry$weeklyCommentsArgs<ExtArgs>
+  industrySupervisorReviewRequest?: boolean | Prisma.WeeklyEntry$industrySupervisorReviewRequestArgs<ExtArgs>
+  schoolSupervisorWeeklyComments?: boolean | Prisma.WeeklyEntry$schoolSupervisorWeeklyCommentsArgs<ExtArgs>
+  industrySupervisorWeeklyComments?: boolean | Prisma.WeeklyEntry$industrySupervisorWeeklyCommentsArgs<ExtArgs>
   siwesSession?: boolean | Prisma.SiwesSessionDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.WeeklyEntryCountOutputTypeDefaultArgs<ExtArgs>
@@ -1479,8 +1631,9 @@ export type $WeeklyEntryPayload<ExtArgs extends runtime.Types.Extensions.Interna
   name: "WeeklyEntry"
   objects: {
     diagrams: Prisma.$DiagramPayload<ExtArgs>[]
-    reviewRequest: Prisma.$ReviewRequestPayload<ExtArgs> | null
-    weeklyComments: Prisma.$WeeklyCommentPayload<ExtArgs>[]
+    industrySupervisorReviewRequest: Prisma.$IndustrySupervisorReviewRequestPayload<ExtArgs> | null
+    schoolSupervisorWeeklyComments: Prisma.$SchoolSupervisorWeeklyCommentPayload<ExtArgs>[]
+    industrySupervisorWeeklyComments: Prisma.$IndustrySupervisorWeeklyCommentPayload<ExtArgs>[]
     siwesSession: Prisma.$SiwesSessionPayload<ExtArgs>
     student: Prisma.$StudentPayload<ExtArgs>
   }
@@ -1895,8 +2048,9 @@ readonly fields: WeeklyEntryFieldRefs;
 export interface Prisma__WeeklyEntryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   diagrams<T extends Prisma.WeeklyEntry$diagramsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WeeklyEntry$diagramsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DiagramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  reviewRequest<T extends Prisma.WeeklyEntry$reviewRequestArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WeeklyEntry$reviewRequestArgs<ExtArgs>>): Prisma.Prisma__ReviewRequestClient<runtime.Types.Result.GetResult<Prisma.$ReviewRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  weeklyComments<T extends Prisma.WeeklyEntry$weeklyCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WeeklyEntry$weeklyCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WeeklyCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  industrySupervisorReviewRequest<T extends Prisma.WeeklyEntry$industrySupervisorReviewRequestArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WeeklyEntry$industrySupervisorReviewRequestArgs<ExtArgs>>): Prisma.Prisma__IndustrySupervisorReviewRequestClient<runtime.Types.Result.GetResult<Prisma.$IndustrySupervisorReviewRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  schoolSupervisorWeeklyComments<T extends Prisma.WeeklyEntry$schoolSupervisorWeeklyCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WeeklyEntry$schoolSupervisorWeeklyCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SchoolSupervisorWeeklyCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  industrySupervisorWeeklyComments<T extends Prisma.WeeklyEntry$industrySupervisorWeeklyCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WeeklyEntry$industrySupervisorWeeklyCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IndustrySupervisorWeeklyCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   siwesSession<T extends Prisma.SiwesSessionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SiwesSessionDefaultArgs<ExtArgs>>): Prisma.Prisma__SiwesSessionClient<runtime.Types.Result.GetResult<Prisma.$SiwesSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   student<T extends Prisma.StudentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StudentDefaultArgs<ExtArgs>>): Prisma.Prisma__StudentClient<runtime.Types.Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
@@ -2363,46 +2517,70 @@ export type WeeklyEntry$diagramsArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
- * WeeklyEntry.reviewRequest
+ * WeeklyEntry.industrySupervisorReviewRequest
  */
-export type WeeklyEntry$reviewRequestArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type WeeklyEntry$industrySupervisorReviewRequestArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ReviewRequest
+   * Select specific fields to fetch from the IndustrySupervisorReviewRequest
    */
-  select?: Prisma.ReviewRequestSelect<ExtArgs> | null
+  select?: Prisma.IndustrySupervisorReviewRequestSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ReviewRequest
+   * Omit specific fields from the IndustrySupervisorReviewRequest
    */
-  omit?: Prisma.ReviewRequestOmit<ExtArgs> | null
+  omit?: Prisma.IndustrySupervisorReviewRequestOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ReviewRequestInclude<ExtArgs> | null
-  where?: Prisma.ReviewRequestWhereInput
+  include?: Prisma.IndustrySupervisorReviewRequestInclude<ExtArgs> | null
+  where?: Prisma.IndustrySupervisorReviewRequestWhereInput
 }
 
 /**
- * WeeklyEntry.weeklyComments
+ * WeeklyEntry.schoolSupervisorWeeklyComments
  */
-export type WeeklyEntry$weeklyCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type WeeklyEntry$schoolSupervisorWeeklyCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the WeeklyComment
+   * Select specific fields to fetch from the SchoolSupervisorWeeklyComment
    */
-  select?: Prisma.WeeklyCommentSelect<ExtArgs> | null
+  select?: Prisma.SchoolSupervisorWeeklyCommentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the WeeklyComment
+   * Omit specific fields from the SchoolSupervisorWeeklyComment
    */
-  omit?: Prisma.WeeklyCommentOmit<ExtArgs> | null
+  omit?: Prisma.SchoolSupervisorWeeklyCommentOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WeeklyCommentInclude<ExtArgs> | null
-  where?: Prisma.WeeklyCommentWhereInput
-  orderBy?: Prisma.WeeklyCommentOrderByWithRelationInput | Prisma.WeeklyCommentOrderByWithRelationInput[]
-  cursor?: Prisma.WeeklyCommentWhereUniqueInput
+  include?: Prisma.SchoolSupervisorWeeklyCommentInclude<ExtArgs> | null
+  where?: Prisma.SchoolSupervisorWeeklyCommentWhereInput
+  orderBy?: Prisma.SchoolSupervisorWeeklyCommentOrderByWithRelationInput | Prisma.SchoolSupervisorWeeklyCommentOrderByWithRelationInput[]
+  cursor?: Prisma.SchoolSupervisorWeeklyCommentWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.WeeklyCommentScalarFieldEnum | Prisma.WeeklyCommentScalarFieldEnum[]
+  distinct?: Prisma.SchoolSupervisorWeeklyCommentScalarFieldEnum | Prisma.SchoolSupervisorWeeklyCommentScalarFieldEnum[]
+}
+
+/**
+ * WeeklyEntry.industrySupervisorWeeklyComments
+ */
+export type WeeklyEntry$industrySupervisorWeeklyCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the IndustrySupervisorWeeklyComment
+   */
+  select?: Prisma.IndustrySupervisorWeeklyCommentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the IndustrySupervisorWeeklyComment
+   */
+  omit?: Prisma.IndustrySupervisorWeeklyCommentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IndustrySupervisorWeeklyCommentInclude<ExtArgs> | null
+  where?: Prisma.IndustrySupervisorWeeklyCommentWhereInput
+  orderBy?: Prisma.IndustrySupervisorWeeklyCommentOrderByWithRelationInput | Prisma.IndustrySupervisorWeeklyCommentOrderByWithRelationInput[]
+  cursor?: Prisma.IndustrySupervisorWeeklyCommentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.IndustrySupervisorWeeklyCommentScalarFieldEnum | Prisma.IndustrySupervisorWeeklyCommentScalarFieldEnum[]
 }
 
 /**

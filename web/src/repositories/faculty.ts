@@ -1,238 +1,226 @@
 import type { Department, Faculty, Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
+/**
+ * Type Definitions
+ */
 
 /**
- * Faculty Repository - Thin data access layer for Faculty entity
+ * Interface for pagination parameters
+ */
+interface PaginationParams {
+  skip?: number;
+  take?: number;
+}
+
+/**
+ * Faculty with all departments
+ */
+type FacultyWithDepartments = Prisma.FacultyGetPayload<{
+  include: {
+    departments: true;
+    _count: {
+      select: {
+        departments: true;
+      };
+    };
+  };
+}>;
+
+/**
+ * Department with faculty details
+ */
+type DepartmentWithFaculty = Prisma.DepartmentGetPayload<{
+  include: {
+    faculty: true;
+    _count: {
+      select: {
+        students: true;
+        schoolSupervisors: true;
+      };
+    };
+  };
+}>;
+
+/**
+ * Faculty Repository
+ *
+ * Handles faculty organizational structure and department management.
+ * MVP Feature: #26 (Faculty and department management)
  */
 export class FacultyRepository {
-  async findById(id: string): Promise<Faculty | null> {
-    return prisma.faculty.findUnique({
-      where: { id },
-      include: {
-        departments: {
-          include: {
-            _count: {
-              select: {
-                students: true,
-              },
-            },
-          },
-        },
-      },
-    });
-  }
+  readonly prisma = prisma.faculty;
 
-  async findByCode(code: string): Promise<Faculty | null> {
-    return prisma.faculty.findUnique({
+  // ==================== Custom Methods ====================
+
+  /**
+   * Find faculty by code with all departments
+   * @feature #26 Faculty and Department Management
+   */
+  async findByCodeWithDepartments(
+    code: string,
+  ): Promise<FacultyWithDepartments | null> {
+    return this.prisma.findUnique({
       where: { code },
       include: {
         departments: {
-          include: {
-            _count: {
-              select: {
-                students: true,
-              },
-            },
+          orderBy: {
+            name: "asc",
+          },
+        },
+        _count: {
+          select: {
+            departments: true,
           },
         },
       },
     });
   }
 
-  async findByName(name: string): Promise<Faculty | null> {
-    return prisma.faculty.findUnique({
+  /**
+   * Find faculty by name with all departments
+   * @feature #26 Faculty and Department Management
+   */
+  async findByNameWithDepartments(
+    name: string,
+  ): Promise<FacultyWithDepartments | null> {
+    return this.prisma.findUnique({
       where: { name },
       include: {
         departments: {
-          include: {
-            _count: {
-              select: {
-                students: true,
-              },
-            },
+          orderBy: {
+            name: "asc",
+          },
+        },
+        _count: {
+          select: {
+            departments: true,
           },
         },
       },
     });
   }
 
+  /**
+   * Get all faculties with departments and pagination
+   * @feature #26 Faculty and Department Management
+   */
+  async findAllWithDepartments(
+    params?: PaginationParams,
+  ): Promise<FacultyWithDepartments[]> {
+    return this.prisma.findMany({
+      include: {
+        departments: {
+          orderBy: {
+            name: "asc",
+          },
+        },
+        _count: {
+          select: {
+            departments: true,
+          },
+        },
+      },
+      skip: params?.skip,
+      take: params?.take,
+      orderBy: {
+        name: "asc",
+      },
+    });
+  }
+
+  /**
+   * Count departments in a faculty
+   * @feature #26 Faculty and Department Management
+   */
+  async countDepartments(facultyId: string): Promise<number> {
+    return prisma.department.count({
+      where: { facultyId },
+    });
+  }
+
+  /**
+   * Count all faculties
+   * @feature #26 Faculty and Department Management
+   */
+  async countAll(): Promise<number> {
+    return this.prisma.count();
+  }
+
+  /**
+   * Create a new faculty
+   * @feature #26 Faculty and Department Management
+   */
   async create(data: Prisma.FacultyCreateInput): Promise<Faculty> {
-    return prisma.faculty.create({
+    return this.prisma.create({
       data,
-      include: {
-        departments: true,
-      },
     });
   }
 
+  /**
+   * Update a faculty
+   * @feature #26 Faculty and Department Management
+   */
   async update(id: string, data: Prisma.FacultyUpdateInput): Promise<Faculty> {
-    return prisma.faculty.update({
+    return this.prisma.update({
       where: { id },
       data,
-      include: {
-        departments: true,
-      },
     });
   }
 
+  /**
+   * Delete a faculty
+   * @feature #26 Faculty and Department Management
+   */
   async delete(id: string): Promise<Faculty> {
-    return prisma.faculty.delete({
+    return this.prisma.delete({
       where: { id },
     });
   }
 
-  async findMany(params?: {
-    where?: Prisma.FacultyWhereInput;
-    skip?: number;
-    take?: number;
-    orderBy?: Prisma.FacultyOrderByWithRelationInput;
-  }): Promise<Faculty[]> {
-    return prisma.faculty.findMany({
-      ...params,
-      include: {
-        departments: {
-          include: {
-            _count: {
-              select: {
-                students: true,
-              },
-            },
-          },
-        },
-      },
-    });
-  }
-
-  async count(where?: Prisma.FacultyWhereInput): Promise<number> {
-    return prisma.faculty.count({
-      where,
-    });
-  }
-
+  /**
+   * Check if faculty code exists
+   * @feature #26 Faculty and Department Management
+   */
   async existsByCode(code: string): Promise<boolean> {
-    const count = await prisma.faculty.count({
+    const count = await this.prisma.count({
       where: { code },
     });
     return count > 0;
   }
 
+  /**
+   * Check if faculty name exists
+   * @feature #26 Faculty and Department Management
+   */
   async existsByName(name: string): Promise<boolean> {
-    const count = await prisma.faculty.count({
+    const count = await this.prisma.count({
       where: { name },
     });
     return count > 0;
-  }
-
-  // Department management methods
-  async addDepartment(
-    facultyId: string,
-    data: { name: string; code: string },
-  ): Promise<Faculty> {
-    return prisma.faculty.update({
-      where: { id: facultyId },
-      data: {
-        departments: {
-          create: data,
-        },
-      },
-      include: {
-        departments: {
-          include: {
-            _count: {
-              select: {
-                students: true,
-              },
-            },
-          },
-        },
-      },
-    });
-  }
-
-  async updateDepartment(
-    departmentId: string,
-    data: { name?: string; code?: string },
-  ): Promise<Faculty> {
-    const department = await prisma.department.findUnique({
-      where: { id: departmentId },
-      select: { facultyId: true },
-    });
-
-    if (!department) {
-      throw new Error("Department not found");
-    }
-
-    await prisma.department.update({
-      where: { id: departmentId },
-      data,
-    });
-
-    return prisma.faculty.findUniqueOrThrow({
-      where: { id: department.facultyId },
-      include: {
-        departments: {
-          include: {
-            _count: {
-              select: {
-                students: true,
-              },
-            },
-          },
-        },
-      },
-    });
-  }
-
-  async deleteDepartment(departmentId: string): Promise<Faculty> {
-    const department = await prisma.department.findUnique({
-      where: { id: departmentId },
-      select: { facultyId: true },
-    });
-
-    if (!department) {
-      throw new Error("Department not found");
-    }
-
-    await prisma.department.delete({
-      where: { id: departmentId },
-    });
-
-    return prisma.faculty.findUniqueOrThrow({
-      where: { id: department.facultyId },
-      include: {
-        departments: {
-          include: {
-            _count: {
-              select: {
-                students: true,
-              },
-            },
-          },
-        },
-      },
-    });
   }
 }
 
 /**
- * Department Repository - Thin data access layer for Department entity
+ * Department Repository
+ *
+ * Handles academic departments within faculties.
+ * MVP Feature: #26 (Faculty and department management)
  */
 export class DepartmentRepository {
-  async findById(id: string): Promise<Department | null> {
-    return prisma.department.findUnique({
-      where: { id },
-      include: {
-        faculty: true,
-      },
-    });
-  }
+  readonly prisma = prisma.department;
 
-  async findByFacultyAndCode(
+  // ==================== Custom Methods ====================
+
+  /**
+   * Find department by faculty and code with faculty details
+   * @feature #26 Faculty and Department Management
+   */
+  async findByCodeWithFaculty(
     facultyId: string,
     code: string,
-  ): Promise<Department | null> {
-    return prisma.department.findUnique({
+  ): Promise<DepartmentWithFaculty | null> {
+    return this.prisma.findUnique({
       where: {
         facultyId_code: {
           facultyId,
@@ -241,73 +229,178 @@ export class DepartmentRepository {
       },
       include: {
         faculty: true,
+        _count: {
+          select: {
+            students: true,
+            schoolSupervisors: true,
+          },
+        },
       },
     });
   }
 
-  async findByFaculty(facultyId: string): Promise<Department[]> {
-    return prisma.department.findMany({
+  /**
+   * Get all departments in a faculty with pagination
+   * @feature #26 Faculty and Department Management
+   */
+  async findManyByFaculty(
+    facultyId: string,
+    params?: PaginationParams,
+  ): Promise<DepartmentWithFaculty[]> {
+    return this.prisma.findMany({
       where: { facultyId },
       include: {
         faculty: true,
+        _count: {
+          select: {
+            students: true,
+            schoolSupervisors: true,
+          },
+        },
+      },
+      skip: params?.skip,
+      take: params?.take,
+      orderBy: {
+        name: "asc",
       },
     });
   }
 
+  /**
+   * Get all departments with pagination
+   * @feature #26 Faculty and Department Management
+   */
+  async findAll(params?: PaginationParams): Promise<DepartmentWithFaculty[]> {
+    return this.prisma.findMany({
+      include: {
+        faculty: true,
+        _count: {
+          select: {
+            students: true,
+            schoolSupervisors: true,
+          },
+        },
+      },
+      skip: params?.skip,
+      take: params?.take,
+      orderBy: {
+        name: "asc",
+      },
+    });
+  }
+
+  /**
+   * Search departments by name
+   * @feature #26 Faculty and Department Management
+   */
+  async searchByName(
+    query: string,
+    params?: PaginationParams,
+  ): Promise<DepartmentWithFaculty[]> {
+    return this.prisma.findMany({
+      where: {
+        name: {
+          contains: query,
+          mode: "insensitive",
+        },
+      },
+      include: {
+        faculty: true,
+        _count: {
+          select: {
+            students: true,
+            schoolSupervisors: true,
+          },
+        },
+      },
+      skip: params?.skip,
+      take: params?.take,
+      orderBy: {
+        name: "asc",
+      },
+    });
+  }
+
+  /**
+   * Count departments in a faculty
+   * @feature #26 Faculty and Department Management
+   */
+  async countByFaculty(facultyId: string): Promise<number> {
+    return this.prisma.count({
+      where: { facultyId },
+    });
+  }
+
+  /**
+   * Count students in a department
+   * @feature #26 Faculty and Department Management
+   */
+  async countStudents(departmentId: string): Promise<number> {
+    const department = await this.prisma.findUnique({
+      where: { id: departmentId },
+      select: {
+        _count: {
+          select: {
+            students: true,
+          },
+        },
+      },
+    });
+    return department?._count.students ?? 0;
+  }
+
+  /**
+   * Count all departments
+   * @feature #26 Faculty and Department Management
+   */
+  async countAll(): Promise<number> {
+    return this.prisma.count();
+  }
+
+  /**
+   * Create a new department
+   * @feature #26 Faculty and Department Management
+   */
   async create(data: Prisma.DepartmentCreateInput): Promise<Department> {
-    return prisma.department.create({
+    return this.prisma.create({
       data,
-      include: {
-        faculty: true,
-      },
     });
   }
 
-  async update(
-    id: string,
-    data: Prisma.DepartmentUpdateInput,
-  ): Promise<Department> {
-    return prisma.department.update({
-      where: { id },
-      data,
-      include: {
-        faculty: true,
-      },
-    });
-  }
-
-  async delete(id: string): Promise<Department> {
-    return prisma.department.delete({
-      where: { id },
-    });
-  }
-
-  async findMany(params?: {
-    where?: Prisma.DepartmentWhereInput;
-    skip?: number;
-    take?: number;
-    orderBy?: Prisma.DepartmentOrderByWithRelationInput;
-  }): Promise<Department[]> {
-    return prisma.department.findMany({
-      ...params,
-      include: {
-        faculty: true,
-      },
-    });
-  }
-
-  async count(where?: Prisma.DepartmentWhereInput): Promise<number> {
-    return prisma.department.count({
-      where,
-    });
-  }
-
+  /**
+   * Bulk create departments
+   * @feature #26 Faculty and Department Management
+   */
   async createMany(data: Prisma.DepartmentCreateManyInput[]): Promise<number> {
-    const result = await prisma.department.createMany({
+    const result = await this.prisma.createMany({
       data,
       skipDuplicates: true,
     });
     return result.count;
+  }
+
+  /**
+   * Update a department
+   * @feature #26 Faculty and Department Management
+   */
+  async update(
+    id: string,
+    data: Prisma.DepartmentUpdateInput,
+  ): Promise<Department> {
+    return this.prisma.update({
+      where: { id },
+      data,
+    });
+  }
+
+  /**
+   * Delete a department
+   * @feature #26 Faculty and Department Management
+   */
+  async delete(id: string): Promise<Department> {
+    return this.prisma.delete({
+      where: { id },
+    });
   }
 }
 

@@ -1,7 +1,7 @@
-
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
+import { requireStudent } from "@/lib/auth-server";
 import { fileUploader } from "@/lib/file-upload";
-import { requireStudent } from "@/middlewares/auth";
+import { studentRepository } from "@/repositories";
 import { logbookService } from "@/services";
 
 import type { NextRequest } from "next/server";
@@ -21,6 +21,14 @@ export const POST = requireStudent(
     context: { params: { weekId: string } },
   ) => {
     try {
+      // Get student record from user ID
+      const student = await studentRepository.findByUserId(session.user.id);
+      if (!student) {
+        return createErrorResponse("Student profile not found", {
+          status: 404,
+        });
+      }
+
       const { weekId } = context.params;
 
       // Verify ownership
@@ -29,7 +37,7 @@ export const POST = requireStudent(
         return createErrorResponse("Week not found", { status: 404 });
       }
 
-      if (week.studentId !== session.user.userReferenceId) {
+      if (week.studentId !== student.id) {
         return createErrorResponse("Unauthorized", { status: 403 });
       }
 
@@ -89,6 +97,14 @@ export const DELETE = requireStudent(
     context: { params: { weekId: string } },
   ) => {
     try {
+      // Get student record from user ID
+      const student = await studentRepository.findByUserId(session.user.id);
+      if (!student) {
+        return createErrorResponse("Student profile not found", {
+          status: 404,
+        });
+      }
+
       const { weekId } = context.params;
       const { searchParams } = new URL(request.url);
       const diagramId = searchParams.get("diagramId");
@@ -103,12 +119,13 @@ export const DELETE = requireStudent(
         return createErrorResponse("Week not found", { status: 404 });
       }
 
-      if (week.studentId !== session.user.userReferenceId) {
+      if (week.studentId !== student.id) {
         return createErrorResponse("Unauthorized", { status: 403 });
       }
 
       // Get diagram details before deletion to delete file
-      const diagram = week.diagrams?.find((d) => d.id === diagramId);
+      const diagrams = await logbookService.getWeekDiagrams(weekId);
+      const diagram = diagrams.find((d) => d.id === diagramId);
       if (diagram && diagram.filePath) {
         // Delete physical file
         await fileUploader.deleteFile(diagram.filePath);

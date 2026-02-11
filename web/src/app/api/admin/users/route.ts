@@ -1,6 +1,6 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireAdmin } from "@/middlewares/auth";
+import { requireAdmin } from "@/lib/auth-server";
 import { createAdminSchema, paginationSchema } from "@/schemas";
 import { adminUserService } from "@/services";
 

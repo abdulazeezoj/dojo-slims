@@ -1,73 +1,107 @@
-// Activity Log
-export { ActivityLogRepository, activityLogRepository } from "./activity-log";
+// ===== ADMIN =====
+export { AdminUserRepository, adminUserRepository } from "./admin-user";
 
-// Admin
-export { AdminRepository, adminRepository } from "./admin";
+// ===== USER =====
+export { UserRepository, userRepository } from "./user";
 
-// Assignment
-export { AssignmentRepository, assignmentRepository } from "./assignment";
+// ===== STUDENT =====
+export { StudentRepository, studentRepository } from "./student";
+export type { StudentDashboardData, StudentWithDetails } from "./student";
 
-// Enrollment
+// ===== SCHOOL SUPERVISOR =====
 export {
-  StudentEnrollmentRepository,
-  SupervisorEnrollmentRepository,
-  studentEnrollmentRepository,
-  supervisorEnrollmentRepository,
-} from "./enrollment";
+  SchoolSupervisorRepository,
+  schoolSupervisorRepository,
+} from "./school-supervisor";
+export type {
+  SchoolSupervisorDashboardData,
+  SchoolSupervisorWithDetails,
+} from "./school-supervisor";
 
-// Faculty & Department
+// ===== INDUSTRY SUPERVISOR =====
+export {
+  IndustrySupervisorRepository,
+  industrySupervisorRepository,
+} from "./industry-supervisor";
+export type {
+  IndustrySupervisorDashboardData,
+  IndustrySupervisorWithDetails,
+} from "./industry-supervisor";
+
+// ===== FACULTY & DEPARTMENT =====
 export {
   DepartmentRepository,
-  FacultyRepository,
   departmentRepository,
+  FacultyRepository,
   facultyRepository,
 } from "./faculty";
 
-// Final Comment
+// ===== PLACEMENT ORGANIZATION =====
 export {
-  FinalCommentRepository,
-  finalCommentRepository,
-} from "./final-comment";
+  PlacementOrganizationRepository,
+  placementOrganizationRepository,
+} from "./placement-organization";
 
-// Logbook (Weekly Entries, Diagrams, Comments)
+// ===== SIWES SESSION =====
 export {
-  DiagramRepository,
-  WeeklyCommentRepository,
-  WeeklyEntryRepository,
-  diagramRepository,
-  weeklyCommentRepository,
-  weeklyEntryRepository,
-} from "./logbook";
-export type { WeeklyEntryWithRelations } from "./logbook";
+  SiwesSessionRepository,
+  siwesSessionRepository,
+} from "./siwes-session";
 
-// Logbook Metadata
+// ===== SESSION ENROLLMENTS =====
+export {
+  StudentSessionEnrollmentRepository,
+  studentSessionEnrollmentRepository,
+} from "./student-session-enrollment";
+
+export {
+  SupervisorSessionEnrollmentRepository,
+  supervisorSessionEnrollmentRepository,
+} from "./supervisor-session-enrollment";
+
+// ===== STUDENT SUPERVISOR ASSIGNMENT =====
+export {
+  StudentSupervisorAssignmentRepository,
+  studentSupervisorAssignmentRepository,
+} from "./student-supervisor-assignment";
+
+// ===== STUDENT SIWES DETAILS =====
+export {
+  StudentSiwesDetailRepository,
+  studentSiwesDetailRepository,
+} from "./student-siwes-detail";
+
+// ===== LOGBOOK METADATA =====
 export {
   LogbookMetadataRepository,
   logbookMetadataRepository,
 } from "./logbook-metadata";
 
-// Placement Organization
-export { PlacementRepository, placementRepository } from "./placement";
+// ===== WEEKLY ENTRY =====
+export { WeeklyEntryRepository, weeklyEntryRepository } from "./weekly-entry";
+export type { WeeklyEntryWithRelations } from "./weekly-entry";
 
-// Review Request
-export { ReviewRepository, reviewRepository } from "./review";
+// ===== DIAGRAMS =====
+export { DiagramRepository, diagramRepository } from "./diagram";
 
-// Session
-export { SessionRepository, sessionRepository } from "./session";
-
-// SIWES Detail
-export { SiwesDetailRepository, siwesDetailRepository } from "./siwes-detail";
-
-// Student
-export { StudentRepository, studentRepository } from "./student";
-
-// Supervisor (School & Industry)
+// ===== WEEKLY COMMENTS (Separate tables for each supervisor type) =====
 export {
-  IndustrySupervisorRepository,
-  SchoolSupervisorRepository,
-  industrySupervisorRepository,
-  schoolSupervisorRepository,
-} from "./supervisor";
+  IndustrySupervisorWeeklyCommentRepository,
+  industrySupervisorWeeklyCommentRepository,
+  SchoolSupervisorWeeklyCommentRepository,
+  schoolSupervisorWeeklyCommentRepository,
+} from "./weekly-comment";
 
-// User
-export { UserRepository, userRepository } from "./user";
+// ===== FINAL COMMENTS (Separate tables for each supervisor type) =====
+export {
+  IndustrySupervisorFinalCommentRepository,
+  industrySupervisorFinalCommentRepository,
+  SchoolSupervisorFinalCommentRepository,
+  schoolSupervisorFinalCommentRepository,
+} from "./final-comment";
+
+// ===== REVIEW REQUEST (Industry Supervisor) =====
+export {
+  IndustrySupervisorReviewRequestRepository,
+  industrySupervisorReviewRequestRepository,
+} from "./review-request";

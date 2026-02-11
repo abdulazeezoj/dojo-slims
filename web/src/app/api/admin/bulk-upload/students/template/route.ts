@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+import { requireAdmin } from "@/lib/auth-server";
 import { getLogger } from "@/lib/logger";
-import { requireAdmin } from "@/middlewares/auth";
 import { bulkUploadService } from "@/services";
 
 const logger = getLogger([

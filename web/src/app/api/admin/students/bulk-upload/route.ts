@@ -1,5 +1,5 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { requireAdmin } from "@/middlewares/auth";
+import { requireAdmin } from "@/lib/auth-server";
 import { studentManagementService } from "@/services";
 
 import type { NextRequest } from "next/server";

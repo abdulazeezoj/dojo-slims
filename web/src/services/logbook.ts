@@ -1,6 +1,12 @@
 import type { WeeklyEntry } from "@/generated/prisma/client";
 import { getLogger } from "@/lib/logger";
-import { diagramRepository, weeklyEntryRepository } from "@/repositories";
+import {
+  diagramRepository,
+  studentSiwesDetailRepository,
+  weeklyEntryRepository,
+} from "@/repositories";
+
+import { reviewService } from "./review";
 
 const logger = getLogger(["services", "logbook"]);
 
@@ -13,6 +19,47 @@ type DayOfWeek =
   | "saturday";
 
 /**
+ * Validate and sanitize logbook entry content
+ */
+function validateEntryContent(content: string): string {
+  // Check for empty content
+  const trimmed = content.trim();
+  if (trimmed.length === 0) {
+    throw new Error("Entry content cannot be empty");
+  }
+
+  // Check length (max 5000 characters for a daily entry)
+  const maxLength = 5000;
+  if (trimmed.length > maxLength) {
+    throw new Error(
+      `Entry content too long: Maximum ${maxLength} characters allowed`,
+    );
+  }
+
+  // XSS prevention: Remove script tags and on* event handlers
+  const dangerousPatterns = [
+    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+    /on\w+\s*=\s*["'][^"']*["']/gi,
+    /on\w+\s*=\s*[^\s>]*/gi,
+    /<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
+  ];
+
+  let sanitized = trimmed;
+  for (const pattern of dangerousPatterns) {
+    sanitized = sanitized.replace(pattern, "");
+  }
+
+  // Check if content was modified (potential XSS attempt)
+  if (sanitized !== trimmed) {
+    throw new Error(
+      "Invalid content: Scripts and event handlers are not allowed",
+    );
+  }
+
+  return sanitized;
+}
+
+/**
  * Logbook Service - Business logic for weekly entry management
  */
 export class LogbookService {
@@ -22,7 +69,7 @@ export class LogbookService {
   async getLogbookWeeks(studentId: string, sessionId: string) {
     logger.info("Getting logbook weeks", { studentId, sessionId });
 
-    const weeks = await weeklyEntryRepository.findByStudentSession(
+    const weeks = await weeklyEntryRepository.findManyByStudentSession(
       studentId,
       sessionId,
     );
@@ -56,7 +103,9 @@ export class LogbookService {
   async getWeekDetails(weekId: string) {
     logger.info("Getting week details", { weekId });
 
-    const week = await weeklyEntryRepository.findById(weekId);
+    const week = await weeklyEntryRepository.prisma.findUnique({
+      where: { id: weekId },
+    });
     if (!week) {
       throw new Error("Week not found");
     }
@@ -69,15 +118,23 @@ export class LogbookService {
    */
   async upsertWeekEntry(
     weekId: string,
+    studentId: string,
     dayOfWeek: DayOfWeek,
     content: string,
   ): Promise<WeeklyEntry> {
-    logger.info("Upserting week entry", { weekId, dayOfWeek });
+    logger.info("Upserting week entry", { weekId, studentId, dayOfWeek });
 
-    // Check if week is locked
-    const week = await weeklyEntryRepository.findById(weekId);
+    // Check if week exists and student owns it
+    const week = await weeklyEntryRepository.prisma.findUnique({
+      where: { id: weekId },
+    });
     if (!week) {
       throw new Error("Week not found");
+    }
+
+    // Verify student owns this week
+    if (week.studentId !== studentId) {
+      throw new Error("Unauthorized: Week does not belong to this student");
     }
 
     if (week.isLocked) {
@@ -85,6 +142,9 @@ export class LogbookService {
         "Cannot edit locked week. Contact your school supervisor to unlock.",
       );
     }
+
+    // Validate and sanitize content
+    const sanitizedContent = validateEntryContent(content);
 
     // Map day of week to the correct field
     const dayFieldMap: Record<DayOfWeek, string> = {
@@ -98,8 +158,11 @@ export class LogbookService {
 
     const fieldName = dayFieldMap[dayOfWeek];
 
-    return weeklyEntryRepository.update(weekId, {
-      [fieldName]: content,
+    return weeklyEntryRepository.prisma.update({
+      where: { id: weekId },
+      data: {
+        [fieldName]: sanitizedContent,
+      },
     });
   }
 
@@ -108,13 +171,21 @@ export class LogbookService {
    */
   async deleteWeekEntry(
     weekId: string,
+    studentId: string,
     dayOfWeek: DayOfWeek,
   ): Promise<WeeklyEntry> {
-    logger.info("Deleting week entry", { weekId, dayOfWeek });
+    logger.info("Deleting week entry", { weekId, studentId, dayOfWeek });
 
-    const week = await weeklyEntryRepository.findById(weekId);
+    const week = await weeklyEntryRepository.prisma.findUnique({
+      where: { id: weekId },
+    });
     if (!week) {
       throw new Error("Week not found");
+    }
+
+    // Verify student owns this week
+    if (week.studentId !== studentId) {
+      throw new Error("Unauthorized: Week does not belong to this student");
     }
 
     if (week.isLocked) {
@@ -135,8 +206,11 @@ export class LogbookService {
 
     const fieldName = dayFieldMap[dayOfWeek];
 
-    return weeklyEntryRepository.update(weekId, {
-      [fieldName]: null,
+    return weeklyEntryRepository.prisma.update({
+      where: { id: weekId },
+      data: {
+        [fieldName]: null,
+      },
     });
   }
 
@@ -153,7 +227,9 @@ export class LogbookService {
   ) {
     logger.info("Uploading weekly diagram", { weekId, fileName });
 
-    const week = await weeklyEntryRepository.findById(weekId);
+    const week = await weeklyEntryRepository.prisma.findUnique({
+      where: { id: weekId },
+    });
     if (!week) {
       throw new Error("Week not found");
     }
@@ -164,8 +240,37 @@ export class LogbookService {
       );
     }
 
+    // Validate file size (max 5MB per diagram)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (fileSize > maxSize) {
+      throw new Error(
+        `File too large: Maximum diagram size is ${maxSize / 1024 / 1024}MB`,
+      );
+    }
+
+    // Validate MIME type (only allow images and PDFs)
+    const allowedMimeTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+      "application/pdf",
+    ];
+
+    if (!allowedMimeTypes.includes(mimeType.toLowerCase())) {
+      throw new Error(
+        `Invalid file type: Only images (JPEG, PNG, GIF, WebP) and PDF files are allowed`,
+      );
+    }
+
+    // Validate file path to prevent path traversal attacks
+    if (filePath.includes("..") || filePath.includes("~")) {
+      throw new Error("Invalid file path: Path traversal detected");
+    }
+
     // Create diagram record
-    return diagramRepository.create({
+    return diagramRepository.createDiagram({
       weeklyEntry: {
         connect: { id: weekId },
       },
@@ -184,20 +289,24 @@ export class LogbookService {
   async deleteWeeklyDiagram(diagramId: string) {
     logger.info("Deleting weekly diagram", { diagramId });
 
-    const diagram = await diagramRepository.findById(diagramId);
+    const diagram = await diagramRepository.prisma.findUnique({
+      where: { id: diagramId },
+    });
     if (!diagram) {
       throw new Error("Diagram not found");
     }
 
     // Check if week is locked
-    const week = await weeklyEntryRepository.findById(diagram.weeklyEntryId);
+    const week = await weeklyEntryRepository.prisma.findUnique({
+      where: { id: diagram.weeklyEntryId },
+    });
     if (week?.isLocked) {
       throw new Error(
         "Cannot delete diagram from locked week. Contact your school supervisor to unlock.",
       );
     }
 
-    return diagramRepository.delete(diagramId);
+    return diagramRepository.deleteDiagram(diagramId);
   }
 
   /**
@@ -206,13 +315,20 @@ export class LogbookService {
   async requestWeekReview(weekId: string, studentId: string) {
     logger.info("Requesting week review", { weekId, studentId });
 
-    const week = await weeklyEntryRepository.findById(weekId);
+    const week = await weeklyEntryRepository.prisma.findUnique({
+      where: { id: weekId },
+    });
     if (!week) {
       throw new Error("Week not found");
     }
 
     if (week.isLocked) {
       throw new Error("Week is already locked and reviewed");
+    }
+
+    // Verify student owns this week
+    if (week.studentId !== studentId) {
+      throw new Error("Unauthorized: Week does not belong to this student");
     }
 
     // Check if there are entries
@@ -230,19 +346,40 @@ export class LogbookService {
       );
     }
 
-    // Repository includes reviewRequest, but TypeScript doesn't know that
-    const weekWithReview = week as typeof week & {
-      reviewRequest: { id: string; status: string } | null;
-    };
+    // Get student's SIWES details to find industry supervisor
+    const siwesDetails = await studentSiwesDetailRepository.prisma.findUnique({
+      where: {
+        studentId_siwesSessionId: {
+          studentId,
+          siwesSessionId: week.siwesSessionId,
+        },
+      },
+    });
 
-    // Check if review already requested
-    if (weekWithReview.reviewRequest) {
-      throw new Error("Review already requested for this week");
+    if (!siwesDetails) {
+      throw new Error(
+        "SIWES details not found. Please complete your SIWES details first.",
+      );
     }
 
-    // Create review request (this will trigger email notification in the background)
-    // Review request creation will be handled by review service
-    return { success: true, weekId, message: "Review request sent" };
+    // Create review request through review service
+    const reviewRequest = await reviewService.createReviewRequest(
+      weekId,
+      studentId,
+      siwesDetails.industrySupervisorId,
+    );
+
+    logger.info("Review request created successfully", {
+      reviewRequestId: reviewRequest.id,
+      weekId,
+    });
+
+    return {
+      success: true,
+      weekId,
+      reviewRequestId: reviewRequest.id,
+      message: "Review request sent successfully",
+    };
   }
 
   /**
@@ -251,7 +388,9 @@ export class LogbookService {
   async isWeekLocked(weekId: string): Promise<boolean> {
     logger.info("Checking if week is locked", { weekId });
 
-    const week = await weeklyEntryRepository.findById(weekId);
+    const week = await weeklyEntryRepository.prisma.findUnique({
+      where: { id: weekId },
+    });
     if (!week) {
       throw new Error("Week not found");
     }

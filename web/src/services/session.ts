@@ -1,5 +1,5 @@
 import { getLogger } from "@/lib/logger";
-import { sessionRepository } from "@/repositories";
+import { siwesSessionRepository } from "@/repositories";
 
 const logger = getLogger(["services", "session"]);
 
@@ -13,10 +13,8 @@ export class SessionService {
   async getAllSessions() {
     logger.info("Getting all sessions");
 
-    return sessionRepository.findMany({
-      orderBy: {
-        startDate: "desc",
-      },
+    return siwesSessionRepository.findAllWithStats({
+      // No pagination limit - get all
     });
   }
 
@@ -26,7 +24,7 @@ export class SessionService {
   async getSessionById(sessionId: string) {
     logger.info("Getting session by ID", { sessionId });
 
-    const session = await sessionRepository.findById(sessionId);
+    const session = await siwesSessionRepository.findByIdWithStats(sessionId);
     if (!session) {
       throw new Error("Session not found");
     }
@@ -51,12 +49,12 @@ export class SessionService {
     }
 
     // Check if session with same name already exists
-    const exists = await sessionRepository.existsByName(data.name);
+    const exists = await siwesSessionRepository.existsByName(data.name);
     if (exists) {
       throw new Error("Session with this name already exists");
     }
 
-    return sessionRepository.create({
+    return siwesSessionRepository.create({
       name: data.name,
       startDate: data.startDate,
       endDate: data.endDate,
@@ -79,7 +77,7 @@ export class SessionService {
   ) {
     logger.info("Updating session", { sessionId });
 
-    const session = await sessionRepository.findById(sessionId);
+    const session = await siwesSessionRepository.findByIdWithStats(sessionId);
     if (!session) {
       throw new Error("Session not found");
     }
@@ -94,13 +92,13 @@ export class SessionService {
 
     // Check if name is being changed and if it conflicts with existing session
     if (data.name && data.name !== session.name) {
-      const exists = await sessionRepository.existsByName(data.name);
+      const exists = await siwesSessionRepository.existsByName(data.name);
       if (exists) {
         throw new Error("Session with this name already exists");
       }
     }
 
-    return sessionRepository.update(sessionId, data);
+    return siwesSessionRepository.update(sessionId, data);
   }
 
   /**
@@ -109,7 +107,7 @@ export class SessionService {
   async closeSession(sessionId: string) {
     logger.info("Closing session", { sessionId });
 
-    const session = await sessionRepository.findById(sessionId);
+    const session = await siwesSessionRepository.findByIdWithStats(sessionId);
     if (!session) {
       throw new Error("Session not found");
     }
@@ -118,7 +116,7 @@ export class SessionService {
       throw new Error("Session is already closed");
     }
 
-    return sessionRepository.close(sessionId);
+    return siwesSessionRepository.closeSession(sessionId);
   }
 
   /**
@@ -127,7 +125,7 @@ export class SessionService {
   async reopenSession(sessionId: string) {
     logger.info("Reopening session", { sessionId });
 
-    const session = await sessionRepository.findById(sessionId);
+    const session = await siwesSessionRepository.findByIdWithStats(sessionId);
     if (!session) {
       throw new Error("Session not found");
     }
@@ -136,7 +134,7 @@ export class SessionService {
       throw new Error("Session is already active");
     }
 
-    return sessionRepository.reopen(sessionId);
+    return siwesSessionRepository.reopenSession(sessionId);
   }
 
   /**
@@ -145,7 +143,7 @@ export class SessionService {
   async getActiveSession() {
     logger.info("Getting active session");
 
-    return sessionRepository.findCurrentActive();
+    return siwesSessionRepository.findActiveSession();
   }
 
   /**
@@ -154,7 +152,11 @@ export class SessionService {
   async getSessionsByStatus(status: "ACTIVE" | "CLOSED") {
     logger.info("Getting sessions by status", { status });
 
-    return sessionRepository.findByStatus(status);
+    if (status === "ACTIVE") {
+      return siwesSessionRepository.findAllActive();
+    } else {
+      return siwesSessionRepository.findAllClosed();
+    }
   }
 }
 

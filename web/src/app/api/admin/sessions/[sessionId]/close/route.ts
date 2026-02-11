@@ -1,17 +1,25 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireAdmin } from "@/middlewares/auth";
+import { requireAdmin } from "@/lib/auth-server";
 import { closeSessionSchema } from "@/schemas";
 import { sessionService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
 export const POST = requireAdmin(
-  async (request: NextRequest, session, context: { params: { sessionId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { sessionId: string } },
+  ) => {
     try {
       const { sessionId } = context.params;
-      const validation = await validateRequest(request, { body: closeSessionSchema.optional() });
-      if (!validation.success) {return validation.error;}
+      const validation = await validateRequest(request, {
+        body: closeSessionSchema.optional(),
+      });
+      if (!validation.success) {
+        return validation.error;
+      }
 
       const { body } = validation.data;
       const closed = await sessionService.closeSession(sessionId, body?.reason);

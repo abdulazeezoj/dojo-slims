@@ -30,8 +30,10 @@ export type SchoolSupervisorMinAggregateOutputType = {
   name: string | null
   email: string | null
   departmentId: string | null
+  phone: string | null
+  currentSiwesSessionId: string | null
   isActive: boolean | null
-  betterAuthUserId: string | null
+  userId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -42,8 +44,10 @@ export type SchoolSupervisorMaxAggregateOutputType = {
   name: string | null
   email: string | null
   departmentId: string | null
+  phone: string | null
+  currentSiwesSessionId: string | null
   isActive: boolean | null
-  betterAuthUserId: string | null
+  userId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,8 +58,10 @@ export type SchoolSupervisorCountAggregateOutputType = {
   name: number
   email: number
   departmentId: number
+  phone: number
+  currentSiwesSessionId: number
   isActive: number
-  betterAuthUserId: number
+  userId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -68,8 +74,10 @@ export type SchoolSupervisorMinAggregateInputType = {
   name?: true
   email?: true
   departmentId?: true
+  phone?: true
+  currentSiwesSessionId?: true
   isActive?: true
-  betterAuthUserId?: true
+  userId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -80,8 +88,10 @@ export type SchoolSupervisorMaxAggregateInputType = {
   name?: true
   email?: true
   departmentId?: true
+  phone?: true
+  currentSiwesSessionId?: true
   isActive?: true
-  betterAuthUserId?: true
+  userId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -92,8 +102,10 @@ export type SchoolSupervisorCountAggregateInputType = {
   name?: true
   email?: true
   departmentId?: true
+  phone?: true
+  currentSiwesSessionId?: true
   isActive?: true
-  betterAuthUserId?: true
+  userId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -177,8 +189,10 @@ export type SchoolSupervisorGroupByOutputType = {
   name: string
   email: string
   departmentId: string
+  phone: string | null
+  currentSiwesSessionId: string | null
   isActive: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt: Date
   updatedAt: Date
   _count: SchoolSupervisorCountAggregateOutputType | null
@@ -210,14 +224,19 @@ export type SchoolSupervisorWhereInput = {
   name?: Prisma.StringFilter<"SchoolSupervisor"> | string
   email?: Prisma.StringFilter<"SchoolSupervisor"> | string
   departmentId?: Prisma.StringFilter<"SchoolSupervisor"> | string
+  phone?: Prisma.StringNullableFilter<"SchoolSupervisor"> | string | null
+  currentSiwesSessionId?: Prisma.StringNullableFilter<"SchoolSupervisor"> | string | null
   isActive?: Prisma.BoolFilter<"SchoolSupervisor"> | boolean
-  betterAuthUserId?: Prisma.StringFilter<"SchoolSupervisor"> | string
+  userId?: Prisma.StringFilter<"SchoolSupervisor"> | string
   createdAt?: Prisma.DateTimeFilter<"SchoolSupervisor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SchoolSupervisor"> | Date | string
-  betterAuthUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  currentSiwesSession?: Prisma.XOR<Prisma.SiwesSessionNullableScalarRelationFilter, Prisma.SiwesSessionWhereInput> | null
   department?: Prisma.XOR<Prisma.DepartmentScalarRelationFilter, Prisma.DepartmentWhereInput>
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentListRelationFilter
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentListRelationFilter
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentListRelationFilter
+  finalComments?: Prisma.SchoolSupervisorFinalCommentListRelationFilter
 }
 
 export type SchoolSupervisorOrderByWithRelationInput = {
@@ -226,34 +245,44 @@ export type SchoolSupervisorOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  currentSiwesSessionId?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  betterAuthUser?: Prisma.UserOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
+  currentSiwesSession?: Prisma.SiwesSessionOrderByWithRelationInput
   department?: Prisma.DepartmentOrderByWithRelationInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentOrderByRelationAggregateInput
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentOrderByRelationAggregateInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentOrderByRelationAggregateInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentOrderByRelationAggregateInput
 }
 
 export type SchoolSupervisorWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   staffId?: string
   email?: string
-  betterAuthUserId?: string
+  userId?: string
   AND?: Prisma.SchoolSupervisorWhereInput | Prisma.SchoolSupervisorWhereInput[]
   OR?: Prisma.SchoolSupervisorWhereInput[]
   NOT?: Prisma.SchoolSupervisorWhereInput | Prisma.SchoolSupervisorWhereInput[]
   name?: Prisma.StringFilter<"SchoolSupervisor"> | string
   departmentId?: Prisma.StringFilter<"SchoolSupervisor"> | string
+  phone?: Prisma.StringNullableFilter<"SchoolSupervisor"> | string | null
+  currentSiwesSessionId?: Prisma.StringNullableFilter<"SchoolSupervisor"> | string | null
   isActive?: Prisma.BoolFilter<"SchoolSupervisor"> | boolean
   createdAt?: Prisma.DateTimeFilter<"SchoolSupervisor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SchoolSupervisor"> | Date | string
-  betterAuthUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  currentSiwesSession?: Prisma.XOR<Prisma.SiwesSessionNullableScalarRelationFilter, Prisma.SiwesSessionWhereInput> | null
   department?: Prisma.XOR<Prisma.DepartmentScalarRelationFilter, Prisma.DepartmentWhereInput>
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentListRelationFilter
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentListRelationFilter
-}, "id" | "staffId" | "email" | "betterAuthUserId">
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentListRelationFilter
+  finalComments?: Prisma.SchoolSupervisorFinalCommentListRelationFilter
+}, "id" | "staffId" | "email" | "userId">
 
 export type SchoolSupervisorOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -261,8 +290,10 @@ export type SchoolSupervisorOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  currentSiwesSessionId?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SchoolSupervisorCountOrderByAggregateInput
@@ -279,8 +310,10 @@ export type SchoolSupervisorScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"SchoolSupervisor"> | string
   email?: Prisma.StringWithAggregatesFilter<"SchoolSupervisor"> | string
   departmentId?: Prisma.StringWithAggregatesFilter<"SchoolSupervisor"> | string
+  phone?: Prisma.StringNullableWithAggregatesFilter<"SchoolSupervisor"> | string | null
+  currentSiwesSessionId?: Prisma.StringNullableWithAggregatesFilter<"SchoolSupervisor"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"SchoolSupervisor"> | boolean
-  betterAuthUserId?: Prisma.StringWithAggregatesFilter<"SchoolSupervisor"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"SchoolSupervisor"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SchoolSupervisor"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SchoolSupervisor"> | Date | string
 }
@@ -290,13 +323,17 @@ export type SchoolSupervisorCreateInput = {
   staffId: string
   name: string
   email: string
+  phone?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutSchoolSupervisorProfileInput
+  user: Prisma.UserCreateNestedOneWithoutSchoolSupervisorProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutSchoolSupervisorsWithCurrentSiwesSessionInput
   department: Prisma.DepartmentCreateNestedOneWithoutSchoolSupervisorsInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutSchoolSupervisorInput
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentCreateNestedManyWithoutSchoolSupervisorInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentCreateNestedManyWithoutSchoolSupervisorInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutSchoolSupervisorInput
 }
 
 export type SchoolSupervisorUncheckedCreateInput = {
@@ -305,12 +342,16 @@ export type SchoolSupervisorUncheckedCreateInput = {
   name: string
   email: string
   departmentId: string
+  phone?: string | null
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
 }
 
 export type SchoolSupervisorUpdateInput = {
@@ -318,13 +359,17 @@ export type SchoolSupervisorUpdateInput = {
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutSchoolSupervisorProfileNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSchoolSupervisorProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutSchoolSupervisorsWithCurrentSiwesSessionNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutSchoolSupervisorsNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutSchoolSupervisorNestedInput
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUpdateManyWithoutSchoolSupervisorNestedInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUpdateManyWithoutSchoolSupervisorNestedInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutSchoolSupervisorNestedInput
 }
 
 export type SchoolSupervisorUncheckedUpdateInput = {
@@ -333,12 +378,16 @@ export type SchoolSupervisorUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
 }
 
 export type SchoolSupervisorCreateManyInput = {
@@ -347,8 +396,10 @@ export type SchoolSupervisorCreateManyInput = {
   name: string
   email: string
   departmentId: string
+  phone?: string | null
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -358,6 +409,7 @@ export type SchoolSupervisorUpdateManyMutationInput = {
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -369,8 +421,10 @@ export type SchoolSupervisorUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -396,8 +450,10 @@ export type SchoolSupervisorCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  currentSiwesSessionId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -408,8 +464,10 @@ export type SchoolSupervisorMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  currentSiwesSessionId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -420,8 +478,10 @@ export type SchoolSupervisorMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  currentSiwesSessionId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -431,36 +491,36 @@ export type SchoolSupervisorScalarRelationFilter = {
   isNot?: Prisma.SchoolSupervisorWhereInput
 }
 
-export type SchoolSupervisorCreateNestedOneWithoutBetterAuthUserInput = {
-  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutBetterAuthUserInput, Prisma.SchoolSupervisorUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutBetterAuthUserInput
+export type SchoolSupervisorCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutUserInput, Prisma.SchoolSupervisorUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutUserInput
   connect?: Prisma.SchoolSupervisorWhereUniqueInput
 }
 
-export type SchoolSupervisorUncheckedCreateNestedOneWithoutBetterAuthUserInput = {
-  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutBetterAuthUserInput, Prisma.SchoolSupervisorUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutBetterAuthUserInput
+export type SchoolSupervisorUncheckedCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutUserInput, Prisma.SchoolSupervisorUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutUserInput
   connect?: Prisma.SchoolSupervisorWhereUniqueInput
 }
 
-export type SchoolSupervisorUpdateOneWithoutBetterAuthUserNestedInput = {
-  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutBetterAuthUserInput, Prisma.SchoolSupervisorUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutBetterAuthUserInput
-  upsert?: Prisma.SchoolSupervisorUpsertWithoutBetterAuthUserInput
+export type SchoolSupervisorUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutUserInput, Prisma.SchoolSupervisorUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutUserInput
+  upsert?: Prisma.SchoolSupervisorUpsertWithoutUserInput
   disconnect?: Prisma.SchoolSupervisorWhereInput | boolean
   delete?: Prisma.SchoolSupervisorWhereInput | boolean
   connect?: Prisma.SchoolSupervisorWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.SchoolSupervisorUpdateToOneWithWhereWithoutBetterAuthUserInput, Prisma.SchoolSupervisorUpdateWithoutBetterAuthUserInput>, Prisma.SchoolSupervisorUncheckedUpdateWithoutBetterAuthUserInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SchoolSupervisorUpdateToOneWithWhereWithoutUserInput, Prisma.SchoolSupervisorUpdateWithoutUserInput>, Prisma.SchoolSupervisorUncheckedUpdateWithoutUserInput>
 }
 
-export type SchoolSupervisorUncheckedUpdateOneWithoutBetterAuthUserNestedInput = {
-  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutBetterAuthUserInput, Prisma.SchoolSupervisorUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutBetterAuthUserInput
-  upsert?: Prisma.SchoolSupervisorUpsertWithoutBetterAuthUserInput
+export type SchoolSupervisorUncheckedUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutUserInput, Prisma.SchoolSupervisorUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutUserInput
+  upsert?: Prisma.SchoolSupervisorUpsertWithoutUserInput
   disconnect?: Prisma.SchoolSupervisorWhereInput | boolean
   delete?: Prisma.SchoolSupervisorWhereInput | boolean
   connect?: Prisma.SchoolSupervisorWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.SchoolSupervisorUpdateToOneWithWhereWithoutBetterAuthUserInput, Prisma.SchoolSupervisorUpdateWithoutBetterAuthUserInput>, Prisma.SchoolSupervisorUncheckedUpdateWithoutBetterAuthUserInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SchoolSupervisorUpdateToOneWithWhereWithoutUserInput, Prisma.SchoolSupervisorUpdateWithoutUserInput>, Prisma.SchoolSupervisorUncheckedUpdateWithoutUserInput>
 }
 
 export type SchoolSupervisorCreateNestedManyWithoutDepartmentInput = {
@@ -505,6 +565,48 @@ export type SchoolSupervisorUncheckedUpdateManyWithoutDepartmentNestedInput = {
   deleteMany?: Prisma.SchoolSupervisorScalarWhereInput | Prisma.SchoolSupervisorScalarWhereInput[]
 }
 
+export type SchoolSupervisorCreateNestedManyWithoutCurrentSiwesSessionInput = {
+  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutCurrentSiwesSessionInput, Prisma.SchoolSupervisorUncheckedCreateWithoutCurrentSiwesSessionInput> | Prisma.SchoolSupervisorCreateWithoutCurrentSiwesSessionInput[] | Prisma.SchoolSupervisorUncheckedCreateWithoutCurrentSiwesSessionInput[]
+  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutCurrentSiwesSessionInput | Prisma.SchoolSupervisorCreateOrConnectWithoutCurrentSiwesSessionInput[]
+  createMany?: Prisma.SchoolSupervisorCreateManyCurrentSiwesSessionInputEnvelope
+  connect?: Prisma.SchoolSupervisorWhereUniqueInput | Prisma.SchoolSupervisorWhereUniqueInput[]
+}
+
+export type SchoolSupervisorUncheckedCreateNestedManyWithoutCurrentSiwesSessionInput = {
+  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutCurrentSiwesSessionInput, Prisma.SchoolSupervisorUncheckedCreateWithoutCurrentSiwesSessionInput> | Prisma.SchoolSupervisorCreateWithoutCurrentSiwesSessionInput[] | Prisma.SchoolSupervisorUncheckedCreateWithoutCurrentSiwesSessionInput[]
+  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutCurrentSiwesSessionInput | Prisma.SchoolSupervisorCreateOrConnectWithoutCurrentSiwesSessionInput[]
+  createMany?: Prisma.SchoolSupervisorCreateManyCurrentSiwesSessionInputEnvelope
+  connect?: Prisma.SchoolSupervisorWhereUniqueInput | Prisma.SchoolSupervisorWhereUniqueInput[]
+}
+
+export type SchoolSupervisorUpdateManyWithoutCurrentSiwesSessionNestedInput = {
+  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutCurrentSiwesSessionInput, Prisma.SchoolSupervisorUncheckedCreateWithoutCurrentSiwesSessionInput> | Prisma.SchoolSupervisorCreateWithoutCurrentSiwesSessionInput[] | Prisma.SchoolSupervisorUncheckedCreateWithoutCurrentSiwesSessionInput[]
+  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutCurrentSiwesSessionInput | Prisma.SchoolSupervisorCreateOrConnectWithoutCurrentSiwesSessionInput[]
+  upsert?: Prisma.SchoolSupervisorUpsertWithWhereUniqueWithoutCurrentSiwesSessionInput | Prisma.SchoolSupervisorUpsertWithWhereUniqueWithoutCurrentSiwesSessionInput[]
+  createMany?: Prisma.SchoolSupervisorCreateManyCurrentSiwesSessionInputEnvelope
+  set?: Prisma.SchoolSupervisorWhereUniqueInput | Prisma.SchoolSupervisorWhereUniqueInput[]
+  disconnect?: Prisma.SchoolSupervisorWhereUniqueInput | Prisma.SchoolSupervisorWhereUniqueInput[]
+  delete?: Prisma.SchoolSupervisorWhereUniqueInput | Prisma.SchoolSupervisorWhereUniqueInput[]
+  connect?: Prisma.SchoolSupervisorWhereUniqueInput | Prisma.SchoolSupervisorWhereUniqueInput[]
+  update?: Prisma.SchoolSupervisorUpdateWithWhereUniqueWithoutCurrentSiwesSessionInput | Prisma.SchoolSupervisorUpdateWithWhereUniqueWithoutCurrentSiwesSessionInput[]
+  updateMany?: Prisma.SchoolSupervisorUpdateManyWithWhereWithoutCurrentSiwesSessionInput | Prisma.SchoolSupervisorUpdateManyWithWhereWithoutCurrentSiwesSessionInput[]
+  deleteMany?: Prisma.SchoolSupervisorScalarWhereInput | Prisma.SchoolSupervisorScalarWhereInput[]
+}
+
+export type SchoolSupervisorUncheckedUpdateManyWithoutCurrentSiwesSessionNestedInput = {
+  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutCurrentSiwesSessionInput, Prisma.SchoolSupervisorUncheckedCreateWithoutCurrentSiwesSessionInput> | Prisma.SchoolSupervisorCreateWithoutCurrentSiwesSessionInput[] | Prisma.SchoolSupervisorUncheckedCreateWithoutCurrentSiwesSessionInput[]
+  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutCurrentSiwesSessionInput | Prisma.SchoolSupervisorCreateOrConnectWithoutCurrentSiwesSessionInput[]
+  upsert?: Prisma.SchoolSupervisorUpsertWithWhereUniqueWithoutCurrentSiwesSessionInput | Prisma.SchoolSupervisorUpsertWithWhereUniqueWithoutCurrentSiwesSessionInput[]
+  createMany?: Prisma.SchoolSupervisorCreateManyCurrentSiwesSessionInputEnvelope
+  set?: Prisma.SchoolSupervisorWhereUniqueInput | Prisma.SchoolSupervisorWhereUniqueInput[]
+  disconnect?: Prisma.SchoolSupervisorWhereUniqueInput | Prisma.SchoolSupervisorWhereUniqueInput[]
+  delete?: Prisma.SchoolSupervisorWhereUniqueInput | Prisma.SchoolSupervisorWhereUniqueInput[]
+  connect?: Prisma.SchoolSupervisorWhereUniqueInput | Prisma.SchoolSupervisorWhereUniqueInput[]
+  update?: Prisma.SchoolSupervisorUpdateWithWhereUniqueWithoutCurrentSiwesSessionInput | Prisma.SchoolSupervisorUpdateWithWhereUniqueWithoutCurrentSiwesSessionInput[]
+  updateMany?: Prisma.SchoolSupervisorUpdateManyWithWhereWithoutCurrentSiwesSessionInput | Prisma.SchoolSupervisorUpdateManyWithWhereWithoutCurrentSiwesSessionInput[]
+  deleteMany?: Prisma.SchoolSupervisorScalarWhereInput | Prisma.SchoolSupervisorScalarWhereInput[]
+}
+
 export type SchoolSupervisorCreateNestedOneWithoutSupervisorSessionEnrollmentsInput = {
   create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutSupervisorSessionEnrollmentsInput, Prisma.SchoolSupervisorUncheckedCreateWithoutSupervisorSessionEnrollmentsInput>
   connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutSupervisorSessionEnrollmentsInput
@@ -533,72 +635,116 @@ export type SchoolSupervisorUpdateOneRequiredWithoutStudentSupervisorAssignments
   update?: Prisma.XOR<Prisma.XOR<Prisma.SchoolSupervisorUpdateToOneWithWhereWithoutStudentSupervisorAssignmentsInput, Prisma.SchoolSupervisorUpdateWithoutStudentSupervisorAssignmentsInput>, Prisma.SchoolSupervisorUncheckedUpdateWithoutStudentSupervisorAssignmentsInput>
 }
 
-export type SchoolSupervisorCreateWithoutBetterAuthUserInput = {
+export type SchoolSupervisorCreateNestedOneWithoutWeeklyCommentsInput = {
+  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutWeeklyCommentsInput, Prisma.SchoolSupervisorUncheckedCreateWithoutWeeklyCommentsInput>
+  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutWeeklyCommentsInput
+  connect?: Prisma.SchoolSupervisorWhereUniqueInput
+}
+
+export type SchoolSupervisorUpdateOneRequiredWithoutWeeklyCommentsNestedInput = {
+  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutWeeklyCommentsInput, Prisma.SchoolSupervisorUncheckedCreateWithoutWeeklyCommentsInput>
+  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutWeeklyCommentsInput
+  upsert?: Prisma.SchoolSupervisorUpsertWithoutWeeklyCommentsInput
+  connect?: Prisma.SchoolSupervisorWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SchoolSupervisorUpdateToOneWithWhereWithoutWeeklyCommentsInput, Prisma.SchoolSupervisorUpdateWithoutWeeklyCommentsInput>, Prisma.SchoolSupervisorUncheckedUpdateWithoutWeeklyCommentsInput>
+}
+
+export type SchoolSupervisorCreateNestedOneWithoutFinalCommentsInput = {
+  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutFinalCommentsInput, Prisma.SchoolSupervisorUncheckedCreateWithoutFinalCommentsInput>
+  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutFinalCommentsInput
+  connect?: Prisma.SchoolSupervisorWhereUniqueInput
+}
+
+export type SchoolSupervisorUpdateOneRequiredWithoutFinalCommentsNestedInput = {
+  create?: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutFinalCommentsInput, Prisma.SchoolSupervisorUncheckedCreateWithoutFinalCommentsInput>
+  connectOrCreate?: Prisma.SchoolSupervisorCreateOrConnectWithoutFinalCommentsInput
+  upsert?: Prisma.SchoolSupervisorUpsertWithoutFinalCommentsInput
+  connect?: Prisma.SchoolSupervisorWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SchoolSupervisorUpdateToOneWithWhereWithoutFinalCommentsInput, Prisma.SchoolSupervisorUpdateWithoutFinalCommentsInput>, Prisma.SchoolSupervisorUncheckedUpdateWithoutFinalCommentsInput>
+}
+
+export type SchoolSupervisorCreateWithoutUserInput = {
   id?: string
   staffId: string
   name: string
   email: string
+  phone?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutSchoolSupervisorsWithCurrentSiwesSessionInput
   department: Prisma.DepartmentCreateNestedOneWithoutSchoolSupervisorsInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutSchoolSupervisorInput
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentCreateNestedManyWithoutSchoolSupervisorInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentCreateNestedManyWithoutSchoolSupervisorInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutSchoolSupervisorInput
 }
 
-export type SchoolSupervisorUncheckedCreateWithoutBetterAuthUserInput = {
+export type SchoolSupervisorUncheckedCreateWithoutUserInput = {
   id?: string
   staffId: string
   name: string
   email: string
   departmentId: string
+  phone?: string | null
+  currentSiwesSessionId?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
 }
 
-export type SchoolSupervisorCreateOrConnectWithoutBetterAuthUserInput = {
+export type SchoolSupervisorCreateOrConnectWithoutUserInput = {
   where: Prisma.SchoolSupervisorWhereUniqueInput
-  create: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutBetterAuthUserInput, Prisma.SchoolSupervisorUncheckedCreateWithoutBetterAuthUserInput>
+  create: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutUserInput, Prisma.SchoolSupervisorUncheckedCreateWithoutUserInput>
 }
 
-export type SchoolSupervisorUpsertWithoutBetterAuthUserInput = {
-  update: Prisma.XOR<Prisma.SchoolSupervisorUpdateWithoutBetterAuthUserInput, Prisma.SchoolSupervisorUncheckedUpdateWithoutBetterAuthUserInput>
-  create: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutBetterAuthUserInput, Prisma.SchoolSupervisorUncheckedCreateWithoutBetterAuthUserInput>
+export type SchoolSupervisorUpsertWithoutUserInput = {
+  update: Prisma.XOR<Prisma.SchoolSupervisorUpdateWithoutUserInput, Prisma.SchoolSupervisorUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutUserInput, Prisma.SchoolSupervisorUncheckedCreateWithoutUserInput>
   where?: Prisma.SchoolSupervisorWhereInput
 }
 
-export type SchoolSupervisorUpdateToOneWithWhereWithoutBetterAuthUserInput = {
+export type SchoolSupervisorUpdateToOneWithWhereWithoutUserInput = {
   where?: Prisma.SchoolSupervisorWhereInput
-  data: Prisma.XOR<Prisma.SchoolSupervisorUpdateWithoutBetterAuthUserInput, Prisma.SchoolSupervisorUncheckedUpdateWithoutBetterAuthUserInput>
+  data: Prisma.XOR<Prisma.SchoolSupervisorUpdateWithoutUserInput, Prisma.SchoolSupervisorUncheckedUpdateWithoutUserInput>
 }
 
-export type SchoolSupervisorUpdateWithoutBetterAuthUserInput = {
+export type SchoolSupervisorUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutSchoolSupervisorsWithCurrentSiwesSessionNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutSchoolSupervisorsNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutSchoolSupervisorNestedInput
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUpdateManyWithoutSchoolSupervisorNestedInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUpdateManyWithoutSchoolSupervisorNestedInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutSchoolSupervisorNestedInput
 }
 
-export type SchoolSupervisorUncheckedUpdateWithoutBetterAuthUserInput = {
+export type SchoolSupervisorUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
 }
 
 export type SchoolSupervisorCreateWithoutDepartmentInput = {
@@ -606,12 +752,16 @@ export type SchoolSupervisorCreateWithoutDepartmentInput = {
   staffId: string
   name: string
   email: string
+  phone?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutSchoolSupervisorProfileInput
+  user: Prisma.UserCreateNestedOneWithoutSchoolSupervisorProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutSchoolSupervisorsWithCurrentSiwesSessionInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutSchoolSupervisorInput
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentCreateNestedManyWithoutSchoolSupervisorInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentCreateNestedManyWithoutSchoolSupervisorInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutSchoolSupervisorInput
 }
 
 export type SchoolSupervisorUncheckedCreateWithoutDepartmentInput = {
@@ -619,12 +769,16 @@ export type SchoolSupervisorUncheckedCreateWithoutDepartmentInput = {
   staffId: string
   name: string
   email: string
+  phone?: string | null
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
 }
 
 export type SchoolSupervisorCreateOrConnectWithoutDepartmentInput = {
@@ -662,10 +816,72 @@ export type SchoolSupervisorScalarWhereInput = {
   name?: Prisma.StringFilter<"SchoolSupervisor"> | string
   email?: Prisma.StringFilter<"SchoolSupervisor"> | string
   departmentId?: Prisma.StringFilter<"SchoolSupervisor"> | string
+  phone?: Prisma.StringNullableFilter<"SchoolSupervisor"> | string | null
+  currentSiwesSessionId?: Prisma.StringNullableFilter<"SchoolSupervisor"> | string | null
   isActive?: Prisma.BoolFilter<"SchoolSupervisor"> | boolean
-  betterAuthUserId?: Prisma.StringFilter<"SchoolSupervisor"> | string
+  userId?: Prisma.StringFilter<"SchoolSupervisor"> | string
   createdAt?: Prisma.DateTimeFilter<"SchoolSupervisor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SchoolSupervisor"> | Date | string
+}
+
+export type SchoolSupervisorCreateWithoutCurrentSiwesSessionInput = {
+  id?: string
+  staffId: string
+  name: string
+  email: string
+  phone?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutSchoolSupervisorProfileInput
+  department: Prisma.DepartmentCreateNestedOneWithoutSchoolSupervisorsInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutSchoolSupervisorInput
+  supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentCreateNestedManyWithoutSchoolSupervisorInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentCreateNestedManyWithoutSchoolSupervisorInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutSchoolSupervisorInput
+}
+
+export type SchoolSupervisorUncheckedCreateWithoutCurrentSiwesSessionInput = {
+  id?: string
+  staffId: string
+  name: string
+  email: string
+  departmentId: string
+  phone?: string | null
+  isActive?: boolean
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+}
+
+export type SchoolSupervisorCreateOrConnectWithoutCurrentSiwesSessionInput = {
+  where: Prisma.SchoolSupervisorWhereUniqueInput
+  create: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutCurrentSiwesSessionInput, Prisma.SchoolSupervisorUncheckedCreateWithoutCurrentSiwesSessionInput>
+}
+
+export type SchoolSupervisorCreateManyCurrentSiwesSessionInputEnvelope = {
+  data: Prisma.SchoolSupervisorCreateManyCurrentSiwesSessionInput | Prisma.SchoolSupervisorCreateManyCurrentSiwesSessionInput[]
+  skipDuplicates?: boolean
+}
+
+export type SchoolSupervisorUpsertWithWhereUniqueWithoutCurrentSiwesSessionInput = {
+  where: Prisma.SchoolSupervisorWhereUniqueInput
+  update: Prisma.XOR<Prisma.SchoolSupervisorUpdateWithoutCurrentSiwesSessionInput, Prisma.SchoolSupervisorUncheckedUpdateWithoutCurrentSiwesSessionInput>
+  create: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutCurrentSiwesSessionInput, Prisma.SchoolSupervisorUncheckedCreateWithoutCurrentSiwesSessionInput>
+}
+
+export type SchoolSupervisorUpdateWithWhereUniqueWithoutCurrentSiwesSessionInput = {
+  where: Prisma.SchoolSupervisorWhereUniqueInput
+  data: Prisma.XOR<Prisma.SchoolSupervisorUpdateWithoutCurrentSiwesSessionInput, Prisma.SchoolSupervisorUncheckedUpdateWithoutCurrentSiwesSessionInput>
+}
+
+export type SchoolSupervisorUpdateManyWithWhereWithoutCurrentSiwesSessionInput = {
+  where: Prisma.SchoolSupervisorScalarWhereInput
+  data: Prisma.XOR<Prisma.SchoolSupervisorUpdateManyMutationInput, Prisma.SchoolSupervisorUncheckedUpdateManyWithoutCurrentSiwesSessionInput>
 }
 
 export type SchoolSupervisorCreateWithoutSupervisorSessionEnrollmentsInput = {
@@ -673,12 +889,16 @@ export type SchoolSupervisorCreateWithoutSupervisorSessionEnrollmentsInput = {
   staffId: string
   name: string
   email: string
+  phone?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutSchoolSupervisorProfileInput
+  user: Prisma.UserCreateNestedOneWithoutSchoolSupervisorProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutSchoolSupervisorsWithCurrentSiwesSessionInput
   department: Prisma.DepartmentCreateNestedOneWithoutSchoolSupervisorsInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutSchoolSupervisorInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentCreateNestedManyWithoutSchoolSupervisorInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutSchoolSupervisorInput
 }
 
 export type SchoolSupervisorUncheckedCreateWithoutSupervisorSessionEnrollmentsInput = {
@@ -687,11 +907,15 @@ export type SchoolSupervisorUncheckedCreateWithoutSupervisorSessionEnrollmentsIn
   name: string
   email: string
   departmentId: string
+  phone?: string | null
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
 }
 
 export type SchoolSupervisorCreateOrConnectWithoutSupervisorSessionEnrollmentsInput = {
@@ -715,12 +939,16 @@ export type SchoolSupervisorUpdateWithoutSupervisorSessionEnrollmentsInput = {
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutSchoolSupervisorProfileNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSchoolSupervisorProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutSchoolSupervisorsWithCurrentSiwesSessionNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutSchoolSupervisorsNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutSchoolSupervisorNestedInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUpdateManyWithoutSchoolSupervisorNestedInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutSchoolSupervisorNestedInput
 }
 
 export type SchoolSupervisorUncheckedUpdateWithoutSupervisorSessionEnrollmentsInput = {
@@ -729,11 +957,15 @@ export type SchoolSupervisorUncheckedUpdateWithoutSupervisorSessionEnrollmentsIn
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
 }
 
 export type SchoolSupervisorCreateWithoutStudentSupervisorAssignmentsInput = {
@@ -741,12 +973,16 @@ export type SchoolSupervisorCreateWithoutStudentSupervisorAssignmentsInput = {
   staffId: string
   name: string
   email: string
+  phone?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutSchoolSupervisorProfileInput
+  user: Prisma.UserCreateNestedOneWithoutSchoolSupervisorProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutSchoolSupervisorsWithCurrentSiwesSessionInput
   department: Prisma.DepartmentCreateNestedOneWithoutSchoolSupervisorsInput
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentCreateNestedManyWithoutSchoolSupervisorInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentCreateNestedManyWithoutSchoolSupervisorInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutSchoolSupervisorInput
 }
 
 export type SchoolSupervisorUncheckedCreateWithoutStudentSupervisorAssignmentsInput = {
@@ -755,11 +991,15 @@ export type SchoolSupervisorUncheckedCreateWithoutStudentSupervisorAssignmentsIn
   name: string
   email: string
   departmentId: string
+  phone?: string | null
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
 }
 
 export type SchoolSupervisorCreateOrConnectWithoutStudentSupervisorAssignmentsInput = {
@@ -783,12 +1023,16 @@ export type SchoolSupervisorUpdateWithoutStudentSupervisorAssignmentsInput = {
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutSchoolSupervisorProfileNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSchoolSupervisorProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutSchoolSupervisorsWithCurrentSiwesSessionNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutSchoolSupervisorsNestedInput
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUpdateManyWithoutSchoolSupervisorNestedInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUpdateManyWithoutSchoolSupervisorNestedInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutSchoolSupervisorNestedInput
 }
 
 export type SchoolSupervisorUncheckedUpdateWithoutStudentSupervisorAssignmentsInput = {
@@ -797,11 +1041,183 @@ export type SchoolSupervisorUncheckedUpdateWithoutStudentSupervisorAssignmentsIn
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+}
+
+export type SchoolSupervisorCreateWithoutWeeklyCommentsInput = {
+  id?: string
+  staffId: string
+  name: string
+  email: string
+  phone?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutSchoolSupervisorProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutSchoolSupervisorsWithCurrentSiwesSessionInput
+  department: Prisma.DepartmentCreateNestedOneWithoutSchoolSupervisorsInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutSchoolSupervisorInput
+  supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentCreateNestedManyWithoutSchoolSupervisorInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutSchoolSupervisorInput
+}
+
+export type SchoolSupervisorUncheckedCreateWithoutWeeklyCommentsInput = {
+  id?: string
+  staffId: string
+  name: string
+  email: string
+  departmentId: string
+  phone?: string | null
+  currentSiwesSessionId?: string | null
+  isActive?: boolean
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+}
+
+export type SchoolSupervisorCreateOrConnectWithoutWeeklyCommentsInput = {
+  where: Prisma.SchoolSupervisorWhereUniqueInput
+  create: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutWeeklyCommentsInput, Prisma.SchoolSupervisorUncheckedCreateWithoutWeeklyCommentsInput>
+}
+
+export type SchoolSupervisorUpsertWithoutWeeklyCommentsInput = {
+  update: Prisma.XOR<Prisma.SchoolSupervisorUpdateWithoutWeeklyCommentsInput, Prisma.SchoolSupervisorUncheckedUpdateWithoutWeeklyCommentsInput>
+  create: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutWeeklyCommentsInput, Prisma.SchoolSupervisorUncheckedCreateWithoutWeeklyCommentsInput>
+  where?: Prisma.SchoolSupervisorWhereInput
+}
+
+export type SchoolSupervisorUpdateToOneWithWhereWithoutWeeklyCommentsInput = {
+  where?: Prisma.SchoolSupervisorWhereInput
+  data: Prisma.XOR<Prisma.SchoolSupervisorUpdateWithoutWeeklyCommentsInput, Prisma.SchoolSupervisorUncheckedUpdateWithoutWeeklyCommentsInput>
+}
+
+export type SchoolSupervisorUpdateWithoutWeeklyCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  staffId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutSchoolSupervisorProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutSchoolSupervisorsWithCurrentSiwesSessionNestedInput
+  department?: Prisma.DepartmentUpdateOneRequiredWithoutSchoolSupervisorsNestedInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutSchoolSupervisorNestedInput
+  supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUpdateManyWithoutSchoolSupervisorNestedInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutSchoolSupervisorNestedInput
+}
+
+export type SchoolSupervisorUncheckedUpdateWithoutWeeklyCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  staffId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+}
+
+export type SchoolSupervisorCreateWithoutFinalCommentsInput = {
+  id?: string
+  staffId: string
+  name: string
+  email: string
+  phone?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutSchoolSupervisorProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutSchoolSupervisorsWithCurrentSiwesSessionInput
+  department: Prisma.DepartmentCreateNestedOneWithoutSchoolSupervisorsInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutSchoolSupervisorInput
+  supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentCreateNestedManyWithoutSchoolSupervisorInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentCreateNestedManyWithoutSchoolSupervisorInput
+}
+
+export type SchoolSupervisorUncheckedCreateWithoutFinalCommentsInput = {
+  id?: string
+  staffId: string
+  name: string
+  email: string
+  departmentId: string
+  phone?: string | null
+  currentSiwesSessionId?: string | null
+  isActive?: boolean
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedCreateNestedManyWithoutSchoolSupervisorInput
+}
+
+export type SchoolSupervisorCreateOrConnectWithoutFinalCommentsInput = {
+  where: Prisma.SchoolSupervisorWhereUniqueInput
+  create: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutFinalCommentsInput, Prisma.SchoolSupervisorUncheckedCreateWithoutFinalCommentsInput>
+}
+
+export type SchoolSupervisorUpsertWithoutFinalCommentsInput = {
+  update: Prisma.XOR<Prisma.SchoolSupervisorUpdateWithoutFinalCommentsInput, Prisma.SchoolSupervisorUncheckedUpdateWithoutFinalCommentsInput>
+  create: Prisma.XOR<Prisma.SchoolSupervisorCreateWithoutFinalCommentsInput, Prisma.SchoolSupervisorUncheckedCreateWithoutFinalCommentsInput>
+  where?: Prisma.SchoolSupervisorWhereInput
+}
+
+export type SchoolSupervisorUpdateToOneWithWhereWithoutFinalCommentsInput = {
+  where?: Prisma.SchoolSupervisorWhereInput
+  data: Prisma.XOR<Prisma.SchoolSupervisorUpdateWithoutFinalCommentsInput, Prisma.SchoolSupervisorUncheckedUpdateWithoutFinalCommentsInput>
+}
+
+export type SchoolSupervisorUpdateWithoutFinalCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  staffId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutSchoolSupervisorProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutSchoolSupervisorsWithCurrentSiwesSessionNestedInput
+  department?: Prisma.DepartmentUpdateOneRequiredWithoutSchoolSupervisorsNestedInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutSchoolSupervisorNestedInput
+  supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUpdateManyWithoutSchoolSupervisorNestedInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUpdateManyWithoutSchoolSupervisorNestedInput
+}
+
+export type SchoolSupervisorUncheckedUpdateWithoutFinalCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  staffId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
 }
 
 export type SchoolSupervisorCreateManyDepartmentInput = {
@@ -809,8 +1225,10 @@ export type SchoolSupervisorCreateManyDepartmentInput = {
   staffId: string
   name: string
   email: string
+  phone?: string | null
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -820,12 +1238,16 @@ export type SchoolSupervisorUpdateWithoutDepartmentInput = {
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutSchoolSupervisorProfileNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSchoolSupervisorProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutSchoolSupervisorsWithCurrentSiwesSessionNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutSchoolSupervisorNestedInput
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUpdateManyWithoutSchoolSupervisorNestedInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUpdateManyWithoutSchoolSupervisorNestedInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutSchoolSupervisorNestedInput
 }
 
 export type SchoolSupervisorUncheckedUpdateWithoutDepartmentInput = {
@@ -833,12 +1255,16 @@ export type SchoolSupervisorUncheckedUpdateWithoutDepartmentInput = {
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
   supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
 }
 
 export type SchoolSupervisorUncheckedUpdateManyWithoutDepartmentInput = {
@@ -846,8 +1272,70 @@ export type SchoolSupervisorUncheckedUpdateManyWithoutDepartmentInput = {
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type SchoolSupervisorCreateManyCurrentSiwesSessionInput = {
+  id?: string
+  staffId: string
+  name: string
+  email: string
+  departmentId: string
+  phone?: string | null
+  isActive?: boolean
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type SchoolSupervisorUpdateWithoutCurrentSiwesSessionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  staffId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutSchoolSupervisorProfileNestedInput
+  department?: Prisma.DepartmentUpdateOneRequiredWithoutSchoolSupervisorsNestedInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutSchoolSupervisorNestedInput
+  supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUpdateManyWithoutSchoolSupervisorNestedInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUpdateManyWithoutSchoolSupervisorNestedInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutSchoolSupervisorNestedInput
+}
+
+export type SchoolSupervisorUncheckedUpdateWithoutCurrentSiwesSessionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  staffId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  supervisorSessionEnrollments?: Prisma.SupervisorSessionEnrollmentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  weeklyComments?: Prisma.SchoolSupervisorWeeklyCommentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+  finalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutSchoolSupervisorNestedInput
+}
+
+export type SchoolSupervisorUncheckedUpdateManyWithoutCurrentSiwesSessionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  staffId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -860,11 +1348,15 @@ export type SchoolSupervisorUncheckedUpdateManyWithoutDepartmentInput = {
 export type SchoolSupervisorCountOutputType = {
   studentSupervisorAssignments: number
   supervisorSessionEnrollments: number
+  weeklyComments: number
+  finalComments: number
 }
 
 export type SchoolSupervisorCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   studentSupervisorAssignments?: boolean | SchoolSupervisorCountOutputTypeCountStudentSupervisorAssignmentsArgs
   supervisorSessionEnrollments?: boolean | SchoolSupervisorCountOutputTypeCountSupervisorSessionEnrollmentsArgs
+  weeklyComments?: boolean | SchoolSupervisorCountOutputTypeCountWeeklyCommentsArgs
+  finalComments?: boolean | SchoolSupervisorCountOutputTypeCountFinalCommentsArgs
 }
 
 /**
@@ -891,6 +1383,20 @@ export type SchoolSupervisorCountOutputTypeCountSupervisorSessionEnrollmentsArgs
   where?: Prisma.SupervisorSessionEnrollmentWhereInput
 }
 
+/**
+ * SchoolSupervisorCountOutputType without action
+ */
+export type SchoolSupervisorCountOutputTypeCountWeeklyCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SchoolSupervisorWeeklyCommentWhereInput
+}
+
+/**
+ * SchoolSupervisorCountOutputType without action
+ */
+export type SchoolSupervisorCountOutputTypeCountFinalCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SchoolSupervisorFinalCommentWhereInput
+}
+
 
 export type SchoolSupervisorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -898,14 +1404,19 @@ export type SchoolSupervisorSelect<ExtArgs extends runtime.Types.Extensions.Inte
   name?: boolean
   email?: boolean
   departmentId?: boolean
+  phone?: boolean
+  currentSiwesSessionId?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.SchoolSupervisor$currentSiwesSessionArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
   studentSupervisorAssignments?: boolean | Prisma.SchoolSupervisor$studentSupervisorAssignmentsArgs<ExtArgs>
   supervisorSessionEnrollments?: boolean | Prisma.SchoolSupervisor$supervisorSessionEnrollmentsArgs<ExtArgs>
+  weeklyComments?: boolean | Prisma.SchoolSupervisor$weeklyCommentsArgs<ExtArgs>
+  finalComments?: boolean | Prisma.SchoolSupervisor$finalCommentsArgs<ExtArgs>
   _count?: boolean | Prisma.SchoolSupervisorCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["schoolSupervisor"]>
 
@@ -915,11 +1426,14 @@ export type SchoolSupervisorSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   name?: boolean
   email?: boolean
   departmentId?: boolean
+  phone?: boolean
+  currentSiwesSessionId?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.SchoolSupervisor$currentSiwesSessionArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["schoolSupervisor"]>
 
@@ -929,11 +1443,14 @@ export type SchoolSupervisorSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   name?: boolean
   email?: boolean
   departmentId?: boolean
+  phone?: boolean
+  currentSiwesSessionId?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.SchoolSupervisor$currentSiwesSessionArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["schoolSupervisor"]>
 
@@ -943,36 +1460,46 @@ export type SchoolSupervisorSelectScalar = {
   name?: boolean
   email?: boolean
   departmentId?: boolean
+  phone?: boolean
+  currentSiwesSessionId?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SchoolSupervisorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "staffId" | "name" | "email" | "departmentId" | "isActive" | "betterAuthUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["schoolSupervisor"]>
+export type SchoolSupervisorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "staffId" | "name" | "email" | "departmentId" | "phone" | "currentSiwesSessionId" | "isActive" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["schoolSupervisor"]>
 export type SchoolSupervisorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.SchoolSupervisor$currentSiwesSessionArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
   studentSupervisorAssignments?: boolean | Prisma.SchoolSupervisor$studentSupervisorAssignmentsArgs<ExtArgs>
   supervisorSessionEnrollments?: boolean | Prisma.SchoolSupervisor$supervisorSessionEnrollmentsArgs<ExtArgs>
+  weeklyComments?: boolean | Prisma.SchoolSupervisor$weeklyCommentsArgs<ExtArgs>
+  finalComments?: boolean | Prisma.SchoolSupervisor$finalCommentsArgs<ExtArgs>
   _count?: boolean | Prisma.SchoolSupervisorCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SchoolSupervisorIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.SchoolSupervisor$currentSiwesSessionArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }
 export type SchoolSupervisorIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.SchoolSupervisor$currentSiwesSessionArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }
 
 export type $SchoolSupervisorPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SchoolSupervisor"
   objects: {
-    betterAuthUser: Prisma.$UserPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs>
+    currentSiwesSession: Prisma.$SiwesSessionPayload<ExtArgs> | null
     department: Prisma.$DepartmentPayload<ExtArgs>
     studentSupervisorAssignments: Prisma.$StudentSupervisorAssignmentPayload<ExtArgs>[]
     supervisorSessionEnrollments: Prisma.$SupervisorSessionEnrollmentPayload<ExtArgs>[]
+    weeklyComments: Prisma.$SchoolSupervisorWeeklyCommentPayload<ExtArgs>[]
+    finalComments: Prisma.$SchoolSupervisorFinalCommentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -980,8 +1507,10 @@ export type $SchoolSupervisorPayload<ExtArgs extends runtime.Types.Extensions.In
     name: string
     email: string
     departmentId: string
+    phone: string | null
+    currentSiwesSessionId: string | null
     isActive: boolean
-    betterAuthUserId: string
+    userId: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["schoolSupervisor"]>
@@ -1378,10 +1907,13 @@ readonly fields: SchoolSupervisorFieldRefs;
  */
 export interface Prisma__SchoolSupervisorClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  betterAuthUser<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  currentSiwesSession<T extends Prisma.SchoolSupervisor$currentSiwesSessionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SchoolSupervisor$currentSiwesSessionArgs<ExtArgs>>): Prisma.Prisma__SiwesSessionClient<runtime.Types.Result.GetResult<Prisma.$SiwesSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   department<T extends Prisma.DepartmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DepartmentDefaultArgs<ExtArgs>>): Prisma.Prisma__DepartmentClient<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   studentSupervisorAssignments<T extends Prisma.SchoolSupervisor$studentSupervisorAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SchoolSupervisor$studentSupervisorAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentSupervisorAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   supervisorSessionEnrollments<T extends Prisma.SchoolSupervisor$supervisorSessionEnrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SchoolSupervisor$supervisorSessionEnrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupervisorSessionEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  weeklyComments<T extends Prisma.SchoolSupervisor$weeklyCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SchoolSupervisor$weeklyCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SchoolSupervisorWeeklyCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  finalComments<T extends Prisma.SchoolSupervisor$finalCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SchoolSupervisor$finalCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SchoolSupervisorFinalCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1416,8 +1948,10 @@ export interface SchoolSupervisorFieldRefs {
   readonly name: Prisma.FieldRef<"SchoolSupervisor", 'String'>
   readonly email: Prisma.FieldRef<"SchoolSupervisor", 'String'>
   readonly departmentId: Prisma.FieldRef<"SchoolSupervisor", 'String'>
+  readonly phone: Prisma.FieldRef<"SchoolSupervisor", 'String'>
+  readonly currentSiwesSessionId: Prisma.FieldRef<"SchoolSupervisor", 'String'>
   readonly isActive: Prisma.FieldRef<"SchoolSupervisor", 'Boolean'>
-  readonly betterAuthUserId: Prisma.FieldRef<"SchoolSupervisor", 'String'>
+  readonly userId: Prisma.FieldRef<"SchoolSupervisor", 'String'>
   readonly createdAt: Prisma.FieldRef<"SchoolSupervisor", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SchoolSupervisor", 'DateTime'>
 }
@@ -1816,6 +2350,25 @@ export type SchoolSupervisorDeleteManyArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
+ * SchoolSupervisor.currentSiwesSession
+ */
+export type SchoolSupervisor$currentSiwesSessionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SiwesSession
+   */
+  select?: Prisma.SiwesSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SiwesSession
+   */
+  omit?: Prisma.SiwesSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SiwesSessionInclude<ExtArgs> | null
+  where?: Prisma.SiwesSessionWhereInput
+}
+
+/**
  * SchoolSupervisor.studentSupervisorAssignments
  */
 export type SchoolSupervisor$studentSupervisorAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1861,6 +2414,54 @@ export type SchoolSupervisor$supervisorSessionEnrollmentsArgs<ExtArgs extends ru
   take?: number
   skip?: number
   distinct?: Prisma.SupervisorSessionEnrollmentScalarFieldEnum | Prisma.SupervisorSessionEnrollmentScalarFieldEnum[]
+}
+
+/**
+ * SchoolSupervisor.weeklyComments
+ */
+export type SchoolSupervisor$weeklyCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SchoolSupervisorWeeklyComment
+   */
+  select?: Prisma.SchoolSupervisorWeeklyCommentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SchoolSupervisorWeeklyComment
+   */
+  omit?: Prisma.SchoolSupervisorWeeklyCommentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SchoolSupervisorWeeklyCommentInclude<ExtArgs> | null
+  where?: Prisma.SchoolSupervisorWeeklyCommentWhereInput
+  orderBy?: Prisma.SchoolSupervisorWeeklyCommentOrderByWithRelationInput | Prisma.SchoolSupervisorWeeklyCommentOrderByWithRelationInput[]
+  cursor?: Prisma.SchoolSupervisorWeeklyCommentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SchoolSupervisorWeeklyCommentScalarFieldEnum | Prisma.SchoolSupervisorWeeklyCommentScalarFieldEnum[]
+}
+
+/**
+ * SchoolSupervisor.finalComments
+ */
+export type SchoolSupervisor$finalCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SchoolSupervisorFinalComment
+   */
+  select?: Prisma.SchoolSupervisorFinalCommentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SchoolSupervisorFinalComment
+   */
+  omit?: Prisma.SchoolSupervisorFinalCommentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SchoolSupervisorFinalCommentInclude<ExtArgs> | null
+  where?: Prisma.SchoolSupervisorFinalCommentWhereInput
+  orderBy?: Prisma.SchoolSupervisorFinalCommentOrderByWithRelationInput | Prisma.SchoolSupervisorFinalCommentOrderByWithRelationInput[]
+  cursor?: Prisma.SchoolSupervisorFinalCommentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SchoolSupervisorFinalCommentScalarFieldEnum | Prisma.SchoolSupervisorFinalCommentScalarFieldEnum[]
 }
 
 /**

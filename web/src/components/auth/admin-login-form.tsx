@@ -19,7 +19,6 @@ import { mapAuthError } from "@/lib/auth-utils";
 
 import type { AxiosError } from "axios";
 
-
 const adminLoginSchema = z.object({
   email: z.email("Please enter a valid email address"),
   password: z

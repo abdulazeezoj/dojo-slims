@@ -246,7 +246,7 @@ export type StudentSessionEnrollmentScalarWhereWithAggregatesInput = {
 
 export type StudentSessionEnrollmentCreateInput = {
   id?: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   siwesSession: Prisma.SiwesSessionCreateNestedOneWithoutStudentSessionEnrollmentsInput
@@ -257,7 +257,7 @@ export type StudentSessionEnrollmentUncheckedCreateInput = {
   id?: string
   studentId: string
   siwesSessionId: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -284,7 +284,7 @@ export type StudentSessionEnrollmentCreateManyInput = {
   id?: string
   studentId: string
   siwesSessionId: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -433,7 +433,7 @@ export type StudentSessionEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
 
 export type StudentSessionEnrollmentCreateWithoutSiwesSessionInput = {
   id?: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   student: Prisma.StudentCreateNestedOneWithoutStudentSessionEnrollmentsInput
@@ -442,7 +442,7 @@ export type StudentSessionEnrollmentCreateWithoutSiwesSessionInput = {
 export type StudentSessionEnrollmentUncheckedCreateWithoutSiwesSessionInput = {
   id?: string
   studentId: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -487,7 +487,7 @@ export type StudentSessionEnrollmentScalarWhereInput = {
 
 export type StudentSessionEnrollmentCreateWithoutStudentInput = {
   id?: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   siwesSession: Prisma.SiwesSessionCreateNestedOneWithoutStudentSessionEnrollmentsInput
@@ -496,7 +496,7 @@ export type StudentSessionEnrollmentCreateWithoutStudentInput = {
 export type StudentSessionEnrollmentUncheckedCreateWithoutStudentInput = {
   id?: string
   siwesSessionId: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -530,7 +530,7 @@ export type StudentSessionEnrollmentUpdateManyWithWhereWithoutStudentInput = {
 export type StudentSessionEnrollmentCreateManySiwesSessionInput = {
   id?: string
   studentId: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -562,7 +562,7 @@ export type StudentSessionEnrollmentUncheckedUpdateManyWithoutSiwesSessionInput 
 export type StudentSessionEnrollmentCreateManyStudentInput = {
   id?: string
   siwesSessionId: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }

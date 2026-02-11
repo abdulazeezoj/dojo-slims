@@ -31,7 +31,6 @@ export type UserMinAggregateOutputType = {
   emailVerified: boolean | null
   image: string | null
   userType: $Enums.UserType | null
-  userReferenceId: string | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -50,7 +49,6 @@ export type UserMaxAggregateOutputType = {
   emailVerified: boolean | null
   image: string | null
   userType: $Enums.UserType | null
-  userReferenceId: string | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -69,7 +67,6 @@ export type UserCountAggregateOutputType = {
   emailVerified: number
   image: number
   userType: number
-  userReferenceId: number
   isActive: number
   createdAt: number
   updatedAt: number
@@ -90,7 +87,6 @@ export type UserMinAggregateInputType = {
   emailVerified?: true
   image?: true
   userType?: true
-  userReferenceId?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -109,7 +105,6 @@ export type UserMaxAggregateInputType = {
   emailVerified?: true
   image?: true
   userType?: true
-  userReferenceId?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -128,7 +123,6 @@ export type UserCountAggregateInputType = {
   emailVerified?: true
   image?: true
   userType?: true
-  userReferenceId?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -220,7 +214,6 @@ export type UserGroupByOutputType = {
   emailVerified: boolean
   image: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -260,7 +253,6 @@ export type UserWhereInput = {
   emailVerified?: Prisma.BoolFilter<"User"> | boolean
   image?: Prisma.StringNullableFilter<"User"> | string | null
   userType?: Prisma.EnumUserTypeFilter<"User"> | $Enums.UserType
-  userReferenceId?: Prisma.StringFilter<"User"> | string
   isActive?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -285,7 +277,6 @@ export type UserOrderByWithRelationInput = {
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   userType?: Prisma.SortOrder
-  userReferenceId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -307,7 +298,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   email?: string
   username?: string
-  userType_userReferenceId?: Prisma.UserUserTypeUserReferenceIdCompoundUniqueInput
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
@@ -315,7 +305,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   emailVerified?: Prisma.BoolFilter<"User"> | boolean
   image?: Prisma.StringNullableFilter<"User"> | string | null
   userType?: Prisma.EnumUserTypeFilter<"User"> | $Enums.UserType
-  userReferenceId?: Prisma.StringFilter<"User"> | string
   isActive?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -330,7 +319,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   schoolSupervisorProfile?: Prisma.XOR<Prisma.SchoolSupervisorNullableScalarRelationFilter, Prisma.SchoolSupervisorWhereInput> | null
   industrySupervisorProfile?: Prisma.XOR<Prisma.IndustrySupervisorNullableScalarRelationFilter, Prisma.IndustrySupervisorWhereInput> | null
   adminProfile?: Prisma.XOR<Prisma.AdminUserNullableScalarRelationFilter, Prisma.AdminUserWhereInput> | null
-}, "id" | "email" | "username" | "userType_userReferenceId">
+}, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -339,7 +328,6 @@ export type UserOrderByWithAggregationInput = {
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   userType?: Prisma.SortOrder
-  userReferenceId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -364,7 +352,6 @@ export type UserScalarWhereWithAggregatesInput = {
   emailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   userType?: Prisma.EnumUserTypeWithAggregatesFilter<"User"> | $Enums.UserType
-  userReferenceId?: Prisma.StringWithAggregatesFilter<"User"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -383,7 +370,6 @@ export type UserCreateInput = {
   emailVerified?: boolean
   image?: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -395,10 +381,10 @@ export type UserCreateInput = {
   banExpires?: Date | string | null
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  studentProfile?: Prisma.StudentCreateNestedOneWithoutBetterAuthUserInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutBetterAuthUserInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutBetterAuthUserInput
-  adminProfile?: Prisma.AdminUserCreateNestedOneWithoutBetterAuthUserInput
+  studentProfile?: Prisma.StudentCreateNestedOneWithoutUserInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutUserInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutUserInput
+  adminProfile?: Prisma.AdminUserCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -408,7 +394,6 @@ export type UserUncheckedCreateInput = {
   emailVerified?: boolean
   image?: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -420,10 +405,10 @@ export type UserUncheckedCreateInput = {
   banExpires?: Date | string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutBetterAuthUserInput
+  studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutUserInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutUserInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutUserInput
+  adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -433,7 +418,6 @@ export type UserUpdateInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -445,10 +429,10 @@ export type UserUpdateInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  studentProfile?: Prisma.StudentUpdateOneWithoutBetterAuthUserNestedInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutBetterAuthUserNestedInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutBetterAuthUserNestedInput
-  adminProfile?: Prisma.AdminUserUpdateOneWithoutBetterAuthUserNestedInput
+  studentProfile?: Prisma.StudentUpdateOneWithoutUserNestedInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutUserNestedInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutUserNestedInput
+  adminProfile?: Prisma.AdminUserUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -458,7 +442,6 @@ export type UserUncheckedUpdateInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -470,10 +453,10 @@ export type UserUncheckedUpdateInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutBetterAuthUserNestedInput
+  studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutUserNestedInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutUserNestedInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutUserNestedInput
+  adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -483,7 +466,6 @@ export type UserCreateManyInput = {
   emailVerified?: boolean
   image?: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -502,7 +484,6 @@ export type UserUpdateManyMutationInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -521,7 +502,6 @@ export type UserUncheckedUpdateManyInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -533,11 +513,6 @@ export type UserUncheckedUpdateManyInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
-export type UserUserTypeUserReferenceIdCompoundUniqueInput = {
-  userType: $Enums.UserType
-  userReferenceId: string
-}
-
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -545,7 +520,6 @@ export type UserCountOrderByAggregateInput = {
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrder
   userType?: Prisma.SortOrder
-  userReferenceId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -564,7 +538,6 @@ export type UserMaxOrderByAggregateInput = {
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrder
   userType?: Prisma.SortOrder
-  userReferenceId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -583,7 +556,6 @@ export type UserMinOrderByAggregateInput = {
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrder
   userType?: Prisma.SortOrder
-  userReferenceId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -715,7 +687,6 @@ export type UserCreateWithoutSessionsInput = {
   emailVerified?: boolean
   image?: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -726,10 +697,10 @@ export type UserCreateWithoutSessionsInput = {
   banReason?: string | null
   banExpires?: Date | string | null
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  studentProfile?: Prisma.StudentCreateNestedOneWithoutBetterAuthUserInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutBetterAuthUserInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutBetterAuthUserInput
-  adminProfile?: Prisma.AdminUserCreateNestedOneWithoutBetterAuthUserInput
+  studentProfile?: Prisma.StudentCreateNestedOneWithoutUserInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutUserInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutUserInput
+  adminProfile?: Prisma.AdminUserCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -739,7 +710,6 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   emailVerified?: boolean
   image?: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -750,10 +720,10 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   banReason?: string | null
   banExpires?: Date | string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutBetterAuthUserInput
+  studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutUserInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutUserInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutUserInput
+  adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -779,7 +749,6 @@ export type UserUpdateWithoutSessionsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -790,10 +759,10 @@ export type UserUpdateWithoutSessionsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  studentProfile?: Prisma.StudentUpdateOneWithoutBetterAuthUserNestedInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutBetterAuthUserNestedInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutBetterAuthUserNestedInput
-  adminProfile?: Prisma.AdminUserUpdateOneWithoutBetterAuthUserNestedInput
+  studentProfile?: Prisma.StudentUpdateOneWithoutUserNestedInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutUserNestedInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutUserNestedInput
+  adminProfile?: Prisma.AdminUserUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -803,7 +772,6 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -814,10 +782,10 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutBetterAuthUserNestedInput
+  studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutUserNestedInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutUserNestedInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutUserNestedInput
+  adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -827,7 +795,6 @@ export type UserCreateWithoutAccountsInput = {
   emailVerified?: boolean
   image?: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -838,10 +805,10 @@ export type UserCreateWithoutAccountsInput = {
   banReason?: string | null
   banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  studentProfile?: Prisma.StudentCreateNestedOneWithoutBetterAuthUserInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutBetterAuthUserInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutBetterAuthUserInput
-  adminProfile?: Prisma.AdminUserCreateNestedOneWithoutBetterAuthUserInput
+  studentProfile?: Prisma.StudentCreateNestedOneWithoutUserInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutUserInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutUserInput
+  adminProfile?: Prisma.AdminUserCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -851,7 +818,6 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   emailVerified?: boolean
   image?: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -862,10 +828,10 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   banReason?: string | null
   banExpires?: Date | string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutBetterAuthUserInput
+  studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutUserInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutUserInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutUserInput
+  adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -891,7 +857,6 @@ export type UserUpdateWithoutAccountsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -902,10 +867,10 @@ export type UserUpdateWithoutAccountsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  studentProfile?: Prisma.StudentUpdateOneWithoutBetterAuthUserNestedInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutBetterAuthUserNestedInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutBetterAuthUserNestedInput
-  adminProfile?: Prisma.AdminUserUpdateOneWithoutBetterAuthUserNestedInput
+  studentProfile?: Prisma.StudentUpdateOneWithoutUserNestedInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutUserNestedInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutUserNestedInput
+  adminProfile?: Prisma.AdminUserUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -915,7 +880,6 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -926,10 +890,10 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutBetterAuthUserNestedInput
+  studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutUserNestedInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutUserNestedInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutUserNestedInput
+  adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAdminProfileInput = {
@@ -939,7 +903,6 @@ export type UserCreateWithoutAdminProfileInput = {
   emailVerified?: boolean
   image?: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -951,9 +914,9 @@ export type UserCreateWithoutAdminProfileInput = {
   banExpires?: Date | string | null
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  studentProfile?: Prisma.StudentCreateNestedOneWithoutBetterAuthUserInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutBetterAuthUserInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutBetterAuthUserInput
+  studentProfile?: Prisma.StudentCreateNestedOneWithoutUserInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutUserInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAdminProfileInput = {
@@ -963,7 +926,6 @@ export type UserUncheckedCreateWithoutAdminProfileInput = {
   emailVerified?: boolean
   image?: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -975,9 +937,9 @@ export type UserUncheckedCreateWithoutAdminProfileInput = {
   banExpires?: Date | string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutBetterAuthUserInput
+  studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutUserInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutUserInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAdminProfileInput = {
@@ -1003,7 +965,6 @@ export type UserUpdateWithoutAdminProfileInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1015,9 +976,9 @@ export type UserUpdateWithoutAdminProfileInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  studentProfile?: Prisma.StudentUpdateOneWithoutBetterAuthUserNestedInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutBetterAuthUserNestedInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutBetterAuthUserNestedInput
+  studentProfile?: Prisma.StudentUpdateOneWithoutUserNestedInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutUserNestedInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAdminProfileInput = {
@@ -1027,7 +988,6 @@ export type UserUncheckedUpdateWithoutAdminProfileInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1039,9 +999,9 @@ export type UserUncheckedUpdateWithoutAdminProfileInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutBetterAuthUserNestedInput
+  studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutUserNestedInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutUserNestedInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStudentProfileInput = {
@@ -1051,7 +1011,6 @@ export type UserCreateWithoutStudentProfileInput = {
   emailVerified?: boolean
   image?: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1063,9 +1022,9 @@ export type UserCreateWithoutStudentProfileInput = {
   banExpires?: Date | string | null
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutBetterAuthUserInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutBetterAuthUserInput
-  adminProfile?: Prisma.AdminUserCreateNestedOneWithoutBetterAuthUserInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutUserInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutUserInput
+  adminProfile?: Prisma.AdminUserCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStudentProfileInput = {
@@ -1075,7 +1034,6 @@ export type UserUncheckedCreateWithoutStudentProfileInput = {
   emailVerified?: boolean
   image?: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1087,9 +1045,9 @@ export type UserUncheckedCreateWithoutStudentProfileInput = {
   banExpires?: Date | string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutBetterAuthUserInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutUserInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutUserInput
+  adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStudentProfileInput = {
@@ -1115,7 +1073,6 @@ export type UserUpdateWithoutStudentProfileInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1127,9 +1084,9 @@ export type UserUpdateWithoutStudentProfileInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutBetterAuthUserNestedInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutBetterAuthUserNestedInput
-  adminProfile?: Prisma.AdminUserUpdateOneWithoutBetterAuthUserNestedInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutUserNestedInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutUserNestedInput
+  adminProfile?: Prisma.AdminUserUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudentProfileInput = {
@@ -1139,7 +1096,6 @@ export type UserUncheckedUpdateWithoutStudentProfileInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1151,9 +1107,9 @@ export type UserUncheckedUpdateWithoutStudentProfileInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutBetterAuthUserNestedInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutUserNestedInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutUserNestedInput
+  adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSchoolSupervisorProfileInput = {
@@ -1163,7 +1119,6 @@ export type UserCreateWithoutSchoolSupervisorProfileInput = {
   emailVerified?: boolean
   image?: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1175,9 +1130,9 @@ export type UserCreateWithoutSchoolSupervisorProfileInput = {
   banExpires?: Date | string | null
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  studentProfile?: Prisma.StudentCreateNestedOneWithoutBetterAuthUserInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutBetterAuthUserInput
-  adminProfile?: Prisma.AdminUserCreateNestedOneWithoutBetterAuthUserInput
+  studentProfile?: Prisma.StudentCreateNestedOneWithoutUserInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutUserInput
+  adminProfile?: Prisma.AdminUserCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSchoolSupervisorProfileInput = {
@@ -1187,7 +1142,6 @@ export type UserUncheckedCreateWithoutSchoolSupervisorProfileInput = {
   emailVerified?: boolean
   image?: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1199,9 +1153,9 @@ export type UserUncheckedCreateWithoutSchoolSupervisorProfileInput = {
   banExpires?: Date | string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutBetterAuthUserInput
+  studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutUserInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutUserInput
+  adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSchoolSupervisorProfileInput = {
@@ -1227,7 +1181,6 @@ export type UserUpdateWithoutSchoolSupervisorProfileInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1239,9 +1192,9 @@ export type UserUpdateWithoutSchoolSupervisorProfileInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  studentProfile?: Prisma.StudentUpdateOneWithoutBetterAuthUserNestedInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutBetterAuthUserNestedInput
-  adminProfile?: Prisma.AdminUserUpdateOneWithoutBetterAuthUserNestedInput
+  studentProfile?: Prisma.StudentUpdateOneWithoutUserNestedInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutUserNestedInput
+  adminProfile?: Prisma.AdminUserUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSchoolSupervisorProfileInput = {
@@ -1251,7 +1204,6 @@ export type UserUncheckedUpdateWithoutSchoolSupervisorProfileInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1263,9 +1215,9 @@ export type UserUncheckedUpdateWithoutSchoolSupervisorProfileInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutBetterAuthUserNestedInput
+  studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutUserNestedInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutUserNestedInput
+  adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutIndustrySupervisorProfileInput = {
@@ -1275,7 +1227,6 @@ export type UserCreateWithoutIndustrySupervisorProfileInput = {
   emailVerified?: boolean
   image?: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1287,9 +1238,9 @@ export type UserCreateWithoutIndustrySupervisorProfileInput = {
   banExpires?: Date | string | null
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  studentProfile?: Prisma.StudentCreateNestedOneWithoutBetterAuthUserInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutBetterAuthUserInput
-  adminProfile?: Prisma.AdminUserCreateNestedOneWithoutBetterAuthUserInput
+  studentProfile?: Prisma.StudentCreateNestedOneWithoutUserInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutUserInput
+  adminProfile?: Prisma.AdminUserCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutIndustrySupervisorProfileInput = {
@@ -1299,7 +1250,6 @@ export type UserUncheckedCreateWithoutIndustrySupervisorProfileInput = {
   emailVerified?: boolean
   image?: string | null
   userType: $Enums.UserType
-  userReferenceId: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1311,9 +1261,9 @@ export type UserUncheckedCreateWithoutIndustrySupervisorProfileInput = {
   banExpires?: Date | string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutBetterAuthUserInput
-  adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutBetterAuthUserInput
+  studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutUserInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutUserInput
+  adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutIndustrySupervisorProfileInput = {
@@ -1339,7 +1289,6 @@ export type UserUpdateWithoutIndustrySupervisorProfileInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1351,9 +1300,9 @@ export type UserUpdateWithoutIndustrySupervisorProfileInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  studentProfile?: Prisma.StudentUpdateOneWithoutBetterAuthUserNestedInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutBetterAuthUserNestedInput
-  adminProfile?: Prisma.AdminUserUpdateOneWithoutBetterAuthUserNestedInput
+  studentProfile?: Prisma.StudentUpdateOneWithoutUserNestedInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutUserNestedInput
+  adminProfile?: Prisma.AdminUserUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutIndustrySupervisorProfileInput = {
@@ -1363,7 +1312,6 @@ export type UserUncheckedUpdateWithoutIndustrySupervisorProfileInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-  userReferenceId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1375,9 +1323,9 @@ export type UserUncheckedUpdateWithoutIndustrySupervisorProfileInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutBetterAuthUserNestedInput
-  adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutBetterAuthUserNestedInput
+  studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutUserNestedInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutUserNestedInput
+  adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutUserNestedInput
 }
 
 
@@ -1427,7 +1375,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   emailVerified?: boolean
   image?: boolean
   userType?: boolean
-  userReferenceId?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1453,7 +1400,6 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   emailVerified?: boolean
   image?: boolean
   userType?: boolean
-  userReferenceId?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1472,7 +1418,6 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   emailVerified?: boolean
   image?: boolean
   userType?: boolean
-  userReferenceId?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1491,7 +1436,6 @@ export type UserSelectScalar = {
   emailVerified?: boolean
   image?: boolean
   userType?: boolean
-  userReferenceId?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1503,7 +1447,7 @@ export type UserSelectScalar = {
   banExpires?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "userType" | "userReferenceId" | "isActive" | "createdAt" | "updatedAt" | "username" | "displayUsername" | "role" | "banned" | "banReason" | "banExpires", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "userType" | "isActive" | "createdAt" | "updatedAt" | "username" | "displayUsername" | "role" | "banned" | "banReason" | "banExpires", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -1533,7 +1477,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     emailVerified: boolean
     image: string | null
     userType: $Enums.UserType
-    userReferenceId: string
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -1978,7 +1921,6 @@ export interface UserFieldRefs {
   readonly emailVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly image: Prisma.FieldRef<"User", 'String'>
   readonly userType: Prisma.FieldRef<"User", 'UserType'>
-  readonly userReferenceId: Prisma.FieldRef<"User", 'String'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>

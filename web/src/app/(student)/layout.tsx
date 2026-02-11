@@ -1,8 +1,33 @@
-export default function Layout({ children }: { children: React.ReactNode }) {
+import { StudentHeader } from "@/components/student/header";
+import { StudentSidebar } from "@/components/student/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { requireServerStudent } from "@/lib/auth-server";
+
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: {
+    default: "SLIMS - Student Dashboard",
+    template: "%s | SLIMS",
+  },
+};
+
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Validate student access before rendering
+  await requireServerStudent();
+  
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar will go here */}
-      <main className="flex-1 p-6">{children}</main>
-    </div>
+    <SidebarProvider>
+      <StudentSidebar />
+      <SidebarInset>
+        <StudentHeader />
+
+        <main className="flex-1">{children}</main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

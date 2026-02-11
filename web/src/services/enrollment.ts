@@ -1,12 +1,12 @@
 import { getLogger } from "@/lib/logger";
 import {
-  assignmentRepository,
   logbookMetadataRepository,
   schoolSupervisorRepository,
-  sessionRepository,
-  studentEnrollmentRepository,
+  siwesSessionRepository,
   studentRepository,
-  supervisorEnrollmentRepository,
+  studentSessionEnrollmentRepository,
+  studentSupervisorAssignmentRepository,
+  supervisorSessionEnrollmentRepository,
   weeklyEntryRepository,
 } from "@/repositories";
 
@@ -22,15 +22,17 @@ export class EnrollmentService {
   async getSessionEnrollments(sessionId: string) {
     logger.info("Getting session enrollments", { sessionId });
 
-    const session = await sessionRepository.findById(sessionId);
+    const session = await siwesSessionRepository.prisma.findUnique({
+      where: { id: sessionId },
+    });
     if (!session) {
       throw new Error("Session not found");
     }
 
     const studentEnrollments =
-      await studentEnrollmentRepository.findBySession(sessionId);
+      await studentSessionEnrollmentRepository.findManyBySession(sessionId);
     const supervisorEnrollments =
-      await supervisorEnrollmentRepository.findBySession(sessionId);
+      await supervisorSessionEnrollmentRepository.findManyBySession(sessionId);
 
     return {
       session,
@@ -46,37 +48,46 @@ export class EnrollmentService {
     logger.info("Adding student to session", { studentId, sessionId });
 
     // Verify student exists
-    const student = await studentRepository.findById(studentId);
+    const student = await studentRepository.prisma.findUnique({
+      where: { id: studentId },
+      include: {
+        department: true,
+      },
+    });
     if (!student) {
       throw new Error("Student not found");
     }
 
     // Verify session exists
-    const session = await sessionRepository.findById(sessionId);
+    const session = await siwesSessionRepository.prisma.findUnique({
+      where: { id: sessionId },
+    });
     if (!session) {
       throw new Error("Session not found");
     }
 
     // Check if already enrolled
-    const existing = await studentEnrollmentRepository.findByStudentAndSession(
-      studentId,
-      sessionId,
-    );
+    const existing =
+      await studentSessionEnrollmentRepository.findByStudentAndSession(
+        studentId,
+        sessionId,
+      );
 
     if (existing) {
       throw new Error("Student already enrolled in this session");
     }
 
     // Create enrollment
-    const enrollment = await studentEnrollmentRepository.create({
-      student: {
-        connect: { id: studentId },
+    const enrollment = await studentSessionEnrollmentRepository.prisma.create({
+      data: {
+        student: {
+          connect: { id: studentId },
+        },
+        siwesSession: {
+          connect: { id: sessionId },
+        },
+        enrolledAt: new Date(),
       },
-      siwesSession: {
-        connect: { id: sessionId },
-      },
-      enrolledAt: new Date(),
-      isActive: true,
     });
 
     // Create logbook metadata for all weeks
@@ -101,18 +112,27 @@ export class EnrollmentService {
   async removeStudentFromSession(enrollmentId: string) {
     logger.info("Removing student from session", { enrollmentId });
 
-    const enrollment = await studentEnrollmentRepository.findById(enrollmentId);
+    const enrollment =
+      await studentSessionEnrollmentRepository.prisma.findUnique({
+        where: { id: enrollmentId },
+      });
     if (!enrollment) {
       throw new Error("Enrollment not found");
     }
 
     // Delete associated logbook metadata
-    await logbookMetadataRepository.deleteByStudentSession(
-      enrollment.studentId,
-      enrollment.siwesSessionId,
-    );
+    const logbookMetadata =
+      await logbookMetadataRepository.findByStudentAndSession(
+        enrollment.studentId,
+        enrollment.siwesSessionId,
+      );
+    if (logbookMetadata) {
+      await logbookMetadataRepository.delete(logbookMetadata.id);
+    }
 
-    return studentEnrollmentRepository.delete(enrollmentId);
+    return studentSessionEnrollmentRepository.prisma.delete({
+      where: { id: enrollmentId },
+    });
   }
 
   /**
@@ -122,20 +142,24 @@ export class EnrollmentService {
     logger.info("Adding supervisor to session", { supervisorId, sessionId });
 
     // Verify supervisor exists
-    const supervisor = await schoolSupervisorRepository.findById(supervisorId);
+    const supervisor = await schoolSupervisorRepository.prisma.findUnique({
+      where: { id: supervisorId },
+    });
     if (!supervisor) {
       throw new Error("School supervisor not found");
     }
 
     // Verify session exists
-    const session = await sessionRepository.findById(sessionId);
+    const session = await siwesSessionRepository.prisma.findUnique({
+      where: { id: sessionId },
+    });
     if (!session) {
       throw new Error("Session not found");
     }
 
     // Check if already enrolled
     const existing =
-      await supervisorEnrollmentRepository.findBySupervisorAndSession(
+      await supervisorSessionEnrollmentRepository.findBySupervisorAndSession(
         supervisorId,
         sessionId,
       );
@@ -145,14 +169,16 @@ export class EnrollmentService {
     }
 
     // Create enrollment
-    return supervisorEnrollmentRepository.create({
-      schoolSupervisor: {
-        connect: { id: supervisorId },
+    return supervisorSessionEnrollmentRepository.prisma.create({
+      data: {
+        schoolSupervisor: {
+          connect: { id: supervisorId },
+        },
+        siwesSession: {
+          connect: { id: sessionId },
+        },
+        enrolledAt: new Date(),
       },
-      siwesSession: {
-        connect: { id: sessionId },
-      },
-      enrolledAt: new Date(),
     });
   }
 
@@ -163,16 +189,19 @@ export class EnrollmentService {
     logger.info("Removing supervisor from session", { enrollmentId });
 
     const enrollment =
-      await supervisorEnrollmentRepository.findById(enrollmentId);
+      await supervisorSessionEnrollmentRepository.prisma.findUnique({
+        where: { id: enrollmentId },
+      });
     if (!enrollment) {
       throw new Error("Supervisor enrollment not found");
     }
 
     // Check if supervisor has assigned students
-    const assignedStudents = await assignmentRepository.getSupervisorWorkload(
-      enrollment.schoolSupervisorId,
-      enrollment.siwesSessionId,
-    );
+    const assignedStudents =
+      await studentSupervisorAssignmentRepository.getSupervisorWorkload(
+        enrollment.schoolSupervisorId,
+        enrollment.siwesSessionId,
+      );
 
     if (assignedStudents > 0) {
       throw new Error(
@@ -180,7 +209,9 @@ export class EnrollmentService {
       );
     }
 
-    return supervisorEnrollmentRepository.delete(enrollmentId);
+    return supervisorSessionEnrollmentRepository.prisma.delete({
+      where: { id: enrollmentId },
+    });
   }
 
   /**
@@ -192,7 +223,9 @@ export class EnrollmentService {
       count: studentIds.length,
     });
 
-    const session = await sessionRepository.findById(sessionId);
+    const session = await siwesSessionRepository.prisma.findUnique({
+      where: { id: sessionId },
+    });
     if (!session) {
       throw new Error("Session not found");
     }
@@ -233,7 +266,9 @@ export class EnrollmentService {
       count: supervisorIds.length,
     });
 
-    const session = await sessionRepository.findById(sessionId);
+    const session = await siwesSessionRepository.prisma.findUnique({
+      where: { id: sessionId },
+    });
     if (!session) {
       throw new Error("Session not found");
     }
@@ -279,13 +314,20 @@ export class EnrollmentService {
       totalWeeks,
     });
 
-    const session = await sessionRepository.findById(sessionId);
+    const session = await siwesSessionRepository.prisma.findUnique({
+      where: { id: sessionId },
+    });
     if (!session) {
       throw new Error("Session not found");
     }
 
     // Get student details for logbook metadata
-    const student = await studentRepository.findById(studentId);
+    const student = await studentRepository.prisma.findUnique({
+      where: { id: studentId },
+      include: {
+        department: true,
+      },
+    });
     if (!student) {
       throw new Error("Student not found");
     }
@@ -308,15 +350,17 @@ export class EnrollmentService {
     const weekPromises = [];
     for (let weekNumber = 1; weekNumber <= totalWeeks; weekNumber++) {
       weekPromises.push(
-        weeklyEntryRepository.create({
-          student: {
-            connect: { id: studentId },
+        weeklyEntryRepository.prisma.create({
+          data: {
+            student: {
+              connect: { id: studentId },
+            },
+            siwesSession: {
+              connect: { id: sessionId },
+            },
+            weekNumber,
+            isLocked: false,
           },
-          siwesSession: {
-            connect: { id: sessionId },
-          },
-          weekNumber,
-          isLocked: false,
         }),
       );
     }

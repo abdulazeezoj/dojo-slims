@@ -25,8 +25,8 @@ export class NotificationService {
         recipientName: data.name,
         userType: data.userType,
         loginCredential: data.loginCredential,
-        loginUrl: `${config.APP_URL}/auth/signin`,
-        supportEmail: config.SUPPORT_EMAIL,
+        loginUrl: `${config.APP_URL}/auth`,
+        supportEmail: config.APP_SUPPORT_EMAIL,
       });
 
       await mailer.sendEmail({
@@ -91,8 +91,8 @@ export class NotificationService {
           studentName: data.studentName,
           matricNumber: data.matricNumber,
           organization: data.organization,
-          loginUrl: `${config.APP_URL}/auth/signin`,
-          supportEmail: config.SUPPORT_EMAIL,
+          loginUrl: `${config.APP_URL}/auth/login/industry-supervisor`,
+          supportEmail: config.APP_SUPPORT_EMAIL,
         },
       );
 
@@ -129,8 +129,8 @@ export class NotificationService {
           studentName: data.studentName,
           matricNumber: data.matricNumber,
           sessionName: data.sessionName,
-          loginUrl: `${config.APP_URL}/auth/signin`,
-          supportEmail: config.SUPPORT_EMAIL,
+          loginUrl: `${config.APP_URL}/auth/login/school-supervisor`,
+          supportEmail: config.APP_SUPPORT_EMAIL,
         },
       );
 
@@ -169,8 +169,8 @@ export class NotificationService {
           supervisorName: data.supervisorName,
           supervisorEmail: data.supervisorEmail,
           sessionName: data.sessionName,
-          loginUrl: `${config.APP_URL}/auth/signin`,
-          supportEmail: config.SUPPORT_EMAIL,
+          loginUrl: `${config.APP_URL}/auth/login/student`,
+          supportEmail: config.APP_SUPPORT_EMAIL,
         },
       );
 
@@ -205,7 +205,7 @@ export class NotificationService {
         studentName: data.studentName,
         weekNumber: data.weekNumber.toString(),
         reviewUrl: data.reviewUrl,
-        supportEmail: config.SUPPORT_EMAIL,
+        supportEmail: config.APP_SUPPORT_EMAIL,
       });
 
       await mailer.sendEmail({
@@ -241,7 +241,7 @@ export class NotificationService {
         supervisorType: data.supervisorType,
         weekNumber: data.weekNumber.toString(),
         viewUrl: data.viewUrl,
-        supportEmail: config.SUPPORT_EMAIL,
+        supportEmail: config.APP_SUPPORT_EMAIL,
       });
 
       await mailer.sendEmail({
@@ -273,7 +273,7 @@ export class NotificationService {
         supervisorName: data.supervisorName,
         weekNumber: data.weekNumber.toString(),
         reason: data.reason || "Review completed",
-        supportEmail: config.SUPPORT_EMAIL,
+        supportEmail: config.APP_SUPPORT_EMAIL,
       });
 
       await mailer.sendEmail({
@@ -307,8 +307,8 @@ export class NotificationService {
           sessionName: data.sessionName,
           startDate: data.startDate,
           endDate: data.endDate,
-          loginUrl: `${config.APP_URL}/auth/signin`,
-          supportEmail: config.SUPPORT_EMAIL,
+          loginUrl: `${config.APP_URL}/auth/login/student`,
+          supportEmail: config.APP_SUPPORT_EMAIL,
         },
       );
 
@@ -345,8 +345,8 @@ export class NotificationService {
           sessionName: data.sessionName,
           startDate: data.startDate,
           endDate: data.endDate,
-          loginUrl: `${config.APP_URL}/auth/signin`,
-          supportEmail: config.SUPPORT_EMAIL,
+          loginUrl: `${config.APP_URL}/auth/login/school-supervisor`,
+          supportEmail: config.APP_SUPPORT_EMAIL,
         },
       );
 
@@ -385,7 +385,7 @@ export class NotificationService {
           studentName: data.studentName,
           sessionName: data.sessionName,
           submitUrl: data.submitUrl,
-          supportEmail: config.SUPPORT_EMAIL,
+          supportEmail: config.APP_SUPPORT_EMAIL,
         },
       );
 
@@ -422,7 +422,7 @@ export class NotificationService {
           studentName: data.studentName,
           sessionName: data.sessionName,
           submitUrl: data.submitUrl,
-          supportEmail: config.SUPPORT_EMAIL,
+          supportEmail: config.APP_SUPPORT_EMAIL,
         },
       );
 

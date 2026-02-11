@@ -1,21 +1,26 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
-import { requireSchoolSupervisor } from "@/middlewares/auth";
+import { requireSchoolSupervisor } from "@/lib/auth-server";
 import { supervisorService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
-export const GET = requireSchoolSupervisor(async (request: NextRequest, session) => {
-  try {
-    const supervisorId = session.user.userReferenceId;
-    const students = await supervisorService.getAssignedStudents(supervisorId, "SCHOOL_SUPERVISOR");
+export const GET = requireSchoolSupervisor(
+  async (request: NextRequest, session) => {
+    try {
+      const supervisorId = session.user.userReferenceId;
+      const students = await supervisorService.getAssignedStudents(
+        supervisorId,
+        "SCHOOL_SUPERVISOR",
+      );
 
-    return createSuccessResponse(students, {
-      message: "Students loaded successfully",
-    });
-  } catch (error) {
-    return createErrorResponse(
-      error instanceof Error ? error.message : "Failed to load students",
-      { status: 500 },
-    );
-  }
-});
+      return createSuccessResponse(students, {
+        message: "Students loaded successfully",
+      });
+    } catch (error) {
+      return createErrorResponse(
+        error instanceof Error ? error.message : "Failed to load students",
+        { status: 500 },
+      );
+    }
+  },
+);

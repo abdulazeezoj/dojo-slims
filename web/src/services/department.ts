@@ -4,7 +4,13 @@
  */
 
 import type { Faculty } from "@/generated/prisma/client";
-import { departmentRepository, facultyRepository } from "@/repositories";
+import {
+  departmentRepository,
+  facultyRepository,
+  schoolSupervisorRepository,
+  siwesSessionRepository,
+  studentRepository,
+} from "@/repositories";
 
 export class DepartmentService {
   /**
@@ -17,13 +23,15 @@ export class DepartmentService {
       code: string;
     },
   ): Promise<Faculty> {
-    const faculty = await facultyRepository.findById(facultyId);
+    const faculty = await facultyRepository.prisma.findUnique({
+      where: { id: facultyId },
+    });
     if (!faculty) {
       throw new Error("Faculty not found");
     }
 
     // Check if department code already exists in this faculty
-    const existing = await departmentRepository.findByFacultyAndCode(
+    const existing = await departmentRepository.findByCodeWithFaculty(
       facultyId,
       data.code,
     );
@@ -33,7 +41,18 @@ export class DepartmentService {
       );
     }
 
-    return facultyRepository.addDepartment(facultyId, data);
+    // Create department
+    await departmentRepository.create({
+      name: data.name,
+      code: data.code,
+      faculty: {
+        connect: { id: facultyId },
+      },
+    });
+
+    // Return updated faculty with departments
+    const updatedFaculty = await facultyRepository.findAllWithDepartments();
+    return updatedFaculty.find((f) => f.id === facultyId) as Faculty;
   }
 
   /**
@@ -48,7 +67,9 @@ export class DepartmentService {
     },
   ): Promise<Faculty> {
     // Check if department exists and belongs to the faculty
-    const department = await departmentRepository.findById(departmentId);
+    const department = await departmentRepository.prisma.findUnique({
+      where: { id: departmentId },
+    });
     if (!department) {
       throw new Error("Department not found");
     }
@@ -59,7 +80,7 @@ export class DepartmentService {
 
     // If code is being changed, check for conflicts within the faculty
     if (data.code && data.code !== department.code) {
-      const existing = await departmentRepository.findByFacultyAndCode(
+      const existing = await departmentRepository.findByCodeWithFaculty(
         facultyId,
         data.code,
       );
@@ -70,7 +91,12 @@ export class DepartmentService {
       }
     }
 
-    return facultyRepository.updateDepartment(departmentId, data);
+    // Update department
+    await departmentRepository.update(departmentId, data);
+
+    // Return updated faculty with departments
+    const updatedFaculty = await facultyRepository.findAllWithDepartments();
+    return updatedFaculty.find((f) => f.id === facultyId) as Faculty;
   }
 
   /**
@@ -81,7 +107,9 @@ export class DepartmentService {
     departmentId: string,
   ): Promise<Faculty> {
     // Check if department exists and belongs to the faculty
-    const department = await departmentRepository.findById(departmentId);
+    const department = await departmentRepository.prisma.findUnique({
+      where: { id: departmentId },
+    });
     if (!department) {
       throw new Error("Department not found");
     }
@@ -90,36 +118,49 @@ export class DepartmentService {
       throw new Error("Department does not belong to this faculty");
     }
 
-    // Check if department has students by re-fetching with student count
-    const deptWithCounts = await facultyRepository.findById(facultyId);
-    const departments =
-      (
-        deptWithCounts as {
-          departments?: Array<{ id: string; _count?: { students: number } }>;
-        }
-      )?.departments || [];
-    const deptToDelete = departments.find((d) => d.id === departmentId);
-    if (deptToDelete?._count?.students && deptToDelete._count.students > 0) {
+    // Check if department has students
+    const studentCount = await departmentRepository.countStudents(departmentId);
+    if (studentCount > 0) {
       throw new Error("Cannot delete department with enrolled students");
     }
 
-    return facultyRepository.deleteDepartment(departmentId);
+    // Delete department
+    await departmentRepository.delete(departmentId);
+
+    // Return updated faculty with departments
+    const updatedFaculty = await facultyRepository.findAllWithDepartments();
+    return updatedFaculty.find((f) => f.id === facultyId) as Faculty;
   }
 
   /**
    * Get department statistics
    */
-  async getDepartmentStats(_departmentId: string): Promise<{
+  async getDepartmentStats(departmentId: string): Promise<{
     totalStudents: number;
     activeSessions: number;
     totalSupervisors: number;
   }> {
-    // This would require additional repository methods
-    // For now, return basic structure
+    // Verify department exists
+    const department = await departmentRepository.prisma.findUnique({
+      where: { id: departmentId },
+    });
+    if (!department) {
+      throw new Error("Department not found");
+    }
+
+    // Get counts using repository methods
+    const [totalStudents, activeSessions, totalSupervisors] = await Promise.all(
+      [
+        studentRepository.prisma.count({ where: { departmentId } }),
+        siwesSessionRepository.countActive(),
+        schoolSupervisorRepository.prisma.count({ where: { departmentId } }),
+      ],
+    );
+
     return {
-      totalStudents: 0,
-      activeSessions: 0,
-      totalSupervisors: 0,
+      totalStudents,
+      activeSessions,
+      totalSupervisors,
     };
   }
 
@@ -135,9 +176,9 @@ export class DepartmentService {
       facultyName: string;
     }>
   > {
-    const faculties = await facultyRepository.findMany({});
+    const faculties = await facultyRepository.findAllWithDepartments();
 
-    // Repository includes departments, but TypeScript doesn't infer it
+    // Repository includes departments
     return faculties.flatMap((faculty) => {
       const departments =
         (

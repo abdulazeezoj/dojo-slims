@@ -1,6 +1,6 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireAdmin } from "@/middlewares/auth";
+import { requireAdmin } from "@/lib/auth-server";
 import { createOrganizationSchema } from "@/schemas";
 import { organizationService } from "@/services";
 
@@ -32,7 +32,9 @@ export const POST = requireAdmin(async (request: NextRequest, _session) => {
     const validation = await validateRequest(request, {
       body: createOrganizationSchema,
     });
-    if (!validation.success) {return validation.error;}
+    if (!validation.success) {
+      return validation.error;
+    }
 
     const { body } = validation.data;
     const organization = await organizationService.createOrganization(body);

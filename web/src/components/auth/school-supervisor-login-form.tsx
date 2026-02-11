@@ -55,7 +55,7 @@ export function SchoolSupervisorLoginForm() {
       toast.success("Sign in successful! Redirecting to your dashboard...");
 
       setTimeout(() => {
-        router.push("/school-supervisor");
+        router.push("/school-supervisor/dashboard");
       }, 500);
     },
     onError: (error) => {

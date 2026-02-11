@@ -50,6 +50,7 @@ export async function configureLogger() {
   isConfigured = true;
 }
 
-configureLogger();
+// Initialize logger configuration (fire and forget - logger will queue messages if not ready)
+configureLogger().catch(console.error);
 
 export { getLogger } from "@logtape/logtape";

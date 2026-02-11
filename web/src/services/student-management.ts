@@ -8,10 +8,14 @@ import crypto from "crypto";
 
 import type { Prisma, Student } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
-import { studentRepository, userRepository } from "@/repositories";
+import prisma from "@/lib/prisma";
+import {
+  departmentRepository,
+  studentRepository,
+  userRepository,
+} from "@/repositories";
 
 import { notificationService } from "./notifications";
-
 
 export class StudentManagementService {
   /**
@@ -44,8 +48,8 @@ export class StudentManagementService {
     };
 
     const [students, total] = await Promise.all([
-      studentRepository.findMany({ where, skip, take, orderBy }),
-      studentRepository.count(where),
+      studentRepository.prisma.findMany({ where, skip, take, orderBy }),
+      studentRepository.prisma.count({ where }),
     ]);
 
     return { students, total };
@@ -55,14 +59,14 @@ export class StudentManagementService {
    * Get student by ID
    */
   async getStudentById(id: string): Promise<Student | null> {
-    return studentRepository.findById(id);
+    return studentRepository.prisma.findUnique({ where: { id } });
   }
 
   /**
    * Get student by matric number
    */
   async getStudentByMatricNo(matricNumber: string): Promise<Student | null> {
-    return studentRepository.findByMatricNumber(matricNumber);
+    return studentRepository.findByMatricNumberWithDetails(matricNumber);
   }
 
   /**
@@ -76,9 +80,8 @@ export class StudentManagementService {
     password?: string;
   }): Promise<Student> {
     // Check if matric number already exists
-    const existingStudent = await studentRepository.findByMatricNumber(
-      data.matricNumber,
-    );
+    const existingStudent =
+      await studentRepository.findByMatricNumberWithDetails(data.matricNumber);
     if (existingStudent) {
       throw new Error(
         `Student with matric number ${data.matricNumber} already exists`,
@@ -109,20 +112,29 @@ export class StudentManagementService {
 
     const userId = userResult.user.id;
 
-    // Update User record with userType and userReferenceId (will be set after Student is created)
-    // Create Student first to get the ID
-    const student = await studentRepository.create({
-      name: data.name,
-      email: data.email,
-      matricNumber: data.matricNumber,
-      department: { connect: { id: data.departmentId } },
-      betterAuthUser: { connect: { id: userId } },
-    });
+    // Use transaction to ensure data consistency
+    // Create Student and update User atomically
+    const student = await prisma.$transaction(async (tx) => {
+      // Create Student record
+      const newStudent = await tx.student.create({
+        data: {
+          name: data.name,
+          email: data.email,
+          matricNumber: data.matricNumber,
+          department: { connect: { id: data.departmentId } },
+          user: { connect: { id: userId } },
+        },
+      });
 
-    // Update User with userType and userReferenceId
-    await userRepository.update(userId, {
-      userType: "STUDENT",
-      userReferenceId: student.id,
+      // Update User with userType
+      await tx.user.update({
+        where: { id: userId },
+        data: {
+          userType: "STUDENT",
+        },
+      });
+
+      return newStudent;
     });
 
     // Send welcome email with credentials
@@ -151,14 +163,16 @@ export class StudentManagementService {
       isActive?: boolean;
     },
   ): Promise<Student> {
-    const student = await studentRepository.findById(id);
+    const student = await studentRepository.prisma.findUnique({
+      where: { id },
+    });
     if (!student) {
       throw new Error("Student not found");
     }
 
     // Check matric number uniqueness if being changed
     if (data.matricNumber && data.matricNumber !== student.matricNumber) {
-      const existing = await studentRepository.findByMatricNumber(
+      const existing = await studentRepository.findByMatricNumberWithDetails(
         data.matricNumber,
       );
       if (existing) {
@@ -171,16 +185,19 @@ export class StudentManagementService {
     // Check email uniqueness if being changed
     if (data.email && data.email !== student.email) {
       const existingUser = await userRepository.findByEmail(data.email);
-      if (existingUser && existingUser.id !== student.betterAuthUserId) {
+      if (existingUser && existingUser.id !== student.userId) {
         throw new Error(`User with email ${data.email} already exists`);
       }
     }
 
     // Update User record if email or name changed
     if (data.email || data.name) {
-      await userRepository.update(student.betterAuthUserId, {
-        ...(data.email && { email: data.email }),
-        ...(data.name && { name: data.name }),
+      await userRepository.prisma.update({
+        where: { id: student.userId },
+        data: {
+          ...(data.email && { email: data.email }),
+          ...(data.name && { name: data.name }),
+        },
       });
     }
 
@@ -206,24 +223,26 @@ export class StudentManagementService {
       ...(data.isActive !== undefined && { isActive: data.isActive }),
     };
 
-    return studentRepository.update(id, updateData);
+    return studentRepository.updateProfile(id, updateData);
   }
 
   /**
    * Delete student
    */
   async deleteStudent(id: string): Promise<void> {
-    const student = await studentRepository.findById(id);
+    const student = await studentRepository.prisma.findUnique({
+      where: { id },
+    });
     if (!student) {
       throw new Error("Student not found");
     }
 
     // Delete student (cascade delete configured in schema will handle related records)
-    await studentRepository.delete(id);
+    await studentRepository.prisma.delete({ where: { id } });
 
     // Delete the associated User account
-    if (student.betterAuthUserId) {
-      await userRepository.delete(student.betterAuthUserId);
+    if (student.userId) {
+      await userRepository.prisma.delete({ where: { id: student.userId } });
     }
   }
 
@@ -259,9 +278,9 @@ export class StudentManagementService {
         const rowNumber = i + index + 1;
         try {
           // Find department by code
-          const department = await studentRepository.findDepartmentByCode(
-            studentData.departmentCode,
-          );
+          const department = await departmentRepository.prisma.findFirst({
+            where: { code: studentData.departmentCode },
+          });
           if (!department) {
             errors.push({
               row: rowNumber,
@@ -272,9 +291,10 @@ export class StudentManagementService {
           }
 
           // Check matric number uniqueness
-          const existingStudent = await studentRepository.findByMatricNumber(
-            studentData.matricNumber,
-          );
+          const existingStudent =
+            await studentRepository.findByMatricNumberWithDetails(
+              studentData.matricNumber,
+            );
           if (existingStudent) {
             errors.push({
               row: rowNumber,
@@ -321,18 +341,22 @@ export class StudentManagementService {
           const userId = userResult.user.id;
 
           // Create student
-          const student = await studentRepository.create({
-            name: studentData.name,
-            email: studentData.email,
-            matricNumber: studentData.matricNumber,
-            department: { connect: { id: department.id } },
-            betterAuthUser: { connect: { id: userId } },
+          const _student = await studentRepository.prisma.create({
+            data: {
+              name: studentData.name,
+              email: studentData.email,
+              matricNumber: studentData.matricNumber,
+              department: { connect: { id: department.id } },
+              user: { connect: { id: userId } },
+            },
           });
 
-          // Update User with userType and userReferenceId
-          await userRepository.update(userId, {
-            userType: "STUDENT",
-            userReferenceId: student.id,
+          // Update User with userType
+          await userRepository.prisma.update({
+            where: { id: userId },
+            data: {
+              userType: "STUDENT",
+            },
           });
 
           credentials.push({
@@ -371,8 +395,8 @@ export class StudentManagementService {
       : {};
 
     const [totalStudents, activeStudents] = await Promise.all([
-      studentRepository.count(where),
-      studentRepository.count({ ...where, isActive: true }),
+      studentRepository.prisma.count({ where }),
+      studentRepository.prisma.count({ where: { ...where, isActive: true } }),
     ]);
 
     return {
@@ -386,7 +410,9 @@ export class StudentManagementService {
    * Activate student
    */
   async activateStudent(id: string): Promise<Student> {
-    const student = await studentRepository.findById(id);
+    const student = await studentRepository.prisma.findUnique({
+      where: { id },
+    });
     if (!student) {
       throw new Error("Student not found");
     }
@@ -398,7 +424,9 @@ export class StudentManagementService {
    * Deactivate student
    */
   async deactivateStudent(id: string): Promise<Student> {
-    const student = await studentRepository.findById(id);
+    const student = await studentRepository.prisma.findUnique({
+      where: { id },
+    });
     if (!student) {
       throw new Error("Student not found");
     }

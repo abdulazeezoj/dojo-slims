@@ -1,13 +1,17 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireSchoolSupervisor } from "@/middlewares/auth";
+import { requireSchoolSupervisor } from "@/lib/auth-server";
 import { addWeeklyCommentSchema } from "@/schemas";
 import { reviewService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
 export const POST = requireSchoolSupervisor(
-  async (request: NextRequest, session, context: { params: { studentId: string; weekId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { studentId: string; weekId: string } },
+  ) => {
     try {
       const supervisorId = session.user.userReferenceId;
       const { weekId } = context.params;
@@ -26,7 +30,7 @@ export const POST = requireSchoolSupervisor(
         weekId,
         supervisorId,
         "SCHOOL_SUPERVISOR",
-        body.comment
+        body.comment,
       );
 
       return createSuccessResponse(result, {

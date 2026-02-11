@@ -1,14 +1,18 @@
+
+import { SiwesDetailsData } from "./siwes-details-data";
+import { SiwesDetailsHeader } from "./siwes-details-header";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "SIWES Details | SIWES Logbook",
-  description: "Enter your SIWES placement and industry supervisor details",
+  title: "SIWES Details",
+  description: "Enter and manage your SIWES placement and supervisor details.",
 };
 
 export default function Page() {
   return (
-    <div className="flex min-h-100 items-center justify-center">
-      <h1 className="text-2xl font-bold">SIWES Details Entry</h1>
+    <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+      <SiwesDetailsHeader />
+      <SiwesDetailsData />
     </div>
   );
 }

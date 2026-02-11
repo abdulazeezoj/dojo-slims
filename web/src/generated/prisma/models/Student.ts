@@ -30,8 +30,9 @@ export type StudentMinAggregateOutputType = {
   name: string | null
   email: string | null
   departmentId: string | null
+  currentSiwesSessionId: string | null
   isActive: boolean | null
-  betterAuthUserId: string | null
+  userId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -42,8 +43,9 @@ export type StudentMaxAggregateOutputType = {
   name: string | null
   email: string | null
   departmentId: string | null
+  currentSiwesSessionId: string | null
   isActive: boolean | null
-  betterAuthUserId: string | null
+  userId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,8 +56,9 @@ export type StudentCountAggregateOutputType = {
   name: number
   email: number
   departmentId: number
+  currentSiwesSessionId: number
   isActive: number
-  betterAuthUserId: number
+  userId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -68,8 +71,9 @@ export type StudentMinAggregateInputType = {
   name?: true
   email?: true
   departmentId?: true
+  currentSiwesSessionId?: true
   isActive?: true
-  betterAuthUserId?: true
+  userId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -80,8 +84,9 @@ export type StudentMaxAggregateInputType = {
   name?: true
   email?: true
   departmentId?: true
+  currentSiwesSessionId?: true
   isActive?: true
-  betterAuthUserId?: true
+  userId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -92,8 +97,9 @@ export type StudentCountAggregateInputType = {
   name?: true
   email?: true
   departmentId?: true
+  currentSiwesSessionId?: true
   isActive?: true
-  betterAuthUserId?: true
+  userId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -177,8 +183,9 @@ export type StudentGroupByOutputType = {
   name: string
   email: string
   departmentId: string
+  currentSiwesSessionId: string | null
   isActive: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt: Date
   updatedAt: Date
   _count: StudentCountAggregateOutputType | null
@@ -210,17 +217,20 @@ export type StudentWhereInput = {
   name?: Prisma.StringFilter<"Student"> | string
   email?: Prisma.StringFilter<"Student"> | string
   departmentId?: Prisma.StringFilter<"Student"> | string
+  currentSiwesSessionId?: Prisma.StringNullableFilter<"Student"> | string | null
   isActive?: Prisma.BoolFilter<"Student"> | boolean
-  betterAuthUserId?: Prisma.StringFilter<"Student"> | string
+  userId?: Prisma.StringFilter<"Student"> | string
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
-  betterAuthUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  finalComments?: Prisma.FinalCommentListRelationFilter
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  currentSiwesSession?: Prisma.XOR<Prisma.SiwesSessionNullableScalarRelationFilter, Prisma.SiwesSessionWhereInput> | null
   logbookMetadata?: Prisma.LogbookMetadataListRelationFilter
-  reviewRequests?: Prisma.ReviewRequestListRelationFilter
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestListRelationFilter
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentListRelationFilter
   studentSiwesDetails?: Prisma.StudentSiwesDetailListRelationFilter
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentListRelationFilter
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentListRelationFilter
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentListRelationFilter
   department?: Prisma.XOR<Prisma.DepartmentScalarRelationFilter, Prisma.DepartmentWhereInput>
   weeklyEntries?: Prisma.WeeklyEntryListRelationFilter
 }
@@ -231,17 +241,20 @@ export type StudentOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
+  currentSiwesSessionId?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  betterAuthUser?: Prisma.UserOrderByWithRelationInput
-  finalComments?: Prisma.FinalCommentOrderByRelationAggregateInput
+  user?: Prisma.UserOrderByWithRelationInput
+  currentSiwesSession?: Prisma.SiwesSessionOrderByWithRelationInput
   logbookMetadata?: Prisma.LogbookMetadataOrderByRelationAggregateInput
-  reviewRequests?: Prisma.ReviewRequestOrderByRelationAggregateInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestOrderByRelationAggregateInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentOrderByRelationAggregateInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailOrderByRelationAggregateInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentOrderByRelationAggregateInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentOrderByRelationAggregateInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentOrderByRelationAggregateInput
   department?: Prisma.DepartmentOrderByWithRelationInput
   weeklyEntries?: Prisma.WeeklyEntryOrderByRelationAggregateInput
 }
@@ -250,25 +263,28 @@ export type StudentWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   matricNumber?: string
   email?: string
-  betterAuthUserId?: string
+  userId?: string
   AND?: Prisma.StudentWhereInput | Prisma.StudentWhereInput[]
   OR?: Prisma.StudentWhereInput[]
   NOT?: Prisma.StudentWhereInput | Prisma.StudentWhereInput[]
   name?: Prisma.StringFilter<"Student"> | string
   departmentId?: Prisma.StringFilter<"Student"> | string
+  currentSiwesSessionId?: Prisma.StringNullableFilter<"Student"> | string | null
   isActive?: Prisma.BoolFilter<"Student"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
-  betterAuthUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  finalComments?: Prisma.FinalCommentListRelationFilter
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  currentSiwesSession?: Prisma.XOR<Prisma.SiwesSessionNullableScalarRelationFilter, Prisma.SiwesSessionWhereInput> | null
   logbookMetadata?: Prisma.LogbookMetadataListRelationFilter
-  reviewRequests?: Prisma.ReviewRequestListRelationFilter
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestListRelationFilter
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentListRelationFilter
   studentSiwesDetails?: Prisma.StudentSiwesDetailListRelationFilter
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentListRelationFilter
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentListRelationFilter
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentListRelationFilter
   department?: Prisma.XOR<Prisma.DepartmentScalarRelationFilter, Prisma.DepartmentWhereInput>
   weeklyEntries?: Prisma.WeeklyEntryListRelationFilter
-}, "id" | "matricNumber" | "email" | "betterAuthUserId">
+}, "id" | "matricNumber" | "email" | "userId">
 
 export type StudentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -276,8 +292,9 @@ export type StudentOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
+  currentSiwesSessionId?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.StudentCountOrderByAggregateInput
@@ -294,8 +311,9 @@ export type StudentScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Student"> | string
   email?: Prisma.StringWithAggregatesFilter<"Student"> | string
   departmentId?: Prisma.StringWithAggregatesFilter<"Student"> | string
+  currentSiwesSessionId?: Prisma.StringNullableWithAggregatesFilter<"Student"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"Student"> | boolean
-  betterAuthUserId?: Prisma.StringWithAggregatesFilter<"Student"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"Student"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Student"> | Date | string
 }
@@ -308,13 +326,15 @@ export type StudentCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
-  finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
+  user: Prisma.UserCreateNestedOneWithoutStudentProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutStudentsWithCurrentSiwesSessionInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutStudentInput
   department: Prisma.DepartmentCreateNestedOneWithoutStudentsInput
   weeklyEntries?: Prisma.WeeklyEntryCreateNestedManyWithoutStudentInput
 }
@@ -325,16 +345,18 @@ export type StudentUncheckedCreateInput = {
   name: string
   email: string
   departmentId: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedCreateNestedManyWithoutStudentInput
 }
 
@@ -346,13 +368,15 @@ export type StudentUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
-  finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutStudentsWithCurrentSiwesSessionNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutStudentNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutStudentsNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUpdateManyWithoutStudentNestedInput
 }
@@ -363,16 +387,18 @@ export type StudentUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedUpdateManyWithoutStudentNestedInput
 }
 
@@ -382,8 +408,9 @@ export type StudentCreateManyInput = {
   name: string
   email: string
   departmentId: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -404,8 +431,9 @@ export type StudentUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -431,8 +459,9 @@ export type StudentCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
+  currentSiwesSessionId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -443,8 +472,9 @@ export type StudentMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
+  currentSiwesSessionId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -455,8 +485,9 @@ export type StudentMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
+  currentSiwesSessionId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  betterAuthUserId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -466,36 +497,36 @@ export type StudentScalarRelationFilter = {
   isNot?: Prisma.StudentWhereInput
 }
 
-export type StudentCreateNestedOneWithoutBetterAuthUserInput = {
-  create?: Prisma.XOR<Prisma.StudentCreateWithoutBetterAuthUserInput, Prisma.StudentUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutBetterAuthUserInput
+export type StudentCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutUserInput, Prisma.StudentUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutUserInput
   connect?: Prisma.StudentWhereUniqueInput
 }
 
-export type StudentUncheckedCreateNestedOneWithoutBetterAuthUserInput = {
-  create?: Prisma.XOR<Prisma.StudentCreateWithoutBetterAuthUserInput, Prisma.StudentUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutBetterAuthUserInput
+export type StudentUncheckedCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutUserInput, Prisma.StudentUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutUserInput
   connect?: Prisma.StudentWhereUniqueInput
 }
 
-export type StudentUpdateOneWithoutBetterAuthUserNestedInput = {
-  create?: Prisma.XOR<Prisma.StudentCreateWithoutBetterAuthUserInput, Prisma.StudentUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutBetterAuthUserInput
-  upsert?: Prisma.StudentUpsertWithoutBetterAuthUserInput
+export type StudentUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutUserInput, Prisma.StudentUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutUserInput
+  upsert?: Prisma.StudentUpsertWithoutUserInput
   disconnect?: Prisma.StudentWhereInput | boolean
   delete?: Prisma.StudentWhereInput | boolean
   connect?: Prisma.StudentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.StudentUpdateToOneWithWhereWithoutBetterAuthUserInput, Prisma.StudentUpdateWithoutBetterAuthUserInput>, Prisma.StudentUncheckedUpdateWithoutBetterAuthUserInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StudentUpdateToOneWithWhereWithoutUserInput, Prisma.StudentUpdateWithoutUserInput>, Prisma.StudentUncheckedUpdateWithoutUserInput>
 }
 
-export type StudentUncheckedUpdateOneWithoutBetterAuthUserNestedInput = {
-  create?: Prisma.XOR<Prisma.StudentCreateWithoutBetterAuthUserInput, Prisma.StudentUncheckedCreateWithoutBetterAuthUserInput>
-  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutBetterAuthUserInput
-  upsert?: Prisma.StudentUpsertWithoutBetterAuthUserInput
+export type StudentUncheckedUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutUserInput, Prisma.StudentUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutUserInput
+  upsert?: Prisma.StudentUpsertWithoutUserInput
   disconnect?: Prisma.StudentWhereInput | boolean
   delete?: Prisma.StudentWhereInput | boolean
   connect?: Prisma.StudentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.StudentUpdateToOneWithWhereWithoutBetterAuthUserInput, Prisma.StudentUpdateWithoutBetterAuthUserInput>, Prisma.StudentUncheckedUpdateWithoutBetterAuthUserInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StudentUpdateToOneWithWhereWithoutUserInput, Prisma.StudentUpdateWithoutUserInput>, Prisma.StudentUncheckedUpdateWithoutUserInput>
 }
 
 export type StudentCreateNestedManyWithoutDepartmentInput = {
@@ -537,6 +568,48 @@ export type StudentUncheckedUpdateManyWithoutDepartmentNestedInput = {
   connect?: Prisma.StudentWhereUniqueInput | Prisma.StudentWhereUniqueInput[]
   update?: Prisma.StudentUpdateWithWhereUniqueWithoutDepartmentInput | Prisma.StudentUpdateWithWhereUniqueWithoutDepartmentInput[]
   updateMany?: Prisma.StudentUpdateManyWithWhereWithoutDepartmentInput | Prisma.StudentUpdateManyWithWhereWithoutDepartmentInput[]
+  deleteMany?: Prisma.StudentScalarWhereInput | Prisma.StudentScalarWhereInput[]
+}
+
+export type StudentCreateNestedManyWithoutCurrentSiwesSessionInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutCurrentSiwesSessionInput, Prisma.StudentUncheckedCreateWithoutCurrentSiwesSessionInput> | Prisma.StudentCreateWithoutCurrentSiwesSessionInput[] | Prisma.StudentUncheckedCreateWithoutCurrentSiwesSessionInput[]
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutCurrentSiwesSessionInput | Prisma.StudentCreateOrConnectWithoutCurrentSiwesSessionInput[]
+  createMany?: Prisma.StudentCreateManyCurrentSiwesSessionInputEnvelope
+  connect?: Prisma.StudentWhereUniqueInput | Prisma.StudentWhereUniqueInput[]
+}
+
+export type StudentUncheckedCreateNestedManyWithoutCurrentSiwesSessionInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutCurrentSiwesSessionInput, Prisma.StudentUncheckedCreateWithoutCurrentSiwesSessionInput> | Prisma.StudentCreateWithoutCurrentSiwesSessionInput[] | Prisma.StudentUncheckedCreateWithoutCurrentSiwesSessionInput[]
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutCurrentSiwesSessionInput | Prisma.StudentCreateOrConnectWithoutCurrentSiwesSessionInput[]
+  createMany?: Prisma.StudentCreateManyCurrentSiwesSessionInputEnvelope
+  connect?: Prisma.StudentWhereUniqueInput | Prisma.StudentWhereUniqueInput[]
+}
+
+export type StudentUpdateManyWithoutCurrentSiwesSessionNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutCurrentSiwesSessionInput, Prisma.StudentUncheckedCreateWithoutCurrentSiwesSessionInput> | Prisma.StudentCreateWithoutCurrentSiwesSessionInput[] | Prisma.StudentUncheckedCreateWithoutCurrentSiwesSessionInput[]
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutCurrentSiwesSessionInput | Prisma.StudentCreateOrConnectWithoutCurrentSiwesSessionInput[]
+  upsert?: Prisma.StudentUpsertWithWhereUniqueWithoutCurrentSiwesSessionInput | Prisma.StudentUpsertWithWhereUniqueWithoutCurrentSiwesSessionInput[]
+  createMany?: Prisma.StudentCreateManyCurrentSiwesSessionInputEnvelope
+  set?: Prisma.StudentWhereUniqueInput | Prisma.StudentWhereUniqueInput[]
+  disconnect?: Prisma.StudentWhereUniqueInput | Prisma.StudentWhereUniqueInput[]
+  delete?: Prisma.StudentWhereUniqueInput | Prisma.StudentWhereUniqueInput[]
+  connect?: Prisma.StudentWhereUniqueInput | Prisma.StudentWhereUniqueInput[]
+  update?: Prisma.StudentUpdateWithWhereUniqueWithoutCurrentSiwesSessionInput | Prisma.StudentUpdateWithWhereUniqueWithoutCurrentSiwesSessionInput[]
+  updateMany?: Prisma.StudentUpdateManyWithWhereWithoutCurrentSiwesSessionInput | Prisma.StudentUpdateManyWithWhereWithoutCurrentSiwesSessionInput[]
+  deleteMany?: Prisma.StudentScalarWhereInput | Prisma.StudentScalarWhereInput[]
+}
+
+export type StudentUncheckedUpdateManyWithoutCurrentSiwesSessionNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutCurrentSiwesSessionInput, Prisma.StudentUncheckedCreateWithoutCurrentSiwesSessionInput> | Prisma.StudentCreateWithoutCurrentSiwesSessionInput[] | Prisma.StudentUncheckedCreateWithoutCurrentSiwesSessionInput[]
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutCurrentSiwesSessionInput | Prisma.StudentCreateOrConnectWithoutCurrentSiwesSessionInput[]
+  upsert?: Prisma.StudentUpsertWithWhereUniqueWithoutCurrentSiwesSessionInput | Prisma.StudentUpsertWithWhereUniqueWithoutCurrentSiwesSessionInput[]
+  createMany?: Prisma.StudentCreateManyCurrentSiwesSessionInputEnvelope
+  set?: Prisma.StudentWhereUniqueInput | Prisma.StudentWhereUniqueInput[]
+  disconnect?: Prisma.StudentWhereUniqueInput | Prisma.StudentWhereUniqueInput[]
+  delete?: Prisma.StudentWhereUniqueInput | Prisma.StudentWhereUniqueInput[]
+  connect?: Prisma.StudentWhereUniqueInput | Prisma.StudentWhereUniqueInput[]
+  update?: Prisma.StudentUpdateWithWhereUniqueWithoutCurrentSiwesSessionInput | Prisma.StudentUpdateWithWhereUniqueWithoutCurrentSiwesSessionInput[]
+  updateMany?: Prisma.StudentUpdateManyWithWhereWithoutCurrentSiwesSessionInput | Prisma.StudentUpdateManyWithWhereWithoutCurrentSiwesSessionInput[]
   deleteMany?: Prisma.StudentScalarWhereInput | Prisma.StudentScalarWhereInput[]
 }
 
@@ -610,35 +683,49 @@ export type StudentUpdateOneRequiredWithoutWeeklyEntriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StudentUpdateToOneWithWhereWithoutWeeklyEntriesInput, Prisma.StudentUpdateWithoutWeeklyEntriesInput>, Prisma.StudentUncheckedUpdateWithoutWeeklyEntriesInput>
 }
 
-export type StudentCreateNestedOneWithoutReviewRequestsInput = {
-  create?: Prisma.XOR<Prisma.StudentCreateWithoutReviewRequestsInput, Prisma.StudentUncheckedCreateWithoutReviewRequestsInput>
-  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutReviewRequestsInput
+export type StudentCreateNestedOneWithoutIndustrySupervisorReviewRequestInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutIndustrySupervisorReviewRequestInput, Prisma.StudentUncheckedCreateWithoutIndustrySupervisorReviewRequestInput>
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutIndustrySupervisorReviewRequestInput
   connect?: Prisma.StudentWhereUniqueInput
 }
 
-export type StudentUpdateOneRequiredWithoutReviewRequestsNestedInput = {
-  create?: Prisma.XOR<Prisma.StudentCreateWithoutReviewRequestsInput, Prisma.StudentUncheckedCreateWithoutReviewRequestsInput>
-  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutReviewRequestsInput
-  upsert?: Prisma.StudentUpsertWithoutReviewRequestsInput
+export type StudentUpdateOneRequiredWithoutIndustrySupervisorReviewRequestNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutIndustrySupervisorReviewRequestInput, Prisma.StudentUncheckedCreateWithoutIndustrySupervisorReviewRequestInput>
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutIndustrySupervisorReviewRequestInput
+  upsert?: Prisma.StudentUpsertWithoutIndustrySupervisorReviewRequestInput
   connect?: Prisma.StudentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.StudentUpdateToOneWithWhereWithoutReviewRequestsInput, Prisma.StudentUpdateWithoutReviewRequestsInput>, Prisma.StudentUncheckedUpdateWithoutReviewRequestsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StudentUpdateToOneWithWhereWithoutIndustrySupervisorReviewRequestInput, Prisma.StudentUpdateWithoutIndustrySupervisorReviewRequestInput>, Prisma.StudentUncheckedUpdateWithoutIndustrySupervisorReviewRequestInput>
 }
 
-export type StudentCreateNestedOneWithoutFinalCommentsInput = {
-  create?: Prisma.XOR<Prisma.StudentCreateWithoutFinalCommentsInput, Prisma.StudentUncheckedCreateWithoutFinalCommentsInput>
-  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutFinalCommentsInput
+export type StudentCreateNestedOneWithoutSchoolSupervisorFinalCommentsInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutSchoolSupervisorFinalCommentsInput, Prisma.StudentUncheckedCreateWithoutSchoolSupervisorFinalCommentsInput>
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutSchoolSupervisorFinalCommentsInput
   connect?: Prisma.StudentWhereUniqueInput
 }
 
-export type StudentUpdateOneRequiredWithoutFinalCommentsNestedInput = {
-  create?: Prisma.XOR<Prisma.StudentCreateWithoutFinalCommentsInput, Prisma.StudentUncheckedCreateWithoutFinalCommentsInput>
-  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutFinalCommentsInput
-  upsert?: Prisma.StudentUpsertWithoutFinalCommentsInput
+export type StudentUpdateOneRequiredWithoutSchoolSupervisorFinalCommentsNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutSchoolSupervisorFinalCommentsInput, Prisma.StudentUncheckedCreateWithoutSchoolSupervisorFinalCommentsInput>
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutSchoolSupervisorFinalCommentsInput
+  upsert?: Prisma.StudentUpsertWithoutSchoolSupervisorFinalCommentsInput
   connect?: Prisma.StudentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.StudentUpdateToOneWithWhereWithoutFinalCommentsInput, Prisma.StudentUpdateWithoutFinalCommentsInput>, Prisma.StudentUncheckedUpdateWithoutFinalCommentsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StudentUpdateToOneWithWhereWithoutSchoolSupervisorFinalCommentsInput, Prisma.StudentUpdateWithoutSchoolSupervisorFinalCommentsInput>, Prisma.StudentUncheckedUpdateWithoutSchoolSupervisorFinalCommentsInput>
 }
 
-export type StudentCreateWithoutBetterAuthUserInput = {
+export type StudentCreateNestedOneWithoutIndustrySupervisorFinalCommentsInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutIndustrySupervisorFinalCommentsInput, Prisma.StudentUncheckedCreateWithoutIndustrySupervisorFinalCommentsInput>
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutIndustrySupervisorFinalCommentsInput
+  connect?: Prisma.StudentWhereUniqueInput
+}
+
+export type StudentUpdateOneRequiredWithoutIndustrySupervisorFinalCommentsNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentCreateWithoutIndustrySupervisorFinalCommentsInput, Prisma.StudentUncheckedCreateWithoutIndustrySupervisorFinalCommentsInput>
+  connectOrCreate?: Prisma.StudentCreateOrConnectWithoutIndustrySupervisorFinalCommentsInput
+  upsert?: Prisma.StudentUpsertWithoutIndustrySupervisorFinalCommentsInput
+  connect?: Prisma.StudentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StudentUpdateToOneWithWhereWithoutIndustrySupervisorFinalCommentsInput, Prisma.StudentUpdateWithoutIndustrySupervisorFinalCommentsInput>, Prisma.StudentUncheckedUpdateWithoutIndustrySupervisorFinalCommentsInput>
+}
+
+export type StudentCreateWithoutUserInput = {
   id?: string
   matricNumber: string
   name: string
@@ -646,51 +733,55 @@ export type StudentCreateWithoutBetterAuthUserInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutStudentsWithCurrentSiwesSessionInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutStudentInput
   department: Prisma.DepartmentCreateNestedOneWithoutStudentsInput
   weeklyEntries?: Prisma.WeeklyEntryCreateNestedManyWithoutStudentInput
 }
 
-export type StudentUncheckedCreateWithoutBetterAuthUserInput = {
+export type StudentUncheckedCreateWithoutUserInput = {
   id?: string
   matricNumber: string
   name: string
   email: string
   departmentId: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedCreateNestedManyWithoutStudentInput
 }
 
-export type StudentCreateOrConnectWithoutBetterAuthUserInput = {
+export type StudentCreateOrConnectWithoutUserInput = {
   where: Prisma.StudentWhereUniqueInput
-  create: Prisma.XOR<Prisma.StudentCreateWithoutBetterAuthUserInput, Prisma.StudentUncheckedCreateWithoutBetterAuthUserInput>
+  create: Prisma.XOR<Prisma.StudentCreateWithoutUserInput, Prisma.StudentUncheckedCreateWithoutUserInput>
 }
 
-export type StudentUpsertWithoutBetterAuthUserInput = {
-  update: Prisma.XOR<Prisma.StudentUpdateWithoutBetterAuthUserInput, Prisma.StudentUncheckedUpdateWithoutBetterAuthUserInput>
-  create: Prisma.XOR<Prisma.StudentCreateWithoutBetterAuthUserInput, Prisma.StudentUncheckedCreateWithoutBetterAuthUserInput>
+export type StudentUpsertWithoutUserInput = {
+  update: Prisma.XOR<Prisma.StudentUpdateWithoutUserInput, Prisma.StudentUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.StudentCreateWithoutUserInput, Prisma.StudentUncheckedCreateWithoutUserInput>
   where?: Prisma.StudentWhereInput
 }
 
-export type StudentUpdateToOneWithWhereWithoutBetterAuthUserInput = {
+export type StudentUpdateToOneWithWhereWithoutUserInput = {
   where?: Prisma.StudentWhereInput
-  data: Prisma.XOR<Prisma.StudentUpdateWithoutBetterAuthUserInput, Prisma.StudentUncheckedUpdateWithoutBetterAuthUserInput>
+  data: Prisma.XOR<Prisma.StudentUpdateWithoutUserInput, Prisma.StudentUncheckedUpdateWithoutUserInput>
 }
 
-export type StudentUpdateWithoutBetterAuthUserInput = {
+export type StudentUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -698,31 +789,35 @@ export type StudentUpdateWithoutBetterAuthUserInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutStudentsWithCurrentSiwesSessionNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutStudentNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutStudentsNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUpdateManyWithoutStudentNestedInput
 }
 
-export type StudentUncheckedUpdateWithoutBetterAuthUserInput = {
+export type StudentUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedUpdateManyWithoutStudentNestedInput
 }
 
@@ -734,13 +829,15 @@ export type StudentCreateWithoutDepartmentInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
-  finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
+  user: Prisma.UserCreateNestedOneWithoutStudentProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutStudentsWithCurrentSiwesSessionInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutStudentInput
   weeklyEntries?: Prisma.WeeklyEntryCreateNestedManyWithoutStudentInput
 }
 
@@ -749,16 +846,18 @@ export type StudentUncheckedCreateWithoutDepartmentInput = {
   matricNumber: string
   name: string
   email: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedCreateNestedManyWithoutStudentInput
 }
 
@@ -797,10 +896,77 @@ export type StudentScalarWhereInput = {
   name?: Prisma.StringFilter<"Student"> | string
   email?: Prisma.StringFilter<"Student"> | string
   departmentId?: Prisma.StringFilter<"Student"> | string
+  currentSiwesSessionId?: Prisma.StringNullableFilter<"Student"> | string | null
   isActive?: Prisma.BoolFilter<"Student"> | boolean
-  betterAuthUserId?: Prisma.StringFilter<"Student"> | string
+  userId?: Prisma.StringFilter<"Student"> | string
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
+}
+
+export type StudentCreateWithoutCurrentSiwesSessionInput = {
+  id?: string
+  matricNumber: string
+  name: string
+  email: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutStudentProfileInput
+  logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutStudentInput
+  studentSessionEnrollments?: Prisma.StudentSessionEnrollmentCreateNestedManyWithoutStudentInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutStudentInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutStudentInput
+  department: Prisma.DepartmentCreateNestedOneWithoutStudentsInput
+  weeklyEntries?: Prisma.WeeklyEntryCreateNestedManyWithoutStudentInput
+}
+
+export type StudentUncheckedCreateWithoutCurrentSiwesSessionInput = {
+  id?: string
+  matricNumber: string
+  name: string
+  email: string
+  departmentId: string
+  isActive?: boolean
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  logbookMetadata?: Prisma.LogbookMetadataUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutStudentInput
+  studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutStudentInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
+  weeklyEntries?: Prisma.WeeklyEntryUncheckedCreateNestedManyWithoutStudentInput
+}
+
+export type StudentCreateOrConnectWithoutCurrentSiwesSessionInput = {
+  where: Prisma.StudentWhereUniqueInput
+  create: Prisma.XOR<Prisma.StudentCreateWithoutCurrentSiwesSessionInput, Prisma.StudentUncheckedCreateWithoutCurrentSiwesSessionInput>
+}
+
+export type StudentCreateManyCurrentSiwesSessionInputEnvelope = {
+  data: Prisma.StudentCreateManyCurrentSiwesSessionInput | Prisma.StudentCreateManyCurrentSiwesSessionInput[]
+  skipDuplicates?: boolean
+}
+
+export type StudentUpsertWithWhereUniqueWithoutCurrentSiwesSessionInput = {
+  where: Prisma.StudentWhereUniqueInput
+  update: Prisma.XOR<Prisma.StudentUpdateWithoutCurrentSiwesSessionInput, Prisma.StudentUncheckedUpdateWithoutCurrentSiwesSessionInput>
+  create: Prisma.XOR<Prisma.StudentCreateWithoutCurrentSiwesSessionInput, Prisma.StudentUncheckedCreateWithoutCurrentSiwesSessionInput>
+}
+
+export type StudentUpdateWithWhereUniqueWithoutCurrentSiwesSessionInput = {
+  where: Prisma.StudentWhereUniqueInput
+  data: Prisma.XOR<Prisma.StudentUpdateWithoutCurrentSiwesSessionInput, Prisma.StudentUncheckedUpdateWithoutCurrentSiwesSessionInput>
+}
+
+export type StudentUpdateManyWithWhereWithoutCurrentSiwesSessionInput = {
+  where: Prisma.StudentScalarWhereInput
+  data: Prisma.XOR<Prisma.StudentUpdateManyMutationInput, Prisma.StudentUncheckedUpdateManyWithoutCurrentSiwesSessionInput>
 }
 
 export type StudentCreateWithoutStudentSessionEnrollmentsInput = {
@@ -811,12 +977,14 @@ export type StudentCreateWithoutStudentSessionEnrollmentsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
-  finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
+  user: Prisma.UserCreateNestedOneWithoutStudentProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutStudentsWithCurrentSiwesSessionInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutStudentInput
   department: Prisma.DepartmentCreateNestedOneWithoutStudentsInput
   weeklyEntries?: Prisma.WeeklyEntryCreateNestedManyWithoutStudentInput
 }
@@ -827,15 +995,17 @@ export type StudentUncheckedCreateWithoutStudentSessionEnrollmentsInput = {
   name: string
   email: string
   departmentId: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedCreateNestedManyWithoutStudentInput
 }
 
@@ -863,12 +1033,14 @@ export type StudentUpdateWithoutStudentSessionEnrollmentsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
-  finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutStudentsWithCurrentSiwesSessionNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutStudentNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutStudentsNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUpdateManyWithoutStudentNestedInput
 }
@@ -879,15 +1051,17 @@ export type StudentUncheckedUpdateWithoutStudentSessionEnrollmentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedUpdateManyWithoutStudentNestedInput
 }
 
@@ -899,12 +1073,14 @@ export type StudentCreateWithoutStudentSupervisorAssignmentsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
-  finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
+  user: Prisma.UserCreateNestedOneWithoutStudentProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutStudentsWithCurrentSiwesSessionInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutStudentInput
   department: Prisma.DepartmentCreateNestedOneWithoutStudentsInput
   weeklyEntries?: Prisma.WeeklyEntryCreateNestedManyWithoutStudentInput
 }
@@ -915,15 +1091,17 @@ export type StudentUncheckedCreateWithoutStudentSupervisorAssignmentsInput = {
   name: string
   email: string
   departmentId: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedCreateNestedManyWithoutStudentInput
 }
 
@@ -951,12 +1129,14 @@ export type StudentUpdateWithoutStudentSupervisorAssignmentsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
-  finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutStudentsWithCurrentSiwesSessionNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutStudentNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutStudentsNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUpdateManyWithoutStudentNestedInput
 }
@@ -967,15 +1147,17 @@ export type StudentUncheckedUpdateWithoutStudentSupervisorAssignmentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedUpdateManyWithoutStudentNestedInput
 }
 
@@ -987,12 +1169,14 @@ export type StudentCreateWithoutStudentSiwesDetailsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
-  finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
+  user: Prisma.UserCreateNestedOneWithoutStudentProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutStudentsWithCurrentSiwesSessionInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutStudentInput
   department: Prisma.DepartmentCreateNestedOneWithoutStudentsInput
   weeklyEntries?: Prisma.WeeklyEntryCreateNestedManyWithoutStudentInput
 }
@@ -1003,15 +1187,17 @@ export type StudentUncheckedCreateWithoutStudentSiwesDetailsInput = {
   name: string
   email: string
   departmentId: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedCreateNestedManyWithoutStudentInput
 }
 
@@ -1039,12 +1225,14 @@ export type StudentUpdateWithoutStudentSiwesDetailsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
-  finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutStudentsWithCurrentSiwesSessionNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutStudentNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutStudentsNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUpdateManyWithoutStudentNestedInput
 }
@@ -1055,15 +1243,17 @@ export type StudentUncheckedUpdateWithoutStudentSiwesDetailsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedUpdateManyWithoutStudentNestedInput
 }
 
@@ -1075,12 +1265,14 @@ export type StudentCreateWithoutLogbookMetadataInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
-  finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
+  user: Prisma.UserCreateNestedOneWithoutStudentProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutStudentsWithCurrentSiwesSessionInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutStudentInput
   department: Prisma.DepartmentCreateNestedOneWithoutStudentsInput
   weeklyEntries?: Prisma.WeeklyEntryCreateNestedManyWithoutStudentInput
 }
@@ -1091,15 +1283,17 @@ export type StudentUncheckedCreateWithoutLogbookMetadataInput = {
   name: string
   email: string
   departmentId: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedCreateNestedManyWithoutStudentInput
 }
 
@@ -1127,12 +1321,14 @@ export type StudentUpdateWithoutLogbookMetadataInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
-  finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutStudentsWithCurrentSiwesSessionNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutStudentNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutStudentsNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUpdateManyWithoutStudentNestedInput
 }
@@ -1143,15 +1339,17 @@ export type StudentUncheckedUpdateWithoutLogbookMetadataInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedUpdateManyWithoutStudentNestedInput
 }
 
@@ -1163,13 +1361,15 @@ export type StudentCreateWithoutWeeklyEntriesInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
-  finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
+  user: Prisma.UserCreateNestedOneWithoutStudentProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutStudentsWithCurrentSiwesSessionInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutStudentInput
   department: Prisma.DepartmentCreateNestedOneWithoutStudentsInput
 }
 
@@ -1179,16 +1379,18 @@ export type StudentUncheckedCreateWithoutWeeklyEntriesInput = {
   name: string
   email: string
   departmentId: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type StudentCreateOrConnectWithoutWeeklyEntriesInput = {
@@ -1215,13 +1417,15 @@ export type StudentUpdateWithoutWeeklyEntriesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
-  finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutStudentsWithCurrentSiwesSessionNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutStudentNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutStudentsNestedInput
 }
 
@@ -1231,19 +1435,21 @@ export type StudentUncheckedUpdateWithoutWeeklyEntriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
 }
 
-export type StudentCreateWithoutReviewRequestsInput = {
+export type StudentCreateWithoutIndustrySupervisorReviewRequestInput = {
   id?: string
   matricNumber: string
   name: string
@@ -1251,51 +1457,55 @@ export type StudentCreateWithoutReviewRequestsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
-  finalComments?: Prisma.FinalCommentCreateNestedManyWithoutStudentInput
+  user: Prisma.UserCreateNestedOneWithoutStudentProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutStudentsWithCurrentSiwesSessionInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutStudentInput
   department: Prisma.DepartmentCreateNestedOneWithoutStudentsInput
   weeklyEntries?: Prisma.WeeklyEntryCreateNestedManyWithoutStudentInput
 }
 
-export type StudentUncheckedCreateWithoutReviewRequestsInput = {
+export type StudentUncheckedCreateWithoutIndustrySupervisorReviewRequestInput = {
   id?: string
   matricNumber: string
   name: string
   email: string
   departmentId: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  finalComments?: Prisma.FinalCommentUncheckedCreateNestedManyWithoutStudentInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedCreateNestedManyWithoutStudentInput
 }
 
-export type StudentCreateOrConnectWithoutReviewRequestsInput = {
+export type StudentCreateOrConnectWithoutIndustrySupervisorReviewRequestInput = {
   where: Prisma.StudentWhereUniqueInput
-  create: Prisma.XOR<Prisma.StudentCreateWithoutReviewRequestsInput, Prisma.StudentUncheckedCreateWithoutReviewRequestsInput>
+  create: Prisma.XOR<Prisma.StudentCreateWithoutIndustrySupervisorReviewRequestInput, Prisma.StudentUncheckedCreateWithoutIndustrySupervisorReviewRequestInput>
 }
 
-export type StudentUpsertWithoutReviewRequestsInput = {
-  update: Prisma.XOR<Prisma.StudentUpdateWithoutReviewRequestsInput, Prisma.StudentUncheckedUpdateWithoutReviewRequestsInput>
-  create: Prisma.XOR<Prisma.StudentCreateWithoutReviewRequestsInput, Prisma.StudentUncheckedCreateWithoutReviewRequestsInput>
+export type StudentUpsertWithoutIndustrySupervisorReviewRequestInput = {
+  update: Prisma.XOR<Prisma.StudentUpdateWithoutIndustrySupervisorReviewRequestInput, Prisma.StudentUncheckedUpdateWithoutIndustrySupervisorReviewRequestInput>
+  create: Prisma.XOR<Prisma.StudentCreateWithoutIndustrySupervisorReviewRequestInput, Prisma.StudentUncheckedCreateWithoutIndustrySupervisorReviewRequestInput>
   where?: Prisma.StudentWhereInput
 }
 
-export type StudentUpdateToOneWithWhereWithoutReviewRequestsInput = {
+export type StudentUpdateToOneWithWhereWithoutIndustrySupervisorReviewRequestInput = {
   where?: Prisma.StudentWhereInput
-  data: Prisma.XOR<Prisma.StudentUpdateWithoutReviewRequestsInput, Prisma.StudentUncheckedUpdateWithoutReviewRequestsInput>
+  data: Prisma.XOR<Prisma.StudentUpdateWithoutIndustrySupervisorReviewRequestInput, Prisma.StudentUncheckedUpdateWithoutIndustrySupervisorReviewRequestInput>
 }
 
-export type StudentUpdateWithoutReviewRequestsInput = {
+export type StudentUpdateWithoutIndustrySupervisorReviewRequestInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1303,35 +1513,39 @@ export type StudentUpdateWithoutReviewRequestsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
-  finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutStudentsWithCurrentSiwesSessionNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutStudentNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutStudentsNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUpdateManyWithoutStudentNestedInput
 }
 
-export type StudentUncheckedUpdateWithoutReviewRequestsInput = {
+export type StudentUncheckedUpdateWithoutIndustrySupervisorReviewRequestInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedUpdateManyWithoutStudentNestedInput
 }
 
-export type StudentCreateWithoutFinalCommentsInput = {
+export type StudentCreateWithoutSchoolSupervisorFinalCommentsInput = {
   id?: string
   matricNumber: string
   name: string
@@ -1339,51 +1553,55 @@ export type StudentCreateWithoutFinalCommentsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  betterAuthUser: Prisma.UserCreateNestedOneWithoutStudentProfileInput
+  user: Prisma.UserCreateNestedOneWithoutStudentProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutStudentsWithCurrentSiwesSessionInput
   logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentCreateNestedManyWithoutStudentInput
   department: Prisma.DepartmentCreateNestedOneWithoutStudentsInput
   weeklyEntries?: Prisma.WeeklyEntryCreateNestedManyWithoutStudentInput
 }
 
-export type StudentUncheckedCreateWithoutFinalCommentsInput = {
+export type StudentUncheckedCreateWithoutSchoolSupervisorFinalCommentsInput = {
   id?: string
   matricNumber: string
   name: string
   email: string
   departmentId: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   logbookMetadata?: Prisma.LogbookMetadataUncheckedCreateNestedManyWithoutStudentInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutStudentInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedCreateNestedManyWithoutStudentInput
 }
 
-export type StudentCreateOrConnectWithoutFinalCommentsInput = {
+export type StudentCreateOrConnectWithoutSchoolSupervisorFinalCommentsInput = {
   where: Prisma.StudentWhereUniqueInput
-  create: Prisma.XOR<Prisma.StudentCreateWithoutFinalCommentsInput, Prisma.StudentUncheckedCreateWithoutFinalCommentsInput>
+  create: Prisma.XOR<Prisma.StudentCreateWithoutSchoolSupervisorFinalCommentsInput, Prisma.StudentUncheckedCreateWithoutSchoolSupervisorFinalCommentsInput>
 }
 
-export type StudentUpsertWithoutFinalCommentsInput = {
-  update: Prisma.XOR<Prisma.StudentUpdateWithoutFinalCommentsInput, Prisma.StudentUncheckedUpdateWithoutFinalCommentsInput>
-  create: Prisma.XOR<Prisma.StudentCreateWithoutFinalCommentsInput, Prisma.StudentUncheckedCreateWithoutFinalCommentsInput>
+export type StudentUpsertWithoutSchoolSupervisorFinalCommentsInput = {
+  update: Prisma.XOR<Prisma.StudentUpdateWithoutSchoolSupervisorFinalCommentsInput, Prisma.StudentUncheckedUpdateWithoutSchoolSupervisorFinalCommentsInput>
+  create: Prisma.XOR<Prisma.StudentCreateWithoutSchoolSupervisorFinalCommentsInput, Prisma.StudentUncheckedCreateWithoutSchoolSupervisorFinalCommentsInput>
   where?: Prisma.StudentWhereInput
 }
 
-export type StudentUpdateToOneWithWhereWithoutFinalCommentsInput = {
+export type StudentUpdateToOneWithWhereWithoutSchoolSupervisorFinalCommentsInput = {
   where?: Prisma.StudentWhereInput
-  data: Prisma.XOR<Prisma.StudentUpdateWithoutFinalCommentsInput, Prisma.StudentUncheckedUpdateWithoutFinalCommentsInput>
+  data: Prisma.XOR<Prisma.StudentUpdateWithoutSchoolSupervisorFinalCommentsInput, Prisma.StudentUncheckedUpdateWithoutSchoolSupervisorFinalCommentsInput>
 }
 
-export type StudentUpdateWithoutFinalCommentsInput = {
+export type StudentUpdateWithoutSchoolSupervisorFinalCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1391,31 +1609,131 @@ export type StudentUpdateWithoutFinalCommentsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutStudentsWithCurrentSiwesSessionNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutStudentNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutStudentsNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUpdateManyWithoutStudentNestedInput
 }
 
-export type StudentUncheckedUpdateWithoutFinalCommentsInput = {
+export type StudentUncheckedUpdateWithoutSchoolSupervisorFinalCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   logbookMetadata?: Prisma.LogbookMetadataUncheckedUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
+  weeklyEntries?: Prisma.WeeklyEntryUncheckedUpdateManyWithoutStudentNestedInput
+}
+
+export type StudentCreateWithoutIndustrySupervisorFinalCommentsInput = {
+  id?: string
+  matricNumber: string
+  name: string
+  email: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutStudentProfileInput
+  currentSiwesSession?: Prisma.SiwesSessionCreateNestedOneWithoutStudentsWithCurrentSiwesSessionInput
+  logbookMetadata?: Prisma.LogbookMetadataCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestCreateNestedManyWithoutStudentInput
+  studentSessionEnrollments?: Prisma.StudentSessionEnrollmentCreateNestedManyWithoutStudentInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailCreateNestedManyWithoutStudentInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentCreateNestedManyWithoutStudentInput
+  department: Prisma.DepartmentCreateNestedOneWithoutStudentsInput
+  weeklyEntries?: Prisma.WeeklyEntryCreateNestedManyWithoutStudentInput
+}
+
+export type StudentUncheckedCreateWithoutIndustrySupervisorFinalCommentsInput = {
+  id?: string
+  matricNumber: string
+  name: string
+  email: string
+  departmentId: string
+  currentSiwesSessionId?: string | null
+  isActive?: boolean
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  logbookMetadata?: Prisma.LogbookMetadataUncheckedCreateNestedManyWithoutStudentInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedCreateNestedManyWithoutStudentInput
+  studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedCreateNestedManyWithoutStudentInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedCreateNestedManyWithoutStudentInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedCreateNestedManyWithoutStudentInput
+  weeklyEntries?: Prisma.WeeklyEntryUncheckedCreateNestedManyWithoutStudentInput
+}
+
+export type StudentCreateOrConnectWithoutIndustrySupervisorFinalCommentsInput = {
+  where: Prisma.StudentWhereUniqueInput
+  create: Prisma.XOR<Prisma.StudentCreateWithoutIndustrySupervisorFinalCommentsInput, Prisma.StudentUncheckedCreateWithoutIndustrySupervisorFinalCommentsInput>
+}
+
+export type StudentUpsertWithoutIndustrySupervisorFinalCommentsInput = {
+  update: Prisma.XOR<Prisma.StudentUpdateWithoutIndustrySupervisorFinalCommentsInput, Prisma.StudentUncheckedUpdateWithoutIndustrySupervisorFinalCommentsInput>
+  create: Prisma.XOR<Prisma.StudentCreateWithoutIndustrySupervisorFinalCommentsInput, Prisma.StudentUncheckedCreateWithoutIndustrySupervisorFinalCommentsInput>
+  where?: Prisma.StudentWhereInput
+}
+
+export type StudentUpdateToOneWithWhereWithoutIndustrySupervisorFinalCommentsInput = {
+  where?: Prisma.StudentWhereInput
+  data: Prisma.XOR<Prisma.StudentUpdateWithoutIndustrySupervisorFinalCommentsInput, Prisma.StudentUncheckedUpdateWithoutIndustrySupervisorFinalCommentsInput>
+}
+
+export type StudentUpdateWithoutIndustrySupervisorFinalCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutStudentsWithCurrentSiwesSessionNestedInput
+  logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutStudentNestedInput
+  studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUpdateManyWithoutStudentNestedInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutStudentNestedInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutStudentNestedInput
+  department?: Prisma.DepartmentUpdateOneRequiredWithoutStudentsNestedInput
+  weeklyEntries?: Prisma.WeeklyEntryUpdateManyWithoutStudentNestedInput
+}
+
+export type StudentUncheckedUpdateWithoutIndustrySupervisorFinalCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  logbookMetadata?: Prisma.LogbookMetadataUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
+  studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutStudentNestedInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedUpdateManyWithoutStudentNestedInput
 }
 
@@ -1424,8 +1742,9 @@ export type StudentCreateManyDepartmentInput = {
   matricNumber: string
   name: string
   email: string
+  currentSiwesSessionId?: string | null
   isActive?: boolean
-  betterAuthUserId: string
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1438,13 +1757,15 @@ export type StudentUpdateWithoutDepartmentInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  betterAuthUser?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
-  finalComments?: Prisma.FinalCommentUpdateManyWithoutStudentNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
+  currentSiwesSession?: Prisma.SiwesSessionUpdateOneWithoutStudentsWithCurrentSiwesSessionNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutStudentNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUpdateManyWithoutStudentNestedInput
 }
 
@@ -1453,16 +1774,18 @@ export type StudentUncheckedUpdateWithoutDepartmentInput = {
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  finalComments?: Prisma.FinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   logbookMetadata?: Prisma.LogbookMetadataUncheckedUpdateManyWithoutStudentNestedInput
-  reviewRequests?: Prisma.ReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutStudentNestedInput
   studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
   weeklyEntries?: Prisma.WeeklyEntryUncheckedUpdateManyWithoutStudentNestedInput
 }
 
@@ -1471,8 +1794,73 @@ export type StudentUncheckedUpdateManyWithoutDepartmentInput = {
   matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  currentSiwesSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  betterAuthUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StudentCreateManyCurrentSiwesSessionInput = {
+  id?: string
+  matricNumber: string
+  name: string
+  email: string
+  departmentId: string
+  isActive?: boolean
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type StudentUpdateWithoutCurrentSiwesSessionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
+  logbookMetadata?: Prisma.LogbookMetadataUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUpdateManyWithoutStudentNestedInput
+  studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUpdateManyWithoutStudentNestedInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUpdateManyWithoutStudentNestedInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUpdateManyWithoutStudentNestedInput
+  department?: Prisma.DepartmentUpdateOneRequiredWithoutStudentsNestedInput
+  weeklyEntries?: Prisma.WeeklyEntryUpdateManyWithoutStudentNestedInput
+}
+
+export type StudentUncheckedUpdateWithoutCurrentSiwesSessionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  logbookMetadata?: Prisma.LogbookMetadataUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
+  studentSessionEnrollments?: Prisma.StudentSessionEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  studentSiwesDetails?: Prisma.StudentSiwesDetailUncheckedUpdateManyWithoutStudentNestedInput
+  studentSupervisorAssignments?: Prisma.StudentSupervisorAssignmentUncheckedUpdateManyWithoutStudentNestedInput
+  schoolSupervisorFinalComments?: Prisma.SchoolSupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
+  industrySupervisorFinalComments?: Prisma.IndustrySupervisorFinalCommentUncheckedUpdateManyWithoutStudentNestedInput
+  weeklyEntries?: Prisma.WeeklyEntryUncheckedUpdateManyWithoutStudentNestedInput
+}
+
+export type StudentUncheckedUpdateManyWithoutCurrentSiwesSessionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  matricNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1483,22 +1871,24 @@ export type StudentUncheckedUpdateManyWithoutDepartmentInput = {
  */
 
 export type StudentCountOutputType = {
-  finalComments: number
   logbookMetadata: number
-  reviewRequests: number
+  industrySupervisorReviewRequest: number
   studentSessionEnrollments: number
   studentSiwesDetails: number
   studentSupervisorAssignments: number
+  schoolSupervisorFinalComments: number
+  industrySupervisorFinalComments: number
   weeklyEntries: number
 }
 
 export type StudentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  finalComments?: boolean | StudentCountOutputTypeCountFinalCommentsArgs
   logbookMetadata?: boolean | StudentCountOutputTypeCountLogbookMetadataArgs
-  reviewRequests?: boolean | StudentCountOutputTypeCountReviewRequestsArgs
+  industrySupervisorReviewRequest?: boolean | StudentCountOutputTypeCountIndustrySupervisorReviewRequestArgs
   studentSessionEnrollments?: boolean | StudentCountOutputTypeCountStudentSessionEnrollmentsArgs
   studentSiwesDetails?: boolean | StudentCountOutputTypeCountStudentSiwesDetailsArgs
   studentSupervisorAssignments?: boolean | StudentCountOutputTypeCountStudentSupervisorAssignmentsArgs
+  schoolSupervisorFinalComments?: boolean | StudentCountOutputTypeCountSchoolSupervisorFinalCommentsArgs
+  industrySupervisorFinalComments?: boolean | StudentCountOutputTypeCountIndustrySupervisorFinalCommentsArgs
   weeklyEntries?: boolean | StudentCountOutputTypeCountWeeklyEntriesArgs
 }
 
@@ -1515,13 +1905,6 @@ export type StudentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
 /**
  * StudentCountOutputType without action
  */
-export type StudentCountOutputTypeCountFinalCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.FinalCommentWhereInput
-}
-
-/**
- * StudentCountOutputType without action
- */
 export type StudentCountOutputTypeCountLogbookMetadataArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.LogbookMetadataWhereInput
 }
@@ -1529,8 +1912,8 @@ export type StudentCountOutputTypeCountLogbookMetadataArgs<ExtArgs extends runti
 /**
  * StudentCountOutputType without action
  */
-export type StudentCountOutputTypeCountReviewRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ReviewRequestWhereInput
+export type StudentCountOutputTypeCountIndustrySupervisorReviewRequestArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IndustrySupervisorReviewRequestWhereInput
 }
 
 /**
@@ -1557,6 +1940,20 @@ export type StudentCountOutputTypeCountStudentSupervisorAssignmentsArgs<ExtArgs 
 /**
  * StudentCountOutputType without action
  */
+export type StudentCountOutputTypeCountSchoolSupervisorFinalCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SchoolSupervisorFinalCommentWhereInput
+}
+
+/**
+ * StudentCountOutputType without action
+ */
+export type StudentCountOutputTypeCountIndustrySupervisorFinalCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IndustrySupervisorFinalCommentWhereInput
+}
+
+/**
+ * StudentCountOutputType without action
+ */
 export type StudentCountOutputTypeCountWeeklyEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.WeeklyEntryWhereInput
 }
@@ -1568,17 +1965,20 @@ export type StudentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name?: boolean
   email?: boolean
   departmentId?: boolean
+  currentSiwesSessionId?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  finalComments?: boolean | Prisma.Student$finalCommentsArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.Student$currentSiwesSessionArgs<ExtArgs>
   logbookMetadata?: boolean | Prisma.Student$logbookMetadataArgs<ExtArgs>
-  reviewRequests?: boolean | Prisma.Student$reviewRequestsArgs<ExtArgs>
+  industrySupervisorReviewRequest?: boolean | Prisma.Student$industrySupervisorReviewRequestArgs<ExtArgs>
   studentSessionEnrollments?: boolean | Prisma.Student$studentSessionEnrollmentsArgs<ExtArgs>
   studentSiwesDetails?: boolean | Prisma.Student$studentSiwesDetailsArgs<ExtArgs>
   studentSupervisorAssignments?: boolean | Prisma.Student$studentSupervisorAssignmentsArgs<ExtArgs>
+  schoolSupervisorFinalComments?: boolean | Prisma.Student$schoolSupervisorFinalCommentsArgs<ExtArgs>
+  industrySupervisorFinalComments?: boolean | Prisma.Student$industrySupervisorFinalCommentsArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
   weeklyEntries?: boolean | Prisma.Student$weeklyEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.StudentCountOutputTypeDefaultArgs<ExtArgs>
@@ -1590,11 +1990,13 @@ export type StudentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   name?: boolean
   email?: boolean
   departmentId?: boolean
+  currentSiwesSessionId?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.Student$currentSiwesSessionArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["student"]>
 
@@ -1604,11 +2006,13 @@ export type StudentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   name?: boolean
   email?: boolean
   departmentId?: boolean
+  currentSiwesSessionId?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.Student$currentSiwesSessionArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["student"]>
 
@@ -1618,44 +2022,51 @@ export type StudentSelectScalar = {
   name?: boolean
   email?: boolean
   departmentId?: boolean
+  currentSiwesSessionId?: boolean
   isActive?: boolean
-  betterAuthUserId?: boolean
+  userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "matricNumber" | "name" | "email" | "departmentId" | "isActive" | "betterAuthUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
+export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "matricNumber" | "name" | "email" | "departmentId" | "currentSiwesSessionId" | "isActive" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
 export type StudentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  finalComments?: boolean | Prisma.Student$finalCommentsArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.Student$currentSiwesSessionArgs<ExtArgs>
   logbookMetadata?: boolean | Prisma.Student$logbookMetadataArgs<ExtArgs>
-  reviewRequests?: boolean | Prisma.Student$reviewRequestsArgs<ExtArgs>
+  industrySupervisorReviewRequest?: boolean | Prisma.Student$industrySupervisorReviewRequestArgs<ExtArgs>
   studentSessionEnrollments?: boolean | Prisma.Student$studentSessionEnrollmentsArgs<ExtArgs>
   studentSiwesDetails?: boolean | Prisma.Student$studentSiwesDetailsArgs<ExtArgs>
   studentSupervisorAssignments?: boolean | Prisma.Student$studentSupervisorAssignmentsArgs<ExtArgs>
+  schoolSupervisorFinalComments?: boolean | Prisma.Student$schoolSupervisorFinalCommentsArgs<ExtArgs>
+  industrySupervisorFinalComments?: boolean | Prisma.Student$industrySupervisorFinalCommentsArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
   weeklyEntries?: boolean | Prisma.Student$weeklyEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.StudentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StudentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.Student$currentSiwesSessionArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }
 export type StudentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  betterAuthUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  currentSiwesSession?: boolean | Prisma.Student$currentSiwesSessionArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }
 
 export type $StudentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Student"
   objects: {
-    betterAuthUser: Prisma.$UserPayload<ExtArgs>
-    finalComments: Prisma.$FinalCommentPayload<ExtArgs>[]
+    user: Prisma.$UserPayload<ExtArgs>
+    currentSiwesSession: Prisma.$SiwesSessionPayload<ExtArgs> | null
     logbookMetadata: Prisma.$LogbookMetadataPayload<ExtArgs>[]
-    reviewRequests: Prisma.$ReviewRequestPayload<ExtArgs>[]
+    industrySupervisorReviewRequest: Prisma.$IndustrySupervisorReviewRequestPayload<ExtArgs>[]
     studentSessionEnrollments: Prisma.$StudentSessionEnrollmentPayload<ExtArgs>[]
     studentSiwesDetails: Prisma.$StudentSiwesDetailPayload<ExtArgs>[]
     studentSupervisorAssignments: Prisma.$StudentSupervisorAssignmentPayload<ExtArgs>[]
+    schoolSupervisorFinalComments: Prisma.$SchoolSupervisorFinalCommentPayload<ExtArgs>[]
+    industrySupervisorFinalComments: Prisma.$IndustrySupervisorFinalCommentPayload<ExtArgs>[]
     department: Prisma.$DepartmentPayload<ExtArgs>
     weeklyEntries: Prisma.$WeeklyEntryPayload<ExtArgs>[]
   }
@@ -1665,8 +2076,9 @@ export type $StudentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     name: string
     email: string
     departmentId: string
+    currentSiwesSessionId: string | null
     isActive: boolean
-    betterAuthUserId: string
+    userId: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["student"]>
@@ -2063,13 +2475,15 @@ readonly fields: StudentFieldRefs;
  */
 export interface Prisma__StudentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  betterAuthUser<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  finalComments<T extends Prisma.Student$finalCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$finalCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinalCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  currentSiwesSession<T extends Prisma.Student$currentSiwesSessionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$currentSiwesSessionArgs<ExtArgs>>): Prisma.Prisma__SiwesSessionClient<runtime.Types.Result.GetResult<Prisma.$SiwesSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   logbookMetadata<T extends Prisma.Student$logbookMetadataArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$logbookMetadataArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LogbookMetadataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  reviewRequests<T extends Prisma.Student$reviewRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$reviewRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  industrySupervisorReviewRequest<T extends Prisma.Student$industrySupervisorReviewRequestArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$industrySupervisorReviewRequestArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IndustrySupervisorReviewRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   studentSessionEnrollments<T extends Prisma.Student$studentSessionEnrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$studentSessionEnrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentSessionEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   studentSiwesDetails<T extends Prisma.Student$studentSiwesDetailsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$studentSiwesDetailsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentSiwesDetailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   studentSupervisorAssignments<T extends Prisma.Student$studentSupervisorAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$studentSupervisorAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentSupervisorAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  schoolSupervisorFinalComments<T extends Prisma.Student$schoolSupervisorFinalCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$schoolSupervisorFinalCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SchoolSupervisorFinalCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  industrySupervisorFinalComments<T extends Prisma.Student$industrySupervisorFinalCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$industrySupervisorFinalCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IndustrySupervisorFinalCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   department<T extends Prisma.DepartmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DepartmentDefaultArgs<ExtArgs>>): Prisma.Prisma__DepartmentClient<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   weeklyEntries<T extends Prisma.Student$weeklyEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$weeklyEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WeeklyEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2106,8 +2520,9 @@ export interface StudentFieldRefs {
   readonly name: Prisma.FieldRef<"Student", 'String'>
   readonly email: Prisma.FieldRef<"Student", 'String'>
   readonly departmentId: Prisma.FieldRef<"Student", 'String'>
+  readonly currentSiwesSessionId: Prisma.FieldRef<"Student", 'String'>
   readonly isActive: Prisma.FieldRef<"Student", 'Boolean'>
-  readonly betterAuthUserId: Prisma.FieldRef<"Student", 'String'>
+  readonly userId: Prisma.FieldRef<"Student", 'String'>
   readonly createdAt: Prisma.FieldRef<"Student", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Student", 'DateTime'>
 }
@@ -2506,27 +2921,22 @@ export type StudentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Student.finalComments
+ * Student.currentSiwesSession
  */
-export type Student$finalCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Student$currentSiwesSessionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the FinalComment
+   * Select specific fields to fetch from the SiwesSession
    */
-  select?: Prisma.FinalCommentSelect<ExtArgs> | null
+  select?: Prisma.SiwesSessionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the FinalComment
+   * Omit specific fields from the SiwesSession
    */
-  omit?: Prisma.FinalCommentOmit<ExtArgs> | null
+  omit?: Prisma.SiwesSessionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.FinalCommentInclude<ExtArgs> | null
-  where?: Prisma.FinalCommentWhereInput
-  orderBy?: Prisma.FinalCommentOrderByWithRelationInput | Prisma.FinalCommentOrderByWithRelationInput[]
-  cursor?: Prisma.FinalCommentWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.FinalCommentScalarFieldEnum | Prisma.FinalCommentScalarFieldEnum[]
+  include?: Prisma.SiwesSessionInclude<ExtArgs> | null
+  where?: Prisma.SiwesSessionWhereInput
 }
 
 /**
@@ -2554,27 +2964,27 @@ export type Student$logbookMetadataArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
- * Student.reviewRequests
+ * Student.industrySupervisorReviewRequest
  */
-export type Student$reviewRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Student$industrySupervisorReviewRequestArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ReviewRequest
+   * Select specific fields to fetch from the IndustrySupervisorReviewRequest
    */
-  select?: Prisma.ReviewRequestSelect<ExtArgs> | null
+  select?: Prisma.IndustrySupervisorReviewRequestSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ReviewRequest
+   * Omit specific fields from the IndustrySupervisorReviewRequest
    */
-  omit?: Prisma.ReviewRequestOmit<ExtArgs> | null
+  omit?: Prisma.IndustrySupervisorReviewRequestOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ReviewRequestInclude<ExtArgs> | null
-  where?: Prisma.ReviewRequestWhereInput
-  orderBy?: Prisma.ReviewRequestOrderByWithRelationInput | Prisma.ReviewRequestOrderByWithRelationInput[]
-  cursor?: Prisma.ReviewRequestWhereUniqueInput
+  include?: Prisma.IndustrySupervisorReviewRequestInclude<ExtArgs> | null
+  where?: Prisma.IndustrySupervisorReviewRequestWhereInput
+  orderBy?: Prisma.IndustrySupervisorReviewRequestOrderByWithRelationInput | Prisma.IndustrySupervisorReviewRequestOrderByWithRelationInput[]
+  cursor?: Prisma.IndustrySupervisorReviewRequestWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.ReviewRequestScalarFieldEnum | Prisma.ReviewRequestScalarFieldEnum[]
+  distinct?: Prisma.IndustrySupervisorReviewRequestScalarFieldEnum | Prisma.IndustrySupervisorReviewRequestScalarFieldEnum[]
 }
 
 /**
@@ -2647,6 +3057,54 @@ export type Student$studentSupervisorAssignmentsArgs<ExtArgs extends runtime.Typ
   take?: number
   skip?: number
   distinct?: Prisma.StudentSupervisorAssignmentScalarFieldEnum | Prisma.StudentSupervisorAssignmentScalarFieldEnum[]
+}
+
+/**
+ * Student.schoolSupervisorFinalComments
+ */
+export type Student$schoolSupervisorFinalCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SchoolSupervisorFinalComment
+   */
+  select?: Prisma.SchoolSupervisorFinalCommentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SchoolSupervisorFinalComment
+   */
+  omit?: Prisma.SchoolSupervisorFinalCommentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SchoolSupervisorFinalCommentInclude<ExtArgs> | null
+  where?: Prisma.SchoolSupervisorFinalCommentWhereInput
+  orderBy?: Prisma.SchoolSupervisorFinalCommentOrderByWithRelationInput | Prisma.SchoolSupervisorFinalCommentOrderByWithRelationInput[]
+  cursor?: Prisma.SchoolSupervisorFinalCommentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SchoolSupervisorFinalCommentScalarFieldEnum | Prisma.SchoolSupervisorFinalCommentScalarFieldEnum[]
+}
+
+/**
+ * Student.industrySupervisorFinalComments
+ */
+export type Student$industrySupervisorFinalCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the IndustrySupervisorFinalComment
+   */
+  select?: Prisma.IndustrySupervisorFinalCommentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the IndustrySupervisorFinalComment
+   */
+  omit?: Prisma.IndustrySupervisorFinalCommentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IndustrySupervisorFinalCommentInclude<ExtArgs> | null
+  where?: Prisma.IndustrySupervisorFinalCommentWhereInput
+  orderBy?: Prisma.IndustrySupervisorFinalCommentOrderByWithRelationInput | Prisma.IndustrySupervisorFinalCommentOrderByWithRelationInput[]
+  cursor?: Prisma.IndustrySupervisorFinalCommentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.IndustrySupervisorFinalCommentScalarFieldEnum | Prisma.IndustrySupervisorFinalCommentScalarFieldEnum[]
 }
 
 /**

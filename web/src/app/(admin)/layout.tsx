@@ -1,4 +1,13 @@
-export default function Layout({ children }: { children: React.ReactNode }) {
+import { requireServerAdmin } from "@/lib/auth-server";
+
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Validate admin access before rendering
+  await requireServerAdmin();
+
   return (
     <div className="flex min-h-screen">
       {/* Sidebar will go here */}

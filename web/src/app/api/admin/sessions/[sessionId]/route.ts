@@ -1,13 +1,17 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireAdmin } from "@/middlewares/auth";
+import { requireAdmin } from "@/lib/auth-server";
 import { updateSessionSchema } from "@/schemas";
 import { sessionService } from "@/services";
 
 import type { NextRequest } from "next/server";
 
 export const GET = requireAdmin(
-  async (request: NextRequest, session, context: { params: { sessionId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { sessionId: string } },
+  ) => {
     try {
       const { sessionId } = context.params;
       const siwesSession = await sessionService.getSessionById(sessionId);
@@ -25,11 +29,19 @@ export const GET = requireAdmin(
 );
 
 export const PATCH = requireAdmin(
-  async (request: NextRequest, session, context: { params: { sessionId: string } }) => {
+  async (
+    request: NextRequest,
+    session,
+    context: { params: { sessionId: string } },
+  ) => {
     try {
       const { sessionId } = context.params;
-      const validation = await validateRequest(request, { body: updateSessionSchema });
-      if (!validation.success) {return validation.error;}
+      const validation = await validateRequest(request, {
+        body: updateSessionSchema,
+      });
+      if (!validation.success) {
+        return validation.error;
+      }
 
       const { body } = validation.data;
       const updated = await sessionService.updateSession(sessionId, body);

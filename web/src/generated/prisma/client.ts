@@ -135,22 +135,27 @@ export type WeeklyEntry = Prisma.WeeklyEntryModel
  */
 export type Diagram = Prisma.DiagramModel
 /**
- * Model WeeklyComment
+ * Model SchoolSupervisorWeeklyComment
  * 
  */
-export type WeeklyComment = Prisma.WeeklyCommentModel
+export type SchoolSupervisorWeeklyComment = Prisma.SchoolSupervisorWeeklyCommentModel
 /**
- * Model ReviewRequest
+ * Model IndustrySupervisorWeeklyComment
  * 
  */
-export type ReviewRequest = Prisma.ReviewRequestModel
+export type IndustrySupervisorWeeklyComment = Prisma.IndustrySupervisorWeeklyCommentModel
 /**
- * Model FinalComment
+ * Model IndustrySupervisorReviewRequest
  * 
  */
-export type FinalComment = Prisma.FinalCommentModel
+export type IndustrySupervisorReviewRequest = Prisma.IndustrySupervisorReviewRequestModel
 /**
- * Model ActivityLog
+ * Model SchoolSupervisorFinalComment
  * 
  */
-export type ActivityLog = Prisma.ActivityLogModel
+export type SchoolSupervisorFinalComment = Prisma.SchoolSupervisorFinalCommentModel
+/**
+ * Model IndustrySupervisorFinalComment
+ * 
+ */
+export type IndustrySupervisorFinalComment = Prisma.IndustrySupervisorFinalCommentModel

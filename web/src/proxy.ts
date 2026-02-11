@@ -28,6 +28,7 @@ export async function proxy(request: NextRequest) {
   if (csrfResponse.status !== 200 && csrfResponse.status !== 304) {
     return csrfResponse;
   }
+  // return csrfResponse;
 
   // 4. Authentication and authorization
   const authResponse = await authMiddleware(request, csrfResponse);

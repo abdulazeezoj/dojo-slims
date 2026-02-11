@@ -1,6 +1,6 @@
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
-import { requireStudent } from "@/middlewares/auth";
+import { requireStudent } from "@/lib/auth-server";
 import { siwesDetailSchema } from "@/schemas";
 import { siwesDetailService } from "@/services";
 
@@ -8,8 +8,8 @@ import type { NextRequest } from "next/server";
 
 export const GET = requireStudent(async (request: NextRequest, session) => {
   try {
-    const studentId = session.user.userReferenceId;
-    const details = await siwesDetailService.getSiwesDetails(studentId);
+    const userId = session.user.id;
+    const details = await siwesDetailService.getSiwesDetails(userId);
 
     return createSuccessResponse(details || null);
   } catch (error) {
@@ -22,7 +22,7 @@ export const GET = requireStudent(async (request: NextRequest, session) => {
 
 export const POST = requireStudent(async (request: NextRequest, session) => {
   try {
-    const studentId = session.user.userReferenceId;
+    const userId = session.user.id;
     const validation = await validateRequest(request, {
       body: siwesDetailSchema,
     });
@@ -44,7 +44,7 @@ export const POST = requireStudent(async (request: NextRequest, session) => {
     }
 
     const details = await siwesDetailService.createOrUpdateSiwesDetails(
-      studentId,
+      userId,
       sessionId,
       {
         placementOrganizationId: body.placementOrganizationId!,

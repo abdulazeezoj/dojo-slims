@@ -1,12 +1,33 @@
 import { getLogger } from "@/lib/logger";
 import {
-  assignmentRepository,
   industrySupervisorRepository,
   schoolSupervisorRepository,
+  studentSiwesDetailRepository,
+  studentSupervisorAssignmentRepository,
   weeklyEntryRepository,
 } from "@/repositories";
 
+import { reviewService } from "./review";
+
 const logger = getLogger(["services", "supervisor"]);
+
+/**
+ * Type definitions for repository return values with included relations
+ * These document the expected shapes when repositories include relations
+ */
+type SiwesDetailWithRelations = {
+  siwesSession?: { status: string } | null;
+  student: unknown;
+  [key: string]: unknown;
+};
+
+type AssignmentWithRelations = {
+  id: string;
+  siwesSession?: { status: string } | null;
+  siwesSessionId: string;
+  student?: unknown;
+  [key: string]: unknown;
+};
 
 /**
  * Supervisor Service - Business logic for both industry and school supervisors
@@ -19,14 +40,28 @@ export class SupervisorService {
     logger.info("Getting industry supervisor dashboard", { supervisorId });
 
     const supervisor =
-      await industrySupervisorRepository.findById(supervisorId);
+      await industrySupervisorRepository.findDashboardData(supervisorId);
     if (!supervisor) {
       throw new Error("Industry supervisor not found");
     }
 
-    // Get assigned students through SIWES details
-    const assignedStudents =
-      await industrySupervisorRepository.getAssignedStudents(supervisorId);
+    // Get assigned students through SIWES details with session info
+    const siwesDetails = await studentSiwesDetailRepository.prisma.findMany({
+      where: {
+        industrySupervisorId: supervisorId,
+      },
+      include: {
+        siwesSession: true,
+        student: true,
+      },
+    });
+
+    // Filter for active sessions only
+    const activeDetails = (siwesDetails as SiwesDetailWithRelations[]).filter(
+      (detail) => detail.siwesSession?.status === "ACTIVE",
+    );
+
+    const assignedStudents = activeDetails.map((detail) => detail.student);
 
     // Get pending reviews
     const pendingReviews = await this.getPendingIndustryReviews(supervisorId);
@@ -48,22 +83,26 @@ export class SupervisorService {
   async getSchoolSupervisorDashboard(supervisorId: string) {
     logger.info("Getting school supervisor dashboard", { supervisorId });
 
-    const supervisor = await schoolSupervisorRepository.findById(supervisorId);
+    const supervisor =
+      await schoolSupervisorRepository.findDashboardData(supervisorId);
     if (!supervisor) {
       throw new Error("School supervisor not found");
     }
 
     // Get assigned students through assignments (includes relations)
     const assignments =
-      await assignmentRepository.findBySupervisor(supervisorId);
+      await studentSupervisorAssignmentRepository.prisma.findMany({
+        where: { schoolSupervisorId: supervisorId },
+        include: {
+          student: true,
+          siwesSession: true,
+        },
+      });
 
     // Filter active sessions - assignments include siwesSession relation
-    const activeSessions = (
-      assignments as Array<{
-        siwesSession?: { status: string } | null;
-        siwesSessionId: string;
-      }>
-    ).filter((a) => a.siwesSession?.status === "ACTIVE");
+    const activeSessions = (assignments as AssignmentWithRelations[]).filter(
+      (a) => a.siwesSession?.status === "ACTIVE",
+    );
 
     return {
       supervisor,
@@ -87,14 +126,14 @@ export class SupervisorService {
 
     if (type === "INDUSTRY") {
       const supervisor =
-        await industrySupervisorRepository.findById(supervisorId);
+        await industrySupervisorRepository.findDashboardData(supervisorId);
       if (!supervisor) {
         throw new Error("Industry supervisor not found");
       }
       return supervisor;
     } else {
       const supervisor =
-        await schoolSupervisorRepository.findById(supervisorId);
+        await schoolSupervisorRepository.findDashboardData(supervisorId);
       if (!supervisor) {
         throw new Error("School supervisor not found");
       }
@@ -120,7 +159,7 @@ export class SupervisorService {
     if (type === "INDUSTRY") {
       // Industry supervisors have: name, email, phone, position
       const { position, phone, ...rest } = data;
-      return industrySupervisorRepository.update(supervisorId, {
+      return industrySupervisorRepository.updateProfile(supervisorId, {
         ...rest,
         ...(position && { position }),
         ...(phone && { phone }),
@@ -128,7 +167,7 @@ export class SupervisorService {
     } else {
       // School supervisors have: name, email (no phone/position in schema)
       const { name, email } = data;
-      return schoolSupervisorRepository.update(supervisorId, {
+      return schoolSupervisorRepository.updateProfile(supervisorId, {
         ...(name && { name }),
         ...(email && { email }),
       });
@@ -142,20 +181,27 @@ export class SupervisorService {
     logger.info("Getting assigned students", { supervisorId, type });
 
     if (type === "INDUSTRY") {
-      return industrySupervisorRepository.getAssignedStudents(supervisorId);
+      // Get students through SIWES details
+      const siwesDetails = await studentSiwesDetailRepository.prisma.findMany({
+        where: { industrySupervisorId: supervisorId },
+        include: {
+          student: true,
+          siwesSession: true,
+        },
+      });
+      return siwesDetails.map((detail) => detail.student);
     } else {
       const assignments =
-        await assignmentRepository.findBySupervisor(supervisorId);
+        await studentSupervisorAssignmentRepository.prisma.findMany({
+          where: { schoolSupervisorId: supervisorId },
+          include: {
+            student: true,
+            siwesSession: true,
+          },
+        });
       // Assignments include student, siwesSession relations
-      return (
-        assignments as Array<{
-          id: string;
-          student: unknown;
-          siwesSessionId: string;
-          siwesSession: unknown;
-        }>
-      ).map((a) => ({
-        ...a.student,
+      return (assignments as AssignmentWithRelations[]).map((a) => ({
+        ...(a.student as object),
         enrollmentId: a.id,
         sessionId: a.siwesSessionId,
         session: a.siwesSession,
@@ -177,7 +223,16 @@ export class SupervisorService {
       supervisorId,
     });
 
-    const week = await weeklyEntryRepository.findById(weekId);
+    const week = await weeklyEntryRepository.prisma.findUnique({
+      where: { id: weekId },
+      include: {
+        student: true,
+        siwesSession: true,
+        diagrams: true,
+        schoolSupervisorWeeklyComments: true,
+        industrySupervisorWeeklyComments: true,
+      },
+    });
     if (!week) {
       throw new Error("Week not found");
     }
@@ -194,37 +249,20 @@ export class SupervisorService {
    * Get pending industry reviews for supervisor
    */
   private async getPendingIndustryReviews(supervisorId: string) {
-    // Get all assigned students
-    const students =
-      await industrySupervisorRepository.getAssignedStudents(supervisorId);
+    logger.info("Getting pending industry reviews", { supervisorId });
 
-    const pendingReviews: Array<{
-      weekId: string;
-      studentId: string;
-      weekNumber: number;
-      startDate: Date;
-      endDate: Date;
-    }> = [];
+    // Use reviewService to get pending review requests
+    const pendingRequests =
+      await reviewService.getPendingReviewRequests(supervisorId);
 
-    for (const student of students) {
-      // Get weeks with pending review requests but no industry comment
-      const weeks = await weeklyEntryRepository.findMany({
-        where: {
-          studentId: student.id,
-          reviewRequest: {
-            industrySupervisorId: supervisorId,
-            status: "PENDING",
-          },
-          weeklyComments: {
-            none: {
-              commenterType: "INDUSTRY_SUPERVISOR",
-            },
-          },
-        },
-      });
-
-      pendingReviews.push(...weeks);
-    }
+    // Map to expected format
+    const pendingReviews = pendingRequests.map((request) => ({
+      weekId: request.weeklyEntryId,
+      studentId: request.studentId,
+      weekNumber: request.weeklyEntry.weekNumber,
+      startDate: request.requestedAt,
+      endDate: request.requestedAt, // Using requestedAt as placeholder
+    }));
 
     return pendingReviews;
   }

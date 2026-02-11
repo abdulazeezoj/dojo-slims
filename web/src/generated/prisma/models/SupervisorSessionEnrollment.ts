@@ -246,7 +246,7 @@ export type SupervisorSessionEnrollmentScalarWhereWithAggregatesInput = {
 
 export type SupervisorSessionEnrollmentCreateInput = {
   id?: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   schoolSupervisor: Prisma.SchoolSupervisorCreateNestedOneWithoutSupervisorSessionEnrollmentsInput
@@ -257,7 +257,7 @@ export type SupervisorSessionEnrollmentUncheckedCreateInput = {
   id?: string
   schoolSupervisorId: string
   siwesSessionId: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -284,7 +284,7 @@ export type SupervisorSessionEnrollmentCreateManyInput = {
   id?: string
   schoolSupervisorId: string
   siwesSessionId: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -433,7 +433,7 @@ export type SupervisorSessionEnrollmentUncheckedUpdateManyWithoutSchoolSuperviso
 
 export type SupervisorSessionEnrollmentCreateWithoutSiwesSessionInput = {
   id?: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   schoolSupervisor: Prisma.SchoolSupervisorCreateNestedOneWithoutSupervisorSessionEnrollmentsInput
@@ -442,7 +442,7 @@ export type SupervisorSessionEnrollmentCreateWithoutSiwesSessionInput = {
 export type SupervisorSessionEnrollmentUncheckedCreateWithoutSiwesSessionInput = {
   id?: string
   schoolSupervisorId: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -487,7 +487,7 @@ export type SupervisorSessionEnrollmentScalarWhereInput = {
 
 export type SupervisorSessionEnrollmentCreateWithoutSchoolSupervisorInput = {
   id?: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   siwesSession: Prisma.SiwesSessionCreateNestedOneWithoutSupervisorSessionEnrollmentsInput
@@ -496,7 +496,7 @@ export type SupervisorSessionEnrollmentCreateWithoutSchoolSupervisorInput = {
 export type SupervisorSessionEnrollmentUncheckedCreateWithoutSchoolSupervisorInput = {
   id?: string
   siwesSessionId: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -530,7 +530,7 @@ export type SupervisorSessionEnrollmentUpdateManyWithWhereWithoutSchoolSuperviso
 export type SupervisorSessionEnrollmentCreateManySiwesSessionInput = {
   id?: string
   schoolSupervisorId: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -562,7 +562,7 @@ export type SupervisorSessionEnrollmentUncheckedUpdateManyWithoutSiwesSessionInp
 export type SupervisorSessionEnrollmentCreateManySchoolSupervisorInput = {
   id?: string
   siwesSessionId: string
-  enrolledAt: Date | string
+  enrolledAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }

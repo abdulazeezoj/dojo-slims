@@ -61,7 +61,7 @@ export function StudentLoginForm() {
       toast.success("Sign in successful! Redirecting to your dashboard...");
 
       setTimeout(() => {
-        router.push("/student");
+        router.push("/student/dashboard");
       }, 500);
     },
     onError: (error) => {

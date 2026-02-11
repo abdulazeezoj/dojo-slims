@@ -1,4 +1,3 @@
-export * from "./auth";
 export * from "./health";
 
 // Student services
@@ -7,6 +6,9 @@ export * from "./student";
 // Logbook services
 export * from "./logbook";
 
+// Diagram services
+export * from "./diagram";
+
 // Review services
 export * from "./review";
 
@@ -14,6 +16,8 @@ export * from "./review";
 export * from "./siwes-detail";
 
 // Supervisor services
+export * from "./industry-supervisor";
+export * from "./school-supervisor";
 export * from "./supervisor";
 
 // Admin Dashboard services
@@ -49,11 +53,9 @@ export * from "./supervisor-management";
 // PDF Generator services
 export * from "./pdf-generator";
 
-// Password Management services
-export * from "./password";
-
 // Notification services
 export * from "./notifications";
 
 // Bulk Upload services
 export * from "./bulk-upload";
+export * from "./bulk-user-creation";

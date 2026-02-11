@@ -4,6 +4,7 @@ const envSchema = z.object({
   APP_NAME: z.string().default("SLIMS"),
   APP_URL: z.string().default("http://localhost:3000"),
   APP_VERSION: z.string().default("0.1.0"),
+  APP_SUPPORT_EMAIL: z.email().default("support@slims.edu.ng"),
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),
@@ -34,6 +35,10 @@ const envSchema = z.object({
   BETTER_AUTH_SECRET: z.string().default("super-secret-development-key"),
   BETTER_AUTH_URL: z.string().default("http://localhost:3000"),
   BETTER_AUTH_MAGIC_LINK_EXPIRY_M: z.coerce.number().default(15),
+  SUPERADMIN_EMAIL: z.email().default("superadmin@slims.edu.ng"),
+  SUPERADMIN_PASSWORD: z.string().min(8).default("SuperAdmin@123"),
+  SUPERADMIN_NAME: z.string().default("Super Admin"),
+  SUPERADMIN_USERNAME: z.string().default("SUPERADMIN"),
   SMTP_HOST: z.string().default("smtp.gmail.com"),
   SMTP_PORT: z.coerce.number().default(587),
   SMTP_SECURE: z.coerce.boolean().default(false),
@@ -80,6 +85,7 @@ function loadEnv(): Env {
     APP_NAME: process.env.APP_NAME || process.env.NEXT_PUBLIC_APP_NAME,
     APP_URL: process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL,
     APP_VERSION: process.env.APP_VERSION || process.env.NEXT_PUBLIC_APP_VERSION,
+    APP_SUPPORT_EMAIL: process.env.APP_SUPPORT_EMAIL,
     NODE_ENV: process.env.NODE_ENV,
     LOG_LEVEL: process.env.LOG_LEVEL || process.env.NEXT_PUBLIC_LOG_LEVEL,
     DATABASE_URL: process.env.DATABASE_URL,
@@ -102,6 +108,10 @@ function loadEnv(): Env {
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
     BETTER_AUTH_MAGIC_LINK_EXPIRY_M:
       process.env.BETTER_AUTH_MAGIC_LINK_EXPIRY_M,
+    SUPERADMIN_EMAIL: process.env.SUPERADMIN_EMAIL,
+    SUPERADMIN_PASSWORD: process.env.SUPERADMIN_PASSWORD,
+    SUPERADMIN_NAME: process.env.SUPERADMIN_NAME,
+    SUPERADMIN_USERNAME: process.env.SUPERADMIN_USERNAME,
     SMTP_HOST: process.env.SMTP_HOST,
     SMTP_PORT: process.env.SMTP_PORT,
     SMTP_SECURE: process.env.SMTP_SECURE,
