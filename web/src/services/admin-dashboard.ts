@@ -172,7 +172,7 @@ export class AdminDashboardService {
       ? Math.min(Math.max(Math.floor(limit), 1), 100)
       : 20;
     
-    logger.info(`Getting recent activities (limit: ${sanitizedLimit})`);
+    logger.info("Getting recent activities", { limit: sanitizedLimit });
 
     // Since we don't have an activity_logs table yet, we'll generate activities
     // from various recent database records as a workaround
@@ -188,6 +188,7 @@ export class AdminDashboardService {
 
     try {
       // Fetch all activity sources in parallel for better performance
+      // Fetch up to sanitizedLimit from each source to reliably fill the requested limit
       const [
         recentEnrollments,
         recentAssignments,
@@ -196,7 +197,7 @@ export class AdminDashboardService {
       ] = await Promise.all([
         // Get recent student enrollments
         studentSessionEnrollmentRepository.prisma.findMany({
-          take: Math.ceil(sanitizedLimit / 4),
+          take: sanitizedLimit,
           orderBy: { enrolledAt: "desc" },
           include: {
             student: { select: { name: true, matricNumber: true } },
@@ -205,7 +206,7 @@ export class AdminDashboardService {
         }),
         // Get recent supervisor assignments
         studentSupervisorAssignmentRepository.prisma.findMany({
-          take: Math.ceil(sanitizedLimit / 4),
+          take: sanitizedLimit,
           orderBy: { assignedAt: "desc" },
           include: {
             student: { select: { name: true, matricNumber: true } },
@@ -215,7 +216,7 @@ export class AdminDashboardService {
         }),
         // Get recent industry supervisor comments
         industrySupervisorWeeklyCommentRepository.prisma.findMany({
-          take: Math.ceil(sanitizedLimit / 4),
+          take: sanitizedLimit,
           orderBy: { commentedAt: "desc" },
           include: {
             industrySupervisor: { select: { name: true } },
@@ -229,7 +230,7 @@ export class AdminDashboardService {
         }),
         // Get recent school supervisor comments
         schoolSupervisorWeeklyCommentRepository.prisma.findMany({
-          take: Math.ceil(sanitizedLimit / 4),
+          take: sanitizedLimit,
           orderBy: { commentedAt: "desc" },
           include: {
             schoolSupervisor: { select: { name: true } },

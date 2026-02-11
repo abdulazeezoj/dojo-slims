@@ -15,6 +15,18 @@ import {
   type WeeklyEntryWithRelations,
 } from "@/repositories";
 
+/**
+ * Format date consistently for ITF-compliant PDFs
+ * Uses en-GB locale for DD/MM/YYYY format
+ */
+const formatDate = (date: Date | string): string => {
+  return new Date(date).toLocaleDateString("en-GB", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+};
+
 export class PdfGeneratorService {
   /**
    * Generate ITF-compliant PDF logbook for a student's session
@@ -87,6 +99,9 @@ export class PdfGeneratorService {
         },
         include: {
           schoolSupervisor: true,
+        },
+        orderBy: {
+          commentedAt: "desc",
         },
       });
 
@@ -240,11 +255,11 @@ export class PdfGeneratorService {
       ["Session:", data.enrollment.siwesSession.name],
       [
         "Start Date:",
-        new Date(data.enrollment.siwesSession.startDate).toLocaleDateString(),
+        formatDate(data.enrollment.siwesSession.startDate),
       ],
       [
         "End Date:",
-        new Date(data.enrollment.siwesSession.endDate).toLocaleDateString(),
+        formatDate(data.enrollment.siwesSession.endDate),
       ],
     ];
 
@@ -259,7 +274,7 @@ export class PdfGeneratorService {
     doc
       .fontSize(10)
       .text(
-        `Generated on: ${new Date().toLocaleDateString()}`,
+        `Generated on: ${formatDate(new Date())}`,
         { align: "center" },
       );
   }
@@ -310,11 +325,11 @@ export class PdfGeneratorService {
       ["Job Title:", data.siwesDetail.jobTitle || "Not specified"],
       [
         "Training Start:",
-        new Date(data.siwesDetail.trainingStartDate).toLocaleDateString(),
+        formatDate(data.siwesDetail.trainingStartDate),
       ],
       [
         "Training End:",
-        new Date(data.siwesDetail.trainingEndDate).toLocaleDateString(),
+        formatDate(data.siwesDetail.trainingEndDate),
       ],
     ];
 
@@ -423,7 +438,7 @@ export class PdfGeneratorService {
             .fontSize(10)
             .font("Helvetica-Oblique")
             .text(
-              `- ${comment.industrySupervisor.name} (${new Date(comment.commentedAt).toLocaleDateString()})`,
+              `- ${comment.industrySupervisor.name} (${formatDate(comment.commentedAt)})`,
               { indent: 20 },
             );
           doc.fontSize(12);
@@ -443,7 +458,7 @@ export class PdfGeneratorService {
             .fontSize(10)
             .font("Helvetica-Oblique")
             .text(
-              `- ${comment.schoolSupervisor.name} (${new Date(comment.commentedAt).toLocaleDateString()})`,
+              `- ${comment.schoolSupervisor.name} (${formatDate(comment.commentedAt)})`,
               { indent: 20 },
             );
           doc.fontSize(12);
@@ -515,7 +530,7 @@ export class PdfGeneratorService {
           }`,
         );
       doc.text(
-        `Date: ${new Date(data.industryFinalComment.commentedAt).toLocaleDateString()}`,
+        `Date: ${formatDate(data.industryFinalComment.commentedAt)}`,
       );
     } else {
       doc.fontSize(12).font("Helvetica-Oblique").text("No assessment provided");
@@ -544,7 +559,7 @@ export class PdfGeneratorService {
           `Assessed by: ${data.schoolFinalComment.schoolSupervisor.name} (${data.schoolFinalComment.schoolSupervisor.staffId})`,
         );
       doc.text(
-        `Date: ${new Date(data.schoolFinalComment.commentedAt).toLocaleDateString()}`,
+        `Date: ${formatDate(data.schoolFinalComment.commentedAt)}`,
       );
     } else {
       doc.fontSize(12).font("Helvetica-Oblique").text("No assessment provided");
@@ -725,7 +740,7 @@ export class PdfGeneratorService {
           for (const comment of weeklyEntry.industrySupervisorWeeklyComments) {
             doc.font("Helvetica").text(comment.comment, { indent: 20 });
             doc.fontSize(10).font("Helvetica-Oblique")
-              .text(`- ${comment.industrySupervisor.name} (${new Date(comment.commentedAt).toLocaleDateString()})`, { indent: 20 });
+              .text(`- ${comment.industrySupervisor.name} (${formatDate(comment.commentedAt)})`, { indent: 20 });
             doc.fontSize(12);
           }
           doc.moveDown(1);
@@ -736,7 +751,7 @@ export class PdfGeneratorService {
           for (const comment of weeklyEntry.schoolSupervisorWeeklyComments) {
             doc.font("Helvetica").text(comment.comment, { indent: 20 });
             doc.fontSize(10).font("Helvetica-Oblique")
-              .text(`- ${comment.schoolSupervisor.name} (${new Date(comment.commentedAt).toLocaleDateString()})`, { indent: 20 });
+              .text(`- ${comment.schoolSupervisor.name} (${formatDate(comment.commentedAt)})`, { indent: 20 });
             doc.fontSize(12);
           }
         }
