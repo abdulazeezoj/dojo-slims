@@ -105,3 +105,9 @@ export {
   IndustrySupervisorReviewRequestRepository,
   industrySupervisorReviewRequestRepository,
 } from "./review-request";
+
+// ===== ACTIVITY LOG =====
+export {
+  ActivityLogRepository,
+  activityLogRepository,
+} from "./activity-log";

@@ -1,5 +1,6 @@
 import { getLogger } from "@/lib/logger";
 import {
+  activityLogRepository,
   placementOrganizationRepository,
   schoolSupervisorRepository,
   siwesSessionRepository,
@@ -157,6 +158,17 @@ export class AdminDashboardService {
     );
 
     return metrics;
+  }
+
+  /**
+   * Get recent activities
+   */
+  async getRecentActivities(limit = 20) {
+    logger.info("Getting recent activities");
+
+    const activities = await activityLogRepository.findRecent({ take: limit });
+
+    return activities;
   }
 }
 

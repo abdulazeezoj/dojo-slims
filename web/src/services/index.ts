@@ -1,5 +1,8 @@
 export * from "./health";
 
+// Activity Log services
+export * from "./activity-log";
+
 // Student services
 export * from "./student";
 

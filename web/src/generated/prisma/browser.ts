@@ -137,3 +137,8 @@ export type SchoolSupervisorFinalComment = Prisma.SchoolSupervisorFinalCommentMo
  * 
  */
 export type IndustrySupervisorFinalComment = Prisma.IndustrySupervisorFinalCommentModel
+/**
+ * Model ActivityLog
+ * 
+ */
+export type ActivityLog = Prisma.ActivityLogModel

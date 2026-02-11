@@ -556,3 +556,20 @@ enum ReviewStatus {
 
   @@map("review_status")
 }
+
+model ActivityLog {
+  id         String   @id @default(uuid())
+  userType   UserType
+  userId     String
+  action     String
+  entityType String?
+  entityId   String?
+  details    Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@index([userType, userId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@map("activity_logs")
+}
