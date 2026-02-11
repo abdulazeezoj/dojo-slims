@@ -8,6 +8,7 @@ import crypto from "crypto";
 
 import type { Prisma, SchoolSupervisor } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
+import { getLogger } from "@/lib/logger";
 import {
   departmentRepository,
   schoolSupervisorRepository,
@@ -18,6 +19,8 @@ import {
 } from "@/repositories";
 
 import { notificationService } from "./notifications";
+
+const logger = getLogger(["services", "supervisor-management"]);
 
 export class SupervisorManagementService {
   /**
@@ -383,8 +386,50 @@ export class SupervisorManagementService {
       }
     }
 
-    // TODO: Queue bulk email sending for credentials
-    // await mailer.sendBulkWelcomeEmails(credentials);
+    // Send bulk welcome emails for all successfully created supervisors
+    if (credentials.length > 0) {
+      // Build email data using Map for O(n) lookup instead of O(n²)
+      // Ensure the first occurrence of each email is retained, so later
+      // duplicate rows (which may have failed creation) do not overwrite it.
+      const supervisorMap = new Map<string, (typeof supervisors)[number]>();
+      for (const s of supervisors) {
+        if (!supervisorMap.has(s.email)) {
+          supervisorMap.set(s.email, s);
+        }
+      }
+      const emailData = credentials
+        .map((cred) => {
+          const supervisorData = supervisorMap.get(cred.email);
+          if (!supervisorData) {
+            logger.error("Supervisor data not found during email preparation", {
+              email: cred.email,
+            });
+            return null;
+          }
+          return {
+            email: cred.email,
+            name: supervisorData.name,
+            userType: "School Supervisor",
+            loginCredential: supervisorData.staffId,
+            temporaryPassword: cred.password,
+          };
+        })
+        .filter((data): data is NonNullable<typeof data> => data !== null);
+
+      // Fire-and-forget: Send emails in background without blocking API response
+      if (emailData.length > 0) {
+        notificationService
+          .sendBulkWelcomeEmails(emailData)
+          .catch((error) => {
+            // Log error but don't fail the bulk creation
+            logger.error("Failed to send bulk welcome emails", {
+              error,
+              attempted: emailData.length,
+              firstRecipient: emailData[0]?.email,
+            });
+          });
+      }
+    }
 
     return { successful, failed, errors, credentials };
   }

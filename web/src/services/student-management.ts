@@ -8,6 +8,7 @@ import crypto from "crypto";
 
 import type { Prisma, Student } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
+import { getLogger } from "@/lib/logger";
 import prisma from "@/lib/prisma";
 import {
   departmentRepository,
@@ -16,6 +17,8 @@ import {
 } from "@/repositories";
 
 import { notificationService } from "./notifications";
+
+const logger = getLogger(["services", "student-management"]);
 
 export class StudentManagementService {
   /**
@@ -376,8 +379,49 @@ export class StudentManagementService {
       }
     }
 
-    // TODO: Queue bulk email sending for credentials
-    // await mailer.sendBulkWelcomeEmails(credentials);
+    // Send bulk welcome emails for all successfully created students
+    if (credentials.length > 0) {
+      // Build email data using Map for O(1) average lookup instead of O(n²)
+      // Build from input students, keeping the first occurrence per email
+      const studentMap = new Map<string, (typeof students)[number]>();
+      for (const student of students) {
+        if (!studentMap.has(student.email)) {
+          studentMap.set(student.email, student);
+        }
+      }
+      const emailData = credentials
+        .map((cred) => {
+          const studentData = studentMap.get(cred.email);
+          if (!studentData) {
+            logger.error("Student data not found during email preparation", {
+              email: cred.email,
+            });
+            return null;
+          }
+          return {
+            email: cred.email,
+            name: studentData.name,
+            userType: "Student",
+            loginCredential: studentData.matricNumber,
+            temporaryPassword: cred.password,
+          };
+        })
+        .filter((data): data is NonNullable<typeof data> => data !== null);
+
+      // Fire-and-forget: Send emails in background without blocking API response
+      if (emailData.length > 0) {
+        notificationService
+          .sendBulkWelcomeEmails(emailData)
+          .catch((error) => {
+            // Log error but don't fail the bulk creation
+            logger.error("Failed to send bulk welcome emails", {
+              error,
+              attempted: emailData.length,
+              firstRecipient: emailData[0]?.email,
+            });
+          });
+      }
+    }
 
     return { successful, failed, errors, credentials };
   }

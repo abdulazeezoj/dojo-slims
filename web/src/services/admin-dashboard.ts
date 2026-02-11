@@ -5,6 +5,9 @@ import {
   siwesSessionRepository,
   studentRepository,
   studentSessionEnrollmentRepository,
+  studentSupervisorAssignmentRepository,
+  industrySupervisorWeeklyCommentRepository,
+  schoolSupervisorWeeklyCommentRepository,
 } from "@/repositories";
 
 const logger = getLogger(["services", "admin-dashboard"]);
@@ -157,6 +160,150 @@ export class AdminDashboardService {
     );
 
     return metrics;
+  }
+
+  /**
+   * Get recent activities in the system
+   * Returns a summary of recent actions from different entities
+   */
+  async getRecentActivities(limit = 20) {
+    // Validate and sanitize limit parameter
+    const sanitizedLimit = Number.isFinite(limit) && limit > 0 
+      ? Math.min(Math.max(Math.floor(limit), 1), 100)
+      : 20;
+    
+    logger.info("Getting recent activities", { limit: sanitizedLimit });
+
+    // Since we don't have an activity_logs table yet, we'll generate activities
+    // from various recent database records as a workaround
+    const activities: Array<{
+      id: string;
+      userType: string;
+      action: string;
+      entityType: string;
+      entityId: string;
+      details: string;
+      createdAt: Date;
+    }> = [];
+
+    try {
+      // Fetch all activity sources in parallel for better performance
+      // Fetch up to sanitizedLimit from each source to reliably fill the requested limit
+      const [
+        recentEnrollments,
+        recentAssignments,
+        recentIndustryComments,
+        recentSchoolComments,
+      ] = await Promise.all([
+        // Get recent student enrollments
+        studentSessionEnrollmentRepository.prisma.findMany({
+          take: sanitizedLimit,
+          orderBy: { enrolledAt: "desc" },
+          include: {
+            student: { select: { name: true, matricNumber: true } },
+            siwesSession: { select: { name: true } },
+          },
+        }),
+        // Get recent supervisor assignments
+        studentSupervisorAssignmentRepository.prisma.findMany({
+          take: sanitizedLimit,
+          orderBy: { assignedAt: "desc" },
+          include: {
+            student: { select: { name: true, matricNumber: true } },
+            schoolSupervisor: { select: { name: true, staffId: true } },
+            siwesSession: { select: { name: true } },
+          },
+        }),
+        // Get recent industry supervisor comments
+        industrySupervisorWeeklyCommentRepository.prisma.findMany({
+          take: sanitizedLimit,
+          orderBy: { commentedAt: "desc" },
+          include: {
+            industrySupervisor: { select: { name: true } },
+            weeklyEntry: {
+              select: {
+                weekNumber: true,
+                student: { select: { name: true, matricNumber: true } },
+              },
+            },
+          },
+        }),
+        // Get recent school supervisor comments
+        schoolSupervisorWeeklyCommentRepository.prisma.findMany({
+          take: sanitizedLimit,
+          orderBy: { commentedAt: "desc" },
+          include: {
+            schoolSupervisor: { select: { name: true } },
+            weeklyEntry: {
+              select: {
+                weekNumber: true,
+                student: { select: { name: true, matricNumber: true } },
+              },
+            },
+          },
+        }),
+      ]);
+
+      // Process enrollments
+      for (const enrollment of recentEnrollments) {
+        activities.push({
+          id: enrollment.id,
+          userType: "STUDENT",
+          action: "ENROLLED",
+          entityType: "StudentSessionEnrollment",
+          entityId: enrollment.id,
+          details: `${enrollment.student.name} (${enrollment.student.matricNumber}) enrolled in ${enrollment.siwesSession.name}`,
+          createdAt: enrollment.enrolledAt,
+        });
+      }
+
+      // Process assignments
+      for (const assignment of recentAssignments) {
+        activities.push({
+          id: assignment.id,
+          userType: "ADMIN",
+          action: "ASSIGNED_SUPERVISOR",
+          entityType: "StudentSupervisorAssignment",
+          entityId: assignment.id,
+          details: `${assignment.student.name} assigned to supervisor ${assignment.schoolSupervisor.name} for ${assignment.siwesSession.name}`,
+          createdAt: assignment.assignedAt,
+        });
+      }
+
+      // Process industry supervisor comments
+      for (const comment of recentIndustryComments) {
+        activities.push({
+          id: comment.id,
+          userType: "INDUSTRY_SUPERVISOR",
+          action: "COMMENTED",
+          entityType: "IndustrySupervisorWeeklyComment",
+          entityId: comment.id,
+          details: `${comment.industrySupervisor.name} commented on ${comment.weeklyEntry.student.name}'s week ${comment.weeklyEntry.weekNumber}`,
+          createdAt: comment.commentedAt,
+        });
+      }
+
+      // Process school supervisor comments
+      for (const comment of recentSchoolComments) {
+        activities.push({
+          id: comment.id,
+          userType: "SCHOOL_SUPERVISOR",
+          action: "COMMENTED",
+          entityType: "SchoolSupervisorWeeklyComment",
+          entityId: comment.id,
+          details: `${comment.schoolSupervisor.name} commented on ${comment.weeklyEntry.student.name}'s week ${comment.weeklyEntry.weekNumber}`,
+          createdAt: comment.commentedAt,
+        });
+      }
+
+      // Sort all activities by createdAt and limit to requested number
+      activities.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      return activities.slice(0, sanitizedLimit);
+    } catch (error) {
+      logger.error("Failed to get recent activities", { error });
+      // Return empty array if we fail to get activities
+      return [];
+    }
   }
 }
 
