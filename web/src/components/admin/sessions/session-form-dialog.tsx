@@ -54,6 +54,7 @@ export function SessionFormDialog({ session, trigger }: SessionFormDialogProps) 
       startDate: new Date(startDate),
       endDate: new Date(endDate),
       totalWeeks: parseInt(totalWeeks),
+      status: "ACTIVE" as const,
     };
 
     if (session) {
@@ -75,14 +76,16 @@ export function SessionFormDialog({ session, trigger }: SessionFormDialogProps) 
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger || (
-          <Button>
-            <PlusIcon className="mr-2 h-4 w-4" />
-            New Session
-          </Button>
-        )}
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          trigger || (
+            <Button>
+              <PlusIcon className="mr-2 h-4 w-4" />
+              New Session
+            </Button>
+          )
+        }
+      />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>

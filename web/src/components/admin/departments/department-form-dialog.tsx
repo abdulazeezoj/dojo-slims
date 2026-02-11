@@ -71,14 +71,16 @@ export function DepartmentFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger || (
-          <Button>
-            <PlusIcon className="mr-2 h-4 w-4" />
-            New Department
-          </Button>
-        )}
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          trigger || (
+            <Button>
+              <PlusIcon className="mr-2 h-4 w-4" />
+              New Department
+            </Button>
+          )
+        }
+      />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
@@ -94,7 +96,11 @@ export function DepartmentFormDialog({
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="faculty">Faculty</Label>
-              <Select value={facultyId} onValueChange={setFacultyId} required>
+              <Select
+                value={facultyId ? [facultyId] : undefined}
+                onValueChange={(value) => value && setFacultyId(value[0])}
+                required
+              >
                 <SelectTrigger id="faculty">
                   <SelectValue placeholder="Select faculty" />
                 </SelectTrigger>

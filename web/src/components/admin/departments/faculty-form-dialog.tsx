@@ -57,14 +57,16 @@ export function FacultyFormDialog({ faculty, trigger }: FacultyFormDialogProps) 
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger || (
-          <Button>
-            <PlusIcon className="mr-2 h-4 w-4" />
-            New Faculty
-          </Button>
-        )}
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          trigger || (
+            <Button>
+              <PlusIcon className="mr-2 h-4 w-4" />
+              New Faculty
+            </Button>
+          )
+        }
+      />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>

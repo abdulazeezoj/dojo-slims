@@ -24,7 +24,12 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Empty } from "@/components/ui/empty";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
 import {
   useDepartments,
   useDeleteDepartment,
@@ -59,10 +64,14 @@ export function DepartmentsList() {
 
   if (!departments || departments.length === 0) {
     return (
-      <Empty
-        title="No departments found"
-        description="Create your first department to get started."
-      />
+      <Empty>
+        <EmptyHeader>
+          <EmptyTitle>No departments found</EmptyTitle>
+          <EmptyDescription>
+            Create your first department to get started.
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
     );
   }
 

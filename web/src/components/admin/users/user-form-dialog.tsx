@@ -66,14 +66,16 @@ export function UserFormDialog({ user, trigger }: UserFormDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger || (
-          <Button>
-            <PlusIcon className="mr-2 h-4 w-4" />
-            New Admin User
-          </Button>
-        )}
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          trigger || (
+            <Button>
+              <PlusIcon className="mr-2 h-4 w-4" />
+              New Admin User
+            </Button>
+          )
+        }
+      />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>

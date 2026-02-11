@@ -25,7 +25,12 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Empty } from "@/components/ui/empty";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
 import {
   useAdminUsers,
   useDeleteAdminUser,
@@ -61,10 +66,14 @@ export function UsersList() {
 
   if (users.length === 0) {
     return (
-      <Empty
-        title="No admin users found"
-        description="Create your first admin user to get started."
-      />
+      <Empty>
+        <EmptyHeader>
+          <EmptyTitle>No admin users found</EmptyTitle>
+          <EmptyDescription>
+            Create your first admin user to get started.
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
     );
   }
 

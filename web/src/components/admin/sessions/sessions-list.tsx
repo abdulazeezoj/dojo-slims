@@ -25,7 +25,12 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Empty } from "@/components/ui/empty";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
 import {
   useAdminSessions,
   useCloseSession,
@@ -59,10 +64,14 @@ export function SessionsList() {
 
   if (!sessions || sessions.length === 0) {
     return (
-      <Empty
-        title="No sessions found"
-        description="Create your first SIWES session to get started."
-      />
+      <Empty>
+        <EmptyHeader>
+          <EmptyTitle>No sessions found</EmptyTitle>
+          <EmptyDescription>
+            Create your first SIWES session to get started.
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
     );
   }
 

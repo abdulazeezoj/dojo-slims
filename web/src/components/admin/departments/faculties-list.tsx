@@ -24,7 +24,12 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Empty } from "@/components/ui/empty";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
 import {
   useFaculties,
   useDeleteFaculty,
@@ -58,10 +63,14 @@ export function FacultiesList() {
 
   if (!faculties || faculties.length === 0) {
     return (
-      <Empty
-        title="No faculties found"
-        description="Create your first faculty to get started."
-      />
+      <Empty>
+        <EmptyHeader>
+          <EmptyTitle>No faculties found</EmptyTitle>
+          <EmptyDescription>
+            Create your first faculty to get started.
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
     );
   }
 
