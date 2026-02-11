@@ -1,0 +1,266 @@
+SLIMS Feature Audit: Documented vs. Implemented
+=================================================
+
+Audit Date: 2026-02-11
+Scope: All 4 specification documents in docs/SLIMS/ compared against web/src/ codebase
+
+
+==============================================================================
+1. MVP FEATURE STATUS (31 Documented Features)
+==============================================================================
+
+AUTHENTICATION (4 features)
+----------------------------
+#  Feature                              Status       Notes
+1  Student Login (matric number)        IMPLEMENTED  Better Auth credential flow, /auth/login/student
+2  School Supervisor Login (staff ID)   IMPLEMENTED  Better Auth credential flow
+3  Industry Supervisor Magic Link       IMPLEMENTED  Better Auth magic link plugin, 14 email templates
+4  Admin Login (admin ID)               IMPLEMENTED  Better Auth credential flow + super admin auto-creation
+
+
+STUDENT FEATURES (9 features)
+-------------------------------
+#  Feature                              Status              Notes
+5  Dashboard with Session Switching     IMPLEMENTED         GET /api/student/dashboard, POST /api/student/sessions/switch
+6  Digital Weekly Entry Management      IMPLEMENTED         Full CRUD, Mon-Sat, XSS sanitization, max 5000 chars/entry
+7  Weekly Diagram Upload                IMPLEMENTED         Sharp image processing, magic-number validation, quota/rate limiting
+8  Student-Triggered Review Requests    IMPLEMENTED         Status workflow: PENDING -> REVIEWED -> EXPIRED
+9  Week Locking Mechanism               IMPLEMENTED         Lock/unlock by school supervisors
+10 View Supervisor Comments             IMPLEMENTED         GET /api/student/logbook/weeks/[weekId]/comments
+11 Auto-Generate PDF Logbook            NOT IMPLEMENTED     PdfGeneratorService returns Buffer.from("PDF content placeholder").
+                                                            No PDF engine (pdfkit/puppeteer) installed. 8 TODOs in
+                                                            web/src/services/pdf-generator.ts
+12 Student SIWES Details Entry          IMPLEMENTED         GET/PUT /api/student/siwes-details
+13 Student Profile Management           IMPLEMENTED         GET/PUT /api/student/profile
+
+
+INDUSTRY SUPERVISOR FEATURES (3 features)
+-------------------------------------------
+#  Feature                              Status       Notes
+14 Industry Supervisor Dashboard        IMPLEMENTED  GET /api/industry-supervisor/dashboard
+15 Industry Supervisor Weekly Comments  IMPLEMENTED  POST .../students/[studentId]/weeks/[weekId]/comment
+16 Industry Supervisor Final Comment    IMPLEMENTED  POST .../students/[studentId]/final-comment
+
+
+SCHOOL SUPERVISOR FEATURES (4 features)
+-----------------------------------------
+#  Feature                              Status       Notes
+17 School Supervisor Dashboard          IMPLEMENTED  GET /api/school-supervisor/dashboard
+18 School Supervisor Weekly Comments    IMPLEMENTED  POST .../students/[studentId]/weeks/[weekId]/comment
+19 School Supervisor Week Locking       IMPLEMENTED  POST .../weeks/[weekId]/lock and .../unlock
+20 School Supervisor Final Comment      IMPLEMENTED  POST .../students/[studentId]/final-comment
+
+
+ADMIN FEATURES (8 features + 1 enrollment)
+--------------------------------------------
+#  Feature                                      Status                  Notes
+21 Admin Dashboard with Statistics               PARTIALLY IMPLEMENTED  Dashboard route exists but activities endpoint
+                                                                        calls getRecentActivities() which DOES NOT EXIST
+                                                                        on AdminDashboardService - will crash at runtime
+                                                                        (web/src/app/api/admin/dashboard/activities/route.ts:16)
+22 Admin User Management                         IMPLEMENTED            Full CRUD + activate/deactivate
+23 SIWES Session Management                      IMPLEMENTED            CRUD + close session
+24 Department and Faculty Management             IMPLEMENTED            CRUD for both entities
+25 Placement Organization Management             IMPLEMENTED            CRUD + bulk upload
+26 Student Management with Bulk Upload           IMPLEMENTED            CRUD + Excel bulk upload + template download
+27 School Supervisor Management with Bulk Upload IMPLEMENTED            CRUD + bulk upload + workload analytics
+28 Student-Supervisor Assignment                 IMPLEMENTED            Manual + automatic (autoAssignByDepartment in
+                                                                        web/src/services/assignment.ts:135)
+29 Session Enrollment Management                 IMPLEMENTED            CRUD + auto-creates 24 weekly entry rows on enroll
+
+
+TOTALS
+-------
+  Fully Implemented:      27 of 31
+  Partially Implemented:   1 of 31  (#21 Admin Dashboard Activities)
+  Not Implemented:         1 of 31  (#11 PDF Generation)
+  Product-Level Gaps:      2        (Automated weekly email prompts, Export access flow)
+
+
+==============================================================================
+2. DATABASE SCHEMA DIVERGENCES
+==============================================================================
+
+Documented: 23 tables  (in 3 - Database Schema.txt)
+Actual:     24 Prisma models  (in web/prisma/schema.prisma)
+
+Documented Table          Actual Model(s)                                      Divergence Type
+-----------------------   ---------------------------------------------------  ---------------
+weekly_comments           SchoolSupervisorWeeklyComment +                      DESIGN IMPROVEMENT
+(polymorphic, single)     IndustrySupervisorWeeklyComment (typed tables)       Eliminates polymorphic discrimination
+
+final_comments            SchoolSupervisorFinalComment +                       DESIGN IMPROVEMENT
+(polymorphic, single)     IndustrySupervisorFinalComment (typed tables)        Same improvement as above
+
+review_requests           IndustrySupervisorReviewRequest                      RENAMED
+                                                                               Clarifies only industry supervisors receive requests
+
+activity_logs             MISSING                                              GAP
+                                                                               Documented: user_type, action, entity_type,
+                                                                               entity_id, details JSONB, ip_address
+                                                                               Reality: No table, no service, no middleware
+
+password_hash fields      REMOVED from role tables                             CORRECT CHANGE
+(on Student, Supervisor,  Auth delegated to Better Auth Account model
+AdminUser, etc.)
+
+N/A                       currentSiwesSessionId on Student                     ADDITION
+                                                                               Enables session switching without extra lookup
+
+KEY GAP: activity_logs table is entirely absent from the implementation. The docs
+specify comprehensive audit logging of all user actions with JSONB details and
+IP address tracking. None of this exists in the codebase.
+
+
+==============================================================================
+3. ARCHITECTURE GAPS
+==============================================================================
+
+DOCUMENTED BUT MISSING OR INCOMPLETE
+--------------------------------------
+
+Component                     Doc Reference                     Status
+-----------------------------  --------------------------------  ------
+Activity/Audit Logging        Schema: activity_logs table       NOT IMPLEMENTED
+                              Architecture: "audit trail"       No table, no service, no middleware
+
+PDF Generation Engine         Feature #11                       PLACEHOLDER ONLY
+                              Architecture: PDF data flow       Returns dummy buffer, no pdfkit/puppeteer installed
+
+Automated Weekly Email Links  Product Idea: "weekly feedback    NOT IMPLEMENTED
+                              via automated email links"        No cron/scheduled job for weekly prompts
+
+Admin Dashboard Activities    Feature #21                       BROKEN
+                                                                getRecentActivities() called but method missing
+
+Bulk Email for Credentials    Implied by bulk upload            TODO
+                                                                supervisor-management.ts:386 and
+                                                                student-management.ts:379 have TODO comments
+
+Password Update (admin)       Implied by user management        NOT IMPLEMENTED
+                                                                Three services return "Password update not
+                                                                implemented. Use password reset flow."
+
+Nginx / PM2 / Let's Encrypt   Architecture: deployment          NOT CONFIGURED
+                                                                No config files in repo
+
+Daily PostgreSQL Backups      Architecture: "30-day retention"  NOT CONFIGURED
+                                                                No backup scripts or cron jobs
+
+CI/CD Pipeline                Architecture: deployment          NOT SET UP
+                                                                No GitHub Actions or deployment scripts
+
+
+DOCUMENTED DATA FLOWS VS IMPLEMENTATION
+-----------------------------------------
+
+Data Flow                  Status
+-------------------------  ------------------
+Authentication Flow        IMPLEMENTED (Better Auth + Redis session caching)
+Weekly Entry Flow          IMPLEMENTED (Prisma + validation + XSS prevention)
+Review Request Flow        IMPLEMENTED (BullMQ queue + email notification)
+PDF Generation Flow        PLACEHOLDER (flow scaffolded, engine missing)
+Magic Link Authentication  IMPLEMENTED
+Bulk Upload Flow           IMPLEMENTED (Excel parsing + validation + error reporting)
+Export Access Flow         NOT IMPLEMENTED (no expiring URL generation, no file cleanup)
+
+
+==============================================================================
+4. UNDOCUMENTED CAPABILITIES (Built but Not in Docs)
+==============================================================================
+
+Capability                  Location                             Notes
+--------------------------  -----------------------------------  -----
+CSRF Protection             web/src/middlewares/csrf.ts           Token-based, 60-min expiry, dual cookies
+Rate Limiting               web/src/middlewares/rate-limit.ts     Redis-backed, per-user, per-endpoint
+Security Headers (CSP)      web/src/middlewares/security.ts       Configurable content security policy
+File Upload Security        web/src/lib/file-upload.ts            Magic number validation, MIME blacklist,
+                                                                  image sanitization via Sharp, user quotas
+Super Admin Auto-Creation   web/src/lib/auth.ts                   Auto-creates admin on startup from env vars
+Better Auth Admin Plugin    Schema: banned/banReason/banExpires   Banning & impersonation support
+Landing Page                web/src/app/page.tsx + components     Public marketing page
+Password Reset Flow         Email templates: password-reset.html  Full reset flow, not in feature list
+Rich Text Editor            @tiptap/react dependency              For logbook entries
+Charts/Data Visualization   recharts dependency                   For dashboard analytics
+Upload Quotas               UPLOAD_RATE_LIMIT_MAX,                Per-user storage quotas (100MB default)
+                            UPLOAD_USER_QUOTA_MB
+
+
+==============================================================================
+5. PRIORITY GAP RECOMMENDATIONS
+==============================================================================
+
+CRITICAL (blocks documented MVP features)
+------------------------------------------
+1. PDF Generation Engine
+   - Feature #11 is a core deliverable for ITF compliance
+   - web/src/services/pdf-generator.ts needs a real implementation
+   - Action: Install pdfkit or puppeteer, implement ITF-compliant layout
+   - Estimated scope: New dependency + full service rewrite
+
+2. Admin Dashboard Activities
+   - getRecentActivities() is called but does not exist
+   - web/src/app/api/admin/dashboard/activities/route.ts:16 will crash
+   - Action: Implement the method on AdminDashboardService or remove the route
+
+
+HIGH (documented in spec but absent)
+--------------------------------------
+3. Activity Logs / Audit Trail
+   - Specified in both schema doc and architecture doc
+   - Action: Add activity_logs table to Prisma schema, create ActivityLogService,
+     add middleware to capture user actions
+
+4. Automated Weekly Email Prompts
+   - Product idea promises "weekly feedback via automated email links"
+   - Action: Create a BullMQ repeatable job that sends weekly digest emails
+
+5. Bulk Credential Emails
+   - TODO at student-management.ts:379 and supervisor-management.ts:386
+   - Action: Implement BullMQ job to send welcome emails after bulk upload
+
+
+MEDIUM (operational gaps)
+--------------------------
+6. Export Access Flow
+   - Documented data flow for expiring download URLs not built
+   - Action: Implement signed URL generation with expiry for PDF downloads
+
+7. Deployment Configuration
+   - No Nginx, PM2, backup scripts, or CI/CD in repo
+   - Action: Add deployment configs and GitHub Actions workflow
+
+8. Password Update for Admin-Managed Users
+   - Three services explicitly throw "not implemented" errors
+   - Action: Implement password update via Better Auth admin API
+
+
+LOW (docs need updating)
+--------------------------
+9.  Schema Doc Drift - Update docs to reflect typed tables replacing polymorphic ones
+10. Undocumented Security Features - Add CSRF, rate limiting, CSP to architecture doc
+11. Missing from Feature List - Add password reset, landing page, rich text editor,
+    charts to feature documentation
+
+
+==============================================================================
+6. TECH STACK ALIGNMENT
+==============================================================================
+
+Component         Documented     Actual          Match?
+----------------  -------------  --------------  ------
+Next.js           16             16.1.4          YES
+React             19             19.2.3          YES
+Tailwind CSS      Yes            Yes             YES
+Shadcn UI         Yes            Yes + Base UI   YES (extra)
+TanStack          Query/Form     Query/Form/Table YES (extra)
+Better Auth       Yes            1.4.18          YES
+Prisma            Yes            7.3.0           YES
+NodeMailer        Yes            Yes             YES
+BullMQ            Yes            Yes             YES
+LogTape           Yes            Yes             YES
+PostgreSQL        16             Yes             YES
+Redis             7.x            ioredis         YES
+Sharp             Not documented Yes             UNDOCUMENTED
+Tiptap            Not documented Yes             UNDOCUMENTED
+Recharts          Not documented Yes             UNDOCUMENTED
