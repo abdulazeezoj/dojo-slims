@@ -67,9 +67,15 @@ export class PdfGeneratorService {
         where: {
           studentId,
           siwesSessionId: sessionId,
+          ...(siwesDetail?.industrySupervisorId
+            ? { industrySupervisorId: siwesDetail.industrySupervisorId }
+            : {}),
         },
         include: {
           industrySupervisor: true,
+        },
+        orderBy: {
+          commentedAt: "desc",
         },
       });
 
