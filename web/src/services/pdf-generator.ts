@@ -11,6 +11,8 @@ import {
   weeklyEntryRepository,
   type WeeklyEntryWithRelations,
 } from "@/repositories";
+import PDFDocument from "pdfkit";
+import { format } from "date-fns";
 
 export class PdfGeneratorService {
   /**
@@ -23,6 +25,13 @@ export class PdfGeneratorService {
     // Get student with all related data
     const student = await studentRepository.prisma.findUnique({
       where: { id: studentId },
+      include: {
+        department: {
+          include: {
+            faculty: true,
+          },
+        },
+      },
     });
     if (!student) {
       throw new Error("Student not found");
@@ -36,28 +45,60 @@ export class PdfGeneratorService {
 
     // Get SIWES details and placement info
     const enrollment =
-      await studentSessionEnrollmentRepository.findByStudentAndSession(
-        studentId,
-        sessionId,
-      );
+      await studentSessionEnrollmentRepository.prisma.findFirst({
+        where: {
+          studentId,
+          siwesSessionId: sessionId,
+        },
+        include: {
+          siwesSession: true,
+        },
+      });
     if (!enrollment) {
       throw new Error("Student enrollment not found for this session");
     }
 
     // Get student SIWES details (placement organization, industry supervisor)
     const siwesDetail =
-      await studentSiwesDetailRepository.findByStudentAndSession(
-        studentId,
-        sessionId,
-      );
+      await studentSiwesDetailRepository.prisma.findFirst({
+        where: {
+          studentId,
+          siwesSessionId: sessionId,
+        },
+        include: {
+          placementOrganization: true,
+          industrySupervisor: true,
+        },
+      });
 
-    // TODO: Implement PDF generation using a library like pdfkit or puppeteer
-    // For now, return a placeholder
+    // Transform data to match expected types
+    const transformedSiwesDetail = siwesDetail
+      ? {
+          placementOrganization: {
+            name: siwesDetail.placementOrganization.name,
+            address: siwesDetail.placementOrganization.address ?? undefined,
+            city: siwesDetail.placementOrganization.city ?? undefined,
+            state: siwesDetail.placementOrganization.state ?? undefined,
+          },
+          industrySupervisor: {
+            name: siwesDetail.industrySupervisor.name,
+            email: siwesDetail.industrySupervisor.email,
+            position: siwesDetail.industrySupervisor.position ?? undefined,
+            phone: siwesDetail.industrySupervisor.phone ?? undefined,
+          },
+          trainingStartDate: siwesDetail.trainingStartDate,
+          trainingEndDate: siwesDetail.trainingEndDate,
+          jobTitle: siwesDetail.jobTitle ?? undefined,
+          departmentAtOrg: siwesDetail.departmentAtOrg ?? undefined,
+        }
+      : null;
+
+    // Generate PDF document
     const pdfBuffer = await this.generatePdfDocument({
       student,
       weeklyEntries,
       enrollment,
-      siwesDetail,
+      siwesDetail: transformedSiwesDetail,
     });
 
     return pdfBuffer;
@@ -66,34 +107,417 @@ export class PdfGeneratorService {
   /**
    * Generate PDF document with ITF compliance
    */
-  private async generatePdfDocument(_data: {
+  private async generatePdfDocument(data: {
     student: Student;
     weeklyEntries: WeeklyEntryWithRelations[];
-    enrollment: unknown;
-    siwesDetail: unknown;
+    enrollment: {
+      siwesSession: {
+        id: string;
+        name: string;
+        startDate: Date;
+        endDate: Date;
+        totalWeeks: number;
+      };
+    };
+    siwesDetail: {
+      placementOrganization: {
+        name: string;
+        address?: string;
+        city?: string;
+        state?: string;
+      };
+      industrySupervisor: {
+        name: string;
+        email: string;
+        position?: string;
+        phone?: string;
+      };
+      trainingStartDate: Date;
+      trainingEndDate: Date;
+      jobTitle?: string;
+      departmentAtOrg?: string;
+    } | null;
   }): Promise<Buffer> {
-    // Placeholder for actual PDF generation implementation
-    // This would use a library like:
-    // - pdfkit for low-level PDF creation
-    // - puppeteer for HTML-to-PDF conversion
-    // - pdf-lib for PDF manipulation
+    return new Promise((resolve, reject) => {
+      try {
+        const doc = new PDFDocument({
+          size: "A4",
+          margins: { top: 50, bottom: 50, left: 50, right: 50 },
+        });
 
-    // ITF Logbook Structure:
-    // 1. Cover Page (Student info, Institution, Session dates)
-    // 2. SIWES Details (Organization, Supervisor, Dates)
-    // 3. Weekly Entries (24 weeks)
-    //    - Week Number
-    //    - Date Range
-    //    - Activities performed
-    //    - Diagrams/illustrations
-    //    - Industry Supervisor comments & signature
-    //    - School Supervisor comments & signature
-    // 4. Final Assessment (Industry Supervisor)
-    // 5. Final Assessment (School Supervisor)
-    // 6. Supervisor Contact Information
+        const chunks: Buffer[] = [];
+        doc.on("data", (chunk) => chunks.push(chunk));
+        doc.on("end", () => resolve(Buffer.concat(chunks)));
+        doc.on("error", reject);
 
-    const placeholder = Buffer.from("PDF content placeholder");
-    return placeholder;
+        // 1. Generate Cover Page
+        this.generateCoverPage(doc, data);
+
+        // 2. Generate SIWES Details Page
+        if (data.siwesDetail) {
+          doc.addPage();
+          this.generateSiwesDetailsPage(doc, data);
+        }
+
+        // 3. Generate Weekly Entries (24 weeks)
+        for (const entry of data.weeklyEntries) {
+          doc.addPage();
+          this.generateWeeklyEntryPage(doc, entry, data);
+        }
+
+        // 4. Generate Final Assessment Pages
+        doc.addPage();
+        this.generateFinalAssessmentPage(doc, data);
+
+        // Finalize PDF
+        doc.end();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  /**
+   * Generate cover page
+   */
+  private generateCoverPage(
+    doc: typeof PDFDocument.prototype,
+    data: {
+      student: Student;
+      enrollment: {
+        siwesSession: {
+          name: string;
+          startDate: Date;
+          endDate: Date;
+        };
+      };
+    },
+  ): void {
+    // Title
+    doc
+      .fontSize(24)
+      .font("Helvetica-Bold")
+      .text("SIWES LOGBOOK", { align: "center" });
+
+    doc.moveDown(2);
+
+    // Institution
+    doc
+      .fontSize(16)
+      .font("Helvetica-Bold")
+      .text("Ahmadu Bello University, Zaria", { align: "center" });
+
+    doc.moveDown(1);
+
+    doc
+      .fontSize(12)
+      .font("Helvetica")
+      .text("Students Industrial Work Experience Scheme", { align: "center" });
+
+    doc.moveDown(3);
+
+    // Student Information
+    const leftMargin = 100;
+    doc.fontSize(12).font("Helvetica-Bold");
+
+    doc.text("Student Information:", leftMargin);
+    doc.moveDown(0.5);
+
+    doc.font("Helvetica");
+    doc.text(`Name: ${data.student.name}`, leftMargin);
+    doc.text(`Matric Number: ${data.student.matricNumber}`, leftMargin);
+    doc.text(`Email: ${data.student.email}`, leftMargin);
+
+    doc.moveDown(1.5);
+
+    // Session Information
+    doc.font("Helvetica-Bold");
+    doc.text("Session Information:", leftMargin);
+    doc.moveDown(0.5);
+
+    doc.font("Helvetica");
+    doc.text(`Session: ${data.enrollment.siwesSession.name}`, leftMargin);
+    doc.text(
+      `Period: ${format(new Date(data.enrollment.siwesSession.startDate), "MMM d, yyyy")} - ${format(new Date(data.enrollment.siwesSession.endDate), "MMM d, yyyy")}`,
+      leftMargin,
+    );
+
+    // Footer
+    doc
+      .fontSize(10)
+      .font("Helvetica-Oblique")
+      .text(
+        "This logbook is property of Ahmadu Bello University",
+        50,
+        doc.page.height - 100,
+        { align: "center" },
+      );
+  }
+
+  /**
+   * Generate SIWES details page
+   */
+  private generateSiwesDetailsPage(
+    doc: typeof PDFDocument.prototype,
+    data: {
+      student: Student;
+      siwesDetail: {
+        placementOrganization: {
+          name: string;
+          address?: string;
+          city?: string;
+          state?: string;
+        };
+        industrySupervisor: {
+          name: string;
+          email: string;
+          position?: string;
+          phone?: string;
+        };
+        trainingStartDate: Date;
+        trainingEndDate: Date;
+        jobTitle?: string;
+        departmentAtOrg?: string;
+      } | null;
+    },
+  ): void {
+    const leftMargin = 50;
+
+    doc
+      .fontSize(18)
+      .font("Helvetica-Bold")
+      .text("SIWES Training Details", leftMargin);
+
+    doc.moveDown(1.5);
+
+    if (!data.siwesDetail) return;
+
+    // Placement Organization
+    doc.fontSize(14).font("Helvetica-Bold");
+    doc.text("Placement Organization", leftMargin);
+    doc.moveDown(0.5);
+
+    doc.fontSize(12).font("Helvetica");
+    doc.text(`Organization: ${data.siwesDetail.placementOrganization.name}`, leftMargin);
+    if (data.siwesDetail.placementOrganization.address) {
+      doc.text(`Address: ${data.siwesDetail.placementOrganization.address}`, leftMargin);
+    }
+    if (data.siwesDetail.placementOrganization.city) {
+      doc.text(
+        `City: ${data.siwesDetail.placementOrganization.city}, ${data.siwesDetail.placementOrganization.state || ""}`,
+        leftMargin,
+      );
+    }
+
+    doc.moveDown(1.5);
+
+    // Industry Supervisor
+    doc.fontSize(14).font("Helvetica-Bold");
+    doc.text("Industry Supervisor", leftMargin);
+    doc.moveDown(0.5);
+
+    doc.fontSize(12).font("Helvetica");
+    doc.text(`Name: ${data.siwesDetail.industrySupervisor.name}`, leftMargin);
+    if (data.siwesDetail.industrySupervisor.position) {
+      doc.text(`Position: ${data.siwesDetail.industrySupervisor.position}`, leftMargin);
+    }
+    doc.text(`Email: ${data.siwesDetail.industrySupervisor.email}`, leftMargin);
+    if (data.siwesDetail.industrySupervisor.phone) {
+      doc.text(`Phone: ${data.siwesDetail.industrySupervisor.phone}`, leftMargin);
+    }
+
+    doc.moveDown(1.5);
+
+    // Training Details
+    doc.fontSize(14).font("Helvetica-Bold");
+    doc.text("Training Details", leftMargin);
+    doc.moveDown(0.5);
+
+    doc.fontSize(12).font("Helvetica");
+    if (data.siwesDetail.jobTitle) {
+      doc.text(`Job Title: ${data.siwesDetail.jobTitle}`, leftMargin);
+    }
+    if (data.siwesDetail.departmentAtOrg) {
+      doc.text(`Department: ${data.siwesDetail.departmentAtOrg}`, leftMargin);
+    }
+    doc.text(
+      `Training Period: ${format(new Date(data.siwesDetail.trainingStartDate), "MMM d, yyyy")} - ${format(new Date(data.siwesDetail.trainingEndDate), "MMM d, yyyy")}`,
+      leftMargin,
+    );
+  }
+
+  /**
+   * Generate weekly entry page
+   */
+  private generateWeeklyEntryPage(
+    doc: typeof PDFDocument.prototype,
+    entry: WeeklyEntryWithRelations,
+    data: {
+      student: Student;
+    },
+  ): void {
+    const leftMargin = 50;
+
+    // Week header
+    doc
+      .fontSize(16)
+      .font("Helvetica-Bold")
+      .text(`Week ${entry.weekNumber}`, leftMargin);
+
+    doc.moveDown(1);
+
+    // Daily entries
+    const days = [
+      { label: "Monday", content: entry.mondayEntry },
+      { label: "Tuesday", content: entry.tuesdayEntry },
+      { label: "Wednesday", content: entry.wednesdayEntry },
+      { label: "Thursday", content: entry.thursdayEntry },
+      { label: "Friday", content: entry.fridayEntry },
+      { label: "Saturday", content: entry.saturdayEntry },
+    ];
+
+    days.forEach((day) => {
+      if (day.content) {
+        doc.fontSize(12).font("Helvetica-Bold");
+        doc.text(`${day.label}:`, leftMargin);
+        doc.moveDown(0.3);
+
+        doc.fontSize(10).font("Helvetica");
+        doc.text(day.content, leftMargin + 20, undefined, {
+          width: doc.page.width - leftMargin - 70,
+        });
+        doc.moveDown(0.8);
+      }
+    });
+
+    // Diagrams
+    if (entry.diagrams && entry.diagrams.length > 0) {
+      doc.moveDown(1);
+      doc.fontSize(12).font("Helvetica-Bold");
+      doc.text("Diagrams:", leftMargin);
+      doc.moveDown(0.5);
+
+      entry.diagrams.forEach((diagram) => {
+        doc.fontSize(10).font("Helvetica");
+        doc.text(`- ${diagram.fileName}`, leftMargin + 20);
+        if (diagram.caption) {
+          doc.text(`  ${diagram.caption}`, leftMargin + 30);
+        }
+      });
+    }
+
+    // Supervisor Comments
+    doc.moveDown(1.5);
+
+    // Industry Supervisor Comments
+    if (entry.industrySupervisorWeeklyComments && entry.industrySupervisorWeeklyComments.length > 0) {
+      doc.fontSize(12).font("Helvetica-Bold");
+      doc.text("Industry Supervisor Comments:", leftMargin);
+      doc.moveDown(0.5);
+
+      entry.industrySupervisorWeeklyComments.forEach(
+        (comment) => {
+          doc.fontSize(10).font("Helvetica");
+          doc.text(comment.comment, leftMargin + 20, undefined, {
+            width: doc.page.width - leftMargin - 70,
+          });
+          doc.fontSize(9).font("Helvetica-Oblique");
+          doc.text(
+            `- ${comment.industrySupervisor.name}, ${format(new Date(comment.commentedAt), "MMM d, yyyy")}`,
+            leftMargin + 20,
+          );
+          doc.moveDown(0.5);
+        },
+      );
+    }
+
+    // School Supervisor Comments
+    if (entry.schoolSupervisorWeeklyComments && entry.schoolSupervisorWeeklyComments.length > 0) {
+      doc.moveDown(1);
+      doc.fontSize(12).font("Helvetica-Bold");
+      doc.text("School Supervisor Comments:", leftMargin);
+      doc.moveDown(0.5);
+
+      entry.schoolSupervisorWeeklyComments.forEach(
+        (comment) => {
+          doc.fontSize(10).font("Helvetica");
+          doc.text(comment.comment, leftMargin + 20, undefined, {
+            width: doc.page.width - leftMargin - 70,
+          });
+          doc.fontSize(9).font("Helvetica-Oblique");
+          doc.text(
+            `- ${comment.schoolSupervisor.name}, ${format(new Date(comment.commentedAt), "MMM d, yyyy")}`,
+            leftMargin + 20,
+          );
+          doc.moveDown(0.5);
+        },
+      );
+    }
+
+    // Lock status
+    if (entry.isLocked) {
+      doc.moveDown(1);
+      doc.fontSize(9).font("Helvetica-Oblique");
+      doc.text(
+        `This week is locked and cannot be edited.`,
+        leftMargin,
+        undefined,
+        { align: "center" },
+      );
+    }
+  }
+
+  /**
+   * Generate final assessment page
+   */
+  private generateFinalAssessmentPage(
+    doc: typeof PDFDocument.prototype,
+    data: {
+      student: Student;
+    },
+  ): void {
+    const leftMargin = 50;
+
+    doc
+      .fontSize(18)
+      .font("Helvetica-Bold")
+      .text("Final Assessment", leftMargin);
+
+    doc.moveDown(2);
+
+    // Placeholder for final comments
+    doc.fontSize(12).font("Helvetica");
+    doc.text(
+      "Final comments from industry and school supervisors will appear here.",
+      leftMargin,
+    );
+
+    doc.moveDown(2);
+
+    // Signature sections
+    doc.fontSize(12).font("Helvetica-Bold");
+    doc.text("Industry Supervisor Signature:", leftMargin);
+    doc.moveDown(2);
+    doc
+      .moveTo(leftMargin, doc.y)
+      .lineTo(leftMargin + 200, doc.y)
+      .stroke();
+    doc.moveDown(0.5);
+    doc.fontSize(10).font("Helvetica");
+    doc.text("Date: _________________", leftMargin);
+
+    doc.moveDown(3);
+
+    doc.fontSize(12).font("Helvetica-Bold");
+    doc.text("School Supervisor Signature:", leftMargin);
+    doc.moveDown(2);
+    doc
+      .moveTo(leftMargin, doc.y)
+      .lineTo(leftMargin + 200, doc.y)
+      .stroke();
+    doc.moveDown(0.5);
+    doc.fontSize(10).font("Helvetica");
+    doc.text("Date: _________________", leftMargin);
   }
 
   /**
@@ -173,15 +597,67 @@ export class PdfGeneratorService {
   async generateWeekPreviewPdf(weeklyEntryId: string): Promise<Buffer> {
     const weeklyEntry = await weeklyEntryRepository.prisma.findUnique({
       where: { id: weeklyEntryId },
+      include: {
+        student: {
+          include: {
+            department: {
+              include: {
+                faculty: true,
+              },
+            },
+          },
+        },
+        siwesSession: true,
+        diagrams: true,
+        schoolSupervisorWeeklyComments: {
+          include: {
+            schoolSupervisor: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+        industrySupervisorWeeklyComments: {
+          include: {
+            industrySupervisor: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+      },
     });
     if (!weeklyEntry) {
       throw new Error("Weekly entry not found");
     }
 
     // Generate single-week PDF preview
-    // TODO: Implement single-week PDF generation
-    const placeholder = Buffer.from("Week preview PDF placeholder");
-    return placeholder;
+    return new Promise((resolve, reject) => {
+      try {
+        const doc = new PDFDocument({
+          size: "A4",
+          margins: { top: 50, bottom: 50, left: 50, right: 50 },
+        });
+
+        const chunks: Buffer[] = [];
+        doc.on("data", (chunk) => chunks.push(chunk));
+        doc.on("end", () => resolve(Buffer.concat(chunks)));
+        doc.on("error", reject);
+
+        // Generate the weekly entry page
+        // TypeScript doesn't recognize this includes all required properties from WeeklyEntryWithRelations
+        // but it does, so we cast it
+        this.generateWeeklyEntryPage(doc, weeklyEntry as unknown as WeeklyEntryWithRelations, {
+          student: weeklyEntry.student,
+        });
+
+        doc.end();
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
   /**
@@ -287,18 +763,23 @@ export class PdfGeneratorService {
    * Generate PDF with custom branding
    */
   async generateCustomLogbookPdf(
-    _studentId: string,
-    _sessionId: string,
-    _options: {
+    studentId: string,
+    sessionId: string,
+    options: {
       includeCoverPage?: boolean;
       includeSignatures?: boolean;
       watermark?: string;
       institutionLogo?: string;
     },
   ): Promise<Buffer> {
-    // TODO: Implement custom PDF generation with options
-    const placeholder = Buffer.from("Custom PDF placeholder");
-    return placeholder;
+    // Get the standard PDF first
+    const standardPdf = await this.generateLogbookPdf(studentId, sessionId);
+
+    // For MVP, return standard PDF
+    // Custom branding (watermarks, logos) can be implemented post-MVP
+    // using pdf-lib or similar library to modify the PDF
+
+    return standardPdf;
   }
 }
 
