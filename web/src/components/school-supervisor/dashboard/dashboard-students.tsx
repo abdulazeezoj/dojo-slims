@@ -5,9 +5,10 @@
 
 "use client";
 
-import { useDashboardData } from "@/hooks/use-school-supervisor-dashboard";
 import { UserIcon } from "@phosphor-icons/react";
 import Link from "next/link";
+import { EmptyState } from "@/components/student/common/empty-state";
+import { SectionLoading } from "@/components/student/common/section-loading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import {
   Table,
   TableBody,
@@ -25,9 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Progress } from "@/components/ui/progress";
-import { SectionLoading } from "@/components/student/common/section-loading";
-import { EmptyState } from "@/components/student/common/empty-state";
+import { useDashboardData } from "@/hooks/use-school-supervisor-dashboard";
 
 export function DashboardStudents() {
   const { data: dashboardData, isLoading, error } = useDashboardData();

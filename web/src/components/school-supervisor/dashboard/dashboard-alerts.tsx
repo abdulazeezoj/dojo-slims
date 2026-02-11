@@ -5,14 +5,14 @@
 
 "use client";
 
-import { useDashboardData } from "@/hooks/use-school-supervisor-dashboard";
 import {
   InfoIcon,
   WarningCircleIcon,
   XCircleIcon,
 } from "@phosphor-icons/react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { SectionLoading } from "@/components/student/common/section-loading";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useDashboardData } from "@/hooks/use-school-supervisor-dashboard";
 
 export function DashboardAlerts() {
   const { data: dashboardData, isLoading, error } = useDashboardData();
@@ -37,7 +37,7 @@ export function DashboardAlerts() {
   const sortedAlerts = [...alerts].sort((a, b) => b.priority - a.priority);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {sortedAlerts.map((alert) => {
         const Icon =
           alert.type === "error"
@@ -72,5 +72,14 @@ export function DashboardAlerts() {
 }
 
 export function DashboardAlertsSkeleton() {
-  return <SectionLoading variant="alerts" />;
+  return (
+    <div className="space-y-3">
+      {[...Array(2)].map((_, i) => (
+        <div key={i} className="rounded-lg border p-4">
+          <Skeleton className="mb-2 h-5 w-24" />
+          <Skeleton className="h-4 w-full" />
+        </div>
+      ))}
+    </div>
+  );
 }

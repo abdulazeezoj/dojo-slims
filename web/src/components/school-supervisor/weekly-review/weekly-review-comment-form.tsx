@@ -1,5 +1,6 @@
 "use client";
 
+import { ChatCircleIcon } from "@phosphor-icons/react";
 import { useForm } from "@tanstack/react-form";
 import { toast } from "sonner";
 
@@ -14,7 +15,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useAddComment } from "@/hooks/use-school-supervisor-review";
-import { ChatCircleIcon } from "@phosphor-icons/react";
 
 interface WeeklyReviewCommentFormProps {
   studentId: string;

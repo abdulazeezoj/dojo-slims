@@ -5,7 +5,6 @@
 
 "use client";
 
-import { useDashboardData } from "@/hooks/use-school-supervisor-dashboard";
 import {
   CheckCircleIcon,
   ClockIcon,
@@ -14,6 +13,7 @@ import {
 } from "@phosphor-icons/react";
 import { SectionLoading } from "@/components/student/common/section-loading";
 import { StatCard } from "@/components/student/common/stat-card";
+import { useDashboardData } from "@/hooks/use-school-supervisor-dashboard";
 
 export function DashboardStats() {
   const { data: dashboardData, isLoading, error } = useDashboardData();
