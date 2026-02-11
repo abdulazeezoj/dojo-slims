@@ -5,6 +5,9 @@ import {
   siwesSessionRepository,
   studentRepository,
   studentSessionEnrollmentRepository,
+  studentSupervisorAssignmentRepository,
+  industrySupervisorWeeklyCommentRepository,
+  schoolSupervisorWeeklyCommentRepository,
 } from "@/repositories";
 
 const logger = getLogger(["services", "admin-dashboard"]);
@@ -157,6 +160,139 @@ export class AdminDashboardService {
     );
 
     return metrics;
+  }
+
+  /**
+   * Get recent activities in the system
+   * Returns a summary of recent actions from different entities
+   */
+  async getRecentActivities(limit = 20) {
+    logger.info(`Getting recent activities (limit: ${limit})`);
+
+    // Since we don't have an activity_logs table yet, we'll generate activities
+    // from various recent database records as a workaround
+    const activities: Array<{
+      id: string;
+      userType: string;
+      action: string;
+      entityType: string;
+      entityId: string;
+      details: string;
+      createdAt: Date;
+    }> = [];
+
+    try {
+      // Get recent student enrollments
+      const recentEnrollments =
+        await studentSessionEnrollmentRepository.prisma.findMany({
+          take: Math.ceil(limit / 4),
+          orderBy: { enrolledAt: "desc" },
+          include: {
+            student: { select: { name: true, matricNumber: true } },
+            siwesSession: { select: { name: true } },
+          },
+        });
+
+      for (const enrollment of recentEnrollments) {
+        activities.push({
+          id: enrollment.id,
+          userType: "STUDENT",
+          action: "ENROLLED",
+          entityType: "StudentSessionEnrollment",
+          entityId: enrollment.id,
+          details: `${enrollment.student.name} (${enrollment.student.matricNumber}) enrolled in ${enrollment.siwesSession.name}`,
+          createdAt: enrollment.enrolledAt,
+        });
+      }
+
+      // Get recent supervisor assignments
+      const recentAssignments =
+        await studentSupervisorAssignmentRepository.prisma.findMany({
+          take: Math.ceil(limit / 4),
+          orderBy: { assignedAt: "desc" },
+          include: {
+            student: { select: { name: true, matricNumber: true } },
+            schoolSupervisor: { select: { name: true, staffId: true } },
+            siwesSession: { select: { name: true } },
+          },
+        });
+
+      for (const assignment of recentAssignments) {
+        activities.push({
+          id: assignment.id,
+          userType: "ADMIN",
+          action: "ASSIGNED_SUPERVISOR",
+          entityType: "StudentSupervisorAssignment",
+          entityId: assignment.id,
+          details: `${assignment.student.name} assigned to supervisor ${assignment.schoolSupervisor.name} for ${assignment.siwesSession.name}`,
+          createdAt: assignment.assignedAt,
+        });
+      }
+
+      // Get recent industry supervisor comments
+      const recentIndustryComments =
+        await industrySupervisorWeeklyCommentRepository.prisma.findMany({
+          take: Math.ceil(limit / 4),
+          orderBy: { commentedAt: "desc" },
+          include: {
+            industrySupervisor: { select: { name: true } },
+            weeklyEntry: {
+              select: {
+                weekNumber: true,
+                student: { select: { name: true, matricNumber: true } },
+              },
+            },
+          },
+        });
+
+      for (const comment of recentIndustryComments) {
+        activities.push({
+          id: comment.id,
+          userType: "INDUSTRY_SUPERVISOR",
+          action: "COMMENTED",
+          entityType: "IndustrySupervisorWeeklyComment",
+          entityId: comment.id,
+          details: `${comment.industrySupervisor.name} commented on ${comment.weeklyEntry.student.name}'s week ${comment.weeklyEntry.weekNumber}`,
+          createdAt: comment.commentedAt,
+        });
+      }
+
+      // Get recent school supervisor comments
+      const recentSchoolComments =
+        await schoolSupervisorWeeklyCommentRepository.prisma.findMany({
+          take: Math.ceil(limit / 4),
+          orderBy: { commentedAt: "desc" },
+          include: {
+            schoolSupervisor: { select: { name: true } },
+            weeklyEntry: {
+              select: {
+                weekNumber: true,
+                student: { select: { name: true, matricNumber: true } },
+              },
+            },
+          },
+        });
+
+      for (const comment of recentSchoolComments) {
+        activities.push({
+          id: comment.id,
+          userType: "SCHOOL_SUPERVISOR",
+          action: "COMMENTED",
+          entityType: "SchoolSupervisorWeeklyComment",
+          entityId: comment.id,
+          details: `${comment.schoolSupervisor.name} commented on ${comment.weeklyEntry.student.name}'s week ${comment.weeklyEntry.weekNumber}`,
+          createdAt: comment.commentedAt,
+        });
+      }
+
+      // Sort all activities by createdAt and limit to requested number
+      activities.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      return activities.slice(0, limit);
+    } catch (error) {
+      logger.error("Failed to get recent activities", { error });
+      // Return empty array if we fail to get activities
+      return [];
+    }
   }
 }
 
