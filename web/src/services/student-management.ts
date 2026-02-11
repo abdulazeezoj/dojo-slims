@@ -376,8 +376,28 @@ export class StudentManagementService {
       }
     }
 
-    // TODO: Queue bulk email sending for credentials
-    // await mailer.sendBulkWelcomeEmails(credentials);
+    // Send bulk welcome emails for all successfully created students
+    if (credentials.length > 0) {
+      try {
+        const emailData = credentials.map((cred) => {
+          // Find corresponding student data for name
+          const studentData = students.find((s) => s.email === cred.email);
+          return {
+            email: cred.email,
+            name: studentData?.name || "Student",
+            userType: "Student",
+            loginCredential: studentData?.matricNumber || cred.email,
+            temporaryPassword: cred.password,
+          };
+        });
+        
+        await notificationService.sendBulkWelcomeEmails(emailData);
+      } catch (error) {
+        // Log error but don't fail the bulk creation
+        // Users are created successfully, just email sending failed
+        console.error("Failed to send bulk welcome emails:", error);
+      }
+    }
 
     return { successful, failed, errors, credentials };
   }

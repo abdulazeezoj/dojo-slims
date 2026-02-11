@@ -383,8 +383,28 @@ export class SupervisorManagementService {
       }
     }
 
-    // TODO: Queue bulk email sending for credentials
-    // await mailer.sendBulkWelcomeEmails(credentials);
+    // Send bulk welcome emails for all successfully created supervisors
+    if (credentials.length > 0) {
+      try {
+        const emailData = credentials.map((cred) => {
+          // Find corresponding supervisor data for name and staffId
+          const supervisorData = supervisors.find((s) => s.email === cred.email);
+          return {
+            email: cred.email,
+            name: supervisorData?.name || "Supervisor",
+            userType: "School Supervisor",
+            loginCredential: supervisorData?.staffId || cred.email,
+            temporaryPassword: cred.password,
+          };
+        });
+        
+        await notificationService.sendBulkWelcomeEmails(emailData);
+      } catch (error) {
+        // Log error but don't fail the bulk creation
+        // Users are created successfully, just email sending failed
+        console.error("Failed to send bulk welcome emails:", error);
+      }
+    }
 
     return { successful, failed, errors, credentials };
   }
