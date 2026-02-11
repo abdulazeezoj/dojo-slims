@@ -8,6 +8,7 @@ import crypto from "crypto";
 
 import type { Prisma, Student } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
+import { getLogger } from "@/lib/logger";
 import prisma from "@/lib/prisma";
 import {
   departmentRepository,
@@ -16,6 +17,8 @@ import {
 } from "@/repositories";
 
 import { notificationService } from "./notifications";
+
+const logger = getLogger(["services", "student-management"]);
 
 export class StudentManagementService {
   /**
@@ -384,7 +387,9 @@ export class StudentManagementService {
         .map((cred) => {
           const studentData = studentMap.get(cred.email);
           if (!studentData) {
-            console.error(`Student data not found for ${cred.email}`);
+            logger.error("Student data not found during email preparation", {
+              email: cred.email,
+            });
             return null;
           }
           return {
@@ -403,7 +408,11 @@ export class StudentManagementService {
           .sendBulkWelcomeEmails(emailData)
           .catch((error) => {
             // Log error but don't fail the bulk creation
-            console.error("Failed to send bulk welcome emails:", error);
+            logger.error("Failed to send bulk welcome emails", {
+              error,
+              attempted: emailData.length,
+              firstRecipient: emailData[0]?.email,
+            });
           });
       }
     }

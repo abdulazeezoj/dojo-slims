@@ -167,7 +167,12 @@ export class AdminDashboardService {
    * Returns a summary of recent actions from different entities
    */
   async getRecentActivities(limit = 20) {
-    logger.info(`Getting recent activities (limit: ${limit})`);
+    // Validate and sanitize limit parameter
+    const sanitizedLimit = Number.isFinite(limit) && limit > 0 
+      ? Math.min(Math.max(Math.floor(limit), 1), 100)
+      : 20;
+    
+    logger.info(`Getting recent activities (limit: ${sanitizedLimit})`);
 
     // Since we don't have an activity_logs table yet, we'll generate activities
     // from various recent database records as a workaround
@@ -191,7 +196,7 @@ export class AdminDashboardService {
       ] = await Promise.all([
         // Get recent student enrollments
         studentSessionEnrollmentRepository.prisma.findMany({
-          take: Math.ceil(limit / 4),
+          take: Math.ceil(sanitizedLimit / 4),
           orderBy: { enrolledAt: "desc" },
           include: {
             student: { select: { name: true, matricNumber: true } },
@@ -200,7 +205,7 @@ export class AdminDashboardService {
         }),
         // Get recent supervisor assignments
         studentSupervisorAssignmentRepository.prisma.findMany({
-          take: Math.ceil(limit / 4),
+          take: Math.ceil(sanitizedLimit / 4),
           orderBy: { assignedAt: "desc" },
           include: {
             student: { select: { name: true, matricNumber: true } },
@@ -210,7 +215,7 @@ export class AdminDashboardService {
         }),
         // Get recent industry supervisor comments
         industrySupervisorWeeklyCommentRepository.prisma.findMany({
-          take: Math.ceil(limit / 4),
+          take: Math.ceil(sanitizedLimit / 4),
           orderBy: { commentedAt: "desc" },
           include: {
             industrySupervisor: { select: { name: true } },
@@ -224,7 +229,7 @@ export class AdminDashboardService {
         }),
         // Get recent school supervisor comments
         schoolSupervisorWeeklyCommentRepository.prisma.findMany({
-          take: Math.ceil(limit / 4),
+          take: Math.ceil(sanitizedLimit / 4),
           orderBy: { commentedAt: "desc" },
           include: {
             schoolSupervisor: { select: { name: true } },
@@ -289,11 +294,10 @@ export class AdminDashboardService {
           createdAt: comment.commentedAt,
         });
       }
-      }
 
       // Sort all activities by createdAt and limit to requested number
       activities.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-      return activities.slice(0, limit);
+      return activities.slice(0, sanitizedLimit);
     } catch (error) {
       logger.error("Failed to get recent activities", { error });
       // Return empty array if we fail to get activities

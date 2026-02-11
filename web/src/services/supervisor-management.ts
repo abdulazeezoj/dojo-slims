@@ -8,6 +8,7 @@ import crypto from "crypto";
 
 import type { Prisma, SchoolSupervisor } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
+import { getLogger } from "@/lib/logger";
 import {
   departmentRepository,
   schoolSupervisorRepository,
@@ -18,6 +19,8 @@ import {
 } from "@/repositories";
 
 import { notificationService } from "./notifications";
+
+const logger = getLogger(["services", "supervisor-management"]);
 
 export class SupervisorManagementService {
   /**
@@ -391,7 +394,9 @@ export class SupervisorManagementService {
         .map((cred) => {
           const supervisorData = supervisorMap.get(cred.email);
           if (!supervisorData) {
-            console.error(`Supervisor data not found for ${cred.email}`);
+            logger.error("Supervisor data not found during email preparation", {
+              email: cred.email,
+            });
             return null;
           }
           return {
@@ -410,7 +415,11 @@ export class SupervisorManagementService {
           .sendBulkWelcomeEmails(emailData)
           .catch((error) => {
             // Log error but don't fail the bulk creation
-            console.error("Failed to send bulk welcome emails:", error);
+            logger.error("Failed to send bulk welcome emails", {
+              error,
+              attempted: emailData.length,
+              firstRecipient: emailData[0]?.email,
+            });
           });
       }
     }
