@@ -99,7 +99,7 @@ export function BulkEnrollDialog({ trigger }: BulkEnrollDialogProps) {
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="session">Session</Label>
-              <Select value={sessionId} onValueChange={setSessionId} required>
+              <Select value={sessionId} onValueChange={(value) => setSessionId(value || "")} required>
                 <SelectTrigger id="session">
                   <SelectValue placeholder="Select session" />
                 </SelectTrigger>

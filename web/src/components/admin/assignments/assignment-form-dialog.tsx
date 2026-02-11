@@ -88,7 +88,7 @@ export function AssignmentFormDialog({ trigger }: AssignmentFormDialogProps) {
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="session">Session</Label>
-              <Select value={sessionId} onValueChange={setSessionId} required>
+              <Select value={sessionId} onValueChange={(value) => setSessionId(value || "")} required>
                 <SelectTrigger id="session">
                   <SelectValue placeholder="Select session" />
                 </SelectTrigger>
@@ -103,7 +103,7 @@ export function AssignmentFormDialog({ trigger }: AssignmentFormDialogProps) {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="student">Student</Label>
-              <Select value={studentId} onValueChange={setStudentId} required>
+              <Select value={studentId} onValueChange={(value) => setStudentId(value || "")} required>
                 <SelectTrigger id="student">
                   <SelectValue placeholder="Select student" />
                 </SelectTrigger>
@@ -118,7 +118,7 @@ export function AssignmentFormDialog({ trigger }: AssignmentFormDialogProps) {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="supervisor">School Supervisor</Label>
-              <Select value={schoolSupervisorId} onValueChange={setSchoolSupervisorId} required>
+              <Select value={schoolSupervisorId} onValueChange={(value) => setSchoolSupervisorId(value || "")} required>
                 <SelectTrigger id="supervisor">
                   <SelectValue placeholder="Select supervisor" />
                 </SelectTrigger>

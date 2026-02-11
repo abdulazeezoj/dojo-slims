@@ -82,7 +82,7 @@ export function EnrollmentFormDialog({ trigger }: EnrollmentFormDialogProps) {
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="session">Session</Label>
-              <Select value={sessionId} onValueChange={setSessionId} required>
+              <Select value={sessionId} onValueChange={(value) => setSessionId(value || "")} required>
                 <SelectTrigger id="session">
                   <SelectValue placeholder="Select session" />
                 </SelectTrigger>
@@ -97,7 +97,7 @@ export function EnrollmentFormDialog({ trigger }: EnrollmentFormDialogProps) {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="student">Student</Label>
-              <Select value={studentId} onValueChange={setStudentId} required>
+              <Select value={studentId} onValueChange={(value) => setStudentId(value || "")} required>
                 <SelectTrigger id="student">
                   <SelectValue placeholder="Select student" />
                 </SelectTrigger>

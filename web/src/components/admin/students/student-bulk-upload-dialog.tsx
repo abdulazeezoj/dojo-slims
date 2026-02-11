@@ -76,8 +76,8 @@ export function StudentBulkUploadDialog({ trigger }: BulkUploadDialogProps) {
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-      const students: CreateStudentData[] = jsonData.map(
-        (row: Record<string, unknown>) => ({
+      const students: CreateStudentData[] = (jsonData as Array<Record<string, unknown>>).map(
+        (row) => ({
           matricNumber: String(row.matricNumber || "").trim(),
           name: String(row.name || "").trim(),
           email: String(row.email || "").trim(),

@@ -76,8 +76,8 @@ export function SchoolSupervisorBulkUploadDialog({ trigger }: BulkUploadDialogPr
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-      const supervisors: CreateSchoolSupervisorData[] = jsonData.map(
-        (row: Record<string, unknown>) => ({
+      const supervisors: CreateSchoolSupervisorData[] = (jsonData as Array<Record<string, unknown>>).map(
+        (row) => ({
           staffId: String(row.staffId || "").trim(),
           name: String(row.name || "").trim(),
           email: String(row.email || "").trim(),

@@ -139,7 +139,7 @@ export function SchoolSupervisorFormDialog({ supervisor, trigger }: SchoolSuperv
             </div>
             <div className="grid gap-2">
               <Label htmlFor="department">Department</Label>
-              <Select value={departmentId} onValueChange={setDepartmentId} required>
+              <Select value={departmentId} onValueChange={(value) => setDepartmentId(value || "")} required>
                 <SelectTrigger id="department">
                   <SelectValue placeholder="Select department" />
                 </SelectTrigger>
