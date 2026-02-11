@@ -389,7 +389,14 @@ export class SupervisorManagementService {
     // Send bulk welcome emails for all successfully created supervisors
     if (credentials.length > 0) {
       // Build email data using Map for O(n) lookup instead of O(n²)
-      const supervisorMap = new Map(supervisors.map((s) => [s.email, s]));
+      // Ensure the first occurrence of each email is retained, so later
+      // duplicate rows (which may have failed creation) do not overwrite it.
+      const supervisorMap = new Map<string, (typeof supervisors)[number]>();
+      for (const s of supervisors) {
+        if (!supervisorMap.has(s.email)) {
+          supervisorMap.set(s.email, s);
+        }
+      }
       const emailData = credentials
         .map((cred) => {
           const supervisorData = supervisorMap.get(cred.email);
