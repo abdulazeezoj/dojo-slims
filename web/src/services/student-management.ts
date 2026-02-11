@@ -382,7 +382,8 @@ export class StudentManagementService {
     // Send bulk welcome emails for all successfully created students
     if (credentials.length > 0) {
       // Build email data using Map for O(n) lookup instead of O(n²)
-      const studentMap = new Map(students.map((s) => [s.email, s]));
+      // Use only successfully created students to avoid duplicate/failed rows overwriting data
+      const studentMap = new Map(successful.map((s) => [s.email, s]));
       const emailData = credentials
         .map((cred) => {
           const studentData = studentMap.get(cred.email);
