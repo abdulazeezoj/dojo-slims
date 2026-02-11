@@ -100,7 +100,7 @@ export function DepartmentFormDialog({
               <Label htmlFor="faculty">Faculty</Label>
               <Select
                 value={facultyId}
-                onValueChange={(value) => setFacultyId(value || "")}
+                onValueChange={(value) => value && setFacultyId(value)}
                 required
               >
                 <SelectTrigger id="faculty">
