@@ -137,7 +137,7 @@ export function WeeklyReviewDetail({
         </CardHeader>
         <CardContent className="space-y-4">
           {Object.entries(week.entries).map(([day, entry]) => {
-            if (!entry) return null;
+            if (entry === null || entry === undefined || entry.trim() === "") return null;
             
             return (
               <div key={day} className="space-y-2">
@@ -148,7 +148,7 @@ export function WeeklyReviewDetail({
               </div>
             );
           })}
-          {Object.values(week.entries).every(entry => !entry) && (
+          {Object.values(week.entries).every(entry => entry === null || entry === undefined || entry.trim() === "") && (
             <p className="text-muted-foreground text-center text-sm">
               No entries submitted for this week yet.
             </p>
