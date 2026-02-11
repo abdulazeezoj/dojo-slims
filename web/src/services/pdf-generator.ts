@@ -156,7 +156,7 @@ export class PdfGeneratorService {
         this.generateCoverPage(doc, data);
         doc.addPage();
         this.generateSiwesDetails(doc, data);
-        doc.addPage();
+        // generateWeeklyEntries adds its own page, so no need for addPage here
         this.generateWeeklyEntries(doc, data);
         this.generateFinalAssessments(doc, data);
         

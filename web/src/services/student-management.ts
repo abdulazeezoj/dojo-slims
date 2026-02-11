@@ -378,33 +378,33 @@ export class StudentManagementService {
 
     // Send bulk welcome emails for all successfully created students
     if (credentials.length > 0) {
-      try {
-        const emailData = credentials
-          .map((cred) => {
-            // Find corresponding student data for name and matricNumber
-            const studentData = students.find((s) => s.email === cred.email);
-            // studentData should always exist since we only add to credentials on success
-            if (!studentData) {
-              console.error(`Student data not found for ${cred.email}`);
-              return null;
-            }
-            return {
-              email: cred.email,
-              name: studentData.name,
-              userType: "Student",
-              loginCredential: studentData.matricNumber,
-              temporaryPassword: cred.password,
-            };
-          })
-          .filter((data): data is NonNullable<typeof data> => data !== null);
-        
-        if (emailData.length > 0) {
-          await notificationService.sendBulkWelcomeEmails(emailData);
-        }
-      } catch (error) {
-        // Log error but don't fail the bulk creation
-        // Users are created successfully, just email sending failed
-        console.error("Failed to send bulk welcome emails:", error);
+      // Build email data using Map for O(n) lookup instead of O(n²)
+      const studentMap = new Map(students.map((s) => [s.email, s]));
+      const emailData = credentials
+        .map((cred) => {
+          const studentData = studentMap.get(cred.email);
+          if (!studentData) {
+            console.error(`Student data not found for ${cred.email}`);
+            return null;
+          }
+          return {
+            email: cred.email,
+            name: studentData.name,
+            userType: "Student",
+            loginCredential: studentData.matricNumber,
+            temporaryPassword: cred.password,
+          };
+        })
+        .filter((data): data is NonNullable<typeof data> => data !== null);
+
+      // Fire-and-forget: Send emails in background without blocking API response
+      if (emailData.length > 0) {
+        notificationService
+          .sendBulkWelcomeEmails(emailData)
+          .catch((error) => {
+            // Log error but don't fail the bulk creation
+            console.error("Failed to send bulk welcome emails:", error);
+          });
       }
     }
 

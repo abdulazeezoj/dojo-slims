@@ -182,17 +182,63 @@ export class AdminDashboardService {
     }> = [];
 
     try {
-      // Get recent student enrollments
-      const recentEnrollments =
-        await studentSessionEnrollmentRepository.prisma.findMany({
+      // Fetch all activity sources in parallel for better performance
+      const [
+        recentEnrollments,
+        recentAssignments,
+        recentIndustryComments,
+        recentSchoolComments,
+      ] = await Promise.all([
+        // Get recent student enrollments
+        studentSessionEnrollmentRepository.prisma.findMany({
           take: Math.ceil(limit / 4),
           orderBy: { enrolledAt: "desc" },
           include: {
             student: { select: { name: true, matricNumber: true } },
             siwesSession: { select: { name: true } },
           },
-        });
+        }),
+        // Get recent supervisor assignments
+        studentSupervisorAssignmentRepository.prisma.findMany({
+          take: Math.ceil(limit / 4),
+          orderBy: { assignedAt: "desc" },
+          include: {
+            student: { select: { name: true, matricNumber: true } },
+            schoolSupervisor: { select: { name: true, staffId: true } },
+            siwesSession: { select: { name: true } },
+          },
+        }),
+        // Get recent industry supervisor comments
+        industrySupervisorWeeklyCommentRepository.prisma.findMany({
+          take: Math.ceil(limit / 4),
+          orderBy: { commentedAt: "desc" },
+          include: {
+            industrySupervisor: { select: { name: true } },
+            weeklyEntry: {
+              select: {
+                weekNumber: true,
+                student: { select: { name: true, matricNumber: true } },
+              },
+            },
+          },
+        }),
+        // Get recent school supervisor comments
+        schoolSupervisorWeeklyCommentRepository.prisma.findMany({
+          take: Math.ceil(limit / 4),
+          orderBy: { commentedAt: "desc" },
+          include: {
+            schoolSupervisor: { select: { name: true } },
+            weeklyEntry: {
+              select: {
+                weekNumber: true,
+                student: { select: { name: true, matricNumber: true } },
+              },
+            },
+          },
+        }),
+      ]);
 
+      // Process enrollments
       for (const enrollment of recentEnrollments) {
         activities.push({
           id: enrollment.id,
@@ -205,18 +251,7 @@ export class AdminDashboardService {
         });
       }
 
-      // Get recent supervisor assignments
-      const recentAssignments =
-        await studentSupervisorAssignmentRepository.prisma.findMany({
-          take: Math.ceil(limit / 4),
-          orderBy: { assignedAt: "desc" },
-          include: {
-            student: { select: { name: true, matricNumber: true } },
-            schoolSupervisor: { select: { name: true, staffId: true } },
-            siwesSession: { select: { name: true } },
-          },
-        });
-
+      // Process assignments
       for (const assignment of recentAssignments) {
         activities.push({
           id: assignment.id,
@@ -229,22 +264,7 @@ export class AdminDashboardService {
         });
       }
 
-      // Get recent industry supervisor comments
-      const recentIndustryComments =
-        await industrySupervisorWeeklyCommentRepository.prisma.findMany({
-          take: Math.ceil(limit / 4),
-          orderBy: { commentedAt: "desc" },
-          include: {
-            industrySupervisor: { select: { name: true } },
-            weeklyEntry: {
-              select: {
-                weekNumber: true,
-                student: { select: { name: true, matricNumber: true } },
-              },
-            },
-          },
-        });
-
+      // Process industry supervisor comments
       for (const comment of recentIndustryComments) {
         activities.push({
           id: comment.id,
@@ -257,22 +277,7 @@ export class AdminDashboardService {
         });
       }
 
-      // Get recent school supervisor comments
-      const recentSchoolComments =
-        await schoolSupervisorWeeklyCommentRepository.prisma.findMany({
-          take: Math.ceil(limit / 4),
-          orderBy: { commentedAt: "desc" },
-          include: {
-            schoolSupervisor: { select: { name: true } },
-            weeklyEntry: {
-              select: {
-                weekNumber: true,
-                student: { select: { name: true, matricNumber: true } },
-              },
-            },
-          },
-        });
-
+      // Process school supervisor comments
       for (const comment of recentSchoolComments) {
         activities.push({
           id: comment.id,
@@ -283,6 +288,7 @@ export class AdminDashboardService {
           details: `${comment.schoolSupervisor.name} commented on ${comment.weeklyEntry.student.name}'s week ${comment.weeklyEntry.weekNumber}`,
           createdAt: comment.commentedAt,
         });
+      }
       }
 
       // Sort all activities by createdAt and limit to requested number
