@@ -37,17 +37,6 @@ export function VerifyMagicLink({ token }: VerifyMagicLinkProps) {
     onSuccess: () => {
       setErrorMessage(null);
       toast.success("Sign in successful!");
-
-      const interval = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(interval);
-            router.push("/industry-supervisor");
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
     },
     onError: (error) => {
       const message = mapAuthError(error);
@@ -55,6 +44,24 @@ export function VerifyMagicLink({ token }: VerifyMagicLinkProps) {
       toast.error(message);
     },
   });
+
+  // Separate effect for countdown and redirect
+  useEffect(() => {
+    if (!verifyMutation.isSuccess) return;
+
+    const interval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          router.push("/industry-supervisor");
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    // Cleanup interval on unmount
+    return () => clearInterval(interval);
+  }, [verifyMutation.isSuccess, router]);
 
   useEffect(() => {
     if (token) {

@@ -19,14 +19,26 @@ export const weekEntryContentSchema = z.object({
 });
 
 // Update multiple days at once
-export const updateWeekEntriesSchema = z.object({
-  monday: optionalTextSchema,
-  tuesday: optionalTextSchema,
-  wednesday: optionalTextSchema,
-  thursday: optionalTextSchema,
-  friday: optionalTextSchema,
-  saturday: optionalTextSchema,
-});
+export const updateWeekEntriesSchema = z
+  .object({
+    monday: optionalTextSchema,
+    tuesday: optionalTextSchema,
+    wednesday: optionalTextSchema,
+    thursday: optionalTextSchema,
+    friday: optionalTextSchema,
+    saturday: optionalTextSchema,
+  })
+  .refine(
+    (data) => {
+      // At least one day must have content
+      return Object.values(data).some(
+        (value) => value && value.trim().length > 0,
+      );
+    },
+    {
+      message: "At least one day must have content",
+    },
+  );
 
 // Diagram upload
 export const uploadDiagramSchema = fileUploadSchema.extend({

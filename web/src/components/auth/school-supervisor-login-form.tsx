@@ -115,9 +115,7 @@ export function SchoolSupervisorLoginForm() {
                   autoComplete="email"
                   aria-invalid={isInvalid}
                   aria-describedby={
-                    field.state.meta.errors.length > 0
-                      ? `${field.name}-error`
-                      : undefined
+                    isInvalid ? `${field.name}-error` : undefined
                   }
                 />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -146,11 +144,9 @@ export function SchoolSupervisorLoginForm() {
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="Enter your password"
                   autoComplete="current-password"
-                  aria-invalid={field.state.meta.errors.length > 0}
+                  aria-invalid={isInvalid}
                   aria-describedby={
-                    field.state.meta.errors.length > 0
-                      ? `${field.name}-error`
-                      : undefined
+                    isInvalid ? `${field.name}-error` : undefined
                   }
                 />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}

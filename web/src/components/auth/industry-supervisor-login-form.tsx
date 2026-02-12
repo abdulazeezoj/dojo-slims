@@ -108,11 +108,9 @@ export function IndustrySupervisorLoginForm() {
                     placeholder="supervisor@company.com"
                     autoFocus
                     autoComplete="email"
-                    aria-invalid={field.state.meta.errors.length > 0}
+                    aria-invalid={isInvalid}
                     aria-describedby={
-                      field.state.meta.errors.length > 0
-                        ? `${field.name}-error`
-                        : undefined
+                      isInvalid ? `${field.name}-error` : undefined
                     }
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
