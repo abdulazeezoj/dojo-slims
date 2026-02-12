@@ -14,10 +14,8 @@ import { toast } from "sonner";
 import { AuthAlert } from "@/components/auth/auth-alert";
 import { AuthButton } from "@/components/auth/auth-button";
 import { AuthCard } from "@/components/auth/auth-card";
-import { apiClient } from "@/lib/api-client";
+import { authClient } from "@/lib/auth-client";
 import { mapAuthError } from "@/lib/auth-utils";
-
-import type { AxiosError } from "axios";
 
 interface VerifyMagicLinkProps {
   token: string;
@@ -30,9 +28,14 @@ export function VerifyMagicLink({ token }: VerifyMagicLinkProps) {
   );
   const [countdown, setCountdown] = useState(3);
 
-  const verifyMutation = useMutation<void, AxiosError | Error, string>({
+  const verifyMutation = useMutation<void, Error, string>({
     mutationFn: async (token: string) => {
-      await apiClient.post("/api/auth/verify-magic-link", { token });
+      // Use Better Auth's built-in magic link verification
+      const result = await authClient.magicLink.verify({ token });
+      
+      if (!result.data) {
+        throw new Error(result.error?.message || "Verification failed");
+      }
     },
     onSuccess: () => {
       setErrorMessage(null);
@@ -72,7 +75,8 @@ export function VerifyMagicLink({ token }: VerifyMagicLinkProps) {
     if (token) {
       verifyMutation.mutate(token);
     }
-  }, [token, verifyMutation]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   if (verifyMutation.isPending) {
     return (
