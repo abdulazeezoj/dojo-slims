@@ -138,6 +138,14 @@ export function useUpdateWeekEntries(
       queryClient.invalidateQueries({ queryKey: ["student-logbook"] });
     },
     onError: (error: unknown) => {
+      // Handle rate limiting explicitly
+      if (isApiError(error) && error.response?.status === 429) {
+        toast.error(
+          "Too many requests. Please wait a moment before trying again.",
+        );
+        return;
+      }
+
       const errorMessage = isApiError(error)
         ? (error as AxiosError<ApiResponse>).response?.data?.error?.message
         : error instanceof Error
@@ -173,6 +181,14 @@ export function useUploadDiagram(
       queryClient.invalidateQueries({ queryKey: ["week", weekId] });
     },
     onError: (error: unknown) => {
+      // Handle rate limiting explicitly
+      if (isApiError(error) && error.response?.status === 429) {
+        toast.error(
+          "Too many requests. Please wait a moment before trying again.",
+        );
+        return;
+      }
+
       const errorMessage = isApiError(error)
         ? (error as AxiosError<ApiResponse>).response?.data?.error?.message
         : error instanceof Error
@@ -203,6 +219,14 @@ export function useRequestReview(
       queryClient.invalidateQueries({ queryKey: ["student-logbook"] });
     },
     onError: (error: unknown) => {
+      // Handle rate limiting explicitly
+      if (isApiError(error) && error.response?.status === 429) {
+        toast.error(
+          "Too many requests. Please wait a moment before trying again.",
+        );
+        return;
+      }
+
       const errorMessage = isApiError(error)
         ? (error as AxiosError<ApiResponse>).response?.data?.error?.message
         : error instanceof Error
