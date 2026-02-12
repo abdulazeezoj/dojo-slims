@@ -316,10 +316,15 @@ async function main() {
   // Create Students with complete profiles
   console.info("👨‍🎓 Creating students...");
   const students = [];
+  // ABU matric number format: UYYZZNNNN
+  // U = University prefix
+  // YY = Year (21, 22, 23, etc.)
+  // ZZ = Department code (CS=Computer Science, MT=Mathematics, EE=Electrical Engineering)
+  // NNNN = Student number (4 digits)
   const studentData = [
     {
       name: "John Doe",
-      matric: "U21CS1234",
+      matric: "U21CS1234", // Computer Science student
       email: "john.doe@student.edu.ng",
       dept: deptComputerScience.id,
       org: techCorp,
@@ -328,7 +333,7 @@ async function main() {
     },
     {
       name: "Jane Smith",
-      matric: "U21CS1235",
+      matric: "U21CS1235", // Computer Science student
       email: "jane.smith@student.edu.ng",
       dept: deptComputerScience.id,
       org: dataSystems,
@@ -337,7 +342,7 @@ async function main() {
     },
     {
       name: "Michael Johnson",
-      matric: "U21MT2345",
+      matric: "U21MT2345", // Mathematics student
       email: "michael.j@student.edu.ng",
       dept: deptMathematics.id,
       org: dataSystems,
@@ -346,7 +351,7 @@ async function main() {
     },
     {
       name: "Sarah Williams",
-      matric: "U21EE3456",
+      matric: "U21EE3456", // Electrical Engineering student
       email: "sarah.w@student.edu.ng",
       dept: deptElectricalEngineering.id,
       org: engineeringHub,
@@ -355,12 +360,39 @@ async function main() {
     },
     {
       name: "David Brown",
-      matric: "U21CS1236",
+      matric: "U21CS1236", // Computer Science student
       email: "david.b@student.edu.ng",
       dept: deptComputerScience.id,
       org: techCorp,
       industrySupervisor: industrySupervisors[0],
       schoolSupervisor: supervisors[0],
+    },
+    {
+      name: "Aisha Mohammed",
+      matric: "U22CS2001", // Computer Science student (2022 entry)
+      email: "aisha.m@student.edu.ng",
+      dept: deptComputerScience.id,
+      org: techCorp,
+      industrySupervisor: industrySupervisors[0],
+      schoolSupervisor: supervisors[0],
+    },
+    {
+      name: "Ibrahim Yusuf",
+      matric: "U22MT3001", // Mathematics student (2022 entry)
+      email: "ibrahim.y@student.edu.ng",
+      dept: deptMathematics.id,
+      org: dataSystems,
+      industrySupervisor: industrySupervisors[1],
+      schoolSupervisor: supervisors[1],
+    },
+    {
+      name: "Fatima Ahmed",
+      matric: "U22EE4001", // Electrical Engineering student (2022 entry)
+      email: "fatima.a@student.edu.ng",
+      dept: deptElectricalEngineering.id,
+      org: engineeringHub,
+      industrySupervisor: industrySupervisors[2],
+      schoolSupervisor: supervisors[2],
     },
   ];
 
@@ -451,11 +483,28 @@ async function main() {
 
   // Create Weekly Entries with comments and reviews
   console.info("📝 Creating weekly entries...");
-  for (const student of students) {
-    // Create entries for weeks 1-4 (with varying completion)
-    for (let week = 1; week <= 4; week++) {
-      const isComplete = week <= 2;
-      const hasReview = week === 1;
+  for (let i = 0; i < students.length; i++) {
+    const student = students[i];
+    // Vary the number of completed weeks per student to show different stages
+    const weeksToCreate = i === 0 ? 6 : i === 1 ? 5 : 4;
+
+    for (let week = 1; week <= weeksToCreate; week++) {
+      const isComplete = week <= (i === 0 ? 5 : i === 1 ? 4 : 2);
+
+      // Determine locking scenarios
+      // Week 1: Locked by industry supervisor after comment
+      // Week 2: Locked by school supervisor after comment
+      // Week 3: Has both supervisor comments, locked by industry
+      // Week 4: Pending review request
+      const hasIndustryComment = week <= 3 && isComplete;
+      const hasSchoolComment = week <= 2 && isComplete;
+      const isLocked = (week <= 3 && isComplete) || (week === 2 && i === 1);
+      const lockedBy =
+        week === 2 && i === 1
+          ? "SCHOOL_SUPERVISOR"
+          : week <= 3 && isComplete
+            ? "INDUSTRY_SUPERVISOR"
+            : null;
 
       const weeklyEntry = await prisma.weeklyEntry.create({
         data: {
@@ -464,61 +513,162 @@ async function main() {
           siwesSessionId: currentSession.id,
           weekNumber: week,
           mondayEntry: isComplete
-            ? `Week ${week} - Monday: Attended orientation and setup development environment.`
+            ? `Week ${week} - Monday: ${
+                week === 1
+                  ? "Attended orientation and setup development environment. Met with team members and learned about company culture."
+                  : week === 2
+                    ? "Started working on assigned tasks. Reviewed codebase and documentation."
+                    : week === 3
+                      ? "Implemented new feature module. Attended daily standup meetings."
+                      : week === 4
+                        ? "Continued development work. Fixed bugs reported by QA team."
+                        : `Regular development activities. Collaborated with team on project milestones.`
+              }`
             : null,
           tuesdayEntry: isComplete
-            ? `Week ${week} - Tuesday: Started learning the company's tech stack and coding standards.`
+            ? `Week ${week} - Tuesday: ${
+                week === 1
+                  ? "Started learning the company's tech stack and coding standards. Completed initial training modules."
+                  : week === 2
+                    ? "Pair programmed with senior developer. Learned about testing practices."
+                    : week === 3
+                      ? "Wrote unit tests for implemented features. Debugged edge cases."
+                      : week === 4
+                        ? "Participated in team planning session. Updated project documentation."
+                        : `Continued feature development. Resolved technical challenges with mentor guidance.`
+              }`
             : null,
           wednesdayEntry: isComplete
-            ? `Week ${week} - Wednesday: Worked on a simple feature under senior developer guidance.`
+            ? `Week ${week} - Wednesday: ${
+                week === 1
+                  ? "Worked on a simple feature under senior developer guidance. Set up local development tools."
+                  : week === 2
+                    ? "Implemented database queries. Optimized existing code for better performance."
+                    : week === 3
+                      ? "Integrated third-party API. Handled error cases and edge scenarios."
+                      : week === 4
+                        ? "Conducted code review for peer. Learned about security best practices."
+                        : `Worked on complex feature requirements. Consulted with product team.`
+              }`
             : null,
           thursdayEntry: isComplete
-            ? `Week ${week} - Thursday: Participated in code review sessions and learned best practices.`
+            ? `Week ${week} - Thursday: ${
+                week === 1
+                  ? "Participated in code review sessions and learned best practices. Shadowed experienced developer."
+                  : week === 2
+                    ? "Attended technical workshop. Applied new concepts to current project."
+                    : week === 3
+                      ? "Deployed changes to staging environment. Verified functionality with QA."
+                      : week === 4
+                        ? "Investigated production issues. Implemented monitoring improvements."
+                        : `Participated in architecture discussions. Contributed ideas for system improvements.`
+              }`
             : null,
           fridayEntry: isComplete
-            ? `Week ${week} - Friday: Completed my first task and submitted for review.`
+            ? `Week ${week} - Friday: ${
+                week === 1
+                  ? "Completed my first task and submitted for review. Received constructive feedback from team."
+                  : week === 2
+                    ? "Finalized weekly deliverables. Prepared demo for team showcase."
+                    : week === 3
+                      ? "Presented completed feature to stakeholders. Documented implementation details."
+                      : week === 4
+                        ? "Released feature to production. Monitored system metrics post-deployment."
+                        : `Wrapped up sprint tasks. Reflected on week's achievements and learning.`
+              }`
             : null,
           saturdayEntry: isComplete
-            ? `Week ${week} - Saturday: Reviewed feedback and made necessary improvements.`
+            ? `Week ${week} - Saturday: ${
+                week === 1
+                  ? "Reviewed feedback and made necessary improvements. Studied advanced topics for next week."
+                  : week === 2
+                    ? "Completed additional research. Prepared for upcoming sprint planning."
+                    : week === 3
+                      ? "Addressed post-review feedback. Updated code based on suggestions."
+                      : week === 4
+                        ? "Documented lessons learned. Planned next week's objectives."
+                        : `Reviewed weekly progress. Set goals for continuous improvement.`
+              }`
             : null,
-          isLocked: hasReview,
-          lockedBy: hasReview ? "INDUSTRY_SUPERVISOR" : null,
-          lockedAt: hasReview ? new Date("2025-07-08") : null,
+          isLocked,
+          lockedBy,
+          lockedAt: isLocked
+            ? new Date(
+                Date.parse("2025-07-01") + (week - 1) * 7 * 24 * 60 * 60 * 1000,
+              )
+            : null,
         },
       });
 
-      // Add diagram for week 2
-      if (week === 2 && isComplete) {
+      // Add diagrams for various weeks
+      if ((week === 2 || week === 4) && isComplete && i <= 2) {
         await prisma.diagram.create({
           data: {
             id: generateId(),
             weeklyEntryId: weeklyEntry.id,
-            fileName: "system-architecture.png",
-            filePath: "/uploads/diagrams/system-architecture.png",
-            fileSize: 245678,
+            fileName:
+              week === 2
+                ? "system-architecture.png"
+                : "database-schema.png",
+            filePath:
+              week === 2
+                ? `/upload/${student.id}/week-${week}/system-architecture.png`
+                : `/upload/${student.id}/week-${week}/database-schema.png`,
+            fileSize: week === 2 ? 245678 : 189234,
             mimeType: "image/png",
-            caption: "System architecture diagram showing the main components",
-            uploadedAt: new Date("2025-07-14"),
+            caption:
+              week === 2
+                ? "System architecture diagram showing the main components"
+                : "Database schema design for the application",
+            uploadedAt: new Date(
+              Date.parse("2025-07-01") + (week - 1) * 7 * 24 * 60 * 60 * 1000,
+            ),
           },
         });
       }
 
-      // Add comments for week 1
-      if (hasReview) {
+      // Add industry supervisor comments
+      if (hasIndustryComment) {
         await prisma.industrySupervisorWeeklyComment.create({
           data: {
             id: generateId(),
             weeklyEntryId: weeklyEntry.id,
             industrySupervisorId: student.data.industrySupervisor.id,
             comment:
-              "Good start! Your entries show good attention to detail. Keep up the enthusiasm and continue documenting your learning process.",
-            commentedAt: new Date("2025-07-08"),
+              week === 1
+                ? "Good start! Your entries show good attention to detail. Keep up the enthusiasm and continue documenting your learning process."
+                : week === 2
+                  ? "Excellent progress this week. I can see you're grasping the concepts quickly. Continue to ask questions when you're unsure."
+                  : "Outstanding work! You've shown great initiative and problem-solving skills. Your contributions are valuable to the team.",
+            commentedAt: new Date(
+              Date.parse("2025-07-01") + (week - 1) * 7 * 24 * 60 * 60 * 1000,
+            ),
           },
         });
       }
 
-      // Add review request for week 3
-      if (week === 3 && isComplete) {
+      // Add school supervisor comments
+      if (hasSchoolComment) {
+        await prisma.schoolSupervisorWeeklyComment.create({
+          data: {
+            id: generateId(),
+            weeklyEntryId: weeklyEntry.id,
+            schoolSupervisorId: student.data.schoolSupervisor.id,
+            comment:
+              week === 1
+                ? "Well documented entries. Make sure to relate your practical work to theoretical concepts learned in class. Keep maintaining this level of detail."
+                : "Good integration of theory and practice. Your entries demonstrate understanding of the academic objectives of SIWES. Continue this excellent work.",
+            commentedAt: new Date(
+              Date.parse("2025-07-01") +
+                (week - 1) * 7 * 24 * 60 * 60 * 1000 +
+                2 * 24 * 60 * 60 * 1000,
+            ), // 2 days after week ends
+          },
+        });
+      }
+
+      // Add review request for week 4
+      if (week === 4 && isComplete) {
         await prisma.industrySupervisorReviewRequest.create({
           data: {
             id: generateId(),
@@ -526,7 +676,22 @@ async function main() {
             studentId: student.id,
             industrySupervisorId: student.data.industrySupervisor.id,
             status: "PENDING",
+            requestedAt: new Date("2025-07-28"),
+          },
+        });
+      }
+
+      // Add reviewed request for week 3
+      if (week === 3 && isComplete && i === 0) {
+        await prisma.industrySupervisorReviewRequest.create({
+          data: {
+            id: generateId(),
+            weeklyEntryId: weeklyEntry.id,
+            studentId: student.id,
+            industrySupervisorId: student.data.industrySupervisor.id,
+            status: "REVIEWED",
             requestedAt: new Date("2025-07-21"),
+            reviewedAt: new Date("2025-07-23"),
           },
         });
       }
@@ -564,19 +729,22 @@ async function main() {
   console.info("✅ Seed completed successfully!");
   console.info("\n📋 Demo Credentials:");
   console.info("==================");
-  console.info("\n🔐 Password-based Login (password: demo123):");
+  console.info("\n🔐 Password-based Login (password: demo1234):");
   console.info("\nAdmin:");
   console.info("  Email: admin@slims.edu.ng");
   console.info("\nSchool Supervisors:");
   console.info("  Email: supervisor1@slims.edu.ng (Computer Science)");
   console.info("  Email: supervisor2@slims.edu.ng (Mathematics)");
   console.info("  Email: supervisor3@slims.edu.ng (Electrical Engineering)");
-  console.info("\nStudents:");
-  console.info("  Email: john.doe@student.edu.ng");
-  console.info("  Email: jane.smith@student.edu.ng");
-  console.info("  Email: michael.j@student.edu.ng");
-  console.info("  Email: sarah.w@student.edu.ng");
-  console.info("  Email: david.b@student.edu.ng");
+  console.info("\nStudents (ABU matric format: UYYZZNNNN):");
+  console.info("  U21CS1234 - john.doe@student.edu.ng");
+  console.info("  U21CS1235 - jane.smith@student.edu.ng");
+  console.info("  U21MT2345 - michael.j@student.edu.ng");
+  console.info("  U21EE3456 - sarah.w@student.edu.ng");
+  console.info("  U21CS1236 - david.b@student.edu.ng");
+  console.info("  U22CS2001 - aisha.m@student.edu.ng");
+  console.info("  U22MT3001 - ibrahim.y@student.edu.ng");
+  console.info("  U22EE4001 - fatima.a@student.edu.ng");
   console.info("\n🔗 Magic Link Login (passwordless):");
   console.info("\nIndustry Supervisors:");
   console.info("  Email: industry1@example.com (TechCorp)");
