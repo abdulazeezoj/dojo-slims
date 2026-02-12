@@ -57,7 +57,7 @@ export const getServerSession = cache(async (): Promise<AuthSession | null> => {
  */
 export async function getDashboardUrl(userType: UserType): Promise<string> {
   const dashboardMap: Record<UserType, string> = {
-    ADMIN: "/admin",
+    ADMIN: "/admin/dashboard",
     STUDENT: "/student/dashboard",
     SCHOOL_SUPERVISOR: "/school-supervisor/dashboard",
     INDUSTRY_SUPERVISOR: "/industry-supervisor/dashboard",

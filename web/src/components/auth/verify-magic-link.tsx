@@ -35,7 +35,7 @@ export function VerifyMagicLink({ token }: VerifyMagicLinkProps) {
       const result = await authClient.magicLink.verify({ 
         query: {
           token,
-          callbackURL: "/industry-supervisor",
+          callbackURL: "/industry-supervisor/dashboard",
         }
       });
       
@@ -64,7 +64,7 @@ export function VerifyMagicLink({ token }: VerifyMagicLinkProps) {
       setCountdown((prev) => {
         if (prev <= 1) {
           if (interval) clearInterval(interval);
-          router.push("/industry-supervisor");
+          router.push("/industry-supervisor/dashboard");
           return 0;
         }
         return prev - 1;

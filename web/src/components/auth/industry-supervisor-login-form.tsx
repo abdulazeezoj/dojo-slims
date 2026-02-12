@@ -37,7 +37,7 @@ export function IndustrySupervisorLoginForm() {
       // Use Better Auth client with callbackURL for automatic redirect after verification
       const result = await authClient.signIn.magicLink({
         email: data.email,
-        callbackURL: "/industry-supervisor",
+        callbackURL: "/industry-supervisor/dashboard",
       });
 
       if (result.error) {
