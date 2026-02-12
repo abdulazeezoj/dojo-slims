@@ -30,11 +30,17 @@ export function VerifyMagicLink({ token }: VerifyMagicLinkProps) {
 
   const verifyMutation = useMutation<void, Error, string>({
     mutationFn: async (token: string) => {
-      // Use Better Auth's built-in magic link verification
-      const result = await authClient.magicLink.verify({ token });
+      // Use Better Auth's built-in magic link verification with query parameter
+      // According to Better Auth docs, we should pass token in query object
+      const result = await authClient.magicLink.verify({ 
+        query: {
+          token,
+          callbackURL: "/industry-supervisor",
+        }
+      });
       
-      if (!result.data) {
-        throw new Error(result.error?.message || "Verification failed");
+      if (result.error) {
+        throw new Error(result.error.message || "Verification failed");
       }
     },
     onSuccess: () => {

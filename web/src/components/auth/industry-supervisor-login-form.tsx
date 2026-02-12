@@ -10,8 +10,7 @@ import { AuthAlert } from "@/components/auth/auth-alert";
 import { AuthButton } from "@/components/auth/auth-button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { apiClient } from "@/lib/api-client";
-import { type MagicLinkResponse } from "@/lib/auth-client";
+import { authClient, type MagicLinkResponse } from "@/lib/auth-client";
 import { mapAuthError } from "@/lib/auth-utils";
 
 import type { AxiosError } from "axios";
@@ -35,14 +34,17 @@ export function IndustrySupervisorLoginForm() {
     IndustrySupervisorLoginData
   >({
     mutationFn: async (data: IndustrySupervisorLoginData) => {
-      const response = await apiClient.post<MagicLinkResponse>(
-        "/api/auth/sign-in/magic-link",
-        {
-          email: data.email,
-        },
-      );
+      // Use Better Auth client with callbackURL for automatic redirect after verification
+      const result = await authClient.signIn.magicLink({
+        email: data.email,
+        callbackURL: "/industry-supervisor",
+      });
 
-      return response.data;
+      if (result.error) {
+        throw new Error(result.error.message);
+      }
+
+      return { success: true, message: "Magic link sent!" };
     },
     onSuccess: () => {
       setErrorMessage(null);
