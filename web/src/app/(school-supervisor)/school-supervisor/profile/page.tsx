@@ -1,14 +1,23 @@
+import {
+  ProfileHeader,
+  ProfileInfo,
+  ProfileChangePasswordForm,
+} from "@/components/school-supervisor/profile";
+import { Separator } from "@/components/ui/separator";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Profile | School Supervisor Portal",
-  description: "View and manage your profile",
+  title: "Profile",
+  description: "View and manage your account information.",
 };
 
 export default function Page() {
   return (
-    <div className="flex min-h-100 items-center justify-center">
-      <h1 className="text-2xl font-bold">School Supervisor Profile</h1>
+    <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+      <ProfileHeader />
+      <ProfileInfo />
+      <Separator />
+      <ProfileChangePasswordForm />
     </div>
   );
 }
