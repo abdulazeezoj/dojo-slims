@@ -44,3 +44,8 @@ next-env.d.ts
 
 upload/*
 !upload/.gitkeep
+
+export/*
+!export/.gitkeep
+!export/README.md
+!export/EXPORT_SECURITY_GUIDE.md
