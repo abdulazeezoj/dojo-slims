@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ExportService } from "@/lib/export-service";
-import fs from "fs/promises";
+import { readFile } from "fs/promises";
 
 export async function GET(
   request: NextRequest,
@@ -30,7 +30,7 @@ export async function GET(
 
   try {
     // Read file from disk
-    const fileBuffer = await fs.readFile(exportRecord.filePath);
+    const fileBuffer = await readFile(exportRecord.filePath);
 
     // Record download
     await ExportService.recordDownload(fileId);

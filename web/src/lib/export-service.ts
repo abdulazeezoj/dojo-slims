@@ -1,9 +1,9 @@
-import crypto from "crypto";
-import jwt from "jsonwebtoken";
+import { randomUUID } from "crypto";
+import * as jwt from "jsonwebtoken";
 import { prisma } from "@/lib/prisma";
 import { config } from "@/lib/config";
-import fs from "fs/promises";
-import path from "path";
+import { readFile, writeFile, mkdir, unlink } from "fs/promises";
+import { join, extname } from "path";
 
 interface CreateExportOptions {
   userId: string;
@@ -21,7 +21,7 @@ interface DownloadTokenPayload {
 }
 
 export class ExportService {
-  private static EXPORT_DIR = path.join(process.cwd(), "export");
+  private static EXPORT_DIR = join(process.cwd(), "export");
 
   /**
    * Create a new export file with signed URL
@@ -37,16 +37,16 @@ export class ExportService {
     } = options;
 
     // Generate unique filename to prevent collisions
-    const fileId = crypto.randomUUID();
-    const ext = path.extname(fileName);
+    const fileId = randomUUID();
+    const ext = extname(fileName);
     const safeFileName = `${fileId}${ext}`;
-    const filePath = path.join(this.EXPORT_DIR, safeFileName);
+    const filePath = join(this.EXPORT_DIR, safeFileName);
 
     // Ensure export directory exists
-    await fs.mkdir(this.EXPORT_DIR, { recursive: true });
+    await mkdir(this.EXPORT_DIR, { recursive: true });
 
     // Write file to disk
-    await fs.writeFile(filePath, fileBuffer);
+    await writeFile(filePath, fileBuffer);
 
     const expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000);
 
@@ -197,7 +197,7 @@ export class ExportService {
 
     // Delete from disk
     try {
-      await fs.unlink(exportRecord.filePath);
+      await unlink(exportRecord.filePath);
     } catch (error) {
       console.error(`Failed to delete file ${exportRecord.filePath}:`, error);
     }
