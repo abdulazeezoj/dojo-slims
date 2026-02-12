@@ -9,9 +9,9 @@ import { toast } from "sonner";
 
 import { apiClient, isApiError } from "@/lib/api-client";
 import type { ApiResponse } from "@/lib/api-response";
+import { useStudentSiwesSession } from "@/contexts/student-siwes-session";
 
 import type { AxiosError } from "axios";
-import { useCurrentSession } from "./use-student-dashboard";
 
 // Types
 export interface Week {
@@ -78,13 +78,13 @@ export interface UpdateWeekEntriesData {
 // Hooks
 /**
  * Fetch logbook overview with all weeks
- * @param sessionId - Optional session ID. If not provided, uses current session from dashboard
+ * @param sessionId - Optional session ID. If not provided, uses current session from context
  */
 export function useLogbookData(
   sessionId?: string,
 ): UseQueryResult<LogbookData, Error> {
-  const { data: currentSessionId } = useCurrentSession();
-  const effectiveSessionId = sessionId || currentSessionId;
+  const { activeSession } = useStudentSiwesSession();
+  const effectiveSessionId = sessionId || activeSession?.id;
 
   return useQuery({
     queryKey: ["student-logbook", effectiveSessionId],
@@ -138,6 +138,14 @@ export function useUpdateWeekEntries(
       queryClient.invalidateQueries({ queryKey: ["student-logbook"] });
     },
     onError: (error: unknown) => {
+      // Handle rate limiting explicitly
+      if (isApiError(error) && error.response?.status === 429) {
+        toast.error(
+          "Too many requests. Please wait a moment before trying again.",
+        );
+        return;
+      }
+
       const errorMessage = isApiError(error)
         ? (error as AxiosError<ApiResponse>).response?.data?.error?.message
         : error instanceof Error
@@ -173,6 +181,14 @@ export function useUploadDiagram(
       queryClient.invalidateQueries({ queryKey: ["week", weekId] });
     },
     onError: (error: unknown) => {
+      // Handle rate limiting explicitly
+      if (isApiError(error) && error.response?.status === 429) {
+        toast.error(
+          "Too many requests. Please wait a moment before trying again.",
+        );
+        return;
+      }
+
       const errorMessage = isApiError(error)
         ? (error as AxiosError<ApiResponse>).response?.data?.error?.message
         : error instanceof Error
@@ -203,6 +219,14 @@ export function useRequestReview(
       queryClient.invalidateQueries({ queryKey: ["student-logbook"] });
     },
     onError: (error: unknown) => {
+      // Handle rate limiting explicitly
+      if (isApiError(error) && error.response?.status === 429) {
+        toast.error(
+          "Too many requests. Please wait a moment before trying again.",
+        );
+        return;
+      }
+
       const errorMessage = isApiError(error)
         ? (error as AxiosError<ApiResponse>).response?.data?.error?.message
         : error instanceof Error

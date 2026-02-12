@@ -7,6 +7,7 @@ import {
   HouseIcon,
   UserIcon,
 } from "@phosphor-icons/react";
+import { usePathname } from "next/navigation";
 import * as React from "react";
 
 import {
@@ -21,12 +22,11 @@ import { BrandLogo } from "../common/brand";
 import { NavMain } from "./nav-main";
 import { NavUser, NavUserError, NavUserSkeleton } from "./nav-user";
 
-const navMain = [
+const navItems = [
   {
     title: "Dashboard",
     url: "/student/dashboard",
     icon: HouseIcon,
-    isActive: true,
   },
   {
     title: "My Logbook",
@@ -54,6 +54,7 @@ export function StudentSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const session = useSession();
+  const pathname = usePathname();
 
   // Get user info from session or use defaults
   const user = {
@@ -64,6 +65,14 @@ export function StudentSidebar({
     email: session.email || "student@example.com",
     avatar: ((session.data as any)?.user as any)?.image || "",
   };
+
+  // Compute navigation items with active state based on current pathname
+  const navMainWithActive = React.useMemo(() => {
+    return navItems.map((item) => ({
+      ...item,
+      isActive: pathname === item.url,
+    }));
+  }, [pathname]);
 
   // Render appropriate NavUser state based on session status
   const renderNavUser = () => {
@@ -86,7 +95,7 @@ export function StudentSidebar({
         {/* </div> */}
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={navMain} />
+        <NavMain items={navMainWithActive} />
       </SidebarContent>
       <SidebarFooter>{renderNavUser()}</SidebarFooter>
     </Sidebar>

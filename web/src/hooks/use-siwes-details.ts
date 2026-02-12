@@ -10,6 +10,7 @@ import { toast } from "sonner";
 
 import { apiClient, isApiError } from "@/lib/api-client";
 import type { ApiResponse } from "@/lib/api-response";
+import { useStudentSiwesSession } from "@/contexts/student-siwes-session";
 
 import type { AxiosError } from "axios";
 
@@ -54,15 +55,22 @@ export interface SiwesDetailsData {
 /**
  * Fetch existing SIWES details
  */
-export function useSiwesDetailsData(): UseQueryResult<SiwesDetailsData, Error> {
+export function useSiwesDetailsData(): UseQueryResult<
+  SiwesDetailsData | null,
+  Error
+> {
+  const { activeSession } = useStudentSiwesSession();
+  const sessionId = activeSession?.id;
+
   return useQuery({
-    queryKey: ["siwes-details"],
+    queryKey: ["siwes-details", sessionId],
     queryFn: async () => {
-      const response = await apiClient.get<SiwesDetailsData>(
+      const response = await apiClient.get<ApiResponse<SiwesDetailsData>>(
         "/api/student/siwes-details",
       );
-      return response.data;
+      return response.data.data ?? null;
     },
+    enabled: !!sessionId,
   });
 }
 
@@ -73,10 +81,10 @@ export function useOrganizations(): UseQueryResult<Organization[], Error> {
   return useQuery({
     queryKey: ["organizations"],
     queryFn: async () => {
-      const response = await apiClient.get<Organization[]>(
+      const response = await apiClient.get<ApiResponse<Organization[]>>(
         "/api/admin/organizations",
       );
-      return response.data;
+      return response.data.data ?? [];
     },
   });
 }
@@ -92,14 +100,11 @@ export function useSaveSiwesDetails(): UseMutationResult<
 > {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { activeSession } = useStudentSiwesSession();
 
   return useMutation({
     mutationFn: async (data: SiwesDetailsData) => {
-      // Get current session ID from dashboard
-      const dashboardResponse = await apiClient.get<
-        ApiResponse<{ activeSession: { id: string } | null }>
-      >("/api/student/dashboard");
-      const sessionId = dashboardResponse.data.data?.activeSession?.id;
+      const sessionId = activeSession?.id;
 
       if (!sessionId) {
         throw new Error(
@@ -119,11 +124,19 @@ export function useSaveSiwesDetails(): UseMutationResult<
     },
     onSuccess: () => {
       toast.success("SIWES details saved successfully");
-      queryClient.invalidateQueries({ queryKey: ["siwes-details"] });
+      queryClient.invalidateQueries({ queryKey: ["siwes-details", activeSession?.id] });
       queryClient.invalidateQueries({ queryKey: ["student-dashboard"] });
       router.push("/student/dashboard");
     },
     onError: (error: unknown) => {
+      // Handle rate limiting explicitly
+      if (isApiError(error) && error.response?.status === 429) {
+        toast.error(
+          "Too many requests. Please wait a moment before trying again.",
+        );
+        return;
+      }
+
       const errorMessage = isApiError(error)
         ? (error as AxiosError<ApiResponse>).response?.data?.error?.message
         : error instanceof Error

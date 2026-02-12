@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import {
   BuildingsIcon,
   CalendarIcon,
@@ -97,29 +98,40 @@ export function SiwesDetailsForm() {
   const { data: organizations } = useOrganizations();
   const saveMutation = useSaveSiwesDetails();
 
+  // Memoize default values to ensure stability
+  const defaultValues = React.useMemo(
+    () => ({
+      placementOrganizationId: existingDetails?.placementOrganizationId ?? "",
+      organizationName: existingDetails?.organizationName ?? "",
+      organizationAddress: existingDetails?.organizationAddress ?? "",
+      organizationCity: existingDetails?.organizationCity ?? "",
+      organizationState: existingDetails?.organizationState ?? "",
+      organizationPhone: existingDetails?.organizationPhone ?? "",
+      organizationEmail: existingDetails?.organizationEmail ?? "",
+      industrySupervisorName: existingDetails?.industrySupervisorName ?? "",
+      industrySupervisorEmail: existingDetails?.industrySupervisorEmail ?? "",
+      industrySupervisorPosition:
+        existingDetails?.industrySupervisorPosition ?? "",
+      industrySupervisorPhone: existingDetails?.industrySupervisorPhone ?? "",
+      trainingStartDate: existingDetails?.trainingStartDate
+        ? new Date(existingDetails.trainingStartDate)
+        : new Date(),
+      trainingEndDate: existingDetails?.trainingEndDate
+        ? new Date(existingDetails.trainingEndDate)
+        : new Date(),
+      jobTitle: existingDetails?.jobTitle ?? "",
+      departmentAtOrg: existingDetails?.departmentAtOrg ?? "",
+      programOfStudy: existingDetails?.programOfStudy ?? "",
+      level: existingDetails?.level ?? "",
+      session: existingDetails?.session ?? "",
+      trainingDuration: existingDetails?.trainingDuration ?? "",
+      areaOfSpecialization: existingDetails?.areaOfSpecialization ?? "",
+    }),
+    [existingDetails],
+  );
+
   const form = useForm({
-    defaultValues: existingDetails || {
-      placementOrganizationId: "",
-      organizationName: "",
-      organizationAddress: "",
-      organizationCity: "",
-      organizationState: "",
-      organizationPhone: "",
-      organizationEmail: "",
-      industrySupervisorName: "",
-      industrySupervisorEmail: "",
-      industrySupervisorPosition: "",
-      industrySupervisorPhone: "",
-      trainingStartDate: new Date(),
-      trainingEndDate: new Date(),
-      jobTitle: "",
-      departmentAtOrg: "",
-      programOfStudy: "",
-      level: "",
-      session: "",
-      trainingDuration: "",
-      areaOfSpecialization: "",
-    },
+    defaultValues,
     onSubmit: async ({ value }) => {
       const result = siwesDetailSchema.safeParse(value);
       if (!result.success) {

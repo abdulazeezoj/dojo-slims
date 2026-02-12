@@ -73,6 +73,14 @@ export function useChangePassword(): UseMutationResult<
       queryClient.invalidateQueries({ queryKey: ["student-profile"] });
     },
     onError: (error: unknown) => {
+      // Handle rate limiting explicitly
+      if (isApiError(error) && error.response?.status === 429) {
+        toast.error(
+          "Too many requests. Please wait a moment before trying again.",
+        );
+        return;
+      }
+
       const errorMessage = isApiError(error)
         ? (error as AxiosError<ApiResponse>).response?.data?.error?.message
         : error instanceof Error

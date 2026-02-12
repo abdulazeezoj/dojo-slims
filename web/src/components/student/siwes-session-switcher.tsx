@@ -15,7 +15,7 @@ import {
   type SessionInfo,
 } from "@/hooks/use-student-dashboard";
 
-export function DashboardSessionSwitcherSkeleton() {
+export function SiwesSessionSwitcherSkeleton() {
   return (
     <div className="flex items-center gap-2">
       <Skeleton className="h-4 w-16" />
@@ -24,15 +24,15 @@ export function DashboardSessionSwitcherSkeleton() {
   );
 }
 
-interface DashboardSessionSwitcherProps {
+interface SiwesSessionSwitcherProps {
   currentSession: SessionInfo;
   availableSessions: SessionInfo[];
 }
 
-export function DashboardSessionSwitcher({
+export function SiwesSessionSwitcher({
   currentSession,
   availableSessions,
-}: DashboardSessionSwitcherProps) {
+}: SiwesSessionSwitcherProps) {
   const switchSessionMutation = useSwitchSession();
 
   const handleSessionSwitch = (sessionId: string | null) => {
@@ -44,7 +44,7 @@ export function DashboardSessionSwitcher({
 
   return (
     <div className="flex items-center gap-2">
-      <label className="text-sm font-medium">Session:</label>
+      <label className="text-sm font-medium">SIWES Session:</label>
       <Select
         value={currentSession.id}
         onValueChange={handleSessionSwitch}
