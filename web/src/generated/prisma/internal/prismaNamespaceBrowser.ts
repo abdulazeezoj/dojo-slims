@@ -74,7 +74,8 @@ export const ModelName = {
   IndustrySupervisorWeeklyComment: 'IndustrySupervisorWeeklyComment',
   IndustrySupervisorReviewRequest: 'IndustrySupervisorReviewRequest',
   SchoolSupervisorFinalComment: 'SchoolSupervisorFinalComment',
-  IndustrySupervisorFinalComment: 'IndustrySupervisorFinalComment'
+  IndustrySupervisorFinalComment: 'IndustrySupervisorFinalComment',
+  ExportedFile: 'ExportedFile'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -454,6 +455,22 @@ export const IndustrySupervisorFinalCommentScalarFieldEnum = {
 } as const
 
 export type IndustrySupervisorFinalCommentScalarFieldEnum = (typeof IndustrySupervisorFinalCommentScalarFieldEnum)[keyof typeof IndustrySupervisorFinalCommentScalarFieldEnum]
+
+
+export const ExportedFileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  fileType: 'fileType',
+  fileName: 'fileName',
+  filePath: 'filePath',
+  fileSize: 'fileSize',
+  expiresAt: 'expiresAt',
+  downloadCount: 'downloadCount',
+  maxDownloads: 'maxDownloads',
+  createdAt: 'createdAt'
+} as const
+
+export type ExportedFileScalarFieldEnum = (typeof ExportedFileScalarFieldEnum)[keyof typeof ExportedFileScalarFieldEnum]
 
 
 export const SortOrder = {

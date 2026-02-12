@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.3.0
- * Query Engine version: 9d6ad21cbbceab97458517b147a6a09ff43aa735
+ * Prisma Client JS version: 7.4.0
+ * Query Engine version: ab56fe763f921d033a6c195e7ddeb3e255bdbb57
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.3.0",
-  engine: "9d6ad21cbbceab97458517b147a6a09ff43aa735"
+  client: "7.4.0",
+  engine: "ab56fe763f921d033a6c195e7ddeb3e255bdbb57"
 }
 
 /**
@@ -407,7 +407,8 @@ export const ModelName = {
   IndustrySupervisorWeeklyComment: 'IndustrySupervisorWeeklyComment',
   IndustrySupervisorReviewRequest: 'IndustrySupervisorReviewRequest',
   SchoolSupervisorFinalComment: 'SchoolSupervisorFinalComment',
-  IndustrySupervisorFinalComment: 'IndustrySupervisorFinalComment'
+  IndustrySupervisorFinalComment: 'IndustrySupervisorFinalComment',
+  ExportedFile: 'ExportedFile'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -423,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "faculty" | "department" | "placementOrganization" | "siwesSession" | "adminUser" | "student" | "schoolSupervisor" | "industrySupervisor" | "studentSessionEnrollment" | "supervisorSessionEnrollment" | "studentSupervisorAssignment" | "studentSiwesDetail" | "logbookMetadata" | "weeklyEntry" | "diagram" | "schoolSupervisorWeeklyComment" | "industrySupervisorWeeklyComment" | "industrySupervisorReviewRequest" | "schoolSupervisorFinalComment" | "industrySupervisorFinalComment"
+    modelProps: "user" | "session" | "account" | "verification" | "faculty" | "department" | "placementOrganization" | "siwesSession" | "adminUser" | "student" | "schoolSupervisor" | "industrySupervisor" | "studentSessionEnrollment" | "supervisorSessionEnrollment" | "studentSupervisorAssignment" | "studentSiwesDetail" | "logbookMetadata" | "weeklyEntry" | "diagram" | "schoolSupervisorWeeklyComment" | "industrySupervisorWeeklyComment" | "industrySupervisorReviewRequest" | "schoolSupervisorFinalComment" | "industrySupervisorFinalComment" | "exportedFile"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2203,6 +2204,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ExportedFile: {
+      payload: Prisma.$ExportedFilePayload<ExtArgs>
+      fields: Prisma.ExportedFileFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ExportedFileFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportedFilePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ExportedFileFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportedFilePayload>
+        }
+        findFirst: {
+          args: Prisma.ExportedFileFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportedFilePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ExportedFileFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportedFilePayload>
+        }
+        findMany: {
+          args: Prisma.ExportedFileFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportedFilePayload>[]
+        }
+        create: {
+          args: Prisma.ExportedFileCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportedFilePayload>
+        }
+        createMany: {
+          args: Prisma.ExportedFileCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ExportedFileCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportedFilePayload>[]
+        }
+        delete: {
+          args: Prisma.ExportedFileDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportedFilePayload>
+        }
+        update: {
+          args: Prisma.ExportedFileUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportedFilePayload>
+        }
+        deleteMany: {
+          args: Prisma.ExportedFileDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ExportedFileUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ExportedFileUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportedFilePayload>[]
+        }
+        upsert: {
+          args: Prisma.ExportedFileUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportedFilePayload>
+        }
+        aggregate: {
+          args: Prisma.ExportedFileAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateExportedFile>
+        }
+        groupBy: {
+          args: Prisma.ExportedFileGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ExportedFileGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ExportedFileCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ExportedFileCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2605,6 +2680,22 @@ export const IndustrySupervisorFinalCommentScalarFieldEnum = {
 export type IndustrySupervisorFinalCommentScalarFieldEnum = (typeof IndustrySupervisorFinalCommentScalarFieldEnum)[keyof typeof IndustrySupervisorFinalCommentScalarFieldEnum]
 
 
+export const ExportedFileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  fileType: 'fileType',
+  fileName: 'fileName',
+  filePath: 'filePath',
+  fileSize: 'fileSize',
+  expiresAt: 'expiresAt',
+  downloadCount: 'downloadCount',
+  maxDownloads: 'maxDownloads',
+  createdAt: 'createdAt'
+} as const
+
+export type ExportedFileScalarFieldEnum = (typeof ExportedFileScalarFieldEnum)[keyof typeof ExportedFileScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2886,6 +2977,7 @@ export type GlobalOmitConfig = {
   industrySupervisorReviewRequest?: Prisma.IndustrySupervisorReviewRequestOmit
   schoolSupervisorFinalComment?: Prisma.SchoolSupervisorFinalCommentOmit
   industrySupervisorFinalComment?: Prisma.IndustrySupervisorFinalCommentOmit
+  exportedFile?: Prisma.ExportedFileOmit
 }
 
 /* Types for Logging */

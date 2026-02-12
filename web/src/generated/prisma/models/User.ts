@@ -268,6 +268,7 @@ export type UserWhereInput = {
   schoolSupervisorProfile?: Prisma.XOR<Prisma.SchoolSupervisorNullableScalarRelationFilter, Prisma.SchoolSupervisorWhereInput> | null
   industrySupervisorProfile?: Prisma.XOR<Prisma.IndustrySupervisorNullableScalarRelationFilter, Prisma.IndustrySupervisorWhereInput> | null
   adminProfile?: Prisma.XOR<Prisma.AdminUserNullableScalarRelationFilter, Prisma.AdminUserWhereInput> | null
+  exportedFiles?: Prisma.ExportedFileListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -292,6 +293,7 @@ export type UserOrderByWithRelationInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorOrderByWithRelationInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorOrderByWithRelationInput
   adminProfile?: Prisma.AdminUserOrderByWithRelationInput
+  exportedFiles?: Prisma.ExportedFileOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -319,6 +321,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   schoolSupervisorProfile?: Prisma.XOR<Prisma.SchoolSupervisorNullableScalarRelationFilter, Prisma.SchoolSupervisorWhereInput> | null
   industrySupervisorProfile?: Prisma.XOR<Prisma.IndustrySupervisorNullableScalarRelationFilter, Prisma.IndustrySupervisorWhereInput> | null
   adminProfile?: Prisma.XOR<Prisma.AdminUserNullableScalarRelationFilter, Prisma.AdminUserWhereInput> | null
+  exportedFiles?: Prisma.ExportedFileListRelationFilter
 }, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -385,6 +388,7 @@ export type UserCreateInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutUserInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutUserInput
   adminProfile?: Prisma.AdminUserCreateNestedOneWithoutUserInput
+  exportedFiles?: Prisma.ExportedFileCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -409,6 +413,7 @@ export type UserUncheckedCreateInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutUserInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutUserInput
   adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutUserInput
+  exportedFiles?: Prisma.ExportedFileUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -433,6 +438,7 @@ export type UserUpdateInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutUserNestedInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserUpdateOneWithoutUserNestedInput
+  exportedFiles?: Prisma.ExportedFileUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -457,6 +463,7 @@ export type UserUncheckedUpdateInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutUserNestedInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutUserNestedInput
+  exportedFiles?: Prisma.ExportedFileUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -680,6 +687,20 @@ export type UserUpdateOneRequiredWithoutIndustrySupervisorProfileNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutIndustrySupervisorProfileInput, Prisma.UserUpdateWithoutIndustrySupervisorProfileInput>, Prisma.UserUncheckedUpdateWithoutIndustrySupervisorProfileInput>
 }
 
+export type UserCreateNestedOneWithoutExportedFilesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutExportedFilesInput, Prisma.UserUncheckedCreateWithoutExportedFilesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutExportedFilesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutExportedFilesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutExportedFilesInput, Prisma.UserUncheckedCreateWithoutExportedFilesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutExportedFilesInput
+  upsert?: Prisma.UserUpsertWithoutExportedFilesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutExportedFilesInput, Prisma.UserUpdateWithoutExportedFilesInput>, Prisma.UserUncheckedUpdateWithoutExportedFilesInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id: string
   name?: string | null
@@ -701,6 +722,7 @@ export type UserCreateWithoutSessionsInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutUserInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutUserInput
   adminProfile?: Prisma.AdminUserCreateNestedOneWithoutUserInput
+  exportedFiles?: Prisma.ExportedFileCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -724,6 +746,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutUserInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutUserInput
   adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutUserInput
+  exportedFiles?: Prisma.ExportedFileUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -763,6 +786,7 @@ export type UserUpdateWithoutSessionsInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutUserNestedInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserUpdateOneWithoutUserNestedInput
+  exportedFiles?: Prisma.ExportedFileUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -786,6 +810,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutUserNestedInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutUserNestedInput
+  exportedFiles?: Prisma.ExportedFileUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -809,6 +834,7 @@ export type UserCreateWithoutAccountsInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutUserInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutUserInput
   adminProfile?: Prisma.AdminUserCreateNestedOneWithoutUserInput
+  exportedFiles?: Prisma.ExportedFileCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -832,6 +858,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutUserInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutUserInput
   adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutUserInput
+  exportedFiles?: Prisma.ExportedFileUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -871,6 +898,7 @@ export type UserUpdateWithoutAccountsInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutUserNestedInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserUpdateOneWithoutUserNestedInput
+  exportedFiles?: Prisma.ExportedFileUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -894,6 +922,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutUserNestedInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutUserNestedInput
+  exportedFiles?: Prisma.ExportedFileUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAdminProfileInput = {
@@ -917,6 +946,7 @@ export type UserCreateWithoutAdminProfileInput = {
   studentProfile?: Prisma.StudentCreateNestedOneWithoutUserInput
   schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutUserInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutUserInput
+  exportedFiles?: Prisma.ExportedFileCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAdminProfileInput = {
@@ -940,6 +970,7 @@ export type UserUncheckedCreateWithoutAdminProfileInput = {
   studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutUserInput
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutUserInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutUserInput
+  exportedFiles?: Prisma.ExportedFileUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAdminProfileInput = {
@@ -979,6 +1010,7 @@ export type UserUpdateWithoutAdminProfileInput = {
   studentProfile?: Prisma.StudentUpdateOneWithoutUserNestedInput
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutUserNestedInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutUserNestedInput
+  exportedFiles?: Prisma.ExportedFileUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAdminProfileInput = {
@@ -1002,6 +1034,7 @@ export type UserUncheckedUpdateWithoutAdminProfileInput = {
   studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutUserNestedInput
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutUserNestedInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutUserNestedInput
+  exportedFiles?: Prisma.ExportedFileUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStudentProfileInput = {
@@ -1025,6 +1058,7 @@ export type UserCreateWithoutStudentProfileInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutUserInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutUserInput
   adminProfile?: Prisma.AdminUserCreateNestedOneWithoutUserInput
+  exportedFiles?: Prisma.ExportedFileCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStudentProfileInput = {
@@ -1048,6 +1082,7 @@ export type UserUncheckedCreateWithoutStudentProfileInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutUserInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutUserInput
   adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutUserInput
+  exportedFiles?: Prisma.ExportedFileUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStudentProfileInput = {
@@ -1087,6 +1122,7 @@ export type UserUpdateWithoutStudentProfileInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutUserNestedInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserUpdateOneWithoutUserNestedInput
+  exportedFiles?: Prisma.ExportedFileUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudentProfileInput = {
@@ -1110,6 +1146,7 @@ export type UserUncheckedUpdateWithoutStudentProfileInput = {
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutUserNestedInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutUserNestedInput
+  exportedFiles?: Prisma.ExportedFileUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSchoolSupervisorProfileInput = {
@@ -1133,6 +1170,7 @@ export type UserCreateWithoutSchoolSupervisorProfileInput = {
   studentProfile?: Prisma.StudentCreateNestedOneWithoutUserInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutUserInput
   adminProfile?: Prisma.AdminUserCreateNestedOneWithoutUserInput
+  exportedFiles?: Prisma.ExportedFileCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSchoolSupervisorProfileInput = {
@@ -1156,6 +1194,7 @@ export type UserUncheckedCreateWithoutSchoolSupervisorProfileInput = {
   studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutUserInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutUserInput
   adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutUserInput
+  exportedFiles?: Prisma.ExportedFileUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSchoolSupervisorProfileInput = {
@@ -1195,6 +1234,7 @@ export type UserUpdateWithoutSchoolSupervisorProfileInput = {
   studentProfile?: Prisma.StudentUpdateOneWithoutUserNestedInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserUpdateOneWithoutUserNestedInput
+  exportedFiles?: Prisma.ExportedFileUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSchoolSupervisorProfileInput = {
@@ -1218,6 +1258,7 @@ export type UserUncheckedUpdateWithoutSchoolSupervisorProfileInput = {
   studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutUserNestedInput
   industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutUserNestedInput
+  exportedFiles?: Prisma.ExportedFileUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutIndustrySupervisorProfileInput = {
@@ -1241,6 +1282,7 @@ export type UserCreateWithoutIndustrySupervisorProfileInput = {
   studentProfile?: Prisma.StudentCreateNestedOneWithoutUserInput
   schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutUserInput
   adminProfile?: Prisma.AdminUserCreateNestedOneWithoutUserInput
+  exportedFiles?: Prisma.ExportedFileCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutIndustrySupervisorProfileInput = {
@@ -1264,6 +1306,7 @@ export type UserUncheckedCreateWithoutIndustrySupervisorProfileInput = {
   studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutUserInput
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutUserInput
   adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutUserInput
+  exportedFiles?: Prisma.ExportedFileUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutIndustrySupervisorProfileInput = {
@@ -1303,6 +1346,7 @@ export type UserUpdateWithoutIndustrySupervisorProfileInput = {
   studentProfile?: Prisma.StudentUpdateOneWithoutUserNestedInput
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserUpdateOneWithoutUserNestedInput
+  exportedFiles?: Prisma.ExportedFileUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutIndustrySupervisorProfileInput = {
@@ -1326,6 +1370,119 @@ export type UserUncheckedUpdateWithoutIndustrySupervisorProfileInput = {
   studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutUserNestedInput
   schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutUserNestedInput
+  exportedFiles?: Prisma.ExportedFileUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutExportedFilesInput = {
+  id: string
+  name?: string | null
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  userType: $Enums.UserType
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  role?: string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  studentProfile?: Prisma.StudentCreateNestedOneWithoutUserInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorCreateNestedOneWithoutUserInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorCreateNestedOneWithoutUserInput
+  adminProfile?: Prisma.AdminUserCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutExportedFilesInput = {
+  id: string
+  name?: string | null
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  userType: $Enums.UserType
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  role?: string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  studentProfile?: Prisma.StudentUncheckedCreateNestedOneWithoutUserInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedCreateNestedOneWithoutUserInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedCreateNestedOneWithoutUserInput
+  adminProfile?: Prisma.AdminUserUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutExportedFilesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutExportedFilesInput, Prisma.UserUncheckedCreateWithoutExportedFilesInput>
+}
+
+export type UserUpsertWithoutExportedFilesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutExportedFilesInput, Prisma.UserUncheckedUpdateWithoutExportedFilesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutExportedFilesInput, Prisma.UserUncheckedCreateWithoutExportedFilesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutExportedFilesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutExportedFilesInput, Prisma.UserUncheckedUpdateWithoutExportedFilesInput>
+}
+
+export type UserUpdateWithoutExportedFilesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  studentProfile?: Prisma.StudentUpdateOneWithoutUserNestedInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUpdateOneWithoutUserNestedInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUpdateOneWithoutUserNestedInput
+  adminProfile?: Prisma.AdminUserUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutExportedFilesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  studentProfile?: Prisma.StudentUncheckedUpdateOneWithoutUserNestedInput
+  schoolSupervisorProfile?: Prisma.SchoolSupervisorUncheckedUpdateOneWithoutUserNestedInput
+  industrySupervisorProfile?: Prisma.IndustrySupervisorUncheckedUpdateOneWithoutUserNestedInput
+  adminProfile?: Prisma.AdminUserUncheckedUpdateOneWithoutUserNestedInput
 }
 
 
@@ -1336,11 +1493,13 @@ export type UserUncheckedUpdateWithoutIndustrySupervisorProfileInput = {
 export type UserCountOutputType = {
   accounts: number
   sessions: number
+  exportedFiles: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
+  exportedFiles?: boolean | UserCountOutputTypeCountExportedFilesArgs
 }
 
 /**
@@ -1367,6 +1526,13 @@ export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.SessionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountExportedFilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExportedFileWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1390,6 +1556,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   schoolSupervisorProfile?: boolean | Prisma.User$schoolSupervisorProfileArgs<ExtArgs>
   industrySupervisorProfile?: boolean | Prisma.User$industrySupervisorProfileArgs<ExtArgs>
   adminProfile?: boolean | Prisma.User$adminProfileArgs<ExtArgs>
+  exportedFiles?: boolean | Prisma.User$exportedFilesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1455,6 +1622,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   schoolSupervisorProfile?: boolean | Prisma.User$schoolSupervisorProfileArgs<ExtArgs>
   industrySupervisorProfile?: boolean | Prisma.User$industrySupervisorProfileArgs<ExtArgs>
   adminProfile?: boolean | Prisma.User$adminProfileArgs<ExtArgs>
+  exportedFiles?: boolean | Prisma.User$exportedFilesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1469,6 +1637,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     schoolSupervisorProfile: Prisma.$SchoolSupervisorPayload<ExtArgs> | null
     industrySupervisorProfile: Prisma.$IndustrySupervisorPayload<ExtArgs> | null
     adminProfile: Prisma.$AdminUserPayload<ExtArgs> | null
+    exportedFiles: Prisma.$ExportedFilePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1886,6 +2055,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   schoolSupervisorProfile<T extends Prisma.User$schoolSupervisorProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$schoolSupervisorProfileArgs<ExtArgs>>): Prisma.Prisma__SchoolSupervisorClient<runtime.Types.Result.GetResult<Prisma.$SchoolSupervisorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   industrySupervisorProfile<T extends Prisma.User$industrySupervisorProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$industrySupervisorProfileArgs<ExtArgs>>): Prisma.Prisma__IndustrySupervisorClient<runtime.Types.Result.GetResult<Prisma.$IndustrySupervisorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   adminProfile<T extends Prisma.User$adminProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adminProfileArgs<ExtArgs>>): Prisma.Prisma__AdminUserClient<runtime.Types.Result.GetResult<Prisma.$AdminUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  exportedFiles<T extends Prisma.User$exportedFilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$exportedFilesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExportedFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2439,6 +2609,30 @@ export type User$adminProfileArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   include?: Prisma.AdminUserInclude<ExtArgs> | null
   where?: Prisma.AdminUserWhereInput
+}
+
+/**
+ * User.exportedFiles
+ */
+export type User$exportedFilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ExportedFile
+   */
+  select?: Prisma.ExportedFileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ExportedFile
+   */
+  omit?: Prisma.ExportedFileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExportedFileInclude<ExtArgs> | null
+  where?: Prisma.ExportedFileWhereInput
+  orderBy?: Prisma.ExportedFileOrderByWithRelationInput | Prisma.ExportedFileOrderByWithRelationInput[]
+  cursor?: Prisma.ExportedFileWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExportedFileScalarFieldEnum | Prisma.ExportedFileScalarFieldEnum[]
 }
 
 /**
