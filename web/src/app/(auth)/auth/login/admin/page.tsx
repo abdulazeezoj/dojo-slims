@@ -25,7 +25,7 @@ export default function Page() {
 
       <AuthCard
         title="Admin Sign In"
-        subtitle="Enter your admin credentials to access the system"
+        subtitle="Enter your admin email and password to access the system"
       >
         <AdminLoginForm />
       </AuthCard>

@@ -341,16 +341,22 @@ export class StudentService {
     Array<{
       id: string;
       type: "warning" | "info" | "error";
+      title: string;
       message: string;
       priority: number;
+      createdAt: Date;
     }>
   > {
     const alerts: Array<{
       id: string;
       type: "warning" | "info" | "error";
+      title: string;
       message: string;
       priority: number;
+      createdAt: Date;
     }> = [];
+
+    const now = new Date();
 
     // Check if SIWES details are complete
     const siwesDetail =
@@ -363,9 +369,11 @@ export class StudentService {
       alerts.push({
         id: "siwes-details-missing",
         type: "error",
+        title: "SIWES Details Required",
         message:
           "Please complete your SIWES details including placement organization and industry supervisor information",
         priority: 1,
+        createdAt: now,
       });
     }
 
@@ -380,9 +388,11 @@ export class StudentService {
       alerts.push({
         id: "supervisor-not-assigned",
         type: "warning",
+        title: "School Supervisor Not Assigned",
         message:
           "School supervisor not yet assigned. Contact SIWES Unit if this persists.",
         priority: 2,
+        createdAt: now,
       });
     }
 
@@ -395,8 +405,10 @@ export class StudentService {
       alerts.push({
         id: "pending-reviews",
         type: "info",
+        title: "Pending Reviews",
         message: `${pendingReviews} week(s) awaiting industry supervisor review`,
         priority: 3,
+        createdAt: now,
       });
     }
 

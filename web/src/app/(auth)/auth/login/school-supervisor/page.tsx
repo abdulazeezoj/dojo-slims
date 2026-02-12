@@ -25,7 +25,7 @@ export default function Page() {
 
       <AuthCard
         title="School Supervisor Sign In"
-        subtitle="Enter your staff ID and password to supervise students"
+        subtitle="Enter your email address and password to supervise students"
       >
         <SchoolSupervisorLoginForm />
       </AuthCard>
