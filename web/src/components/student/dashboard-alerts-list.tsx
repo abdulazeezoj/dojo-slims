@@ -1,4 +1,4 @@
-import { CheckCircleIcon, InfoIcon, WarningIcon } from "@phosphor-icons/react";
+import { InfoIcon, WarningIcon } from "@phosphor-icons/react";
 import { formatDistanceToNow } from "date-fns";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -9,10 +9,9 @@ function getAlertIcon(type: AlertType["type"]) {
   switch (type) {
     case "warning":
       return <WarningIcon className="h-4 w-4" />;
-    case "success":
-      return <CheckCircleIcon className="h-4 w-4" />;
     case "error":
       return <WarningIcon className="h-4 w-4" />;
+    case "info":
     default:
       return <InfoIcon className="h-4 w-4" />;
   }

@@ -340,7 +340,7 @@ export class StudentService {
   ): Promise<
     Array<{
       id: string;
-      type: "warning" | "info" | "error" | "success";
+      type: "warning" | "info" | "error";
       title: string;
       message: string;
       priority: number;
@@ -349,7 +349,7 @@ export class StudentService {
   > {
     const alerts: Array<{
       id: string;
-      type: "warning" | "info" | "error" | "success";
+      type: "warning" | "info" | "error";
       title: string;
       message: string;
       priority: number;
