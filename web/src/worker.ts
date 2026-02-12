@@ -4,11 +4,38 @@ import { Worker } from "bullmq";
 
 import { config } from "./lib/config";
 import { getLogger } from "./lib/logger";
+import { defaultQueue } from "./lib/queue";
 
 const logger = getLogger(["worker"]);
 
 // Import task processors
 import { taskHandlers } from "./tasks";
+
+// Import scheduled jobs
+import { scheduledJobs } from "./schedules";
+
+// Initialize scheduled jobs
+async function initializeScheduledJobs() {
+  logger.info("Initializing scheduled jobs...");
+
+  for (const job of scheduledJobs) {
+    try {
+      await defaultQueue.add(job.taskName, job.data || {}, {
+        jobId: job.name,
+        repeat: {
+          pattern: job.repeat.pattern,
+        },
+        removeOnComplete: true,
+        removeOnFail: false,
+      });
+      logger.info(
+        `Scheduled job registered: ${job.name} (${job.repeat.pattern})`,
+      );
+    } catch (error) {
+      logger.error(`Failed to register scheduled job: ${job.name}`, { error });
+    }
+  }
+}
 
 // Create worker
 const worker = new Worker(
@@ -43,10 +70,12 @@ const worker = new Worker(
 );
 
 // Worker event handlers
-worker.on("ready", () => {
+worker.on("ready", async () => {
   logger.info(
     `Worker started and ready to process jobs from queue: ${config.WORKER_DEFAULT_QUEUE}`,
   );
+  // Initialize scheduled jobs after worker is ready
+  await initializeScheduledJobs();
 });
 
 worker.on("failed", (job, err) => {
