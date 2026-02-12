@@ -69,6 +69,15 @@ export const DELETE = requireAdmin(
   ) => {
     try {
       const { userId } = context.params;
+      
+      // Prevent admin from deleting their own account
+      if (userId === session.user.id) {
+        return createErrorResponse(
+          "Cannot delete your own admin account",
+          { status: 403 },
+        );
+      }
+
       await adminUserService.deleteAdmin(userId);
 
       return createSuccessResponse(null, {

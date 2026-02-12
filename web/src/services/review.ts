@@ -126,6 +126,11 @@ export class ReviewService {
       throw new Error("Week not found");
     }
 
+    // Check if week is locked
+    if (week.isLocked) {
+      throw new Error("Cannot comment on a locked week");
+    }
+
     // Verify industry supervisor is assigned to this student
     const siwesDetails =
       await studentSiwesDetailRepository.findByStudentAndSession(
@@ -190,6 +195,11 @@ export class ReviewService {
     });
     if (!week) {
       throw new Error("Week not found");
+    }
+
+    // Check if week is locked
+    if (week.isLocked) {
+      throw new Error("Cannot comment on a locked week");
     }
 
     // Verify school supervisor is assigned to this student

@@ -25,7 +25,7 @@ export const GET = requireAdmin(async (request: NextRequest, _session) => {
   }
 });
 
-export const POST = requireAdmin(async (request: NextRequest, _session) => {
+export const POST = requireAdmin(async (request: NextRequest, session) => {
   try {
     const validation = await validateRequest(request, {
       body: manualAssignmentSchema,
@@ -39,11 +39,12 @@ export const POST = requireAdmin(async (request: NextRequest, _session) => {
       return createErrorResponse("Invalid request", { status: 400 });
     }
 
+    // Use the authenticated session admin's ID instead of body.adminId
     const assignment = await assignmentService.manualAssignment(
       body.studentId!,
       body.schoolSupervisorId!,
       body.siwesSessionId!,
-      body.adminId!,
+      session.user.id, // Use authenticated admin ID
     );
 
     return createSuccessResponse(assignment, {

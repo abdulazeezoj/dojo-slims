@@ -15,9 +15,11 @@ import type { AxiosError } from "axios";
 // Types
 export interface Alert {
   id: string;
-  type: "info" | "warning" | "error";
+  type: "info" | "warning" | "error" | "success";
+  title: string;
   message: string;
   priority: number;
+  createdAt: string | Date;
 }
 
 export interface SessionInfo {

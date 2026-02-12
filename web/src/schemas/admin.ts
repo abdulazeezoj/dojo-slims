@@ -87,7 +87,7 @@ export const manualAssignmentSchema = z.object({
   studentId: uuidSchema,
   schoolSupervisorId: uuidSchema,
   siwesSessionId: uuidSchema,
-  adminId: uuidSchema,
+  adminId: uuidSchema.optional(), // Optional since we use session admin ID
 });
 
 export const autoAssignmentSchema = z.object({

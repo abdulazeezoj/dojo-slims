@@ -62,16 +62,12 @@ export function LogbookWeekDetail({ weekId }: WeekDetailProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            render={
-              <Link href="/student/logbook">
-                <ArrowLeftIcon className="mr-1 h-4 w-4" />
-                Back
-              </Link>
-            }
-          />
+          <Link href="/student/logbook">
+            <Button variant="ghost" size="sm">
+              <ArrowLeftIcon className="mr-1 h-4 w-4" />
+              Back
+            </Button>
+          </Link>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
               Week {week.weekNumber}
