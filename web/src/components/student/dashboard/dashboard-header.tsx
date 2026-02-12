@@ -5,7 +5,7 @@
 
 "use client";
 
-import { DashboardSessionSwitcher } from "@/components/student/dashboard-session-switcher";
+import { SiwesSessionSwitcher } from "@/components/student/siwes-session-switcher";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDashboardData } from "@/hooks/use-student-dashboard";
 import { PageHeader } from "../common/page-header";
@@ -26,7 +26,7 @@ export function DashboardHeader() {
       description="Welcome back! Here's your SIWES progress overview."
       action={
         activeSession && availableSessions.length > 1 ? (
-          <DashboardSessionSwitcher
+          <SiwesSessionSwitcher
             currentSession={activeSession}
             availableSessions={availableSessions}
           />

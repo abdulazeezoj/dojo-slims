@@ -2,7 +2,7 @@ import { StudentHeader } from "@/components/student/header";
 import { StudentSidebar } from "@/components/student/sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { requireServerStudent } from "@/lib/auth-server";
-import { ClientSessionProvider } from "@/components/student/client-session-provider";
+import { StudentSiwesSession } from "@/providers/student-siwes-session";
 
 import type { Metadata } from "next";
 
@@ -23,14 +23,14 @@ export default async function Layout({
 
   return (
     <SidebarProvider>
-      <ClientSessionProvider>
+      <StudentSiwesSession>
         <StudentSidebar />
         <SidebarInset>
           <StudentHeader />
 
           <main className="flex-1">{children}</main>
         </SidebarInset>
-      </ClientSessionProvider>
+      </StudentSiwesSession>
     </SidebarProvider>
   );
 }

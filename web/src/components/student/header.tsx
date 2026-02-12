@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { SiwesSessionSwitcher } from "./siwes-session-switcher";
+import { useStudentSiwesSession } from "@/contexts/student-siwes-session";
 
 function getBreadcrumbs(pathname: string) {
   const segments = pathname.split("/").filter(Boolean);
@@ -58,9 +60,10 @@ function getBreadcrumbs(pathname: string) {
 export function StudentHeader() {
   const pathname = usePathname();
   const breadcrumbs = getBreadcrumbs(pathname);
+  const { activeSession, sessions } = useStudentSiwesSession();
 
   return (
-    <header className="flex h-16 shrink-0 items-center gap-2">
+    <header className="flex h-16 shrink-0 items-center gap-2 justify-between">
       <div className="flex items-center gap-2 px-4">
         <SidebarTrigger className="-ml-1" />
         <Separator
@@ -90,6 +93,14 @@ export function StudentHeader() {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
+      {activeSession && sessions.length > 1 && (
+        <div className="px-4">
+          <SiwesSessionSwitcher
+            currentSession={activeSession}
+            availableSessions={sessions}
+          />
+        </div>
+      )}
     </header>
   );
 }

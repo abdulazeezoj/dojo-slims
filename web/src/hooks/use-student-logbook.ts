@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 import { apiClient, isApiError } from "@/lib/api-client";
 import type { ApiResponse } from "@/lib/api-response";
-import { useStudentSession } from "@/contexts/student-session-context";
+import { useStudentSiwesSession } from "@/contexts/student-siwes-session";
 
 import type { AxiosError } from "axios";
 
@@ -83,7 +83,7 @@ export interface UpdateWeekEntriesData {
 export function useLogbookData(
   sessionId?: string,
 ): UseQueryResult<LogbookData, Error> {
-  const { activeSession } = useStudentSession();
+  const { activeSession } = useStudentSiwesSession();
   const effectiveSessionId = sessionId || activeSession?.id;
 
   return useQuery({

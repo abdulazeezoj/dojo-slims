@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 import { apiClient, isApiError } from "@/lib/api-client";
 import type { ApiResponse } from "@/lib/api-response";
-import { useStudentSession } from "@/contexts/student-session-context";
+import { useStudentSiwesSession } from "@/contexts/student-siwes-session";
 
 import type { AxiosError } from "axios";
 
@@ -96,7 +96,7 @@ export function useSaveSiwesDetails(): UseMutationResult<
 > {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { activeSession } = useStudentSession();
+  const { activeSession } = useStudentSiwesSession();
 
   return useMutation({
     mutationFn: async (data: SiwesDetailsData) => {

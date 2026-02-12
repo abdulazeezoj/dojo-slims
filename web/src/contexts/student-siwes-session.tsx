@@ -6,17 +6,17 @@ import {
   type SessionInfo,
 } from "@/hooks/use-student-dashboard";
 
-interface StudentSessionContextValue {
+interface StudentSiwesSessionContextValue {
   activeSession: SessionInfo | null;
   sessions: SessionInfo[];
   isLoading: boolean;
   error: Error | null;
 }
 
-const StudentSessionContext =
-  React.createContext<StudentSessionContextValue | null>(null);
+const StudentSiwesSessionContext =
+  React.createContext<StudentSiwesSessionContextValue | null>(null);
 
-export function StudentSessionProvider({
+export function StudentSiwesSessionProvider({
   children,
 }: {
   children: React.ReactNode;
@@ -34,17 +34,17 @@ export function StudentSessionProvider({
   );
 
   return (
-    <StudentSessionContext.Provider value={value}>
+    <StudentSiwesSessionContext.Provider value={value}>
       {children}
-    </StudentSessionContext.Provider>
+    </StudentSiwesSessionContext.Provider>
   );
 }
 
-export function useStudentSession(): StudentSessionContextValue {
-  const context = React.useContext(StudentSessionContext);
+export function useStudentSiwesSession(): StudentSiwesSessionContextValue {
+  const context = React.useContext(StudentSiwesSessionContext);
   if (!context) {
     throw new Error(
-      "useStudentSession must be used within a StudentSessionProvider",
+      "useStudentSiwesSession must be used within a StudentSiwesSessionProvider",
     );
   }
   return context;
