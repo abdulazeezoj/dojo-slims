@@ -59,14 +59,18 @@ export function useSiwesDetailsData(): UseQueryResult<
   SiwesDetailsData | null,
   Error
 > {
+  const { activeSession } = useStudentSiwesSession();
+  const sessionId = activeSession?.id;
+
   return useQuery({
-    queryKey: ["siwes-details"],
+    queryKey: ["siwes-details", sessionId],
     queryFn: async () => {
       const response = await apiClient.get<ApiResponse<SiwesDetailsData>>(
         "/api/student/siwes-details",
       );
       return response.data.data ?? null;
     },
+    enabled: !!sessionId,
   });
 }
 
@@ -120,7 +124,7 @@ export function useSaveSiwesDetails(): UseMutationResult<
     },
     onSuccess: () => {
       toast.success("SIWES details saved successfully");
-      queryClient.invalidateQueries({ queryKey: ["siwes-details"] });
+      queryClient.invalidateQueries({ queryKey: ["siwes-details", activeSession?.id] });
       queryClient.invalidateQueries({ queryKey: ["student-dashboard"] });
       router.push("/student/dashboard");
     },

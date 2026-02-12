@@ -94,7 +94,7 @@ interface SiwesDetailsFormData {
 
 export function SiwesDetailsForm() {
   const router = useRouter();
-  const { data: existingDetails, isLoading } = useSiwesDetailsData();
+  const { data: existingDetails } = useSiwesDetailsData();
   const { data: organizations } = useOrganizations();
   const saveMutation = useSaveSiwesDetails();
 
