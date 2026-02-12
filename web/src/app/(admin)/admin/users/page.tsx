@@ -5,7 +5,7 @@ import {
   UsersList,
   UserFormDialog,
 } from "@/components/admin/users";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const metadata: Metadata = {
   title: "Admin Users | SIWES Admin Portal",

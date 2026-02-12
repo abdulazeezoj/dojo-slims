@@ -10,7 +10,7 @@ import { useDashboardData } from "@/hooks/use-industry-supervisor-dashboard";
 import { PageHeader } from "@/components/student/common/page-header";
 
 export function DashboardHeader() {
-  const { data: dashboardData, isLoading } = useDashboardData();
+  const { isLoading } = useDashboardData();
 
   if (isLoading) {
     return <DashboardHeaderSkeleton />;

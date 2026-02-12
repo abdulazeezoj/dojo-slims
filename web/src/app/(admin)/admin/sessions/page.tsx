@@ -5,7 +5,7 @@ import {
   SessionsList,
   SessionFormDialog,
 } from "@/components/admin/sessions";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const metadata: Metadata = {
   title: "SIWES Sessions | SIWES Admin Portal",

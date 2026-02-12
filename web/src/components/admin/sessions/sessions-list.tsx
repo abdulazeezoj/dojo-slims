@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PencilIcon, StopCircleIcon, TrashIcon } from "@phosphor-icons/react";
+import { PencilIcon, StopCircleIcon } from "@phosphor-icons/react";
 import { format } from "date-fns";
 
 import { Button } from "@/components/ui/button";
