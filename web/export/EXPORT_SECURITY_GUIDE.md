@@ -35,7 +35,7 @@ This document addresses the security concerns and best practices for implementin
 Instead of direct static file access, implement a **signed URL system** similar to AWS S3 presigned URLs:
 
 ```
-GET /api/export/{fileId}?token={jwt_token}&expires={timestamp}
+GET /api/export/{fileId}?token={jwt_token}
 ```
 
 ### Implementation Components
@@ -63,7 +63,7 @@ model ExportedFile {
 }
 ```
 
-#### 2. Export Service (`/lib/export-service.ts`)
+#### 2. Export Service (`/src/lib/export-service.ts`)
 
 ```typescript
 import crypto from 'crypto';
@@ -289,7 +289,7 @@ export class ExportService {
 }
 ```
 
-#### 3. API Route (`/api/export/[fileId]/route.ts`)
+#### 3. API Route (`/src/app/api/export/[fileId]/route.ts`)
 
 ```typescript
 import { NextRequest, NextResponse } from 'next/server';
@@ -356,7 +356,7 @@ export async function GET(
 }
 ```
 
-#### 4. Cleanup Job (`/lib/jobs/cleanup-exports.ts`)
+#### 4. Cleanup Job (`/src/lib/jobs/cleanup-exports.ts`)
 
 ```typescript
 import { ExportService } from '@/lib/export-service';
@@ -432,14 +432,22 @@ export async function POST(request: Request) {
 
 ### Configuration Updates
 
-Add to `/lib/config.ts`:
+Add to `/src/lib/config.ts`:
 
 ```typescript
 export const config = {
   // ... existing config
 
   // Export system
-  EXPORT_TOKEN_SECRET: process.env.EXPORT_TOKEN_SECRET || 'change-this-secret',
+  EXPORT_TOKEN_SECRET: (() => {
+    const secret = process.env.EXPORT_TOKEN_SECRET;
+    if (!secret) {
+      throw new Error(
+        'EXPORT_TOKEN_SECRET is not set. Please define a strong, random secret in your environment.'
+      );
+    }
+    return secret;
+  })(),
   EXPORT_DEFAULT_EXPIRY_MINUTES: parseInt(process.env.EXPORT_DEFAULT_EXPIRY_MINUTES || '15'),
   EXPORT_MAX_FILE_AGE_HOURS: parseInt(process.env.EXPORT_MAX_FILE_AGE_HOURS || '24'),
 };

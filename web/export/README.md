@@ -2,9 +2,9 @@
 
 **Purpose**: This directory stores temporarily generated export files (PDFs, bulk exports) with automatic expiry and cleanup.
 
-## Security Model
+## Recommended Implementation
 
-Files in this directory use **signed URL authentication** with JWT tokens, providing:
+When fully implemented, this directory would use **signed URL authentication** with JWT tokens, providing:
 - ✅ User authentication and authorization
 - ✅ Time-based expiry (default: 15 minutes)
 - ✅ Download count limiting
@@ -24,13 +24,13 @@ export/
 
 ## File Access
 
-Files can ONLY be accessed via authenticated API endpoint:
+When implemented, files would be accessed via authenticated API endpoint:
 
 ```
 GET /api/export/{fileId}?token={jwt_token}
 ```
 
-The JWT token contains:
+The JWT token would contain:
 - File ID
 - User ID
 - Expiration timestamp
@@ -38,7 +38,7 @@ The JWT token contains:
 
 ## Automatic Cleanup
 
-Expired files are automatically deleted by a scheduled job that runs hourly:
+When implemented, expired files would be automatically deleted by a scheduled job that runs hourly:
 - Checks database for expired `ExportedFile` records
 - Deletes physical files from disk
 - Removes database records
@@ -54,10 +54,12 @@ See `EXPORT_SECURITY_GUIDE.md` for complete implementation details including:
 
 ## Git
 
-This directory is gitignored except for:
+Only the following files are intended to be tracked in Git:
 - `.gitkeep` (preserves directory in git)
 - `README.md` (this file)
 - `EXPORT_SECURITY_GUIDE.md` (implementation guide)
+
+To avoid accidentally committing generated export files, ensure your Git configuration (for example, `web/.gitignore`) ignores `export/*` while explicitly allowing the files listed above.
 
 Generated export files are never committed to version control.
 
@@ -65,15 +67,5 @@ Generated export files are never committed to version control.
 
 **DO NOT** serve this directory directly via nginx, bun serve, or any static file server without proper authentication. Always use the API endpoint which validates JWT tokens and checks permissions.
 
-For development:
-```bash
-# Run cleanup manually
-npm run cleanup:exports
-```
-
-For production:
-```bash
-# Set up cron job or use BullMQ scheduler
-0 * * * * cd /path/to/app && NODE_ENV=production node lib/jobs/cleanup-exports.js
-```
+See `EXPORT_SECURITY_GUIDE.md` for complete setup instructions including cleanup job configuration.
 

@@ -612,8 +612,8 @@ async function main() {
                 : "database-schema.png",
             filePath:
               week === 2
-                ? `/upload/${student.id}/week-${week}/system-architecture.png`
-                : `/upload/${student.id}/week-${week}/database-schema.png`,
+                ? `${student.id}/${weeklyEntry.id}/system-architecture.png`
+                : `${student.id}/${weeklyEntry.id}/database-schema.png`,
             fileSize: week === 2 ? 245678 : 189234,
             mimeType: "image/png",
             caption:
@@ -662,7 +662,7 @@ async function main() {
               Date.parse("2025-07-01") +
                 (week - 1) * 7 * 24 * 60 * 60 * 1000 +
                 2 * 24 * 60 * 60 * 1000,
-            ), // 2 days after week ends
+            ), // 2 days after week starts (mid-week comment)
           },
         });
       }
