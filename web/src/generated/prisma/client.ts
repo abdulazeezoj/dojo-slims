@@ -159,3 +159,8 @@ export type SchoolSupervisorFinalComment = Prisma.SchoolSupervisorFinalCommentMo
  * 
  */
 export type IndustrySupervisorFinalComment = Prisma.IndustrySupervisorFinalCommentModel
+/**
+ * Model ExportedFile
+ * 
+ */
+export type ExportedFile = Prisma.ExportedFileModel

@@ -1,0 +1,255 @@
+import { randomUUID } from "crypto";
+import * as jwt from "jsonwebtoken";
+import prisma from "@/lib/prisma";
+import { config } from "@/lib/config";
+import { getLogger } from "@/lib/logger";
+import { writeFile, mkdir, unlink } from "fs/promises";
+import { join, extname } from "path";
+import type { Prisma } from "@/generated/prisma/client";
+
+const logger = getLogger(["lib", "export-service"]);
+
+interface CreateExportOptions {
+  userId: string;
+  fileType: string;
+  fileName: string;
+  fileBuffer: Buffer;
+  expiresInMinutes?: number;
+  maxDownloads?: number;
+}
+
+interface DownloadTokenPayload {
+  fileId: string;
+  userId: string;
+  exp: number;
+}
+
+type ExportRecordWithUser = Prisma.ExportedFileGetPayload<{
+  include: { user: true };
+}>;
+
+export class ExportService {
+  private static EXPORT_DIR = join(process.cwd(), "export");
+
+  /**
+   * Create a new export file with signed URL
+   */
+  static async createExport(options: CreateExportOptions) {
+    const {
+      userId,
+      fileType,
+      fileName,
+      fileBuffer,
+      expiresInMinutes = config.EXPORT_DEFAULT_EXPIRY_MINUTES,
+      maxDownloads,
+    } = options;
+
+    // Generate unique filename to prevent collisions
+    const fileId = randomUUID();
+    const ext = extname(fileName);
+
+    // Sanitize extension: only allow alphanumeric and common file extensions
+    const safeExt = /^\.[a-z0-9]+$/i.test(ext) ? ext.toLowerCase() : "";
+    const safeFileName = `${fileId}${safeExt}`;
+    const filePath = join(this.EXPORT_DIR, safeFileName);
+
+    // Ensure export directory exists
+    await mkdir(this.EXPORT_DIR, { recursive: true });
+
+    // Write file to disk
+    await writeFile(filePath, fileBuffer);
+
+    const expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000);
+
+    // Create database record
+    await prisma.exportedFile.create({
+      data: {
+        id: fileId,
+        userId,
+        fileType,
+        fileName,
+        filePath,
+        fileSize: fileBuffer.length,
+        expiresAt,
+        maxDownloads,
+      },
+    });
+
+    // Generate signed token
+    const token = this.generateDownloadToken(fileId, userId, expiresAt);
+
+    // Generate download URL
+    const downloadUrl = `/api/export/${fileId}?token=${token}`;
+
+    return {
+      fileId,
+      downloadUrl,
+      expiresAt,
+      fileName,
+    };
+  }
+
+  /**
+   * Generate JWT token for download authentication
+   */
+  private static generateDownloadToken(
+    fileId: string,
+    userId: string,
+    expiresAt: Date,
+  ): string {
+    if (!config.EXPORT_TOKEN_SECRET) {
+      throw new Error(
+        "EXPORT_TOKEN_SECRET is not configured. Please set it in your environment variables.",
+      );
+    }
+
+    const payload: DownloadTokenPayload = {
+      fileId,
+      userId,
+      exp: Math.floor(expiresAt.getTime() / 1000),
+    };
+
+    return jwt.sign(payload, config.EXPORT_TOKEN_SECRET, {
+      algorithm: "HS256",
+    });
+  }
+
+  /**
+   * Verify download token and check permissions
+   * Returns exportRecord for valid tokens, performs atomic download count check
+   */
+  static async verifyDownloadToken(
+    fileId: string,
+    token: string,
+  ): Promise<{
+    valid: boolean;
+    exportRecord?: ExportRecordWithUser;
+    error?: string;
+  }> {
+    try {
+      if (!config.EXPORT_TOKEN_SECRET) {
+        return {
+          valid: false,
+          error: "Export token secret not configured",
+        };
+      }
+
+      // Verify JWT signature and expiry
+      const payload = jwt.verify(
+        token,
+        config.EXPORT_TOKEN_SECRET,
+      ) as DownloadTokenPayload;
+
+      // Check fileId matches
+      if (payload.fileId !== fileId) {
+        return { valid: false, error: "Invalid token for this file" };
+      }
+
+      // Fetch export record with atomic download count check
+      const exportRecord = await prisma.exportedFile.findUnique({
+        where: { id: fileId },
+        include: { user: true },
+      });
+
+      if (!exportRecord) {
+        return { valid: false, error: "File not found" };
+      }
+
+      // Check if expired
+      if (exportRecord.expiresAt < new Date()) {
+        // Clean up expired file
+        await this.deleteExportFile(fileId);
+        return { valid: false, error: "File has expired" };
+      }
+
+      // Check download limit (atomic check will happen during recordDownload)
+      if (
+        exportRecord.maxDownloads &&
+        exportRecord.downloadCount >= exportRecord.maxDownloads
+      ) {
+        return { valid: false, error: "Download limit exceeded" };
+      }
+
+      // Check user matches
+      if (exportRecord.userId !== payload.userId) {
+        return { valid: false, error: "Unauthorized" };
+      }
+
+      return { valid: true, exportRecord };
+    } catch (error) {
+      if (error instanceof jwt.TokenExpiredError) {
+        return { valid: false, error: "Token has expired" };
+      }
+      if (error instanceof jwt.JsonWebTokenError) {
+        return { valid: false, error: "Invalid token" };
+      }
+      return { valid: false, error: "Token verification failed" };
+    }
+  }
+
+  /**
+   * Increment download counter
+   */
+  static async recordDownload(fileId: string): Promise<void> {
+    await prisma.exportedFile.update({
+      where: { id: fileId },
+      data: {
+        downloadCount: {
+          increment: 1,
+        },
+      },
+    });
+  }
+
+  /**
+   * Delete export file from disk and database
+   */
+  static async deleteExportFile(fileId: string): Promise<void> {
+    const exportRecord = await prisma.exportedFile.findUnique({
+      where: { id: fileId },
+    });
+
+    if (!exportRecord) return;
+
+    // Delete from disk
+    try {
+      await unlink(exportRecord.filePath);
+    } catch (error) {
+      logger.error("Failed to delete file from disk", {
+        filePath: exportRecord.filePath,
+        error,
+      });
+    }
+
+    // Delete from database
+    await prisma.exportedFile.delete({
+      where: { id: fileId },
+    });
+  }
+
+  /**
+   * Cleanup expired files (run as cron job)
+   */
+  static async cleanupExpiredFiles(): Promise<number> {
+    const expiredFiles = await prisma.exportedFile.findMany({
+      where: {
+        expiresAt: {
+          lt: new Date(),
+        },
+      },
+    });
+
+    let deletedCount = 0;
+
+    for (const file of expiredFiles) {
+      try {
+        await this.deleteExportFile(file.id);
+        deletedCount++;
+      } catch (error) {
+        logger.error("Failed to cleanup file", { fileId: file.id, error });
+      }
+    }
+
+    return deletedCount;
+  }
+}
