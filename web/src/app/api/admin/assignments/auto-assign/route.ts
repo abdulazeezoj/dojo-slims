@@ -1,3 +1,4 @@
+import { isAppError } from "@/lib/errors";
 import { createErrorResponse, createSuccessResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/api-utils";
 import { requireAdmin } from "@/lib/auth-server";
@@ -44,7 +45,6 @@ export const POST = requireAdmin(async (request: NextRequest, session) => {
         },
         {
           status: 200,
-          message: "Dry run completed successfully",
         }
       );
     }
@@ -60,9 +60,17 @@ export const POST = requireAdmin(async (request: NextRequest, session) => {
 
     return createSuccessResponse(result, {
       status: 201,
-      message: result.message || "Auto-assignment completed successfully",
     });
   } catch (error) {
+    // Handle custom application errors with appropriate status codes
+    if (isAppError(error)) {
+      return createErrorResponse(error.message, {
+        status: error.statusCode,
+        code: error.code,
+      });
+    }
+
+    // Handle unexpected errors
     return createErrorResponse(
       error instanceof Error ? error.message : "Failed to perform auto-assignment",
       { status: 500 },

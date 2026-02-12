@@ -1,3 +1,4 @@
+import { ConflictError, NotFoundError } from "@/lib/errors";
 import { getLogger } from "@/lib/logger";
 import {
   industrySupervisorFinalCommentRepository,
@@ -123,12 +124,15 @@ export class ReviewService {
       where: { id: weekId },
     });
     if (!week) {
-      throw new Error("Week not found");
+      throw new NotFoundError("Week not found");
     }
 
     // Check if week is locked
     if (week.isLocked) {
-      throw new Error("Cannot comment on a locked week");
+      throw new ConflictError(
+        "Cannot comment on a locked week",
+        "WEEK_LOCKED"
+      );
     }
 
     // Verify industry supervisor is assigned to this student
@@ -194,12 +198,15 @@ export class ReviewService {
       where: { id: weekId },
     });
     if (!week) {
-      throw new Error("Week not found");
+      throw new NotFoundError("Week not found");
     }
 
     // Check if week is locked
     if (week.isLocked) {
-      throw new Error("Cannot comment on a locked week");
+      throw new ConflictError(
+        "Cannot comment on a locked week",
+        "WEEK_LOCKED"
+      );
     }
 
     // Verify school supervisor is assigned to this student

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { isAppError } from "./errors";
 import { getLogger } from "./logger";
 
 import type { z } from "zod";
@@ -173,6 +174,21 @@ export async function withErrorHandler<T>(
   try {
     return await handler(request);
   } catch (error) {
+    // Handle custom application errors with appropriate status codes
+    if (isAppError(error)) {
+      logger.warn("Business logic error", {
+        message: error.message,
+        statusCode: error.statusCode,
+        code: error.code,
+      });
+      
+      return createErrorResponse(error.message, {
+        status: error.statusCode,
+        code: error.code,
+      }) as NextResponse<ApiResponse<T>>;
+    }
+
+    // Handle unexpected errors
     const errorMessage =
       error instanceof Error ? error.message : "Internal server error";
     logger.error("Unhandled route error", {
