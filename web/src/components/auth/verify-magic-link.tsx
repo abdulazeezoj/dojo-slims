@@ -49,9 +49,12 @@ export function VerifyMagicLink({ token }: VerifyMagicLinkProps) {
   useEffect(() => {
     if (!verifyMutation.isSuccess) return;
 
-    const interval = setInterval(() => {
+    let interval: NodeJS.Timeout | null = null;
+    
+    interval = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
+          if (interval) clearInterval(interval);
           router.push("/industry-supervisor");
           return 0;
         }
@@ -60,7 +63,9 @@ export function VerifyMagicLink({ token }: VerifyMagicLinkProps) {
     }, 1000);
 
     // Cleanup interval on unmount
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [verifyMutation.isSuccess, router]);
 
   useEffect(() => {

@@ -22,6 +22,33 @@ export const POST = requireAdmin(async (request: NextRequest, session) => {
       return createErrorResponse("Invalid request", { status: 400 });
     }
 
+    // Note: Currently only department-based assignment is supported
+    // The 'criteria' field is validated but only 'department' is implemented
+    if (body.criteria && body.criteria !== "department") {
+      return createErrorResponse(
+        "Only department-based assignment is currently supported",
+        { status: 400 }
+      );
+    }
+
+    // If dryRun is true, we'll return what would happen without making changes
+    if (body.dryRun) {
+      // For now, return a message indicating this is a dry run
+      // In the future, this could show preview of assignments
+      return createSuccessResponse(
+        {
+          success: true,
+          message: "Dry run mode - no assignments were made",
+          assigned: 0,
+          dryRun: true,
+        },
+        {
+          status: 200,
+          message: "Dry run completed successfully",
+        }
+      );
+    }
+
     // Perform auto-assignment using the session admin ID
     const result = await assignmentService.autoAssignByDepartment(
       body.siwesSessionId,

@@ -40,7 +40,7 @@ export function LogbookDiagramUpload({
       }
       // Validate file size (5MB to match server limit)
       if (file.size > 5 * 1024 * 1024) {
-        toast.error("File size must be less than 5MB");
+        toast.error("File size must be 5MB or less");
         return;
       }
       setSelectedFile(file);
