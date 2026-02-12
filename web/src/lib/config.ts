@@ -73,6 +73,12 @@ const envSchema = z.object({
   SECURITY_ENABLE_HSTS: z.coerce.boolean().default(false),
   SECURITY_ENABLE_CSP: z.coerce.boolean().default(true),
   SECURITY_CSP_REPORT_URI: z.string().optional(),
+  EXPORT_TOKEN_SECRET: z
+    .string()
+    .min(32, "EXPORT_TOKEN_SECRET must be at least 32 characters")
+    .optional(),
+  EXPORT_DEFAULT_EXPIRY_MINUTES: z.coerce.number().default(15),
+  EXPORT_MAX_FILE_AGE_HOURS: z.coerce.number().default(24),
 });
 
 type Env = z.infer<typeof envSchema>;
@@ -145,6 +151,9 @@ function loadEnv(): Env {
     SECURITY_ENABLE_HSTS: process.env.SECURITY_ENABLE_HSTS,
     SECURITY_ENABLE_CSP: process.env.SECURITY_ENABLE_CSP,
     SECURITY_CSP_REPORT_URI: process.env.SECURITY_CSP_REPORT_URI,
+    EXPORT_TOKEN_SECRET: process.env.EXPORT_TOKEN_SECRET,
+    EXPORT_DEFAULT_EXPIRY_MINUTES: process.env.EXPORT_DEFAULT_EXPIRY_MINUTES,
+    EXPORT_MAX_FILE_AGE_HOURS: process.env.EXPORT_MAX_FILE_AGE_HOURS,
   };
 
   const parsedEnv = envSchema.parse(rawEnv);
@@ -156,6 +165,13 @@ function loadEnv(): Env {
   ) {
     throw new Error(
       "CRITICAL SECURITY ERROR: CSRF_SECRET must be set to a strong random value in production. Generate one with: openssl rand -hex 32",
+    );
+  }
+
+  // Security: Enforce EXPORT_TOKEN_SECRET in production
+  if (parsedEnv.NODE_ENV === "production" && !parsedEnv.EXPORT_TOKEN_SECRET) {
+    throw new Error(
+      "CRITICAL SECURITY ERROR: EXPORT_TOKEN_SECRET must be set in production. Generate one with: openssl rand -hex 32",
     );
   }
 

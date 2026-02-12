@@ -32,6 +32,7 @@ model User {
   schoolSupervisorProfile   SchoolSupervisor?   @relation("SchoolSupervisorUser")
   industrySupervisorProfile IndustrySupervisor? @relation("IndustrySupervisorUser")
   adminProfile              AdminUser?          @relation("AdminUser")
+  exportedFiles             ExportedFile[]
 
   @@index([userType])
   @@index([email])
@@ -555,4 +556,24 @@ enum ReviewStatus {
   EXPIRED
 
   @@map("review_status")
+}
+
+model ExportedFile {
+  id            String   @id @default(uuid())
+  userId        String
+  fileType      String
+  fileName      String
+  filePath      String
+  fileSize      Int
+  expiresAt     DateTime
+  downloadCount Int      @default(0)
+  maxDownloads  Int?
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@index([createdAt])
+  @@map("exported_files")
 }
