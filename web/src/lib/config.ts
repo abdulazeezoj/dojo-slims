@@ -78,7 +78,6 @@ const envSchema = z.object({
     .min(32, "EXPORT_TOKEN_SECRET must be at least 32 characters")
     .optional(),
   EXPORT_DEFAULT_EXPIRY_MINUTES: z.coerce.number().default(15),
-  EXPORT_MAX_FILE_AGE_HOURS: z.coerce.number().default(24),
 });
 
 type Env = z.infer<typeof envSchema>;
@@ -153,7 +152,6 @@ function loadEnv(): Env {
     SECURITY_CSP_REPORT_URI: process.env.SECURITY_CSP_REPORT_URI,
     EXPORT_TOKEN_SECRET: process.env.EXPORT_TOKEN_SECRET,
     EXPORT_DEFAULT_EXPIRY_MINUTES: process.env.EXPORT_DEFAULT_EXPIRY_MINUTES,
-    EXPORT_MAX_FILE_AGE_HOURS: process.env.EXPORT_MAX_FILE_AGE_HOURS,
   };
 
   const parsedEnv = envSchema.parse(rawEnv);

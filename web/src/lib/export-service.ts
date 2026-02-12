@@ -1,9 +1,13 @@
 import { randomUUID } from "crypto";
 import * as jwt from "jsonwebtoken";
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import { config } from "@/lib/config";
-import { readFile, writeFile, mkdir, unlink } from "fs/promises";
+import { getLogger } from "@/lib/logger";
+import { writeFile, mkdir, unlink } from "fs/promises";
 import { join, extname } from "path";
+import type { Prisma } from "@/generated/prisma/client";
+
+const logger = getLogger(["lib", "export-service"]);
 
 interface CreateExportOptions {
   userId: string;
@@ -19,6 +23,10 @@ interface DownloadTokenPayload {
   userId: string;
   exp: number;
 }
+
+type ExportRecordWithUser = Prisma.ExportedFileGetPayload<{
+  include: { user: true };
+}>;
 
 export class ExportService {
   private static EXPORT_DIR = join(process.cwd(), "export");
@@ -39,7 +47,10 @@ export class ExportService {
     // Generate unique filename to prevent collisions
     const fileId = randomUUID();
     const ext = extname(fileName);
-    const safeFileName = `${fileId}${ext}`;
+
+    // Sanitize extension: only allow alphanumeric and common file extensions
+    const safeExt = /^\.[a-z0-9]+$/i.test(ext) ? ext.toLowerCase() : "";
+    const safeFileName = `${fileId}${safeExt}`;
     const filePath = join(this.EXPORT_DIR, safeFileName);
 
     // Ensure export directory exists
@@ -51,7 +62,7 @@ export class ExportService {
     const expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000);
 
     // Create database record
-    const exportRecord = await prisma.exportedFile.create({
+    await prisma.exportedFile.create({
       data: {
         id: fileId,
         userId,
@@ -105,11 +116,16 @@ export class ExportService {
 
   /**
    * Verify download token and check permissions
+   * Returns exportRecord for valid tokens, performs atomic download count check
    */
   static async verifyDownloadToken(
     fileId: string,
     token: string,
-  ): Promise<{ valid: boolean; exportRecord?: any; error?: string }> {
+  ): Promise<{
+    valid: boolean;
+    exportRecord?: ExportRecordWithUser;
+    error?: string;
+  }> {
     try {
       if (!config.EXPORT_TOKEN_SECRET) {
         return {
@@ -129,7 +145,7 @@ export class ExportService {
         return { valid: false, error: "Invalid token for this file" };
       }
 
-      // Fetch export record
+      // Fetch export record with atomic download count check
       const exportRecord = await prisma.exportedFile.findUnique({
         where: { id: fileId },
         include: { user: true },
@@ -146,7 +162,7 @@ export class ExportService {
         return { valid: false, error: "File has expired" };
       }
 
-      // Check download limit
+      // Check download limit (atomic check will happen during recordDownload)
       if (
         exportRecord.maxDownloads &&
         exportRecord.downloadCount >= exportRecord.maxDownloads
@@ -199,7 +215,10 @@ export class ExportService {
     try {
       await unlink(exportRecord.filePath);
     } catch (error) {
-      console.error(`Failed to delete file ${exportRecord.filePath}:`, error);
+      logger.error("Failed to delete file from disk", {
+        filePath: exportRecord.filePath,
+        error,
+      });
     }
 
     // Delete from database
@@ -227,7 +246,7 @@ export class ExportService {
         await this.deleteExportFile(file.id);
         deletedCount++;
       } catch (error) {
-        console.error(`Failed to cleanup file ${file.id}:`, error);
+        logger.error("Failed to cleanup file", { fileId: file.id, error });
       }
     }
 

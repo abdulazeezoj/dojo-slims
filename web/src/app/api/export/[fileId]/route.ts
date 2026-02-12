@@ -1,6 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ExportService } from "@/lib/export-service";
+import { getLogger } from "@/lib/logger";
 import { readFile } from "fs/promises";
+
+const logger = getLogger(["api", "export"]);
+
+/**
+ * Sanitize filename for Content-Disposition header
+ * Removes/encodes special characters that could lead to header injection
+ */
+function sanitizeFilename(filename: string): string {
+  // Remove any control characters, quotes, and newlines
+  return filename.replace(/[^\w\s.-]/g, "_").substring(0, 255);
+}
 
 export async function GET(
   request: NextRequest,
@@ -41,12 +53,15 @@ export async function GET(
         ? "application/pdf"
         : "application/octet-stream";
 
+    // Sanitize filename for header
+    const safeFileName = sanitizeFilename(exportRecord.fileName);
+
     // Return file with proper headers
     return new NextResponse(fileBuffer, {
       status: 200,
       headers: {
         "Content-Type": contentType,
-        "Content-Disposition": `attachment; filename="${exportRecord.fileName}"`,
+        "Content-Disposition": `attachment; filename="${safeFileName}"`,
         "Content-Length": exportRecord.fileSize.toString(),
         "Cache-Control": "private, no-cache, no-store, must-revalidate",
         "X-Content-Type-Options": "nosniff",
@@ -54,7 +69,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("Error serving export file:", error);
+    logger.error("Error serving export file", { error, fileId });
     return NextResponse.json(
       { error: "Failed to serve file" },
       { status: 500 },
