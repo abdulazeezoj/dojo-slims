@@ -10,6 +10,7 @@ import { toast } from "sonner";
 
 import { apiClient, isApiError } from "@/lib/api-client";
 import type { ApiResponse } from "@/lib/api-response";
+import { useStudentSession } from "@/contexts/student-session-context";
 
 import type { AxiosError } from "axios";
 
@@ -54,14 +55,17 @@ export interface SiwesDetailsData {
 /**
  * Fetch existing SIWES details
  */
-export function useSiwesDetailsData(): UseQueryResult<SiwesDetailsData, Error> {
+export function useSiwesDetailsData(): UseQueryResult<
+  SiwesDetailsData | null,
+  Error
+> {
   return useQuery({
     queryKey: ["siwes-details"],
     queryFn: async () => {
-      const response = await apiClient.get<SiwesDetailsData>(
+      const response = await apiClient.get<ApiResponse<SiwesDetailsData>>(
         "/api/student/siwes-details",
       );
-      return response.data;
+      return response.data.data ?? null;
     },
   });
 }
@@ -73,10 +77,10 @@ export function useOrganizations(): UseQueryResult<Organization[], Error> {
   return useQuery({
     queryKey: ["organizations"],
     queryFn: async () => {
-      const response = await apiClient.get<Organization[]>(
+      const response = await apiClient.get<ApiResponse<Organization[]>>(
         "/api/admin/organizations",
       );
-      return response.data;
+      return response.data.data ?? [];
     },
   });
 }
@@ -92,14 +96,11 @@ export function useSaveSiwesDetails(): UseMutationResult<
 > {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { activeSession } = useStudentSession();
 
   return useMutation({
     mutationFn: async (data: SiwesDetailsData) => {
-      // Get current session ID from dashboard
-      const dashboardResponse = await apiClient.get<
-        ApiResponse<{ activeSession: { id: string } | null }>
-      >("/api/student/dashboard");
-      const sessionId = dashboardResponse.data.data?.activeSession?.id;
+      const sessionId = activeSession?.id;
 
       if (!sessionId) {
         throw new Error(
